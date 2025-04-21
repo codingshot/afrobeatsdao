@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
 
 function AlbumCountdown() {
-  const releaseDate = new Date("2024-06-06T00:00:00Z");
+  const releaseDate = new Date("2025-06-06T00:00:00Z");
   const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function MusicSection() {
             Afrobeats is a <b>Public Good Album</b> 🆓 — our CC0 album available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-afro-teal font-semibold">
-            Album drops June 6th!
+            Album drops June 6th, 2025!
           </p>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 max-w-5xl mx-auto">
@@ -97,4 +97,3 @@ export function MusicSection() {
     </section>
   );
 }
-
