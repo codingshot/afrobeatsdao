@@ -32,18 +32,20 @@ const musicPlatforms: MusicPlatform[] = [
 
 export function MusicSection() {
   return (
-    <section id="music" className="py-16 bg-[#264653] text-white">
+    <section id="music" className="py-16 bg-[#E63946] text-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
             <span>See Music</span>
-            <span className="text-4xl">🎵</span>
+            <span className="text-4xl" aria-label="Music emoji">🎵</span>
           </h2>
           <p className="text-xl max-w-2xl mx-auto">
-            Afrobeats is a Public Good Album 🆓 - our CC0 album available everywhere 🌐
+            Afrobeats is a Public Good Album 🆓 - our CC0 album available everywhere soon.
+          </p>
+          <p className="text-lg mt-2 text-[#FFD700] font-semibold">
+            Album drops June 6th!
           </p>
         </div>
-
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-5xl mx-auto">
           <div className="md:w-1/2">
             <div className="relative aspect-square max-w-md mx-auto">
@@ -58,25 +60,26 @@ export function MusicSection() {
               </div>
             </div>
           </div>
-          
           <div className="md:w-1/2 mt-8 md:mt-0">
             <h3 className="text-2xl font-bold mb-4 text-center md:text-left">
-              Stream our free CC0 album 🆓 and vibe to Afrobeats culture! 🎶
+              Stream our free CC0 album and vibe to Afrobeats culture! 🎶
             </h3>
-            
-            <div className="flex flex-col gap-4 mt-6">
+            <div className="flex flex-col gap-4 mt-6 items-center w-full">
               {musicPlatforms.map((platform) => (
                 <Button
                   key={platform.name}
-                  className="bg-white text-[#264653] hover:bg-[#FFD700] hover:text-white transition-all flex items-center justify-center gap-2 py-6 text-lg shadow-lg group"
-                  onClick={() => window.open(platform.link, "_blank")}
+                  className="bg-gray-300 text-gray-400 transition-all flex items-center justify-center gap-2 py-6 text-lg shadow-lg group cursor-not-allowed w-full max-w-xs"
+                  disabled
                 >
                   {platform.icon}
-                  <span>Stream on {platform.name}</span>
-                  <span className="inline-block group-hover:animate-emoji-bounce">{platform.emoji}</span>
+                  <span className="opacity-50">Coming Soon</span>
+                  <span className="inline-block group-hover:animate-emoji-bounce opacity-50">{platform.emoji}</span>
                 </Button>
               ))}
             </div>
+            <p className="text-center text-gray-200 mt-6">
+              Links to Spotify, Apple Music, and YouTube will be available on release.
+            </p>
           </div>
         </div>
       </div>

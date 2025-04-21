@@ -1,12 +1,9 @@
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Twitter, Instagram } from "lucide-react";
+import { Twitter } from "lucide-react";
 
 type TeamMember = {
-  id: number;
   name: string;
   role: string;
-  emoji: string;
   image: string;
   twitter?: string;
   instagram?: string;
@@ -14,29 +11,16 @@ type TeamMember = {
 
 const teamMembers: TeamMember[] = [
   {
-    id: 1,
     name: "Larkim",
-    role: "Artist and Creative 🎨",
-    emoji: "🎨",
-    image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=800&q=80",
+    role: "Artist and Creative",
+    image: "https://placehold.co/160x160.png?text=Larkim",
     twitter: "#",
     instagram: "#",
   },
   {
-    id: 2,
     name: "Earnest Etim",
-    role: "Community Vibe Starter 🌟",
-    emoji: "🌟",
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
-    twitter: "#",
-    instagram: "#",
-  },
-  {
-    id: 3,
-    name: "DJ Samba",
-    role: "Music Director 🎧",
-    emoji: "🎧",
-    image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=crop&w=800&q=80",
+    role: "Community Vibe Starter",
+    image: "https://placehold.co/160x160.png?text=Earnest+Etim",
     twitter: "#",
     instagram: "#",
   },
@@ -44,84 +28,45 @@ const teamMembers: TeamMember[] = [
 
 export function TeamSection() {
   return (
-    <section id="team" className="py-16 bg-gradient-to-b from-[#F4A261]/20 to-[#F28C38]/20">
+    <section id="team" className="py-16 bg-[#F4A261]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
             <span>Meet the Team</span>
-            <span className="text-4xl">🫶</span>
+            <span className="text-4xl" aria-label="Hands emoji">🫶</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            The vibe creators behind Afrobeats DAO 🌟
+          <p className="text-xl max-w-2xl mx-auto">
+            The vibe creators behind Afrobeats DAO.
           </p>
         </div>
-
-        <div className="mt-10 max-w-5xl mx-auto">
-          <Carousel className="w-full">
-            <CarouselContent>
-              {teamMembers.map((member) => (
-                <CarouselItem key={member.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                  <TeamMemberCard member={member} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex justify-center mt-8 gap-4">
-              <CarouselPrevious className="static translate-y-0 bg-afro-orange text-white border-none hover:bg-afro-orange/80">⬅️</CarouselPrevious>
-              <CarouselNext className="static translate-y-0 bg-afro-orange text-white border-none hover:bg-afro-orange/80">➡️</CarouselNext>
+        <div className="flex flex-wrap justify-center gap-8">
+          {teamMembers.map((member) => (
+            <div key={member.name} className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center border-4 border-[#FFD700] max-w-xs">
+              <div className="rounded-full overflow-hidden w-40 h-40 mb-4 border-4 border-[#E63946] flex items-center justify-center">
+                <img
+                  src={member.image}
+                  alt={`${member.name} profile`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-2xl font-bold mb-1">{member.name}</h3>
+              <p className="text-lg text-gray-700 mb-3">{member.role}</p>
+              <div className="flex gap-4">
+                {member.twitter && (
+                  <a href={member.twitter} target="_blank" rel="noopener noreferrer" className="text-[#1DA1F2] hover:text-[#FFD700] transition-colors" aria-label="Twitter">
+                    <Twitter className="h-6 w-6" />
+                  </a>
+                )}
+                {member.instagram && (
+                  <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:text-[#FFD700] transition-colors" aria-label="Instagram">
+                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><title>Instagram</title><path d="M12 2.2c3.2 0 3.6.01 4.8.07 1.08.06 1.67.23 2.06.39.52.21.89.47 1.28.86.39.39.65.76.86 1.28.16.39.33.98.39 2.06.06 1.21.07 1.6.07 4.8s-.01 3.59-.07 4.8c-.06 1.08-.23 1.67-.39 2.06-.21.52-.47.89-.86 1.28-.39.39-.76.65-1.28.86-.39.16-.98.33-2.06.39-1.21.06-1.6.07-4.8.07s-3.6-.01-4.8-.07c-1.08-.06-1.67-.23-2.06-.39-.52-.21-.89-.47-1.28-.86-.39-.39-.65-.76-.86-1.28-.16-.39-.33-.98-.39-2.06C2.21 15.6 2.2 15.2 2.2 12s.01-3.59.07-4.8c.06-1.08.23-1.67.39-2.06.21-.52.47-.89.86-1.28.39-.39.76-.65 1.28-.86.39-.16.98-.33 2.06-.39C8.4 2.21 8.79 2.2 12 2.2zM12 0C8.7 0 8.3.01 7.1.07c-1.2.06-2.03.25-2.74.54-.74.3-1.35.71-2.01 1.36C1.29 2.7.89 3.31.59 4.06.3 4.77.11 5.6.07 6.8.01 7.99 0 8.4 0 12s.01 4.01.07 5.2c.06 1.2.25 2.03.54 2.74.3.74.71 1.35 1.36 2.01.66.65 1.27 1.05 2.01 1.36.71.29 1.54.48 2.74.54 1.19.06 1.59.07 5.19.07s4.01-.01 5.2-.07c1.2-.06 2.03-.25 2.74-.54.74-.3 1.35-.71 2.01-1.36.65-.66 1.05-1.27 1.36-2.01.29-.71.48-1.54.54-2.74.06-1.19.07-1.59.07-5.2s-.01-4.01-.07-5.2c-.06-1.2-.25-2.03-.54-2.74-.3-.74-.71-1.35-1.36-2.01C21.3 1.29 20.7.89 19.95.59c-.71-.29-1.54-.48-2.74-.54C15.6.01 15.2 0 12 0z"/><circle cx="12" cy="12" r="3.4"/><path d="M18.4 4.6a.86.86 0 11-1.72 0 .86.86 0 011.72 0z"/></svg>
+                  </a>
+                )}
+              </div>
             </div>
-          </Carousel>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-interface TeamMemberCardProps {
-  member: TeamMember;
-}
-
-function TeamMemberCard({ member }: TeamMemberCardProps) {
-  return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-lg p-6 text-center group hover:shadow-xl transition-all">
-      <div className="relative w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-afro-gold">
-        <img
-          src={member.image}
-          alt={member.name}
-          className="w-full h-full object-cover transition-transform group-hover:scale-110"
-        />
-        <div className="absolute inset-0 rounded-full border-4 border-dashed border-afro-gold border-opacity-50 animate-spin-slow"></div>
-        <div className="absolute top-1 right-1 text-2xl animate-emoji-bounce">{member.emoji}</div>
-        <div className="absolute bottom-1 left-1 text-2xl animate-emoji-bounce delay-300">✨</div>
-      </div>
-      
-      <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-      <p className="text-gray-600 mb-4">{member.role}</p>
-      
-      <div className="flex justify-center space-x-4">
-        {member.twitter && (
-          <a 
-            href={member.twitter} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-[#264653] hover:text-[#F28C38] transition-colors flex items-center gap-1"
-          >
-            <Twitter size={18} />
-            <span>🐦</span>
-          </a>
-        )}
-        
-        {member.instagram && (
-          <a 
-            href={member.instagram} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-afro-teal hover:text-afro-orange transition-colors flex items-center gap-1"
-          >
-            <Instagram size={18} />
-            <span>📸</span>
-          </a>
-        )}
-      </div>
-    </div>
   );
 }
