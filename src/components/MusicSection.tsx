@@ -1,34 +1,45 @@
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Apple, Youtube, Headphones } from "lucide-react";
-type MusicPlatform = {
-  name: string;
-  icon: React.ReactNode;
-  emoji: string;
-  link: string;
-};
-const musicPlatforms: MusicPlatform[] = [{
-  name: "Spotify",
-  icon: <Headphones className="h-5 w-5" />,
-  emoji: "🎧",
-  link: "#"
-}, {
-  name: "Apple Music",
-  icon: <Apple className="h-5 w-5" />,
-  emoji: "🍎",
-  link: "#"
-}, {
-  name: "YouTube",
-  icon: <Youtube className="h-5 w-5" />,
-  emoji: "▶️",
-  link: "#"
-}];
+import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
+
+function AlbumCountdown() {
+  const releaseDate = new Date("2024-06-06T00:00:00Z");
+  const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTimeLeft(releaseDate.getTime() - Date.now());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  if (timeLeft <= 0) return <span className="text-xl font-semibold">Album is out now!</span>;
+
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+  const seconds = Math.floor((timeLeft / 1000) % 60);
+
+  return (
+    <div className="flex gap-4 text-2xl font-bold text-afro-green justify-center mt-4">
+      <div><span>{days}</span><span className="ml-1 text-base">d</span></div>
+      <div><span>{hours.toString().padStart(2, "0")}</span><span className="ml-1 text-base">h</span></div>
+      <div><span>{minutes.toString().padStart(2, "0")}</span><span className="ml-1 text-base">m</span></div>
+      <div><span>{seconds.toString().padStart(2, "0")}</span><span className="ml-1 text-base">s</span></div>
+    </div>
+  );
+}
+
 export function MusicSection() {
-  return <section id="music" className="py-16 bg-[#E63946] text-white">
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  return (
+    <section id="music" className="py-20 bg-afro-red text-white font-afro">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
-            <span>See Music</span>
-            <span className="text-4xl" aria-label="Music emoji">🎵</span>
+          <h2 className="text-5xl font-extrabold mb-4 flex items-center justify-center gap-3">
+            <span>Album</span>
+            <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
           <p className="text-xl max-w-2xl mx-auto">
             Afrobeats is a Public Good Album 🆓 - our CC0 album available everywhere soon.
@@ -41,28 +52,48 @@ export function MusicSection() {
           <div className="md:w-1/2">
             <div className="relative aspect-square max-w-md mx-auto">
               <div className="absolute inset-2 border-4 border-dashed border-[#FFD700] rounded-xl animate-spin-slow"></div>
-              <img alt="Afrobeats Album Cover" className="w-full h-full object-cover rounded-xl shadow-2xl relative z-10" src="/lovable-uploads/bbbfa661-36e7-42ab-9b62-0dfdcd2565c8.png" />
+              <img alt="Afrobeats Album Cover" className="w-full h-full object-cover rounded-xl shadow-2xl relative z-10" src="/lovable-uploads/6b6dcd87-97f1-4c68-964d-3ef675aff525.png" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-6xl animate-pulse">▶️</span>
               </div>
             </div>
           </div>
-          <div className="md:w-1/2 mt-8 md:mt-0">
+          <div className="md:w-1/2 mt-8 md:mt-0 w-full">
             <h3 className="text-2xl font-bold mb-4 text-center md:text-left">
               Stream our free CC0 album and vibe to Afrobeats culture! 🎶
             </h3>
-            <div className="flex flex-col gap-4 mt-6 items-center w-full">
-              {musicPlatforms.map(platform => <Button key={platform.name} className="bg-gray-300 text-gray-400 transition-all flex items-center justify-center gap-2 py-6 text-lg shadow-lg group cursor-not-allowed w-full max-w-xs" disabled>
-                  {platform.icon}
-                  <span className="opacity-50">Coming Soon</span>
-                  <span className="inline-block group-hover:animate-emoji-bounce opacity-50">{platform.emoji}</span>
-                </Button>)}
+            {/* Dropdown mimic with countdown & streaming buttons below when open */}
+            <div className="bg-afro-green rounded-lg p-6 w-full max-w-xs mx-auto shadow-2xl text-center">
+              <button className="flex items-center justify-center gap-2 w-full text-xl font-bold text-white mb-4 focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
+                <span>When is the album out?</span>
+                <ChevronDown className={`h-6 w-6 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+              </button>
+              {isOpen && (
+                <div>
+                  <AlbumCountdown />
+                  <div className="flex flex-row gap-4 justify-center mt-6">
+                    <Button className="bg-gray-300 text-gray-400 flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
+                      <Headphones className="h-5 w-5" />
+                      <span>Spotify</span>
+                    </Button>
+                    <Button className="bg-gray-300 text-gray-400 flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
+                      <Apple className="h-5 w-5" />
+                      <span>Apple</span>
+                    </Button>
+                    <Button className="bg-gray-300 text-gray-400 flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
+                      <Youtube className="h-5 w-5" />
+                      <span>YouTube</span>
+                    </Button>
+                  </div>
+                  <p className="text-center text-gray-200 mt-6">
+                    Links to Spotify, Apple Music, and YouTube will be available on release.
+                  </p>
+                </div>
+              )}
             </div>
-            <p className="text-center text-gray-200 mt-6">
-              Links to Spotify, Apple Music, and YouTube will be available on release.
-            </p>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }
