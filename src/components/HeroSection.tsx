@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
@@ -19,7 +18,7 @@ export function HeroSection() {
           <p className="text-xl md:text-2xl mb-8 font-medium leading-relaxed">
             A global community spreading culture through Afrobeats Parties, music, and vibes
           </p>
-          <div className="flex flex-col gap-4 items-center w-full max-w-md mx-auto">
+          <div className="flex flex-col gap-4 items-center justify-center w-full max-w-md mx-auto">
             <Button 
               className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#264653] text-lg px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 justify-center w-full"
               onClick={() => window.open("https://discord.com/invite/55EGdbyh", "_blank")}
