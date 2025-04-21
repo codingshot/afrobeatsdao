@@ -1,7 +1,26 @@
 
+import { useState, useEffect } from "react";
+
 export function Header() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('section');
+      if (heroSection) {
+        const heroBottom = heroSection.getBoundingClientRect().bottom;
+        setIsVisible(heroBottom <= 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading">
+    <header className={`sticky top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-center">
         <a href="#" className="flex items-center space-x-2">
           <img 
