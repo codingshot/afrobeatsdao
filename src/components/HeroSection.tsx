@@ -19,7 +19,6 @@ export function HeroSection() {
           <p className="text-2xl md:text-3xl mb-8 font-medium leading-relaxed font-afro text-black max-w-xl mx-auto">
             Grassroots afrobeats culture, community, music and parties.
           </p>
-          {/* CTA Row - Centered, modern, bold */}
           <div className="flex flex-row gap-6 items-center justify-center w-full max-w-xl mx-auto">
             <Button 
               className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
@@ -28,7 +27,7 @@ export function HeroSection() {
               Join the Vibe
             </Button>
             <Button 
-              className="bg-green-700 hover:bg-green-600 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
+              className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
               onClick={() => document.getElementById('music')?.scrollIntoView({
                 behavior: 'smooth'
               })} 
