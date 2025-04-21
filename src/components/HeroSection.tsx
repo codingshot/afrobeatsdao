@@ -19,7 +19,7 @@ export function HeroSection() {
           <div className="flex flex-row gap-6 items-center justify-center w-full max-w-xl mx-auto">
             <Button
               className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full"
-              onClick={() => window.open('https://discord.com/invite/55EGdbyh', '_blank')}
+              onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}
             >
               Join the Vibe
             </Button>

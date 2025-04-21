@@ -69,7 +69,7 @@ export function FutureSection() {
         <div className="text-center mt-12 flex justify-center">
           <Button
             className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#264653] text-lg px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 font-heading"
-            onClick={() => window.open("https://discord.com/invite/55EGdbyh", "_blank")}
+            onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}
           >
             Join
           </Button>

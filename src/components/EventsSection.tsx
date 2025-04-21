@@ -26,7 +26,7 @@ export function EventsSection() {
           </div>
           <Button
             className="bg-afro-teal hover:bg-afro-orange text-afro-yellow text-lg font-heading px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 justify-center mx-auto"
-            onClick={() => window.open("https://discord.com/invite/55EGdbyh", "_blank")}
+            onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}
           >
             Tap In
           </Button>
