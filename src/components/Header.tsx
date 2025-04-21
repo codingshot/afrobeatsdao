@@ -15,7 +15,7 @@ export function Header() {
         {/* Only one CTA on the navbar, no bouncing/emoji */}
         <Button
           className="bg-[#E63946] hover:bg-afro-orange text-white font-heading text-lg px-8 py-3 rounded-full shadow-lg transition hover:scale-105"
-          onClick={() => window.open("https://discord.com/invite/55EGdbyh", "_blank")}
+          onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}
         >
           Join
         </Button>
