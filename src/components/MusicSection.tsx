@@ -1,40 +1,30 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
-
 function AlbumCountdown() {
   const releaseDate = new Date("2025-06-06T00:00:00Z");
   const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimeLeft(releaseDate.getTime() - Date.now());
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);
-
   if (timeLeft <= 0) return <span className="text-2xl font-bold text-white">Album is out now!</span>;
-
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-  const seconds = Math.floor((timeLeft / 1000) % 60);
-
-  return (
-    <div className="flex gap-4 text-2xl md:text-3xl font-bold text-white justify-center mt-4 bg-[#E63946]/80 p-3 rounded-full">
+  const hours = Math.floor(timeLeft / (1000 * 60 * 60) % 24);
+  const minutes = Math.floor(timeLeft / (1000 * 60) % 60);
+  const seconds = Math.floor(timeLeft / 1000 % 60);
+  return <div className="flex gap-4 text-2xl md:text-3xl font-bold text-white justify-center mt-4 bg-[#E63946]/80 p-3 rounded-full">
       <div><span>{days}</span><span className="ml-1 text-base">d</span></div>
       <div><span>{hours.toString().padStart(2, "0")}</span><span className="ml-1 text-base">h</span></div>
       <div><span>{minutes.toString().padStart(2, "0")}</span><span className="ml-1 text-base">m</span></div>
       <div><span>{seconds.toString().padStart(2, "0")}</span><span className="ml-1 text-base">s</span></div>
-    </div>
-  );
+    </div>;
 }
-
 export function MusicSection() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  return (
-    <section id="music" className="py-20 bg-[#108C95] text-white font-afro">
+  return <section id="music" className="py-20 text-white font-afro bg-black">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-heading font-extrabold mb-4 flex items-center justify-center gap-3">
@@ -68,8 +58,7 @@ export function MusicSection() {
                 <span>When is the album out?</span>
                 <ChevronDown className={`h-6 w-6 transition-transform ${isOpen ? "rotate-180" : ""}`} />
               </button>
-              {isOpen && (
-                <div>
+              {isOpen && <div>
                   <AlbumCountdown />
                   <div className="flex flex-wrap gap-4 justify-center mt-6">
                     <Button className="bg-gray-800 text-gray-400 flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
@@ -88,12 +77,10 @@ export function MusicSection() {
                   <p className="text-center text-[#FFD600] mt-6">
                     Links to streaming will be available on release day!
                   </p>
-                </div>
-              )}
+                </div>}
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }

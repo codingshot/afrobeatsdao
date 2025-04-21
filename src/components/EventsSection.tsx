@@ -1,10 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { CalendarOff, PartyPopper } from "lucide-react";
-
 export function EventsSection() {
-  return (
-    <section id="events" className="py-16 bg-[#FFD600] font-afro">
+  return <section id="events" className="py-16 font-afro bg-slate-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
@@ -24,14 +21,10 @@ export function EventsSection() {
             </div>
             <p className="text-xl font-heading text-afro-black mt-2 w-full">No events right now. Stay tuned for future Afrobeats parties!</p>
           </div>
-          <Button
-            className="bg-afro-teal hover:bg-afro-orange text-afro-yellow text-lg font-heading px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 justify-center mx-auto"
-            onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}
-          >
+          <Button className="bg-afro-teal hover:bg-afro-orange text-afro-yellow text-lg font-heading px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 justify-center mx-auto" onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}>
             Tap In
           </Button>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
