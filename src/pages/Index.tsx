@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
+import { VibeOfTheDay } from "@/components/VibeOfTheDay";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
 
@@ -15,6 +16,7 @@ const Index = () => {
         <HeroSection />
         <EventsSection />
         <MusicSection />
+        <VibeOfTheDay />
         <TeamSection />
         <FutureSection />
       </main>
