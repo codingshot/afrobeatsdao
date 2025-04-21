@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -27,7 +26,7 @@ export default {
         background: '#FEF7CD',         // Soft yellow
         foreground: '#222',
         primary: {
-          DEFAULT: '#108C95',          // Teal
+          DEFAULT: '#008751',          // Nigerian flag green
           foreground: '#fff'
         },
         secondary: {
@@ -39,7 +38,7 @@ export default {
           foreground: '#222'
         },
         afro: {
-          teal: '#108C95',
+          teal: '#008751',            // Updated to Nigerian flag green
           orange: '#F97316',
           yellow: '#FFD600',
           black: '#111',
@@ -60,7 +59,6 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        // Removed emoji-bounce from navbar use
         'fade-in': 'fade-in 0.3s ease-out',
         'fade-out': 'fade-out 0.3s ease-out',
       },
@@ -68,4 +66,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

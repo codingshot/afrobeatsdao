@@ -17,7 +17,7 @@ export function EventsSection() {
           <div className="flex flex-col items-center gap-2 text-center w-full">
             <div className="relative flex justify-center">
               <CalendarOff className="h-16 w-16 text-afro-orange opacity-80 mb-2 mx-auto" />
-              <PartyPopper className="h-9 w-9 text-afro-teal opacity-90 absolute -right-4 -top-4 rotate-12" />
+              <PartyPopper className="h-9 w-9 text-[#008751] opacity-90 absolute -right-4 -top-4 rotate-12" />
             </div>
             <p className="text-xl font-heading text-afro-black mt-2 w-full">No events right now. Stay tuned for future Afrobeats parties!</p>
           </div>
