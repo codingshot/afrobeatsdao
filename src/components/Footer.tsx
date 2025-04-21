@@ -1,3 +1,4 @@
+
 import { Twitter } from "lucide-react";
 export function Footer() {
   return <footer className="bg-[#E63946] text-white py-12">
