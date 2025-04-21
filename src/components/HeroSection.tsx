@@ -9,11 +9,11 @@ export function HeroSection() {
           <h1 className="text-6xl md:text-7xl font-heading mb-4 flex flex-col items-center justify-center gap-6">
             <span className="text-9xl" aria-label="Drum emoji" role="img">🪘</span>
             <span>
-              Afrobeats DAO: Classic Rhythms, Bold Vibes, Global Unity
+              Afrobeats DAO
             </span>
           </h1>
           <p className="text-2xl md:text-3xl mb-8 font-medium leading-relaxed font-afro text-black max-w-xl mx-auto">
-            Join us in celebrating the heart and soul of Afrobeats with authentic music, legendary vibes, and a community that moves as one.
+            Grassroots afrobeats culture, community, music and parties.
           </p>
           {/* CTA Row - Centered, modern, bold */}
           <div className="flex flex-row gap-6 items-center justify-center w-full max-w-xl mx-auto">
@@ -30,7 +30,7 @@ export function HeroSection() {
               }
               variant="secondary"
             >
-              Countdown to Album Drop
+              Join
             </Button>
           </div>
         </div>
