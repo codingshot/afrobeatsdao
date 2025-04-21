@@ -24,7 +24,7 @@ export function TeamSection() {
     <section id="team" className="py-16 bg-afro-yellow font-afro">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
+          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
             <span>Meet the Team</span>
             <span className="text-4xl" aria-label="Hands emoji">🫶</span>
           </h2>
@@ -35,14 +35,14 @@ export function TeamSection() {
         <div className="flex flex-wrap justify-center gap-8">
           {teamMembers.map((member) => (
             <div key={member.name} className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center border-4 border-afro-orange max-w-xs">
-              <div className="rounded-full overflow-hidden w-40 h-40 mb-4 border-4 border-afro-red flex items-center justify-center">
+              <div className="rounded-full overflow-hidden w-40 h-40 mb-4 border-4 border-afro-teal flex items-center justify-center">
                 <img
                   src={member.image}
                   alt={`${member.name} profile`}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h3 className="text-2xl font-bold mb-1">{member.name}</h3>
+              <h3 className="text-2xl font-heading font-bold mb-1">{member.name}</h3>
               <p className="text-lg text-gray-700 mb-3">{member.role}</p>
               <div className="flex gap-4">
                 {member.twitter && (

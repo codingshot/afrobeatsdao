@@ -3,49 +3,40 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+/* Bungee Font for headings */
+@import url('https://fonts.googleapis.com/css2?family=Bungee:wght@400&display=swap');
+
+/* Keep Montserrat for body text (already imported in index.html) */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 50 92% 91%; /* Soft Yellow */
+    --foreground: 0 0% 13%;   /* #222 */
+
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 13%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 184 77% 32%; /* Teal */
+    --primary-foreground: 0 0% 100%;
 
-    --primary: 114 81% 31%; /* Deep African Green */
-    --primary-foreground: 210 40% 98%;
+    --secondary: 29 96% 56%; /* Orange */
+    --secondary-foreground: 0 0% 100%;
 
-    --secondary: 29 88% 58%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 55 100% 56%; /* #FFD600 */
+    --accent-foreground: 0 0% 13%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --border: 29 96% 56%; /* orange for style */
+    --input: 29 96% 56%;
 
-    --accent: 354 81% 49%; /* Vibrant African Red */
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --ring: 0 0% 13%;
+    --radius: 1rem;
   }
   body {
-    @apply bg-background text-foreground font-bold font-afro;
+    @apply bg-background text-foreground font-sans;
+  }
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Bungee', cursive;
+    letter-spacing: 0.02em;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-afro;
-  }
-}
