@@ -1,13 +1,14 @@
 
 import { Twitter } from "lucide-react";
+
 export function Footer() {
-  return <footer className="bg-[#E63946] text-white py-12">
+  return <footer className="bg-[#E63946] text-white py-8">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <div className="mb-6 md:mb-0">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+          <div className="mb-4 md:mb-0">
             <div className="flex items-center justify-center md:justify-start gap-2">
               <span className="text-4xl" aria-label="Drum emoji">🪘</span>
-              <span className="text-2xl font-bold">Afrobeats.party</span>
+              <span className="text-2xl font-bold font-heading">Afrobeats.party</span>
             </div>
           </div>
           <div className="flex gap-6 items-center">
@@ -15,14 +16,12 @@ export function Footer() {
               <Twitter className="h-7 w-7" />
             </a>
             <a href="https://discord.com/invite/55EGdbyh" target="_blank" rel="noopener noreferrer" className="hover:text-[#FFD700] transition-colors" aria-label="Discord">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <title>Discord</title>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.4 17.3s-.3-.4-.6-.7c1.2-.4 1.7-1 1.7-1s-.4.2-1.1.5c-.2.1-.3.2-.5.2s-.4 0-.6-.1c-.1 0-.3-.1-.4-.1s-.2 0-.4.1c-.2.1-.4.2-.6.2s-.3-.1-.5-.2c-.7-.3-1.1-.5-1.1-.5s.4.6 1.6 1c-.2.3-.5.7-.6.7-2.1-.1-2.9-1.4-2.9-1.4 0-2.9 1.3-5.3 1.3-5.3C8.8 11 9.5 10.8 9.5 10.8l.5.6c-1.9.6-2.6 1.9-2.6 1.9s.2-.1.6-.2c1.5-.6 2.5-.5 2.5-.5s.1.1.3.2c0 0 .2-.1.5-.1s.5.1.5.1c.2-.1.3-.2.3-.2s1-.1 2.5.5c.3.1.6.2.6.2s-.8-1.2-2.6-1.8l.4-.7s.8.2 1.7 1.2c0 0 1.3 2.4 1.3 5.3 0 0-.7 1.3-2.9 1.4z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3847-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z" />
               </svg>
             </a>
           </div>
         </div>
-        
       </div>
     </footer>;
 }
