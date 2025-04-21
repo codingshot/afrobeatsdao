@@ -1,7 +1,10 @@
-
-import { Button } from "@/components/ui/button";
-import { CalendarDays, ExternalLink, MapPin } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+} from "@/components/ui/carousel";
 
 type Event = {
   image_url: string;
@@ -81,49 +84,56 @@ export function EventsSection() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Object.entries(EVENTS)
-            .sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
-            .map(([name, event]) => (
-              <div key={name} className="bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]">
-                <div className="relative aspect-[3/4]">
-                  <img 
-                    src={event.image_url} 
-                    alt={`${name} poster`}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6 space-y-4">
-                  <h3 className="text-2xl font-heading font-bold">{name}</h3>
-                  
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <MapPin className="shrink-0" />
-                    <span>{event.location}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <CalendarDays className="shrink-0" />
-                    <span>
-                      {formatDate(event.start_date)}
-                      {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                    </span>
-                  </div>
-                  
-                  <p className="text-gray-600 line-clamp-3">
-                    {event.event_description}
-                  </p>
-                  
-                  <Button 
-                    className="w-full bg-[#E63946] hover:bg-red-700 text-white font-heading"
-                    onClick={() => window.open(event.website, "_blank")}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {Object.entries(EVENTS)
+              .sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+              .map(([name, event]) => (
+                <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
+                  <a 
+                    href={event.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]"
                   >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Learn More
-                  </Button>
-                </div>
-              </div>
-            ))}
-        </div>
+                    <div className="relative aspect-video">
+                      <img 
+                        src={event.image_url} 
+                        alt={`${name} poster`}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-6 space-y-4">
+                      <h3 className="text-2xl font-heading font-bold">{name}</h3>
+                      
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <MapPin className="shrink-0" />
+                        <span>{event.location}</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <CalendarDays className="shrink-0" />
+                        <span>
+                          {formatDate(event.start_date)}
+                          {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
+                        </span>
+                      </div>
+                      
+                      <p className="text-gray-600 line-clamp-2">
+                        {event.event_description}
+                      </p>
+                    </div>
+                  </a>
+                </CarouselItem>
+              ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   );
