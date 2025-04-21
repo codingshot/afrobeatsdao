@@ -27,7 +27,7 @@ export function HeroSection() {
               Join the Vibe
             </Button>
             <Button 
-              className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
+              className="bg-[#108C95] hover:bg-[#0a777e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
               onClick={() => document.getElementById('music')?.scrollIntoView({
                 behavior: 'smooth'
               })} 
