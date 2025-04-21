@@ -1,12 +1,11 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Play, Music, Youtube, Instagram, Share2, Headphones } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-// Dance curriculum data
 const danceCurriculum = {
   afrobeats: [
     {
@@ -320,8 +319,8 @@ const DanceOfDay = () => {
   const [selectedGenre, setSelectedGenre] = useState("afrobeats");
   const [selectedDance, setSelectedDance] = useState(danceCurriculum.afrobeats[0]);
   const [selectedTab, setSelectedTab] = useState("overview");
+  const isMobile = useIsMobile();
 
-  // Handle dance selection
   const handleDanceSelect = (dance) => {
     const foundDance = [...danceCurriculum.afrobeats, ...danceCurriculum.amapiano].find(d => d.id === dance.id);
     if (foundDance) {
@@ -331,19 +330,17 @@ const DanceOfDay = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-afrobg to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-afrobg to-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-2 text-afro-black">African Dance Curriculum</h1>
-        <p className="text-center text-gray-600 mb-8 max-w-3xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2 text-afro-black">African Dance Curriculum</h1>
+        <p className="text-center text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto text-sm sm:text-base">
           Learn authentic Afrobeats and Amapiano dances from beginner to advanced levels with our comprehensive curriculum. 
           Featuring cultural context, step-by-step tutorials, and progress tracking.
         </p>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-3">
-            <div className="sticky top-4 space-y-6">
-              {/* Genre Selector */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8">
+          <div className={`${isMobile ? 'order-2' : 'lg:col-span-3'}`}>
+            <div className={`${isMobile ? 'space-y-4' : 'sticky top-4 space-y-6'}`}>
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle>Dance Styles</CardTitle>
@@ -356,20 +353,19 @@ const DanceOfDay = () => {
                       onClick={() => setSelectedGenre("afrobeats")}
                       className="justify-start"
                     >
-                      <Music className="mr-2" /> Afrobeats
+                      <Music className="mr-2 h-4 w-4" /> Afrobeats
                     </Button>
                     <Button 
                       variant={selectedGenre === "amapiano" ? "default" : "outline"}
                       onClick={() => setSelectedGenre("amapiano")}
                       className="justify-start"
                     >
-                      <Headphones className="mr-2" /> Amapiano
+                      <Headphones className="mr-2 h-4 w-4" /> Amapiano
                     </Button>
                   </div>
                 </CardContent>
               </Card>
               
-              {/* Dance List */}
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle>{selectedGenre === "afrobeats" ? "Afrobeats" : "Amapiano"} Dances</CardTitle>
@@ -393,61 +389,27 @@ const DanceOfDay = () => {
                   </div>
                 </CardContent>
               </Card>
-              
-              {/* Progress Tracking */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle>Your Progress</CardTitle>
-                  <CardDescription>Track your learning journey</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Zanku</span>
-                        <span>30%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-primary h-2.5 rounded-full" style={{ width: "30%" }}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Gwara Gwara</span>
-                        <span>15%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-primary h-2.5 rounded-full" style={{ width: "15%" }}></div>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm" className="w-full">View All Progress</Button>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
           
-          {/* Main Content Area */}
-          <div className="lg:col-span-9">
+          <div className={`${isMobile ? 'order-1' : 'lg:col-span-9'}`}>
             <Card className="shadow-lg">
-              {/* Dance Header */}
               <div className="relative">
-                <div className="h-48 md:h-64 bg-gradient-to-r from-primary to-afro-orange rounded-t-lg flex items-center justify-center overflow-hidden">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white z-10 text-center px-4">
+                <div className="h-36 sm:h-48 md:h-64 bg-gradient-to-r from-primary to-afro-orange rounded-t-lg flex items-center justify-center overflow-hidden">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white z-10 text-center px-4">
                     {selectedDance.name}
                   </h2>
                   <div className="absolute inset-0 bg-black/20"></div>
                 </div>
-                <div className="absolute bottom-0 left-0 bg-white px-4 py-1 rounded-tr-lg">
-                  <p className="text-sm font-medium">Origin: <span className="text-primary">{selectedDance.origin}</span></p>
+                <div className="absolute bottom-0 left-0 bg-white px-2 sm:px-4 py-1 rounded-tr-lg">
+                  <p className="text-xs sm:text-sm font-medium">Origin: <span className="text-primary">{selectedDance.origin}</span></p>
                 </div>
-                <div className="absolute bottom-0 right-0 bg-white px-4 py-1 rounded-tl-lg">
-                  <p className="text-sm font-medium">Difficulty: <span className="text-primary">{selectedDance.difficulty}</span></p>
+                <div className="absolute bottom-0 right-0 bg-white px-2 sm:px-4 py-1 rounded-tl-lg">
+                  <p className="text-xs sm:text-sm font-medium">Difficulty: <span className="text-primary">{selectedDance.difficulty}</span></p>
                 </div>
               </div>
               
-              {/* Content Tabs */}
-              <Tabs value={selectedTab} onValueChange={setSelectedTab} className="p-6">
+              <Tabs value={selectedTab} onValueChange={setSelectedTab} className="p-4 sm:p-6">
                 <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="learn">Step-by-Step</TabsTrigger>
@@ -455,204 +417,104 @@ const DanceOfDay = () => {
                   <TabsTrigger value="culture">Cultural Context</TabsTrigger>
                 </TabsList>
                 
-                {/* Overview Tab */}
                 <TabsContent value="overview" className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-semibold mb-2">About {selectedDance.name}</h3>
-                    <p className="text-gray-700">{selectedDance.description}</p>
+                    <h3 className="text-lg sm:text-xl font-semibold mb-2">About {selectedDance.name}</h3>
+                    <p className="text-gray-700 text-sm sm:text-base">{selectedDance.description}</p>
                   </div>
                   
-                  {/* Learning Modules */}
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Learning Modules</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {selectedDance.modules && selectedDance.modules.map((module, idx) => (
-                        <Card key={idx} className="hover:bg-gray-50 transition-colors">
-                          <CardContent className="p-4 flex items-center">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3">
-                              {idx + 1}
-                            </div>
-                            <div>
-                              <h4 className="font-medium">{module}</h4>
-                              <p className="text-xs text-gray-500">
-                                {idx === 0 ? "Beginner" : idx === 1 ? "Beginner-Intermediate" : 
-                                 idx === 2 ? "Intermediate" : "Advanced"}
-                              </p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Notable Dancers */}
-                  {selectedDance.notableDancers && (
+                  {selectedDance.modules && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-4">Notable Dancers & Choreographers</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedDance.notableDancers.map((dancer, idx) => (
-                          <span key={idx} className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
-                            {dancer}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Practice Challenge */}
-                  <Card className="bg-primary/5 border-primary/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2 flex items-center">
-                        <span className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mr-2">
-                          🔥
-                        </span>
-                        Weekly Challenge
-                      </h3>
-                      <p className="mb-4">Record a 15-second clip of your {selectedDance.name} skills and share it with #AfroVibes2025!</p>
-                      <Button>Join Challenge</Button>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                
-                {/* Learn Tab */}
-                <TabsContent value="learn" className="space-y-6">
-                  {/* Video Placeholder */}
-                  <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center mb-6">
-                    <div className="text-center">
-                      <Play size={48} className="mx-auto mb-2 text-gray-400" />
-                      <p className="text-gray-500">Tutorial video preview</p>
-                    </div>
-                  </div>
-                  
-                  {/* Step-by-Step */}
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Key Dance Moves</h3>
-                    <div className="space-y-6">
-                      {selectedDance.keyMoves && selectedDance.keyMoves.map((move, idx) => (
-                        <div key={idx} className="border rounded-lg p-4">
-                          <h4 className="font-semibold text-lg mb-2">{move.name}</h4>
-                          <ol className="list-decimal pl-5 space-y-2">
-                            {move.steps.map((step, stepIdx) => (
-                              <li key={stepIdx} className="text-gray-700">{step}</li>
-                            ))}
-                          </ol>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* External Tutorials */}
-                  {selectedDance.tutorials && (
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4">Tutorial Videos</h3>
+                      <h3 className="text-lg sm:text-xl font-semibold mb-4">Learning Modules</h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {selectedDance.tutorials.map((tutorial, idx) => (
-                          <Card key={idx}>
-                            <CardContent className="p-4">
-                              <div className="flex items-center mb-2">
-                                {tutorial.platform === "YouTube" ? (
-                                  <Youtube className="text-red-600 mr-2" size={20} />
-                                ) : tutorial.platform === "TikTok" ? (
-                                  <span className="mr-2 text-black font-bold">TT</span>
-                                ) : (
-                                  <Instagram className="text-pink-600 mr-2" size={20} />
-                                )}
-                                <span className="text-sm text-gray-500">{tutorial.platform}</span>
+                        {selectedDance.modules.map((module, idx) => (
+                          <Card key={idx} className="hover:bg-gray-50 transition-colors">
+                            <CardContent className="p-4 flex items-center">
+                              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3">
+                                {idx + 1}
                               </div>
-                              <h4 className="font-medium">{tutorial.title}</h4>
-                              {tutorial.creator && (
-                                <p className="text-xs text-gray-500 mb-2">By {tutorial.creator}</p>
-                              )}
-                              <Button variant="outline" size="sm" className="w-full" asChild>
-                                <a href={tutorial.link} target="_blank" rel="noopener noreferrer">
-                                  Watch Tutorial
-                                </a>
-                              </Button>
+                              <div>
+                                <h4 className="font-medium text-sm sm:text-base">{module}</h4>
+                                <p className="text-xs text-gray-500">
+                                  {idx === 0 ? "Beginner" : idx === 1 ? "Beginner-Intermediate" : 
+                                   idx === 2 ? "Intermediate" : "Advanced"}
+                                </p>
+                              </div>
                             </CardContent>
                           </Card>
                         ))}
                       </div>
                     </div>
                   )}
-                  
-                  {/* Practice Tips */}
-                  <Card className="bg-gray-50">
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-semibold mb-2">Practice Tips</h3>
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                        <li>Start slowly, focusing on technique before speed</li>
-                        <li>Practice in front of a mirror to check your form</li>
-                        <li>Record yourself to track your progress</li>
-                        <li>Try 10-15 minutes of daily practice for best results</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
                 </TabsContent>
                 
-                {/* Music Tab */}
-                <TabsContent value="music" className="space-y-6">
-                  <h3 className="text-xl font-semibold mb-4">Popular Songs for {selectedDance.name}</h3>
-                  
-                  {selectedDance.songs && (
-                    <div className="space-y-4">
-                      {selectedDance.songs.map((song, idx) => (
-                        <Card key={idx}>
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h4 className="font-medium">{song.title}</h4>
-                                <p className="text-sm text-gray-500">{song.artist}</p>
-                              </div>
-                              <div className="flex space-x-2">
-                                <Button variant="outline" size="icon" className="h-8 w-8" asChild>
-                                  <a href={song.youtube} target="_blank" rel="noopener noreferrer">
-                                    <Youtube size={16} />
-                                  </a>
-                                </Button>
-                                {song.spotify && (
-                                  <Button variant="outline" size="icon" className="h-8 w-8 bg-[#1DB954] text-white hover:bg-[#1DB954]/90 border-0" asChild>
-                                    <a href={song.spotify} target="_blank" rel="noopener noreferrer">
-                                      <Headphones size={16} />
-                                    </a>
-                                  </Button>
-                                )}
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
+                <TabsContent value="learn" className="space-y-6">
+                  {selectedDance.tutorials && selectedDance.tutorials[0] && (
+                    <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                      <iframe
+                        className="w-full h-full"
+                        src={`https://www.youtube.com/embed/${selectedDance.tutorials[0].link.split('=')[1] || selectedDance.tutorials[0].link.split('/').pop()}`}
+                        title={selectedDance.tutorials[0].title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
                   )}
                   
-                  {/* Practice Playlists */}
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Practice Playlists</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <Card className="bg-gradient-to-br from-[#1DB954]/90 to-[#1DB954] text-white">
-                        <CardContent className="p-6">
-                          <Headphones className="mb-2" size={24} />
-                          <h4 className="font-semibold text-lg">{selectedDance.name} Beats</h4>
-                          <p className="text-sm opacity-80 mb-4">20 songs • 1h 15m</p>
-                          <Button variant="secondary" size="sm" className="bg-white text-[#1DB954] hover:bg-white/90">
-                            Listen on Spotify
-                          </Button>
-                        </CardContent>
-                      </Card>
-                      <Card className="bg-gradient-to-br from-red-500/90 to-red-500 text-white">
-                        <CardContent className="p-6">
-                          <Youtube className="mb-2" size={24} />
-                          <h4 className="font-semibold text-lg">Dance Practice Mix</h4>
-                          <p className="text-sm opacity-80 mb-4">15 videos • 45m</p>
-                          <Button variant="secondary" size="sm" className="bg-white text-red-500 hover:bg-white/90">
-                            Watch on YouTube
-                          </Button>
-                        </CardContent>
-                      </Card>
+                  {selectedDance.keyMoves && (
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-semibold mb-4">Key Dance Moves</h3>
+                      <div className="space-y-4 sm:space-y-6">
+                        {selectedDance.keyMoves.map((move, idx) => (
+                          <div key={idx} className="border rounded-lg p-4">
+                            <h4 className="font-semibold text-base sm:text-lg mb-2">{move.name}</h4>
+                            <ol className="list-decimal pl-5 space-y-2 text-sm sm:text-base">
+                              {move.steps.map((step, stepIdx) => (
+                                <li key={stepIdx} className="text-gray-700">{step}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </TabsContent>
                 
-                {/* Cultural Context Tab */}
+                <TabsContent value="music" className="space-y-6">
+                  {selectedDance.songs && (
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-semibold mb-4">Featured Songs</h3>
+                      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                        {selectedDance.songs.map((song, idx) => (
+                          <Card key={idx} className="overflow-hidden">
+                            <div className="aspect-video">
+                              <iframe
+                                className="w-full h-full"
+                                src={`https://www.youtube.com/embed/${song.youtube.split('=')[1] || song.youtube.split('/').pop()}`}
+                                title={song.title}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                            <CardContent className="p-4">
+                              <h4 className="font-medium text-sm sm:text-base">{song.title}</h4>
+                              <p className="text-sm text-gray-500">{song.artist}</p>
+                              {song.spotify && (
+                                <Button variant="outline" size="sm" className="mt-2" asChild>
+                                  <a href={song.spotify} target="_blank" rel="noopener noreferrer">
+                                    <Headphones className="mr-2 h-4 w-4" />
+                                    Listen on Spotify
+                                  </a>
+                                </Button>
+                              )}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+                
                 <TabsContent value="culture" className="space-y-6">
                   {selectedDance.culturalContext && (
                     <div>
@@ -667,7 +529,6 @@ const DanceOfDay = () => {
                     </div>
                   )}
                   
-                  {/* Historical Context */}
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Historical Background</h3>
                     <div className="space-y-4">
@@ -711,7 +572,6 @@ const DanceOfDay = () => {
                     </div>
                   </div>
                   
-                  {/* Resources */}
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Additional Resources</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -742,18 +602,16 @@ const DanceOfDay = () => {
                 </TabsContent>
               </Tabs>
               
-              {/* Social Sharing & Navigation */}
-              <div className="p-6 pt-0 flex flex-wrap justify-between items-center gap-4">
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <Share2 className="mr-2 h-4 w-4" /> Share
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    Save for Later
-                  </Button>
+              <div className="p-4 sm:p-6 pt-0">
+                <div className="flex flex-wrap justify-between items-center gap-4">
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <Share2 className="mr-2 h-4 w-4" /> Share
+                    </Button>
+                    <Button variant="outline" size="sm">Save for Later</Button>
+                  </div>
                 </div>
                 
-                {/* Dance Carousel for Quick Navigation */}
                 <div className="w-full mt-4">
                   <h3 className="text-sm font-medium mb-2">Explore Other Dances</h3>
                   <Carousel className="w-full">
@@ -782,8 +640,8 @@ const DanceOfDay = () => {
                         </CarouselItem>
                       ))}
                     </CarouselContent>
-                    <CarouselPrevious className="left-0" />
-                    <CarouselNext className="right-0" />
+                    <CarouselPrevious className="hidden sm:flex" />
+                    <CarouselNext className="hidden sm:flex" />
                   </Carousel>
                 </div>
               </div>
