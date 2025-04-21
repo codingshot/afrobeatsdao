@@ -76,6 +76,7 @@ const EVENTS: Record<string, Event> = {
 export function EventsSection() {
   const [showPastEvents, setShowPastEvents] = useState(false);
   const today = new Date();
+  const DEFAULT_IMAGE = '/lovable-uploads/7d55db10-6858-47e9-a593-673aed7a7184.png';
 
   const filteredEvents = Object.entries(EVENTS)
     .filter(([, event]) => {
@@ -138,6 +139,10 @@ export function EventsSection() {
                     <div className="relative aspect-[16/9]">
                       <img 
                         src={event.image_url} 
+                        onError={(e) => {
+                          const imgElement = e.target as HTMLImageElement;
+                          imgElement.src = DEFAULT_IMAGE;
+                        }}
                         alt={`${name} poster`}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
@@ -181,4 +186,3 @@ export function EventsSection() {
     </section>
   );
 }
-
