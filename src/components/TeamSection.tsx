@@ -13,14 +13,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Larkim",
     role: "Artist and Creative",
-    image: "https://placehold.co/160x160.png?text=Larkim",
-    twitter: "#",
-    instagram: "#",
-  },
-  {
-    name: "Earnest Etim",
-    role: "Community Vibe Starter",
-    image: "https://placehold.co/160x160.png?text=Earnest+Etim",
+    image: "/lovable-uploads/eae83191-58b6-4b0b-a31e-3a00a104c730.png",
     twitter: "#",
     instagram: "#",
   },
@@ -70,3 +63,4 @@ export function TeamSection() {
     </section>
   );
 }
+
