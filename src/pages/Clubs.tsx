@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { Footer } from '@/components/Footer';
 import ClubsMapView from '@/components/clubs/ClubsMapView';
@@ -91,8 +92,8 @@ const Clubs = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background pt-20">
-      <main className="flex-1 container mx-auto px-4 py-8">
+    <div className="min-h-screen flex flex-col bg-background">
+      <main className="flex-1 container mx-auto px-4 py-4">
         <ClubsFilterBar 
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -105,22 +106,24 @@ const Clubs = () => {
           clubTypes={clubTypes}
         />
         
-        {viewMode === 'map' ? (
-          <ClubsMapView 
-            clubs={filteredClubs} 
-            filters={filters}
-            onSelectClub={handleSelectClub}
-          />
-        ) : (
-          <ClubsCardView clubs={filteredClubs} />
-        )}
-        
-        {filteredClubs.length === 0 && (
-          <div className="text-center py-16">
-            <h3 className="text-xl font-semibold">No clubs found</h3>
-            <p className="text-muted-foreground mt-2">Try adjusting your filters</p>
-          </div>
-        )}
+        <div className="h-[calc(100vh-16rem)]">
+          {viewMode === 'map' ? (
+            <ClubsMapView 
+              clubs={filteredClubs} 
+              filters={filters}
+              onSelectClub={handleSelectClub}
+            />
+          ) : (
+            <ClubsCardView clubs={filteredClubs} />
+          )}
+          
+          {filteredClubs.length === 0 && (
+            <div className="text-center py-16">
+              <h3 className="text-xl font-semibold">No clubs found</h3>
+              <p className="text-muted-foreground mt-2">Try adjusting your filters</p>
+            </div>
+          )}
+        </div>
       </main>
       
       <Footer />

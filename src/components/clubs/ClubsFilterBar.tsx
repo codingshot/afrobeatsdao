@@ -56,8 +56,8 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
       <CardContent className="p-4">
         <div className="flex flex-col gap-4">
           {/* Header and Subtitle */}
-          <div className="text-center mb-4">
-            <h2 className="text-2xl font-semibold">Afrobeats Clubs</h2>
+          <div className="text-center mb-2">
+            <h2 className="text-2xl font-heading text-black">Afrobeats Clubs</h2>
             <p className="text-muted-foreground mt-1">
               Find Afrobeats and Amapiano exclusive clubs around the world
             </p>
