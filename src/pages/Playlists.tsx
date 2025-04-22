@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, ExternalLink, Music2, Headphones, Youtube, Search, Filter, List, ArrowUp, ArrowDown, Shuffle } from "lucide-react";
@@ -167,12 +167,35 @@ const TRENDING_ARTISTS: Artist[] = [
 ];
 
 const Playlists = () => {
-  const { playNow, addToQueue, queue } = useGlobalAudioPlayer();
+  console.log("Playlists component rendering");
+  
+  // Wrap the hook usage in a try-catch to get more information about the error
+  let audioPlayerContext;
+  try {
+    audioPlayerContext = useGlobalAudioPlayer();
+    console.log("GlobalAudioPlayer context successfully obtained");
+  } catch (error) {
+    console.error("Error using GlobalAudioPlayer:", error);
+    // Provide fallback values for development
+    audioPlayerContext = {
+      playNow: () => console.log("Mock playNow called"),
+      addToQueue: () => console.log("Mock addToQueue called"),
+      queue: []
+    };
+  }
+  
+  const { playNow, addToQueue, queue } = audioPlayerContext;
   const { toast } = useToast();
+  
+  // Add an effect to log when the component mounts/unmounts
+  useEffect(() => {
+    console.log("Playlists component mounted");
+    return () => console.log("Playlists component unmounted");
+  }, []);
   
   const [searchQuery, setSearchQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
-  const [queueVisible, setQueueVisible] = useState(true);  // Changed from false to true
+  const [queueVisible, setQueueVisible] = useState(true);
   const [sortMode, setSortMode] = useState<"default" | "asc" | "desc">("default");
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
