@@ -77,7 +77,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
               placeholder="Search..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="w-48 pl-8 h-9 bg-white/90 border-0 focus-visible:ring-1 focus-visible:ring-[#008751]"
+              className="w-48 pl-8 h-9 bg-white border-0 focus-visible:ring-1 focus-visible:ring-[#008751] text-black"
             />
             <Search className="absolute left-2 h-4 w-4 text-black" />
           </form>
@@ -135,7 +135,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                   Music
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-2 p-2 z-50 bg-white">
+                  <ul className="grid w-[200px] gap-2 p-2 z-50 bg-white shadow-lg border border-gray-200">
                     <li>
                       <Link to="/#vibe">
                         <NavigationMenuLink

@@ -297,29 +297,27 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   }, []);
 
   return (
-    <GlobalAudioPlayerContext.Provider
-      value={{
-        currentSong,
-        queue,
-        isPlaying,
-        playNow,
-        addToQueue,
-        removeFromQueue,
-        togglePlay,
-        nextSong,
-        previousSong,
-        setVolume: updateVolume,
-        toggleRepeat,
-        reorderQueue,
-        duration,
-        currentTime,
-        isDragging,
-      }}
-    >
+    <GlobalAudioPlayerContext.Provider value={{
+      currentSong,
+      queue,
+      isPlaying,
+      playNow,
+      addToQueue,
+      removeFromQueue,
+      togglePlay,
+      nextSong,
+      previousSong,
+      setVolume: updateVolume,
+      toggleRepeat,
+      reorderQueue,
+      duration,
+      currentTime,
+      isDragging,
+    }}>
       {children}
       <div 
         ref={playerContainerRef} 
-        className="fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
+        className="fixed bottom-[80px] right-4 z-[100] bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
         style={{
           display: expandedView ? 'block' : 'none',
           visibility: videoVisible ? 'visible' : 'hidden',

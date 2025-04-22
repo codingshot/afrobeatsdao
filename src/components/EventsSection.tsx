@@ -148,15 +148,12 @@ export function EventsSection() {
   const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
 
   const getImageUrl = (imageUrl: string) => {
-    // If it's a URL (starts with http:// or https://), use it as is
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl;
     }
-    // If it's a local path (starts with /), use it as is
     if (imageUrl.startsWith('/')) {
       return imageUrl;
     }
-    // Otherwise, assume it's a path relative to the public folder
     return `/${imageUrl}`;
   };
 
@@ -178,23 +175,25 @@ export function EventsSection() {
   };
 
   return (
-    <section id="events" className="py-16 font-afro bg-slate-50">
+    <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
-            <span>Upcoming Events</span>
+          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2 text-black">
+            <span>Events</span>
             <span className="text-4xl">🎊</span>
           </h2>
           <div className="flex justify-center gap-4 mb-8">
             <Button
               variant={!showPastEvents ? "default" : "outline"}
               onClick={() => setShowPastEvents(false)}
+              className="bg-[#008751] text-white hover:bg-[#008751]/90"
             >
               Upcoming Events
             </Button>
             <Button
               variant={showPastEvents ? "default" : "outline"}
               onClick={() => setShowPastEvents(true)}
+              className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}
             >
               Past Events
             </Button>

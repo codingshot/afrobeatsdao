@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
@@ -29,11 +28,11 @@ function AlbumCountdown() {
 export function MusicSection() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
-  return <section id="music" className="py-20 text-black font-afro bg-[#FFD600]">
+  return <section id="music" className="py-20 text-black font-afro bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-heading font-extrabold mb-4 flex items-center justify-center gap-3">
-            <span className="text-black">Album</span>
+          <h2 className="text-5xl font-heading font-extrabold mb-4 flex items-center justify-center gap-3 text-black">
+            <span>Album</span>
             <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
           <p className="text-xl max-w-2xl mx-auto text-black">
@@ -79,4 +78,3 @@ export function MusicSection() {
       </div>
     </section>;
 }
-
