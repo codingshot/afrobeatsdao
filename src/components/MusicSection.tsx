@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
 import { FlippableAlbum } from "./FlippableAlbum";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CreativeCommons } from "lucide-react";
+
 function AlbumCountdown() {
   const releaseDate = new Date("2025-06-06T00:00:00Z");
   const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
@@ -23,6 +26,7 @@ function AlbumCountdown() {
       <div><span>{seconds.toString().padStart(2, "0")}</span><span className="ml-1 text-base">s</span></div>
     </div>;
 }
+
 export function MusicSection() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   return <section id="music" className="py-16 text-black font-afro bg-afro-yellow">
@@ -32,8 +36,19 @@ export function MusicSection() {
             <span>Album</span>
             <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
-          <p className="text-xl max-w-2xl mx-auto text-black">
-            Afrobeats is a <b>Public Good Album</b> 🆓 — our CC0 album available everywhere soon.
+          <p className="text-xl max-w-2xl mx-auto text-black flex items-center justify-center gap-2">
+            Afrobeats is a{" "}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <CreativeCommons className="w-6 h-6 text-black" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs text-center">
+                  CC0 is a Creative Commons license that allows creators to waive all copyright and related rights to their work, placing it in the public domain for free use without restrictions.
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>{" "}
+            <b>Public Good Album</b> 🆓 — our CC0 album available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
             Album drops June 6th, 2025!
