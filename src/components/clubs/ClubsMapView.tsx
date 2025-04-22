@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { MapContainerProps } from 'react-leaflet';
@@ -6,7 +5,7 @@ import { Club, ClubFilters } from '@/types/club';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
-import { MapPin, ExternalLink, Music, Clock, Users } from 'lucide-react';
+import { MapPin, ExternalLink, Music, Clock, Users, VideoOff } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -57,6 +56,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
   const defaultZoom = 2;
   const [hoveredClub, setHoveredClub] = useState<Club | null>(null);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
+  const [mapRef, setMapRef] = useState<L.Map | null>(null);
   
   useEffect(() => {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -75,6 +75,19 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
     return "";
   };
 
+  const handleCardSelect = (club: Club, index: number) => {
+    setActiveCardIndex(index);
+    if (mapRef && club.coordinates) {
+      mapRef.setView([club.coordinates[1], club.coordinates[0]], 15, {
+        animate: true,
+        duration: 1
+      });
+    }
+    if (onSelectClub) {
+      onSelectClub(club);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="rounded-lg overflow-hidden border border-[#008751] h-[calc(100vh-350px)] md:h-[500px] w-full bg-[#FEF7CD]/50 relative">
@@ -84,6 +97,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
           style={{ height: '100%', width: '100%' }}
           scrollWheelZoom={true}
           className="z-0"
+          ref={setMapRef}
           {...{} as ExtendedMapContainerProps}
         >
           <TileLayer
@@ -100,10 +114,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                 key={`${club.name}-${index}`} 
                 position={[club.coordinates[1], club.coordinates[0]] as L.LatLngExpression}
                 eventHandlers={{
-                  click: () => {
-                    if (onSelectClub) onSelectClub(club);
-                    setActiveCardIndex(index);
-                  },
+                  click: () => handleCardSelect(club, index),
                   mouseover: () => {
                     setHoveredClub(club);
                     setActiveCardIndex(index);
@@ -194,16 +205,17 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
             loop: true,
           }}
           className="w-full"
-          onSelect={(index) => setActiveCardIndex(index)}
           defaultIndex={activeCardIndex}
+          onSelect={(index: number) => setActiveCardIndex(index)}
         >
           <CarouselContent>
             {clubs.map((club, index) => (
               <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
                 <Card 
-                  className={`p-2 h-full transition-all duration-200 ${
-                    hoveredClub?.name === club.name ? 'ring-2 ring-[#008751]' : ''
+                  className={`p-2 h-full transition-all duration-200 cursor-pointer ${
+                    hoveredClub?.name === club.name || index === activeCardIndex ? 'ring-2 ring-[#008751]' : ''
                   }`}
+                  onClick={() => handleCardSelect(club, index)}
                   onMouseEnter={() => setHoveredClub(club)}
                   onMouseLeave={() => setHoveredClub(null)}
                 >
@@ -229,7 +241,10 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                           size="sm" 
                           variant="outline"
                           className="flex-1 bg-[#008751] text-white hover:bg-[#008751]/90"
-                          onClick={() => window.open(club.google_maps, '_blank')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(club.google_maps, '_blank');
+                          }}
                         >
                           <MapPin className="mr-1 h-4 w-4" />
                           Map
@@ -240,7 +255,10 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                           size="sm" 
                           variant="outline"
                           className="flex-1 bg-[#F97316] text-white hover:bg-[#F97316]/90"
-                          onClick={() => window.open(club.website, '_blank')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(club.website, '_blank');
+                          }}
                         >
                           <ExternalLink className="mr-1 h-4 w-4" />
                           Website
@@ -252,8 +270,8 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
         </Carousel>
       </div>
     </div>
