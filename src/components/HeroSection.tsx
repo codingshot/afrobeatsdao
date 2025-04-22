@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Image } from "lucide-react";
 
 export function HeroSection() {
   const scrollToVibe = () => {
@@ -16,7 +15,7 @@ export function HeroSection() {
       <div className="relative z-10 text-center space-y-6 p-4">
         <div className="flex flex-col items-center">
           <div className="mb-4">
-            <Image 
+            <img 
               src="/lovable-uploads/6b6dcd87-97f1-4c68-964d-3ef675aff525.png" 
               alt="Afrobeats DAO Logo" 
               className="mx-auto w-40 h-40 object-contain"
