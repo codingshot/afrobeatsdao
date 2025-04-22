@@ -67,6 +67,6 @@ export function FlippableAlbum({ coverImage }: FlippableAlbumProps) {
       <HoverCardContent className="bg-black text-white border-[#FFD600]">
         Click to flip for tracklist
       </HoverCardContent>
-    </div>
+    </HoverCard>
   );
 }
