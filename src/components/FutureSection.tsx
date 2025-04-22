@@ -1,5 +1,8 @@
+
 import { Button } from "@/components/ui/button";
 import { Mic, Music, Lightbulb } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 type Initiative = {
   id: number;
   title: string;
@@ -7,6 +10,7 @@ type Initiative = {
   icon: React.ReactNode;
   emoji: string;
 };
+
 const initiatives: Initiative[] = [{
   id: 1,
   title: "Community-run Concerts",
@@ -26,7 +30,10 @@ const initiatives: Initiative[] = [{
   icon: <Lightbulb className="h-6 w-6" />,
   emoji: "💡"
 }];
+
 export function FutureSection() {
+  const navigate = useNavigate();
+
   return <section id="future" className="py-16 bg-gradient-to-b from-[#E63946]/10 to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
@@ -51,8 +58,11 @@ export function FutureSection() {
         </div>
         
         <div className="text-center mt-12 flex justify-center">
-          <Button className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#264653] text-lg px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 font-heading" onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank")}>
-            Join
+          <Button 
+            className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#264653] text-lg px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-2 font-heading"
+            onClick={() => navigate('/dance')}
+          >
+            Learn to Dance
           </Button>
         </div>
       </div>
