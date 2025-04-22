@@ -89,7 +89,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="City" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 <SelectItem value="all">All Cities</SelectItem>
                 {cities.map(city => (
                   <SelectItem key={city} value={city}>{city}</SelectItem>
@@ -101,7 +101,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Club Type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 <SelectItem value="all">All Types</SelectItem>
                 {clubTypes.map(type => (
                   <SelectItem key={type} value={type}>{type}</SelectItem>
@@ -113,7 +113,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Music Style" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 <SelectItem value="all">All Music</SelectItem>
                 {musicTypes.map(music => (
                   <SelectItem key={music} value={music}>{music}</SelectItem>
@@ -125,7 +125,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Sort By" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 <SelectItem value="name">Name</SelectItem>
                 <SelectItem value="city">City</SelectItem>
                 <SelectItem value="year_founded">Year Founded</SelectItem>
@@ -136,7 +136,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
           
           {(filters.city || filters.type || filters.music || filters.search) && (
             <div className="flex justify-end">
-              <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+              <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-muted-foreground hover:text-foreground">
                 Clear Filters
               </Button>
             </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Club } from '@/types/club';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +6,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 import { MapPin, ExternalLink, Info, Clock, Music, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import { Badge } from '@/components/ui/badge';
+import { MapPinOff } from 'lucide-react';
 
 interface ClubsCardViewProps {
   clubs: Club[];
@@ -15,7 +15,6 @@ interface ClubsCardViewProps {
 const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
   const { getFlag } = useCountryFlags();
 
-  // Helper function to get country based on city
   const getCountryFromCity = (city: string) => {
     if (city === "London") return "United Kingdom";
     if (city === "Bangkok") return "Thailand";
@@ -23,6 +22,19 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
     if (city === "Amsterdam") return "Netherlands";
     return "";
   };
+
+  if (clubs.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <MapPinOff className="h-12 w-12 mb-4 text-muted-foreground" />
+        <h3 className="text-xl font-semibold mb-2">No clubs found</h3>
+        <p className="text-muted-foreground mb-4">Try adjusting your filters to find more clubs</p>
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          Reset All Filters
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
