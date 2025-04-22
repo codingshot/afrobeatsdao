@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -7,7 +6,6 @@ import {
   Repeat, Repeat1, Share2, Music2, Maximize, Minimize
 } from "lucide-react";
 
-// Add type declarations for the YouTube IFrame API
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
@@ -17,9 +15,9 @@ declare global {
 
 export interface Song {
   id: string;
-  title: string;
-  artist: string;
   youtube: string;
+  title?: string;
+  artist?: string;
 }
 
 interface GlobalAudioPlayerContextType {
@@ -47,11 +45,11 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [volume, setVolume] = useState(100);
   const [repeat, setRepeat] = useState(false);
   const [youtubeApiLoaded, setYoutubeApiLoaded] = useState(false);
-  // Change default state to true to show video by default
   const [expandedView, setExpandedView] = useState(true);
+  const [videoTitle, setVideoTitle] = useState<string>("Loading...");
+  const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Load YouTube API only once when component mounts
   useEffect(() => {
     if (!window.YT && !document.getElementById('youtube-iframe-api')) {
       const tag = document.createElement('script');
@@ -68,10 +66,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     }
   }, []);
 
-  // Initialize the player after YouTube API is loaded
   useEffect(() => {
     if (youtubeApiLoaded && playerContainerRef.current) {
-      // Destroy existing player if it exists
       if (player) {
         try {
           player.destroy();
@@ -94,12 +90,19 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 }
               } else if (event.data === window.YT.PlayerState.PLAYING) {
                 setIsPlaying(true);
+                const videoData = event.target.getVideoData();
+                if (videoData) {
+                  setVideoTitle(videoData.title || "Unknown Title");
+                  setChannelTitle(videoData.author || "Unknown Channel");
+                }
               } else if (event.data === window.YT.PlayerState.PAUSED) {
                 setIsPlaying(false);
               }
             },
             onError: (event: any) => {
               console.error("YouTube player error:", event);
+              setVideoTitle("Error loading video");
+              setChannelTitle("Unknown");
             },
             onReady: (event: any) => {
               event.target.setVolume(volume);
@@ -113,7 +116,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       }
     }
 
-    // Cleanup function
     return () => {
       if (player) {
         try {
@@ -125,7 +127,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     };
   }, [youtubeApiLoaded, expandedView]);
 
-  // Update player size when expandedView changes
   useEffect(() => {
     if (player && player.setSize) {
       try {
@@ -144,19 +145,14 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     setIsPlaying(true);
     if (player && player.loadVideoById) {
       try {
-        // Extract video ID more robustly
         let videoId;
         if (song.youtube.includes('v=')) {
-          // Handle URLs like https://www.youtube.com/watch?v=VIDEO_ID
           videoId = song.youtube.split('v=')[1].split('&')[0];
         } else if (song.youtube.includes('youtu.be/')) {
-          // Handle shortened URLs like https://youtu.be/VIDEO_ID
           videoId = song.youtube.split('youtu.be/')[1].split('?')[0];
         } else {
-          // Fallback to treating the entire string as an ID
           videoId = song.youtube;
         }
-        
         console.log("Loading video ID:", videoId);
         player.loadVideoById(videoId);
       } catch (e) {
@@ -199,7 +195,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   }, [queue, playNow]);
 
   const previousSong = useCallback(() => {
-    // Restart current song
     if (player) {
       try {
         player.seekTo(0);
@@ -269,8 +264,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium truncate">{currentSong.title}</h3>
-                <p className="text-xs text-gray-400 truncate">{currentSong.artist}</p>
+                <h3 className="text-sm font-medium truncate">{videoTitle}</h3>
+                <p className="text-xs text-gray-400 truncate">{channelTitle}</p>
               </div>
             </div>
 

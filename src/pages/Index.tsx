@@ -22,9 +22,7 @@ const Index = () => {
     // Create a song object from the Vibe of the Day
     const defaultSong = {
       id: `vibe-${vibeVideoId}`,
-      title: "Vibe of the Day",
-      artist: "Afrobeats DAO",
-      youtube: vibeVideoId // Use the video ID directly
+      youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
     };
     
     // Play the Vibe of the Day video
