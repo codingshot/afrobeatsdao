@@ -6,7 +6,6 @@ import { Play, Music, Headphones, Youtube, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 
-// Types for playlists and artists
 interface Playlist {
   id: string;
   title: string;
@@ -26,7 +25,6 @@ interface Artist {
   youtube_id?: string;
 }
 
-// Sample playlist data
 const PLAYLISTS: Playlist[] = [
   {
     id: "spotify1",
@@ -78,7 +76,6 @@ const PLAYLISTS: Playlist[] = [
   }
 ];
 
-// Sample trending artists
 const TRENDING_ARTISTS: Artist[] = [
   {
     id: "artist1",
@@ -112,6 +109,10 @@ const TRENDING_ARTISTS: Artist[] = [
 const Playlists = () => {
   const { playNow } = useGlobalAudioPlayer();
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+  };
+
   const playArtistSong = (artist: Artist) => {
     if (artist.youtube_id) {
       playNow({
@@ -121,7 +122,6 @@ const Playlists = () => {
     }
   };
 
-  // Platform icon mapping
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
       case 'spotify':
@@ -161,7 +161,8 @@ const Playlists = () => {
                     <img 
                       src={playlist.image} 
                       alt={playlist.title} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300" 
+                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                      onError={handleImageError} 
                     />
                     <div className="absolute bottom-2 right-2 bg-black/70 text-white p-1.5 rounded-full">
                       {getPlatformIcon(playlist.platform)}
@@ -199,7 +200,8 @@ const Playlists = () => {
                     <img 
                       src={artist.image} 
                       alt={artist.name} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300" 
+                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                      onError={handleImageError}
                     />
                   </div>
                   

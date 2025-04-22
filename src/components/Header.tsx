@@ -26,6 +26,11 @@ export function Header() {
   const progress = getTotalProgress();
   const onIndexPage = location.pathname === "/";
 
+  // Image error handling
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+  };
+
   useEffect(() => {
     // On the home page, implement scroll-based visibility
     if (location.pathname === '/') {
@@ -56,6 +61,7 @@ export function Header() {
             src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png" 
             alt="Afrobeats Logo" 
             className="h-12 w-auto"
+            onError={handleImageError}
           />
         </Link>
 

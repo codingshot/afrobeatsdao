@@ -60,6 +60,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [isDragging, setIsDragging] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (youtubeApiLoaded && player && !currentSong) {
+      const defaultVideo = getRandomVibeVideo();
+      playNow({
+        id: `default-vibe-${defaultVideo}`,
+        youtube: defaultVideo
+      });
+    }
+  }, [youtubeApiLoaded, player, currentSong]);
+
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
     const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
     const randomIndex = Math.floor(Math.random() * availableVideos.length);
@@ -319,8 +329,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       >
         <div id="youtube-player"></div>
       </div>
-      {currentSong && (
-        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
+        {currentSong ? (
           <div className="max-w-7xl mx-auto flex flex-col gap-2">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
@@ -438,8 +448,28 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
               </span>
             </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Music2 className="h-8 w-8 text-[#FFD600]" />
+              <span className="text-sm">Afrobeats Player</span>
+            </div>
+            <Button 
+              onClick={() => {
+                const defaultVideo = getRandomVibeVideo();
+                playNow({
+                  id: `default-vibe-${defaultVideo}`,
+                  youtube: defaultVideo
+                });
+              }}
+              className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90"
+            >
+              <Play className="mr-2 h-4 w-4" />
+              Play Something
+            </Button>
+          </div>
+        )}
+      </div>
     </GlobalAudioPlayerContext.Provider>
   );
 };
