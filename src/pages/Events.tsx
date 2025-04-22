@@ -185,7 +185,7 @@ const Events = () => {
       
       <main className="container mx-auto px-4 py-24">
         <div className="flex flex-col items-center text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4">
+          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-slate-950">
             Afrobeats Events
           </h1>
           <p className="text-xl max-w-2xl mx-auto text-slate-950">
