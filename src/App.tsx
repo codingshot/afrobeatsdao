@@ -35,7 +35,7 @@ const App = () => {
                 <Route path="/dance/:id" element={<DanceDetails />} />
                 <Route path="/clubs" element={<Clubs />} />
                 <Route path="/events" element={<Events />} />
-                <Route path="/playlists" element={<Playlists />} />
+                <Route path="/music" element={<Playlists />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

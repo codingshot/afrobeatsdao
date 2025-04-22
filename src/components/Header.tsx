@@ -28,13 +28,11 @@ export function Header() {
   const { getTotalProgress } = useDanceProgress();
   const progress = getTotalProgress();
 
-  // Image error handling
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/AfrobeatsDAOMeta.png";
   };
 
   useEffect(() => {
-    // On the home page, implement scroll-based visibility
     if (location.pathname === '/') {
       const handleScroll = () => {
         const scrollPosition = window.scrollY;
@@ -42,11 +40,10 @@ export function Header() {
       };
 
       window.addEventListener('scroll', handleScroll);
-      handleScroll(); // Check initial scroll position
+      handleScroll();
       
       return () => window.removeEventListener('scroll', handleScroll);
     } else {
-      // On other pages, always show the header
       setIsVisible(true);
     }
   }, [location.pathname]);
@@ -62,7 +59,6 @@ export function Header() {
 
   return (
     <>
-      {/* Add spacer div to prevent content overlap */}
       <div className={`h-[72px] ${isVisible ? 'block' : 'hidden'}`} />
       
       <header className={`fixed top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
@@ -78,7 +74,6 @@ export function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             <NavigationMenu>
               <NavigationMenuList>
@@ -139,11 +134,11 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/playlists">
+                  <Link to="/music">
                     <NavigationMenuLink
                       className={cn(
                         "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/playlists") && "bg-black/20"
+                        isRouteActive("/music") && "bg-black/20"
                       )}
                     >
                       <Music className="mr-2 h-4 w-4" />
@@ -155,7 +150,6 @@ export function Header() {
             </NavigationMenu>
           </div>
 
-          {/* Progress Dropdown (Desktop) */}
           {onDancePage && (
             <div className="hidden md:flex items-center">
               <DropdownMenu>
@@ -193,7 +187,6 @@ export function Header() {
             </div>
           )}
 
-          {/* Mobile Menu */}
           <div className="md:hidden flex items-center space-x-4">
             {onDancePage && (
               <DropdownMenu>
@@ -274,10 +267,10 @@ export function Header() {
                     Events
                   </Link>
                   <Link 
-                    to="/playlists"
+                    to="/music"
                     className={cn(
                       "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
-                      isRouteActive("/playlists") && "bg-black/20"
+                      isRouteActive("/music") && "bg-black/20"
                     )}
                   >
                     <Music className="mr-3 h-5 w-5" />
