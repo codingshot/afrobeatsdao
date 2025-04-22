@@ -19,7 +19,6 @@ const MainNavbar = ({ className }: { className?: string }) => {
   const onIndexPage = location.pathname === "/";
 
   useEffect(() => {
-    // Only apply scroll effect on index page
     if (!onIndexPage) {
       setIsScrolled(true);
       return;
@@ -31,30 +30,25 @@ const MainNavbar = ({ className }: { className?: string }) => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Check initial scroll position
-    
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [onIndexPage]);
 
-  // Don't render if on index page and not scrolled
   if (onIndexPage && !isScrolled) {
     return null;
   }
 
-  // Handle search submission
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Navigate to appropriate search page based on current route
     if (location.pathname.includes('/clubs')) {
-      // For example, this could redirect to /clubs with a search param
       window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
     } else if (location.pathname.includes('/dance')) {
       window.location.href = `/dance?search=${encodeURIComponent(searchValue)}`;
     } else if (location.pathname.includes('/events')) {
       window.location.href = `/events?search=${encodeURIComponent(searchValue)}`;
     } else {
-      // Default search leads to clubs
       window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
     }
   };
@@ -76,7 +70,6 @@ const MainNavbar = ({ className }: { className?: string }) => {
         </Link>
 
         <div className="hidden md:flex items-center space-x-4">
-          {/* Search form */}
           <form onSubmit={handleSearch} className="relative flex items-center">
             <Input
               type="text"
@@ -94,9 +87,9 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/dance">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
                       location.pathname.startsWith("/dance") &&
-                        "bg-accent/50 text-accent-foreground"
+                        "bg-black/10 text-black"
                     )}
                   >
                     <Play className="mr-2 h-4 w-4" />
@@ -109,9 +102,9 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/events">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
                       location.pathname.startsWith("/events") &&
-                        "bg-accent/50 text-accent-foreground"
+                        "bg-black/10 text-black"
                     )}
                   >
                     <Calendar className="mr-2 h-4 w-4" />
@@ -124,9 +117,9 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/clubs">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
                       location.pathname.startsWith("/clubs") &&
-                        "bg-accent/50 text-accent-foreground"
+                        "bg-black/10 text-black"
                     )}
                   >
                     <Users className="mr-2 h-4 w-4" />
@@ -136,7 +129,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="group inline-flex h-10 w-max items-center justify-center px-4 py-2 text-sm font-medium">
+                <NavigationMenuTrigger className="group inline-flex h-10 w-max items-center justify-center px-4 py-2 text-sm font-medium text-black">
                   <Music className="mr-2 h-4 w-4" />
                   Music
                 </NavigationMenuTrigger>
@@ -176,7 +169,6 @@ const MainNavbar = ({ className }: { className?: string }) => {
           </NavigationMenu>
         </div>
 
-        {/* Mobile menu - improved version */}
         <div className="md:hidden flex items-center">
           <form onSubmit={handleSearch} className="relative mr-2">
             <Input
@@ -189,7 +181,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
             <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
           </form>
           
-          <Link to="/dance" className="px-2 py-1 text-sm font-medium">
+          <Link to="/dance" className="px-2 py-1 text-sm font-medium text-black">
             Dance
           </Link>
         </div>
