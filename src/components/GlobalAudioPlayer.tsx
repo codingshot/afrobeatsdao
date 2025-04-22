@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
   Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
@@ -34,6 +35,9 @@ interface GlobalAudioPlayerContextType {
   setVolume: (value: number) => void;
   toggleRepeat: () => void;
   reorderQueue: (from: number, to: number) => void;
+  duration: number;
+  currentTime: number;
+  isDragging: boolean;
 }
 
 const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | null>(null);
@@ -51,6 +55,9 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
   const [videoVisible, setVideoVisible] = useState(true);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
@@ -104,6 +111,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                   setVideoTitle(videoData.title || "Unknown Title");
                   setChannelTitle(videoData.author || "Unknown Channel");
                 }
+                setDuration(event.target.getDuration());
               } else if (event.data === window.YT.PlayerState.PAUSED) {
                 setIsPlaying(false);
               }
@@ -141,27 +149,30 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     };
   }, [youtubeApiLoaded]);
 
-  // Updated effect to properly handle video visibility
   useEffect(() => {
-    if (playerContainerRef.current) {
-      // Control the video container visibility based on expandedView
-      playerContainerRef.current.style.display = expandedView ? 'block' : 'none';
-      
-      // When video is not visible but we're still in expanded view (audio only mode),
-      // move the container off-screen but keep it playing
-      if (expandedView && !videoVisible) {
-        playerContainerRef.current.style.position = 'fixed';
-        playerContainerRef.current.style.left = '-9999px'; // Move off-screen
-        playerContainerRef.current.style.visibility = 'hidden'; // Hide from view
-      } else if (expandedView) {
-        playerContainerRef.current.style.position = 'fixed';
-        playerContainerRef.current.style.bottom = '80px';
-        playerContainerRef.current.style.right = '4px';
-        playerContainerRef.current.style.left = 'auto';
-        playerContainerRef.current.style.visibility = 'visible';
+    if (!player || !isPlaying) return;
+
+    const interval = setInterval(() => {
+      if (player.getCurrentTime && !isDragging) {
+        setCurrentTime(player.getCurrentTime());
       }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [player, isPlaying, isDragging]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleTimeChange = (value: number) => {
+    if (player && player.seekTo) {
+      player.seekTo(value);
+      setCurrentTime(value);
     }
-  }, [expandedView, videoVisible]);
+  };
 
   const playNow = useCallback((song: Song) => {
     if (currentSong) {
@@ -290,106 +301,141 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         setVolume: updateVolume,
         toggleRepeat,
         reorderQueue,
+        duration,
+        currentTime,
+        isDragging,
       }}
     >
       {children}
       <div 
         ref={playerContainerRef} 
         className="fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
+        style={{
+          display: expandedView ? 'block' : 'none',
+          visibility: videoVisible ? 'visible' : 'hidden',
+          position: 'fixed',
+          ...(expandedView && !videoVisible ? { left: '-9999px' } : { right: '4px' })
+        }}
       >
         <div id="youtube-player"></div>
       </div>
       {currentSong && (
         <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
-              <div className="flex-shrink-0">
-                <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
+          <div className="max-w-7xl mx-auto flex flex-col gap-2">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
+                <div className="flex-shrink-0">
+                  <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-sm font-medium truncate">{videoTitle}</h3>
+                  <p className="text-xs text-gray-400 truncate">{channelTitle}</p>
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="text-sm font-medium truncate">{videoTitle}</h3>
-                <p className="text-xs text-gray-400 truncate">{channelTitle}</p>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={previousSong}
+                  className="text-white hover:bg-white/10"
+                >
+                  <SkipBack className="h-5 w-5" />
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={togglePlay}
+                  className="text-white hover:bg-white/10"
+                >
+                  {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={nextSong}
+                  className="text-white hover:bg-white/10"
+                >
+                  <SkipForward className="h-5 w-5" />
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleRepeat}
+                  className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}
+                >
+                  {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleVideo}
+                  className="text-white hover:bg-white/10"
+                  title={videoVisible ? "Hide video" : "Show video"}
+                >
+                  {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setVolume(volume === 0 ? 100 : 0)}
+                  className="text-white hover:bg-white/10"
+                >
+                  {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                </Button>
+                
+                <div className="w-24">
+                  <Slider
+                    value={[volume]}
+                    min={0}
+                    max={100}
+                    step={1}
+                    onValueChange={([value]) => updateVolume(value)}
+                    className="cursor-pointer flex-1"
+                  />
+                </div>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleExpandedView}
+                  className="text-white hover:bg-white/10"
+                  title={expandedView ? "Collapse video" : "Show video"}
+                >
+                  {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+                </Button>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={previousSong}
-                className="text-white hover:bg-white/10"
-              >
-                <SkipBack className="h-5 w-5" />
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={togglePlay}
-                className="text-white hover:bg-white/10"
-              >
-                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={nextSong}
-                className="text-white hover:bg-white/10"
-              >
-                <SkipForward className="h-5 w-5" />
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleRepeat}
-                className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}
-              >
-                {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleVideo}
-                className="text-white hover:bg-white/10"
-                title={videoVisible ? "Hide video" : "Show video"}
-              >
-                {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setVolume(volume === 0 ? 100 : 0)}
-                className="text-white hover:bg-white/10"
-              >
-                {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-              </Button>
-              
-              <div className="w-24">
-                <Slider
-                  value={[volume]}
-                  min={0}
-                  max={100}
-                  step={1}
-                  onValueChange={([value]) => updateVolume(value)}
-                  className="cursor-pointer"
-                />
-              </div>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleExpandedView}
-                className="text-white hover:bg-white/10"
-                title={expandedView ? "Collapse video" : "Show video"}
-              >
-                {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-              </Button>
+            <div className="flex items-center gap-2 w-full px-2">
+              <span className="text-xs text-gray-400 min-w-[40px]">
+                {formatTime(currentTime)}
+              </span>
+              <Slider
+                value={[currentTime]}
+                min={0}
+                max={duration}
+                step={1}
+                onValueChange={([value]) => {
+                  setCurrentTime(value);
+                  setIsDragging(true);
+                }}
+                onValueCommit={([value]) => {
+                  handleTimeChange(value);
+                  setIsDragging(false);
+                }}
+                className="cursor-pointer flex-1"
+              />
+              <span className="text-xs text-gray-400 min-w-[40px]">
+                {formatTime(duration)}
+              </span>
             </div>
           </div>
         </div>
