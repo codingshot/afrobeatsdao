@@ -50,12 +50,15 @@ body {
 .section-title,
 .artist-name,
 .playlist-title,
-.hero-title,
 .hero-subtitle,
 .team-title,
 .team-subtitle,
 .event-title {
   color: black !important;
+}
+
+.hero-title {
+  color: white !important;
 }
 
 .white-text,
@@ -128,4 +131,3 @@ body {
 .full-width-tabs {
   width: 100% !important;
 }
-

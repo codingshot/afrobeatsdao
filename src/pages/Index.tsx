@@ -1,3 +1,4 @@
+
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
@@ -9,13 +10,13 @@ import { useEffect, useState } from "react";
 import { HeroSection } from "@/components/HeroSection";
 
 const Index = () => {
-  const { playNow } = useGlobalAudioPlayer();
+  const { playNow, currentSong } = useGlobalAudioPlayer();
   const [isPlayerInitialized, setIsPlayerInitialized] = useState(false);
 
-  // Set the current Vibe of the Day video to play when the component mounts
+  // Only initialize player if no song is currently playing
   useEffect(() => {
-    // Only initialize once
-    if (isPlayerInitialized) return;
+    // Only initialize once and only if no song is currently playing
+    if (isPlayerInitialized || currentSong) return;
     
     // Add a small delay to ensure the player is fully initialized
     const timer = setTimeout(() => {
@@ -41,7 +42,7 @@ const Index = () => {
     }, 1000); // 1 second delay to ensure player is ready
     
     return () => clearTimeout(timer);
-  }, [playNow, isPlayerInitialized]);
+  }, [playNow, isPlayerInitialized, currentSong]);
 
   return (
     <div className="min-h-screen font-sans pb-[100px]">

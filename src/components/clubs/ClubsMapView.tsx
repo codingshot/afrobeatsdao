@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { MapContainerProps } from 'react-leaflet';
@@ -69,7 +68,6 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
     });
   }, []);
 
-  // Move to the selected card when activeCardIndex changes
   useEffect(() => {
     if (carouselApi) {
       carouselApi.scrollTo(activeCardIndex);
@@ -278,8 +276,8 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex" />
-          <CarouselNext className="hidden md:flex" />
+          <CarouselPrevious className="absolute -left-12 md:-left-16" />
+          <CarouselNext className="absolute -right-12 md:-right-16" />
         </Carousel>
       </div>
     </div>
@@ -287,4 +285,3 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
 };
 
 export default ClubsMapView;
-
