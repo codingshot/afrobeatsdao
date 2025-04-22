@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { 
@@ -19,33 +20,34 @@ import { Button } from "@/components/ui/button";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
 
 export function Header() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const location = useLocation();
   const { getTotalProgress } = useDanceProgress();
   const progress = getTotalProgress();
   const onIndexPage = location.pathname === "/";
 
   useEffect(() => {
-    if (location.pathname.startsWith('/dance')) {
+    // On the home page, implement scroll-based visibility
+    if (location.pathname === '/') {
+      const handleScroll = () => {
+        const scrollPosition = window.scrollY;
+        setIsVisible(scrollPosition > 100);
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial scroll position
+      
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      // On other pages, always show the header
       setIsVisible(true);
-      return;
     }
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsVisible(scrollPosition > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial scroll position
-    
-    return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
   const onDancePage = location.pathname.startsWith('/dance');
 
   return (
-    <header className={`fixed top-0 w-full z-40 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
+    <header className={`fixed top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
     }`}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
