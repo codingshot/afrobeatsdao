@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -171,7 +172,7 @@ const Playlists = () => {
   
   const [searchQuery, setSearchQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
-  const [queueVisible, setQueueVisible] = useState(false);
+  const [queueVisible, setQueueVisible] = useState(true);  // Changed from false to true
   const [sortMode, setSortMode] = useState<"default" | "asc" | "desc">("default");
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
