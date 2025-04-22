@@ -58,8 +58,8 @@ const DanceDetails = () => {
           <h1 className="text-2xl font-bold text-white mb-4">Dance not found</h1>
           <Button 
             onClick={() => navigate("/dance")}
-            variant="outline"
-            className="text-white border-white/20 hover:bg-white/10"
+            variant="white"
+            className="text-black"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dances

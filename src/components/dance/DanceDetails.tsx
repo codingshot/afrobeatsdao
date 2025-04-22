@@ -60,8 +60,8 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
       <div className="max-w-7xl mx-auto">
         <Button 
           onClick={() => navigate("/dance")}
-          variant="outline"
-          className="mb-6 text-white border-white/20 hover:bg-white/10"
+          variant="white"
+          className="mb-6"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dances

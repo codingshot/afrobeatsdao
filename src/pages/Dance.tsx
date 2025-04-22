@@ -197,9 +197,9 @@ const DancePage = () => {
                 )}
                 
                 <Button 
-                  variant="ghost" 
+                  variant="white" 
                   size="sm"
-                  className="w-full mt-3 text-white hover:text-[#FFD600] hover:bg-[#FFD600]/10 justify-between"
+                  className="w-full mt-3 justify-between"
                 >
                   Learn More <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
