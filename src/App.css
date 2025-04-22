@@ -1,3 +1,4 @@
+
 /* This file intentionally left mostly blank as we're using Tailwind for styling */
 #root {
   max-width: 100%;
@@ -55,7 +56,18 @@ main {
   padding-top: 0;
 }
 
+/* Add padding to inner pages to prevent navbar overlap */
+.page-clubs, .page-music, .page-dance {
+  padding-top: 5rem;
+}
+
+/* Remove padding from home page */
+.page-home {
+  padding-top: 0;
+}
+
 /* Ensure h1 headings are black */
 h1 {
   color: #000 !important;
 }
+
