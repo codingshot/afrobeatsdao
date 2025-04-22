@@ -1,7 +1,17 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+
 export function HeroSection() {
   const navigate = useNavigate();
+
+  const scrollToVibe = () => {
+    const vibeSection = document.getElementById('vibe');
+    if (vibeSection) {
+      vibeSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return <section className="relative min-h-[90vh] flex items-center bg-[#FFD600] overflow-hidden">
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="max-w-3xl mx-auto text-center text-black drop-shadow-lg">
@@ -18,7 +28,12 @@ export function HeroSection() {
             <Button className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
               Join the Movement
             </Button>
-            <Button className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" onClick={() => navigate('/dance')} variant="secondary">Jam</Button>
+            <Button 
+              className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
+              onClick={scrollToVibe}
+            >
+              Jam
+            </Button>
           </div>
         </div>
       </div>
