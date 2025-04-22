@@ -7,6 +7,7 @@ import {
   Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 declare global {
   interface Window {
@@ -54,7 +55,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [videoTitle, setVideoTitle] = useState<string>("Loading...");
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
-  const [videoVisible, setVideoVisible] = useState(true);
+  const isMobile = useIsMobile();
+  const [videoVisible, setVideoVisible] = useState(!isMobile);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
