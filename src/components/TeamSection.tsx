@@ -1,5 +1,4 @@
 import { Twitter } from "lucide-react";
-
 type TeamMember = {
   name: string;
   role: string;
@@ -7,7 +6,6 @@ type TeamMember = {
   twitter?: string;
   instagram?: string;
 };
-
 const teamMembers: TeamMember[] = [{
   name: "Larkim",
   role: "Artist",
@@ -15,10 +13,8 @@ const teamMembers: TeamMember[] = [{
   twitter: "https://x.com/boy_larkim",
   instagram: "https://www.instagram.com/larkimolorin/"
 }];
-
 export function TeamSection() {
-  return (
-    <section id="team" className="py-16 bg-afro-yellow font-afro">
+  return <section id="team" className="py-16 bg-afro-yellow font-afro">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-black text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
@@ -32,7 +28,7 @@ export function TeamSection() {
               <div className="rounded-full overflow-hidden w-40 h-40 mb-4 border-4 border-afro-teal flex items-center justify-center">
                 <img src={member.image} alt={`${member.name} profile`} className="w-full h-full object-cover" />
               </div>
-              <h3 className="text-2xl font-heading font-bold mb-1">{member.name}</h3>
+              <h3 className="text-2xl font-heading font-bold mb-1 text-slate-950">{member.name}</h3>
               <p className="text-lg text-gray-700 mb-3">{member.role}</p>
               <div className="flex gap-4">
                 {member.twitter && <a href={member.twitter} target="_blank" rel="noopener noreferrer" className="text-[#1DA1F2] hover:text-afro-orange transition-colors" aria-label="Twitter">
@@ -45,6 +41,5 @@ export function TeamSection() {
             </div>)}
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
