@@ -59,6 +59,7 @@ main {
 /* Add padding to inner pages to prevent navbar overlap */
 .page-clubs, .page-music, .page-dance {
   padding-top: 5rem;
+  background-color: #FEF7CD; /* Soft yellow background to match content */
 }
 
 /* Remove padding from home page */
@@ -66,7 +67,7 @@ main {
   padding-top: 0;
 }
 
-/* Ensure h1 headings are black */
+/* Ensure h1 headings are white */
 h1 {
   color: #000 !important;
 }
