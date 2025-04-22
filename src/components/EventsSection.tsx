@@ -1,13 +1,8 @@
 import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem, 
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
 type Event = {
   image_url: string;
   website: string;
@@ -18,7 +13,6 @@ type Event = {
   end_date: string;
   ticket_info: string;
 };
-
 const EVENTS: Record<string, Event> = {
   "Afro Nation Portugal": {
     image_url: "/afornationportugal.jpg",
@@ -141,12 +135,10 @@ const EVENTS: Record<string, Event> = {
     ticket_info: "Tickets via Eventbrite."
   }
 };
-
 export function EventsSection() {
   const [showPastEvents, setShowPastEvents] = useState(false);
   const today = new Date();
   const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
-
   const getImageUrl = (imageUrl: string) => {
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl;
@@ -156,26 +148,20 @@ export function EventsSection() {
     }
     return `/${imageUrl}`;
   };
-
-  const filteredEvents = Object.entries(EVENTS)
-    .filter(([, event]) => {
-      const endDate = new Date(event.end_date);
-      if (showPastEvents) {
-        return endDate < today;
-      }
-      return endDate >= today;
-    })
-    .sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-
+  const filteredEvents = Object.entries(EVENTS).filter(([, event]) => {
+    const endDate = new Date(event.end_date);
+    if (showPastEvents) {
+      return endDate < today;
+    }
+    return endDate >= today;
+  }).sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
   const isEventActive = (startDate: string, endDate: string) => {
     const now = today.getTime();
     const start = new Date(startDate).getTime();
     const end = new Date(endDate).getTime();
     return now >= start && now <= end;
   };
-
-  return (
-    <section id="events" className="py-16 font-afro bg-white">
+  return <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2 text-black">
@@ -183,58 +169,33 @@ export function EventsSection() {
             <span className="text-4xl">🎊</span>
           </h2>
           <div className="flex justify-center gap-4 mb-8">
-            <Button
-              variant={!showPastEvents ? "default" : "outline"}
-              onClick={() => setShowPastEvents(false)}
-              className="bg-[#008751] text-white hover:bg-[#008751]/90"
-            >
+            <Button variant={!showPastEvents ? "default" : "outline"} onClick={() => setShowPastEvents(false)} className="bg-[#008751] text-white hover:bg-[#008751]/90">
               Upcoming Events
             </Button>
-            <Button
-              variant={showPastEvents ? "default" : "outline"}
-              onClick={() => setShowPastEvents(true)}
-              className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}
-            >
+            <Button variant={showPastEvents ? "default" : "outline"} onClick={() => setShowPastEvents(true)} className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}>
               Past Events
             </Button>
           </div>
         </div>
         
-        {filteredEvents.length > 0 ? (
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
+        {filteredEvents.length > 0 ? <Carousel opts={{
+        align: "start",
+        loop: true
+      }} className="w-full">
             <CarouselContent>
-              {filteredEvents.map(([name, event]) => (
-                <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
-                  <a 
-                    href={event.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]"
-                  >
+              {filteredEvents.map(([name, event]) => <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
+                  <a href={event.website} target="_blank" rel="noopener noreferrer" className="block bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]">
                     <div className="relative aspect-[16/9]">
-                      <img 
-                        src={getImageUrl(event.image_url)} 
-                        onError={(e) => {
-                          const imgElement = e.target as HTMLImageElement;
-                          imgElement.src = DEFAULT_IMAGE;
-                        }}
-                        alt={`${name} poster`}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      {isEventActive(event.start_date, event.end_date) && (
-                        <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      <img src={getImageUrl(event.image_url)} onError={e => {
+                  const imgElement = e.target as HTMLImageElement;
+                  imgElement.src = DEFAULT_IMAGE;
+                }} alt={`${name} poster`} className="absolute inset-0 w-full h-full object-cover" />
+                      {isEventActive(event.start_date, event.end_date) && <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                           Active
-                        </div>
-                      )}
+                        </div>}
                     </div>
                     <div className="p-6 space-y-4">
-                      <h3 className="text-2xl font-heading font-bold">{name}</h3>
+                      <h3 className="text-2xl font-heading font-bold text-slate-950">{name}</h3>
                       
                       <div className="flex items-center gap-2 text-gray-600">
                         <MapPin className="shrink-0" />
@@ -254,16 +215,11 @@ export function EventsSection() {
                       </p>
                     </div>
                   </a>
-                </CarouselItem>
-              ))}
+                </CarouselItem>)}
             </CarouselContent>
-          </Carousel>
-        ) : (
-          <div className="text-center text-gray-500">
+          </Carousel> : <div className="text-center text-gray-500">
             {showPastEvents ? "No past events to display." : "No upcoming events to display."}
-          </div>
-        )}
+          </div>}
       </div>
-    </section>
-  );
+    </section>;
 }
