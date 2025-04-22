@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { 
@@ -8,7 +7,13 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { Home, Music2, Calendar, Dance, Users } from "lucide-react";
+import { 
+  Home, 
+  Users, 
+  Calendar, 
+  Music, 
+  Disc3 
+} from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
@@ -21,7 +26,6 @@ export function Header() {
   const onIndexPage = location.pathname === "/";
 
   useEffect(() => {
-    // Always show navbar on dance page
     if (location.pathname.startsWith('/dance')) {
       setIsVisible(true);
       return;
@@ -78,7 +82,7 @@ export function Header() {
                       location.pathname.startsWith("/dance") && "bg-accent/50 text-accent-foreground"
                     )}
                   >
-                    <Dance className="mr-2 h-4 w-4" />
+                    <Disc3 className="mr-2 h-4 w-4" />
                     Dance
                   </NavigationMenuLink>
                 </Link>
@@ -120,7 +124,7 @@ export function Header() {
                       location.pathname.startsWith("/playlists") && "bg-accent/50 text-accent-foreground"
                     )}
                   >
-                    <Music2 className="mr-2 h-4 w-4" />
+                    <Music className="mr-2 h-4 w-4" />
                     Music
                   </NavigationMenuLink>
                 </Link>
@@ -129,7 +133,6 @@ export function Header() {
           </NavigationMenu>
         </div>
 
-        {/* Progress indicator for dance page */}
         {onDancePage && (
           <div className="flex items-center">
             <DropdownMenu>
@@ -167,10 +170,9 @@ export function Header() {
           </div>
         )}
 
-        {/* Mobile menu */}
         <div className="md:hidden flex items-center space-x-2">
           <Link to="/dance" className="px-2 py-1 text-sm font-medium">
-            <Dance className="h-5 w-5" />
+            <Disc3 className="h-5 w-5" />
           </Link>
           <Link to="/clubs" className="px-2 py-1 text-sm font-medium">
             <Users className="h-5 w-5" />
