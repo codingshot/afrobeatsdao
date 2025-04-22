@@ -14,3 +14,39 @@
   font-weight: 600;
 }
 
+/* Make sure video players are always on top */
+iframe,
+.react-player,
+.video-container {
+  z-index: 10 !important;
+  position: relative;
+}
+
+/* Global audio player should always be on top */
+.global-audio-player {
+  z-index: 100 !important;
+}
+
+/* Ensure proper z-index for dropdown menus */
+.selectContent,
+.popoverContent,
+.menuContent,
+.menubarContent,
+.dropdownMenuContent,
+.hover-card-content,
+.navigationMenuContent {
+  z-index: 50 !important;
+}
+
+/* Fix for Leaflet popup content */
+.leaflet-popup-content {
+  min-width: 200px;
+}
+
+/* Fix for mobile display */
+@media (max-width: 768px) {
+  .leaflet-popup-content {
+    min-width: 200px;
+    max-width: 250px;
+  }
+}

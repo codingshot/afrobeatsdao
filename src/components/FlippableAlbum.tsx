@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 
@@ -27,7 +27,7 @@ export function FlippableAlbum({ coverImage }: FlippableAlbumProps) {
     <HoverCard>
       <HoverCardTrigger>
         <div 
-          className="relative aspect-square max-w-md mx-auto cursor-pointer transition-transform duration-700 preserve-3d"
+          className="relative aspect-square max-w-md mx-auto cursor-pointer transition-transform duration-700 transform-style-3d"
           style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)' }}
           onClick={() => setIsFlipped(!isFlipped)}
         >
@@ -47,7 +47,7 @@ export function FlippableAlbum({ coverImage }: FlippableAlbumProps) {
           {/* Back of card (Tracklist) */}
           <div 
             className="absolute inset-0 backface-hidden bg-[#1A1F2C] rounded-2xl shadow-2xl"
-            style={{ transform: 'rotateY(180deg)' }}
+            style={{ transform: 'rotateY(180deg)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
           >
             <div className="p-6 h-full">
               <h3 className="text-2xl font-bold text-[#FFD600] mb-4">Tracklist</h3>
