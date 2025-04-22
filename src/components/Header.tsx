@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { 
   NavigationMenu,
@@ -14,8 +13,7 @@ import {
   Calendar, 
   Music, 
   Disc3,
-  Menu,
-  X 
+  Menu 
 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -152,7 +150,7 @@ export function Header() {
           </div>
 
           {onDancePage && (
-            <div className="hidden md:flex items-center">
+            <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="bg-white/90 border-black/10 text-black hover:bg-white">
@@ -164,7 +162,7 @@ export function Header() {
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10">
+                <DropdownMenuContent align="center" className="w-56 bg-white text-black border-black/10">
                   <div className="p-2 text-sm font-medium border-b border-black/10">
                     Your Dance Progress
                   </div>
@@ -286,4 +284,3 @@ export function Header() {
     </>
   );
 }
-
