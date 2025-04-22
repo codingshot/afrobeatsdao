@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Shuffle } from "lucide-react";
 
-const VIBE_VIDEOS = [
+// Export the array of video IDs so it can be used in other components
+export const VIBE_VIDEOS = [
   'ul_Iy9HC0GE',
   'hvf_K273XIY',
   '6xd4oIP6Uws',
