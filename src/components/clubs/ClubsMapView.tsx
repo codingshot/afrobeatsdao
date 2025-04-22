@@ -42,15 +42,17 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
   return (
     <div className="rounded-lg overflow-hidden border border-[#008751] h-[calc(100vh-200px)] md:h-[600px] w-full bg-[#FEF7CD]/50">
       <MapContainer 
-        center={defaultCenter}
+        center={defaultCenter as L.LatLngExpression}
         zoom={defaultZoom} 
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
         className="z-0"
+        {...{} as ExtendedMapContainerProps}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          {...{} as any}
         />
         
         {clubs.map((club, index) => (
