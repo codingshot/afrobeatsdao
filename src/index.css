@@ -1,50 +1,57 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Bungee Font for headings */
-@import url('https://fonts.googleapis.com/css2?family=Bungee:wght@400&display=swap');
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
 
-/* Keep Montserrat for body text (already imported in index.html) */
-
-@layer base {
+@media (prefers-color-scheme: dark) {
   :root {
-    --background: 50 92% 91%; /* Soft Yellow */
-    --foreground: 0 0% 13%;   /* #222 */
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 13%;
-
-    --primary: 184 77% 32%; /* Teal */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 29 96% 56%; /* Orange */
-    --secondary-foreground: 0 0% 100%;
-
-    --accent: 55 100% 56%; /* #FFD600 */
-    --accent-foreground: 0 0% 13%;
-
-    --border: 29 96% 56%; /* orange for style */
-    --input: 29 96% 56%;
-
-    --ring: 0 0% 13%;
-    --radius: 1rem;
-  }
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
-  h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: 'Bungee', cursive;
-    letter-spacing: 0.02em;
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 20, 20, 20;
   }
 }
 
-@layer utilities {
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
-  
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Font for section headings */
+.font-heading {
+  font-family: 'Bungee', sans-serif;
 }
