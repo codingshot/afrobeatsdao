@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -7,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
-// Define event types to match the events in EventsSection
-interface Event {
+// Define event types to match the events in EventsSection 
+// Renamed from Event to MusicEvent to avoid conflict with DOM Event
+interface MusicEvent {
   id: string;
   title: string;
   location: string;
@@ -127,8 +126,8 @@ const EVENTS_DATA: Record<string, any> = {
   }
 };
 
-// Convert the event data to match our Event interface
-const EVENTS: Event[] = Object.entries(EVENTS_DATA).map(([name, event], index) => {
+// Convert the event data to match our MusicEvent interface
+const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], index) => {
   return {
     id: (index + 1).toString(),
     title: name,
@@ -184,7 +183,7 @@ const Events = () => {
   };
 
   // Function to handle image loading errors
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const imgElement = e.target as HTMLImageElement;
     imgElement.src = '/AfrobeatsDAOMeta.png';
   };
