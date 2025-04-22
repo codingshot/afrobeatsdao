@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2, Maximize, Minimize
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 
@@ -49,6 +49,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [expandedView, setExpandedView] = useState(true);
   const [videoTitle, setVideoTitle] = useState<string>("Loading...");
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
+  const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
+  const [videoVisible, setVideoVisible] = useState(true);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
@@ -85,8 +87,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
 
       try {
         const newPlayer = new window.YT.Player('youtube-player', {
-          height: expandedView ? '240' : '0',
-          width: expandedView ? '426' : '0',
+          height: '240',
+          width: '426',
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
@@ -108,6 +110,11 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
             },
             onError: (event: any) => {
               console.error("YouTube player error:", event);
+              if (previousVideoData) {
+                console.log("Error playing video, reverting to previous video");
+                setCurrentSong(previousVideoData);
+                event.target.loadVideoById(previousVideoData.youtube);
+              }
               setVideoTitle("Error loading video");
               setChannelTitle("Unknown");
             },
@@ -132,22 +139,34 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         }
       }
     };
-  }, [youtubeApiLoaded, expandedView]);
+  }, [youtubeApiLoaded]);
 
+  // Updated effect to properly handle video visibility
   useEffect(() => {
-    if (player && player.setSize) {
-      try {
-        player.setSize(
-          expandedView ? 426 : 0,
-          expandedView ? 240 : 0
-        );
-      } catch (e) {
-        console.error("Error resizing player:", e);
+    if (playerContainerRef.current) {
+      // Control the video container visibility based on expandedView
+      playerContainerRef.current.style.display = expandedView ? 'block' : 'none';
+      
+      // When video is not visible but we're still in expanded view (audio only mode),
+      // move the container off-screen but keep it playing
+      if (expandedView && !videoVisible) {
+        playerContainerRef.current.style.position = 'fixed';
+        playerContainerRef.current.style.left = '-9999px'; // Move off-screen
+        playerContainerRef.current.style.visibility = 'hidden'; // Hide from view
+      } else if (expandedView) {
+        playerContainerRef.current.style.position = 'fixed';
+        playerContainerRef.current.style.bottom = '80px';
+        playerContainerRef.current.style.right = '4px';
+        playerContainerRef.current.style.left = 'auto';
+        playerContainerRef.current.style.visibility = 'visible';
       }
     }
-  }, [expandedView, player]);
+  }, [expandedView, videoVisible]);
 
   const playNow = useCallback((song: Song) => {
+    if (currentSong) {
+      setPreviousVideoData(currentSong);
+    }
     setCurrentSong(song);
     setIsPlaying(true);
     if (player && player.loadVideoById) {
@@ -164,11 +183,14 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         player.loadVideoById(videoId);
       } catch (e) {
         console.error("Error loading video:", e, song);
+        if (previousVideoData) {
+          console.log("Reverting to previous video");
+          setCurrentSong(previousVideoData);
+          player.loadVideoById(previousVideoData.youtube);
+        }
       }
-    } else {
-      console.log("Player not ready yet, will try to play when ready");
     }
-  }, [player]);
+  }, [player, currentSong, previousVideoData]);
 
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
@@ -199,7 +221,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       setQueue(prev => prev.slice(1));
       playNow(nextSong);
     } else {
-      // If queue is empty, pick a random Vibe of the Day video
       const currentVideoId = currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
                            currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
                            currentSong?.youtube;
@@ -246,6 +267,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     });
   }, []);
 
+  const toggleVideo = useCallback(() => {
+    setVideoVisible(prev => !prev);
+  }, []);
+
   const toggleExpandedView = useCallback(() => {
     setExpandedView(prev => !prev);
   }, []);
@@ -270,7 +295,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       {children}
       <div 
         ref={playerContainerRef} 
-        className={`${expandedView ? 'block' : 'hidden'} fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
+        className="fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
       >
         <div id="youtube-player"></div>
       </div>
@@ -326,6 +351,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleVideo}
+                className="text-white hover:bg-white/10"
+                title={videoVisible ? "Hide video" : "Show video"}
+              >
+                {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+              </Button>
+              
               <Button
                 variant="ghost"
                 size="icon"
