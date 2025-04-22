@@ -78,7 +78,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     startDance(dance.id);
     markModuleComplete(dance.id, moduleIndex);
     
-    // Play a relevant song if available for practice mode
     if (action === 'practice' && dance.songs && dance.songs.length > 0) {
       const songIndex = moduleIndex % dance.songs.length;
       handlePlayNow(dance.songs[songIndex]);
@@ -109,7 +108,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     const currentCategory = categories[currentCategoryIndex];
     const dances = danceCurriculum[currentCategory as keyof typeof danceCurriculum];
 
-    // Try next dance in current category
     if (currentDanceIndex < dances.length - 1) {
       return {
         category: currentCategory,
@@ -117,7 +115,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
       };
     }
 
-    // Try first dance of next category
     if (currentCategoryIndex < categories.length - 1) {
       const nextCategory = categories[currentCategoryIndex + 1];
       const nextCategoryDances = danceCurriculum[nextCategory as keyof typeof danceCurriculum];
@@ -144,10 +141,13 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     }
   };
 
-  // Safely calculate progress percentage
   const calculateProgress = () => {
     if (!dance.modules || dance.modules.length === 0) return 0;
     return (danceProgress.moduleProgress.length * 100) / dance.modules.length;
+  };
+
+  const isTutorialAvailable = (tutorial: any) => {
+    return tutorial && tutorial.link && (tutorial.link.includes('youtube.com') || tutorial.link.includes('youtu.be'));
   };
 
   return (
@@ -185,7 +185,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           <Button
             onClick={handleNextDance}
             variant="outline"
-            className="border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
+            className="border-[#008751] text-[#008751] hover:bg-[#008751]/10 font-medium"
           >
             <CircleChevronRight className="mr-2 h-4 w-4" />
             Next Dance
@@ -299,29 +299,40 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           {dance.tutorials && dance.tutorials[0] && (
             <div className="space-y-4">
               <h3 className="text-lg md:text-xl font-semibold text-[#FFD600]">Video Tutorial</h3>
-              <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}`}
-                  title={dance.tutorials[0].title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium text-white">{dance.tutorials[0].title}</h4>
-                  <p className="text-sm text-gray-400">
-                    By {dance.tutorials[0].creator || dance.tutorials[0].platform}
-                  </p>
+              {isTutorialAvailable(dance.tutorials[0]) ? (
+                <>
+                  <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}`}
+                      title={dance.tutorials[0].title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-white">{dance.tutorials[0].title}</h4>
+                      <p className="text-sm text-gray-400">
+                        By {dance.tutorials[0].creator || dance.tutorials[0].platform}
+                      </p>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-white border-gray-700 hover:bg-white/10"
+                      onClick={() => window.open(dance.tutorials[0].link, '_blank')}
+                    >
+                      <Youtube className="mr-2 h-4 w-4" />
+                      Open on YouTube
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="aspect-video bg-gray-900/50 rounded-lg flex items-center justify-center">
+                  <p className="text-gray-400">Tutorial not available</p>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" className="text-white border-gray-700 hover:bg-white/10">
-                    <Youtube className="mr-2 h-4 w-4" />
-                    Open on YouTube
-                  </Button>
-                </div>
-              </div>
+              )}
             </div>
           )}
           
