@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import type { MapContainerProps } from 'react-leaflet';
 import { Club } from '@/types/club';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -12,6 +13,13 @@ import L from 'leaflet';
 interface ClubsMapViewProps {
   clubs: Club[];
   onSelectClub?: (club: Club) => void;
+}
+
+// Define MapContainer props extension to avoid TypeScript errors
+interface ExtendedMapContainerProps extends MapContainerProps {
+  center: L.LatLngExpression;
+  zoom: number;
+  scrollWheelZoom: boolean;
 }
 
 const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
@@ -39,8 +47,8 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
         scrollWheelZoom={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         
         {clubs.map((club, index) => (
