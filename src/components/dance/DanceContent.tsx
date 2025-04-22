@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Play, Youtube, Share2, Music, SkipForward } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Play, Youtube, Music, SkipForward, CircleChevronRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { useCountryFlags } from "@/hooks/use-country-flags";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
+import { useDanceProgress } from "@/hooks/use-dance-progress";
 import { Dance } from "./DanceDetails";
+import { danceCurriculum } from "@/data/dance-curriculum";
 
 interface DanceContentProps {
   dance: Dance;
@@ -18,6 +23,10 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const { getFlag } = useCountryFlags();
   
   const audioPlayer = useGlobalAudioPlayer();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { startDance, markModuleComplete, getDanceProgress } = useDanceProgress();
+  const danceProgress = getDanceProgress(dance.id);
 
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
@@ -41,6 +50,70 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
       audioPlayer.addToQueue(createSongFromDanceData(song));
     }
   };
+  
+  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number) => {
+    startDance(dance.id);
+    markModuleComplete(dance.id, moduleIndex);
+    
+    toast({
+      title: action === 'tutorial' ? "Tutorial Started" : "Practice Mode Started",
+      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex]}`,
+    });
+  };
+
+  const findNextDance = () => {
+    const categories = Object.keys(danceCurriculum);
+    let currentCategoryIndex = -1;
+    let currentDanceIndex = -1;
+
+    categories.forEach((category, catIdx) => {
+      const dances = danceCurriculum[category as keyof typeof danceCurriculum];
+      const danceIdx = dances.findIndex(d => d.id === dance.id);
+      if (danceIdx !== -1) {
+        currentCategoryIndex = catIdx;
+        currentDanceIndex = danceIdx;
+      }
+    });
+
+    if (currentCategoryIndex === -1) return null;
+
+    const currentCategory = categories[currentCategoryIndex];
+    const dances = danceCurriculum[currentCategory as keyof typeof danceCurriculum];
+
+    // Try next dance in current category
+    if (currentDanceIndex < dances.length - 1) {
+      return {
+        category: currentCategory,
+        dance: dances[currentDanceIndex + 1]
+      };
+    }
+
+    // Try first dance of next category
+    if (currentCategoryIndex < categories.length - 1) {
+      const nextCategory = categories[currentCategoryIndex + 1];
+      const nextCategoryDances = danceCurriculum[nextCategory as keyof typeof danceCurriculum];
+      if (nextCategoryDances.length > 0) {
+        return {
+          category: nextCategory,
+          dance: nextCategoryDances[0]
+        };
+      }
+    }
+
+    return null;
+  };
+
+  const handleNextDance = () => {
+    const next = findNextDance();
+    if (next) {
+      navigate(`/dance/${next.category}/${next.dance.id}`);
+    } else {
+      toast({
+        title: "Congratulations!",
+        description: "You've reached the end of the dance curriculum!",
+      });
+    }
+  };
 
   return (
     <Card className="bg-black border-[#008751] text-white">
@@ -62,6 +135,26 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
               />
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="p-4 sm:p-6 border-b border-[#008751]/30">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Progress:</span>
+            <Progress 
+              value={danceProgress.moduleProgress.length * (100 / (dance.modules?.length || 1))} 
+              className="w-32 sm:w-48 bg-gray-800"
+            />
+          </div>
+          <Button
+            onClick={handleNextDance}
+            variant="outline"
+            className="border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
+          >
+            <CircleChevronRight className="mr-2 h-4 w-4" />
+            Next Dance
+          </Button>
         </div>
       </div>
 
@@ -122,20 +215,32 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                           </p>
                         </div>
                         <Badge
-                          className="ml-auto bg-[#FFD600]/20 text-[#FFD600] hover:bg-[#FFD600]/30"
+                          className={`ml-auto ${
+                            danceProgress.moduleProgress.includes(idx)
+                              ? "bg-[#008751]/20 text-[#008751]"
+                              : "bg-[#FFD600]/20 text-[#FFD600]"
+                          } hover:bg-[#FFD600]/30`}
                         >
-                          {moduleVisible === idx ? 'Selected' : 'Start'}
+                          {danceProgress.moduleProgress.includes(idx) ? 'Completed' : 'Start'}
                         </Badge>
                       </div>
                       
                       {moduleVisible === idx && (
                         <div className="mt-4 border-t border-gray-800 pt-4">
                           <div className="flex flex-col sm:flex-row gap-3 mb-3">
-                            <Button variant="outline" className="flex-1 border-[#008751] text-[#008751] hover:bg-[#008751]/10">
+                            <Button 
+                              variant="outline" 
+                              className="flex-1 border-[#008751] text-[#008751] hover:bg-[#008751]/10"
+                              onClick={() => handleModuleAction('tutorial', idx)}
+                            >
                               <Play className="mr-2 h-4 w-4" /> 
                               Tutorial
                             </Button>
-                            <Button variant="outline" className="flex-1 border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10">
+                            <Button 
+                              variant="outline" 
+                              className="flex-1 border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10"
+                              onClick={() => handleModuleAction('practice', idx)}
+                            >
                               <Music className="mr-2 h-4 w-4" /> 
                               Practice
                             </Button>
