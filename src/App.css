@@ -50,3 +50,25 @@ iframe,
     max-width: 250px;
   }
 }
+
+/* Add padding to main content to prevent header overlap */
+main {
+  padding-top: 0;
+}
+
+/* Add padding to inner pages to prevent navbar overlap */
+.page-clubs, .page-music, .page-dance {
+  padding-top: 5rem;
+  background-color: #FEF7CD; /* Soft yellow background to match content */
+}
+
+/* Remove padding from home page */
+.page-home {
+  padding-top: 0;
+}
+
+/* Ensure h1 headings are white */
+h1 {
+  color: #000 !important;
+}
+

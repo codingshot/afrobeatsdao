@@ -1,41 +1,51 @@
 
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 export function HeroSection() {
-  const navigate = useNavigate();
-
   const scrollToVibe = () => {
-    const vibeSection = document.getElementById('vibe');
-    if (vibeSection) {
-      vibeSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    const vibeSection = document.querySelector('#vibe');
+    vibeSection?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
 
-  return <section className="relative min-h-[90vh] flex items-center bg-[#FFD600] overflow-hidden">
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="max-w-3xl mx-auto text-center text-black drop-shadow-lg">
-          <div className="mb-8">
-            <img src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png" alt="Afrobeats Logo" className="w-48 h-48 mx-auto mb-6" />
-            <h1 className="text-6xl md:text-7xl font-heading mb-4">
-              Afrobeats DAO
-            </h1>
+  return (
+    <section className="relative min-h-screen flex items-center justify-center bg-[#FFD600]">
+      <div className="relative z-10 text-center space-y-8 p-4">
+        <div className="flex flex-col items-center">
+          <div className="mb-6">
+            <img 
+              src="/afrobeatsdaologo.png" 
+              alt="Afrobeats DAO Logo" 
+              className="mx-auto w-48 h-48 object-contain"
+            />
           </div>
-          <p className="text-2xl md:text-3xl mb-8 font-medium leading-relaxed font-afro text-black max-w-xl mx-auto">
-            Grassroots afrobeats culture, community, music and parties.
-          </p>
-          <div className="flex flex-row gap-6 items-center justify-center w-full max-w-xl mx-auto">
-            <Button className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
-              Join the Movement
-            </Button>
-            <Button 
-              className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
-              onClick={scrollToVibe}
-            >
-              Jam
-            </Button>
-          </div>
+          <h1 className="text-black text-5xl md:text-7xl lg:text-8xl font-bold font-heading" style={{ color: '#000 !important' }}>
+            Afrobeats DAO
+          </h1>
+        </div>
+        <p className="text-black text-2xl md:text-3xl max-w-2xl mx-auto hero-subtitle">
+          Grassroots afrobeats culture, community, music and parties
+        </p>
+        <div className="space-x-6">
+          <Button 
+            size="lg" 
+            className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" 
+            onClick={() => window.open('https://discord.gg/afrobeats', '_blank')}
+          >
+            Join the Movement
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" 
+            onClick={scrollToVibe}
+          >
+            Vibe
+          </Button>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }

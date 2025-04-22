@@ -28,16 +28,18 @@ const App = () => {
               <Header />
               <Toaster />
               <Sonner />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/dance" element={<Dance />} />
-                <Route path="/dance/:genre/:id" element={<DanceDetails />} />
-                <Route path="/dance/:id" element={<DanceDetails />} />
-                <Route path="/clubs" element={<Clubs />} />
-                <Route path="/events" element={<Events />} />
-                <Route path="/music" element={<Playlists />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <main>
+                <Routes>
+                  <Route path="/" element={<div className="page-home"><Index /></div>} />
+                  <Route path="/dance" element={<div className="page-dance"><Dance /></div>} />
+                  <Route path="/dance/:genre/:id" element={<div className="page-dance"><DanceDetails /></div>} />
+                  <Route path="/dance/:id" element={<div className="page-dance"><DanceDetails /></div>} />
+                  <Route path="/clubs" element={<div className="page-clubs"><Clubs /></div>} />
+                  <Route path="/events" element={<div className="page-events"><Events /></div>} />
+                  <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
             </div>
           </GlobalAudioPlayerProvider>
         </TooltipProvider>
@@ -47,3 +49,4 @@ const App = () => {
 };
 
 export default App;
+
