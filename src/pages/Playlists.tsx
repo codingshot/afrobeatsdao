@@ -259,25 +259,25 @@ const Playlists = () => {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-background pt-10">
-      <main className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background pt-4">
+      <main className="container mx-auto px-4 py-4">
         <div className="flex flex-col items-center text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-white">
+          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-black">
             Afrobeats Playlists
           </h1>
-          <p className="text-xl max-w-2xl mx-auto text-white/90">
+          <p className="text-xl max-w-2xl mx-auto text-black/90">
             Discover the best curated Afrobeats playlists across major streaming platforms.
           </p>
         </div>
         
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-4 mb-6 w-full">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
             <Input
               placeholder="Search playlists or artists..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white text-black"
+              className="pl-10 bg-white text-black w-full"
             />
           </div>
           
@@ -297,7 +297,7 @@ const Playlists = () => {
             <Button 
               variant="outline" 
               onClick={handleSort}
-              className="flex items-center gap-1 min-w-[130px]"
+              className="flex items-center gap-1 min-w-[130px] bg-white text-black"
             >
               {sortMode === "default" ? (
                 <>
@@ -320,13 +320,14 @@ const Playlists = () => {
             <Button 
               variant="outline" 
               onClick={() => setQueueVisible(!queueVisible)}
+              className="bg-white text-black"
             >
               {queueVisible ? "Hide Queue" : "Show Queue"}
             </Button>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
             <Tabs defaultValue="playlists" className="w-full">
               <TabsList className="w-full grid grid-cols-2 mb-8 bg-white">
@@ -344,7 +345,7 @@ const Playlists = () => {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value="playlists" className="mt-6 space-y-4">
+              <TabsContent value="playlists" className="mt-6 space-y-4 w-full">
                 <AnimatePresence>
                   {filteredPlaylists.length > 0 ? (
                     filteredPlaylists.map(playlist => (
@@ -354,7 +355,7 @@ const Playlists = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="flex items-center gap-4 p-4 bg-card rounded-lg border hover:bg-accent/5 transition-colors"
+                        className="flex items-center gap-4 p-4 bg-white rounded-lg border hover:bg-accent/5 transition-colors w-full"
                       >
                         <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
                           <img 
@@ -367,13 +368,13 @@ const Playlists = () => {
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="flex items-center gap-1.5">
+                            <Badge variant="outline" className="flex items-center gap-1.5 bg-white text-black">
                               {getPlatformIcon(playlist.platform)}
                               <span className="capitalize">{playlist.platform}</span>
                             </Badge>
                           </div>
-                          <h3 className="text-lg font-semibold mt-1">{playlist.title}</h3>
-                          <p className="text-sm text-muted-foreground line-clamp-2">
+                          <h3 className="text-lg font-semibold mt-1 text-black">{playlist.title}</h3>
+                          <p className="text-sm text-black/70 line-clamp-2">
                             {playlist.description}
                           </p>
                         </div>
@@ -421,7 +422,7 @@ const Playlists = () => {
                     ))
                   ) : (
                     <div className="text-center py-8">
-                      <p className="text-lg text-muted-foreground">No playlists found. Try adjusting your filters.</p>
+                      <p className="text-lg text-black/70">No playlists found. Try adjusting your filters.</p>
                     </div>
                   )}
                 </AnimatePresence>
@@ -435,7 +436,7 @@ const Playlists = () => {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3 }}
-                      className="flex flex-col items-center p-4 bg-card rounded-lg border hover:bg-accent/5 transition-colors"
+                      className="flex flex-col items-center p-4 bg-white rounded-lg border hover:bg-accent/5 transition-colors"
                     >
                       <div className="h-32 w-32 overflow-hidden rounded-full mb-4">
                         <img 
@@ -446,9 +447,9 @@ const Playlists = () => {
                         />
                       </div>
                       
-                      <h3 className="text-xl font-semibold text-center">{artist.name}</h3>
-                      <Badge variant="outline" className="my-1">{artist.country}</Badge>
-                      <p className="text-sm text-muted-foreground text-center mb-4">
+                      <h3 className="text-xl font-semibold text-center text-black">{artist.name}</h3>
+                      <Badge variant="outline" className="my-1 bg-white text-black">{artist.country}</Badge>
+                      <p className="text-sm text-black/70 text-center mb-4">
                         Popular: {artist.popular_song}
                       </p>
                       
@@ -488,12 +489,12 @@ const Playlists = () => {
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="col-span-1 lg:col-span-1"
+              className="col-span-1 lg:col-span-1 sticky top-4"
             >
-              <Card className="h-full border">
+              <Card className="h-full border bg-white">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Up Next</h3>
+                    <h3 className="text-lg font-semibold text-black">Up Next</h3>
                     <Button 
                       variant="ghost" 
                       size="sm" 
@@ -503,6 +504,7 @@ const Playlists = () => {
                         ];
                         if (randomPlaylist) handleAddToQueue(randomPlaylist);
                       }}
+                      className="text-black hover:bg-black/10"
                     >
                       <Shuffle className="h-4 w-4 mr-2" />
                       Shuffle

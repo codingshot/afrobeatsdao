@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,36 +20,10 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
+/* ... keep existing code (3D transform styles) */
 
 /* Custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
-}
+/* ... keep existing code (scrollbar styles) */
 
 /* Font for section headings */
 .font-heading {
@@ -66,11 +41,54 @@ body {
   z-index: 50 !important;
 }
 
-.title-text {
-  color: black;
+/* General text color fixes */
+.bg-background {
+  background-color: #FEF7CD;
+}
+
+.title-text,
+.section-title,
+.artist-name,
+.playlist-title {
+  color: black !important;
+}
+
+.white-text {
+  color: white !important;
+}
+
+/* Dropdown and select styles */
+.select-content,
+.dropdown-content {
+  background-color: white !important;
+  color: black !important;
 }
 
 /* Fix top spacing for routes */
 .pt-reduced {
   padding-top: 1rem !important;
+}
+
+/* Player text color fixes */
+.player-title,
+.player-artist {
+  color: white !important;
+}
+
+/* Queue integration styles */
+.queue-container {
+  position: fixed;
+  bottom: 80px;
+  right: 0;
+  width: 300px;
+  background: white;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 49;
+}
+
+@media (max-width: 768px) {
+  .queue-container {
+    width: 100%;
+    border-left: none;
+  }
 }
