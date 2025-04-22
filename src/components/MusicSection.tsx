@@ -28,7 +28,8 @@ function AlbumCountdown() {
 export function MusicSection() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
-  return <section id="music" className="py-20 text-black font-afro bg-white">
+  return (
+    <section id="music" className="py-16 text-black font-afro bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-heading font-extrabold mb-4 flex items-center justify-center gap-3 text-black">
@@ -76,5 +77,6 @@ export function MusicSection() {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }

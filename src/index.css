@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -54,4 +53,24 @@ body {
 /* Font for section headings */
 .font-heading {
   font-family: 'Bungee', sans-serif;
+}
+
+/* Custom dropdown styling */
+.selectContent,
+.popoverContent,
+.menuContent,
+.menubarContent,
+.dropdownMenuContent {
+  background-color: white !important;
+  color: black !important;
+  z-index: 50 !important;
+}
+
+.title-text {
+  color: black;
+}
+
+/* Fix top spacing for routes */
+.pt-reduced {
+  padding-top: 1rem !important;
 }

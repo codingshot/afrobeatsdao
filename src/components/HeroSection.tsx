@@ -1,41 +1,45 @@
-
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { ArrowDown } from "lucide-react";
 
 export function HeroSection() {
-  const navigate = useNavigate();
-
-  const scrollToVibe = () => {
-    const vibeSection = document.getElementById('vibe');
-    if (vibeSection) {
-      vibeSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  return <section className="relative min-h-[90vh] flex items-center bg-[#FFD600] overflow-hidden">
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="max-w-3xl mx-auto text-center text-black drop-shadow-lg">
-          <div className="mb-8">
-            <img src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png" alt="Afrobeats Logo" className="w-48 h-48 mx-auto mb-6" />
-            <h1 className="text-6xl md:text-7xl font-heading mb-4">
-              Afrobeats DAO
-            </h1>
-          </div>
-          <p className="text-2xl md:text-3xl mb-8 font-medium leading-relaxed font-afro text-black max-w-xl mx-auto">
-            Grassroots afrobeats culture, community, music and parties.
-          </p>
-          <div className="flex flex-row gap-6 items-center justify-center w-full max-w-xl mx-auto">
-            <Button className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
-              Join the Movement
-            </Button>
-            <Button 
-              className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
-              onClick={scrollToVibe}
-            >
-              Jam
-            </Button>
-          </div>
+  return (
+    <section className="relative min-h-screen flex items-center justify-center">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/afrobeats-vibe.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
+      
+      <div className="relative z-10 text-center space-y-6 p-4">
+        <h1 className="text-black text-4xl md:text-6xl lg:text-7xl font-bold font-heading">
+          Pick a Vibe
+        </h1>
+        <p className="text-black text-xl md:text-2xl max-w-2xl mx-auto">
+          Experience the best of African music and culture
+        </p>
+        <div className="space-x-4">
+          <Button size="lg" className="bg-accent text-black hover:bg-accent-foreground/90">
+            Explore Events
+          </Button>
+          <Button size="lg" variant="outline">
+            Discover Music
+          </Button>
+        </div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <a href="#events" className="flex flex-col items-center text-black hover:text-gray-300">
+            <ArrowDown className="h-6 w-6 mb-2" />
+            <span className="text-sm">Learn More</span>
+          </a>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }

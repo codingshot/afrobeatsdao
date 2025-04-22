@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -260,36 +259,34 @@ const Playlists = () => {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background pt-10">
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4">
+          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-white">
             Afrobeats Playlists
           </h1>
-          <p className="text-xl max-w-2xl mx-auto">
+          <p className="text-xl max-w-2xl mx-auto text-white/90">
             Discover the best curated Afrobeats playlists across major streaming platforms.
           </p>
-          <meta name="description" content="Explore the best Afrobeats and Amapiano playlists from Spotify, Apple Music and YouTube. Stream African music featuring artists like Burna Boy, Wizkid, Tems, Asake, and more." />
-          <meta name="keywords" content="afrobeats playlists, amapiano playlists, african music, spotify afrobeats, youtube afrobeats, apple music afrobeats, burna boy, wizkid, tems, asake" />
         </div>
         
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
             <Input
               placeholder="Search playlists or artists..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 bg-white text-black"
             />
           </div>
           
           <div className="flex gap-2">
             <Select value={platformFilter} onValueChange={setPlatformFilter}>
-              <SelectTrigger className="w-[150px]">
+              <SelectTrigger className="w-[150px] bg-white text-black">
                 <SelectValue placeholder="Platform" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white text-black">
                 <SelectItem value="all">All Platforms</SelectItem>
                 <SelectItem value="spotify">Spotify</SelectItem>
                 <SelectItem value="apple">Apple Music</SelectItem>
@@ -332,16 +329,16 @@ const Playlists = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
           <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
             <Tabs defaultValue="playlists" className="w-full">
-              <TabsList className="w-full grid grid-cols-2 mb-8 bg-accent/10">
+              <TabsList className="w-full grid grid-cols-2 mb-8 bg-white">
                 <TabsTrigger 
                   value="playlists"
-                  className="data-[state=active]:bg-[#008751] data-[state=active]:text-white"
+                  className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white"
                 >
                   Top Playlists
                 </TabsTrigger>
                 <TabsTrigger 
                   value="artists"
-                  className="data-[state=active]:bg-[#008751] data-[state=active]:text-white"
+                  className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white"
                 >
                   Trending Artists
                 </TabsTrigger>

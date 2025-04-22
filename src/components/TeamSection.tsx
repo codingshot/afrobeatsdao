@@ -1,4 +1,5 @@
 import { Twitter } from "lucide-react";
+
 type TeamMember = {
   name: string;
   role: string;
@@ -6,6 +7,7 @@ type TeamMember = {
   twitter?: string;
   instagram?: string;
 };
+
 const teamMembers: TeamMember[] = [{
   name: "Larkim",
   role: "Artist",
@@ -13,15 +15,17 @@ const teamMembers: TeamMember[] = [{
   twitter: "https://x.com/boy_larkim",
   instagram: "https://www.instagram.com/larkimolorin/"
 }];
+
 export function TeamSection() {
-  return <section id="team" className="py-16 bg-afro-yellow font-afro">
+  return (
+    <section id="team" className="py-16 bg-afro-yellow font-afro">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
+          <h2 className="text-black text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">
             <span>Meet the Team</span>
             <span className="text-4xl" aria-label="Hands emoji">🫶</span>
           </h2>
-          <p className="text-xl max-w-2xl mx-auto">The lives behind the parties.</p>
+          <p className="text-black text-xl max-w-2xl mx-auto">The lives behind the parties.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-8">
           {teamMembers.map(member => <div key={member.name} className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center border-4 border-afro-orange max-w-xs">
@@ -41,5 +45,6 @@ export function TeamSection() {
             </div>)}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }
