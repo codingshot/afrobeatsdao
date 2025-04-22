@@ -1,18 +1,9 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-
 export function HeroSection() {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
+  return <section className="relative min-h-screen flex items-center justify-center">
+      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
         <source src="/afrobeats-vibe.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -35,12 +26,8 @@ export function HeroSection() {
           </Button>
         </div>
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <a href="#events" className="flex flex-col items-center text-white hover:text-gray-300">
-            <ArrowDown className="h-6 w-6 mb-2" />
-            <span className="text-sm">Learn More</span>
-          </a>
+          
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
