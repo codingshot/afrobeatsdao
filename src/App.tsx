@@ -28,16 +28,18 @@ const App = () => {
               <Header />
               <Toaster />
               <Sonner />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/dance" element={<Dance />} />
-                <Route path="/dance/:genre/:id" element={<DanceDetails />} />
-                <Route path="/dance/:id" element={<DanceDetails />} />
-                <Route path="/clubs" element={<Clubs />} />
-                <Route path="/events" element={<Events />} />
-                <Route path="/music" element={<Playlists />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <main className="pt-16"> {/* Add padding-top to prevent header overlap */}
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/dance" element={<Dance />} />
+                  <Route path="/dance/:genre/:id" element={<DanceDetails />} />
+                  <Route path="/dance/:id" element={<DanceDetails />} />
+                  <Route path="/clubs" element={<Clubs />} />
+                  <Route path="/events" element={<Events />} />
+                  <Route path="/music" element={<Playlists />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
             </div>
           </GlobalAudioPlayerProvider>
         </TooltipProvider>

@@ -50,3 +50,13 @@ iframe,
     max-width: 250px;
   }
 }
+
+/* Add padding to main content to prevent header overlap */
+main {
+  padding-top: 64px;
+}
+
+/* Ensure h1 headings are black */
+h1 {
+  color: #000 !important;
+}

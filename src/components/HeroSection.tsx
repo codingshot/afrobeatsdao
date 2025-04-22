@@ -21,7 +21,7 @@ export function HeroSection() {
               className="mx-auto w-48 h-48 object-contain"
             />
           </div>
-          <h1 className="text-black text-5xl md:text-7xl lg:text-8xl font-bold font-heading hero-title" style={{ color: 'black !important' }}>
+          <h1 className="text-black text-5xl md:text-7xl lg:text-8xl font-bold font-heading" style={{ color: '#000 !important' }}>
             Afrobeats DAO
           </h1>
         </div>

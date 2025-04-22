@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,6 +18,11 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+}
+
+/* Add default styling for h1 elements */
+h1 {
+  color: #000000 !important;
 }
 
 /* 3D transform styles */
@@ -80,7 +86,7 @@ body {
 }
 
 .hero-title {
-  color: white !important;
+  color: black !important;
 }
 
 .white-text,
@@ -153,3 +159,4 @@ body {
 .full-width-tabs {
   width: 100% !important;
 }
+
