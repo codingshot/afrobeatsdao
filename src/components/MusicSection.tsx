@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
 import { FlippableAlbum } from "./FlippableAlbum";
-
 function AlbumCountdown() {
   const releaseDate = new Date("2025-06-06T00:00:00Z");
   const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
@@ -24,12 +23,9 @@ function AlbumCountdown() {
       <div><span>{seconds.toString().padStart(2, "0")}</span><span className="ml-1 text-base">s</span></div>
     </div>;
 }
-
 export function MusicSection() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  return (
-    <section id="music" className="py-16 text-black font-afro bg-white">
+  return <section id="music" className="py-16 text-black font-afro bg-afro-yellow">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-heading font-extrabold mb-4 flex items-center justify-center gap-3 text-black">
@@ -77,6 +73,5 @@ export function MusicSection() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
