@@ -141,16 +141,24 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     };
   }, [youtubeApiLoaded]);
 
+  // Updated effect to properly handle video visibility
   useEffect(() => {
     if (playerContainerRef.current) {
+      // Control the video container visibility based on expandedView
       playerContainerRef.current.style.display = expandedView ? 'block' : 'none';
       
-      if (playerContainerRef.current.firstChild) {
-        const iframe = playerContainerRef.current.querySelector('iframe');
-        if (iframe) {
-          iframe.style.opacity = videoVisible ? '1' : '0';
-          iframe.style.pointerEvents = videoVisible ? 'auto' : 'none';
-        }
+      // When video is not visible but we're still in expanded view (audio only mode),
+      // move the container off-screen but keep it playing
+      if (expandedView && !videoVisible) {
+        playerContainerRef.current.style.position = 'fixed';
+        playerContainerRef.current.style.left = '-9999px'; // Move off-screen
+        playerContainerRef.current.style.visibility = 'hidden'; // Hide from view
+      } else if (expandedView) {
+        playerContainerRef.current.style.position = 'fixed';
+        playerContainerRef.current.style.bottom = '80px';
+        playerContainerRef.current.style.right = '4px';
+        playerContainerRef.current.style.left = 'auto';
+        playerContainerRef.current.style.visibility = 'visible';
       }
     }
   }, [expandedView, videoVisible]);
@@ -287,8 +295,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       {children}
       <div 
         ref={playerContainerRef} 
-        className={`fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
-        style={{ display: expandedView ? 'block' : 'none' }}
+        className="fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
       >
         <div id="youtube-player"></div>
       </div>
