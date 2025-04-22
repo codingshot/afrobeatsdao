@@ -5,6 +5,7 @@ import {
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
   Repeat, Repeat1, Share2, Music2, Maximize, Minimize
 } from "lucide-react";
+import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 
 declare global {
   interface Window {
@@ -49,6 +50,12 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [videoTitle, setVideoTitle] = useState<string>("Loading...");
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const getRandomVibeVideo = useCallback((excludeId?: string) => {
+    const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
+    const randomIndex = Math.floor(Math.random() * availableVideos.length);
+    return availableVideos[randomIndex];
+  }, []);
 
   useEffect(() => {
     if (!window.YT && !document.getElementById('youtube-iframe-api')) {
@@ -191,8 +198,19 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       const nextSong = queue[0];
       setQueue(prev => prev.slice(1));
       playNow(nextSong);
+    } else {
+      // If queue is empty, pick a random Vibe of the Day video
+      const currentVideoId = currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
+                           currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
+                           currentSong?.youtube;
+      
+      const newVibeVideo = getRandomVibeVideo(currentVideoId);
+      playNow({
+        id: `vibe-${newVibeVideo}`,
+        youtube: newVibeVideo
+      });
     }
-  }, [queue, playNow]);
+  }, [queue, playNow, currentSong, getRandomVibeVideo]);
 
   const previousSong = useCallback(() => {
     if (player) {
