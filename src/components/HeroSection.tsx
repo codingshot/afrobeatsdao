@@ -1,7 +1,10 @@
 
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export function HeroSection() {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative min-h-[90vh] flex items-center bg-[#FFD600] overflow-hidden">
       <div className="container mx-auto px-4 py-16 relative z-10">
@@ -28,12 +31,10 @@ export function HeroSection() {
             </Button>
             <Button 
               className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
-              onClick={() => document.getElementById('music')?.scrollIntoView({
-                behavior: 'smooth'
-              })} 
+              onClick={() => navigate('/dance')}
               variant="secondary"
             >
-              Listen
+              Learn to Dance
             </Button>
           </div>
         </div>
