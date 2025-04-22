@@ -76,20 +76,7 @@ export function Header() {
           <div className="hidden md:flex items-center space-x-4">
             <NavigationMenu>
               <NavigationMenuList>
-                <NavigationMenuItem>
-                  <Link to="/">
-                    <NavigationMenuLink
-                      className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
-                        isRouteActive("/") && "bg-black/10"
-                      )}
-                    >
-                      <Home className="mr-2 h-4 w-4" />
-                      Home
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-
+                
                 <NavigationMenuItem>
                   <Link to="/dance">
                     <NavigationMenuLink
@@ -225,16 +212,7 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] bg-[#FFD600] p-0">
                 <nav className="flex flex-col h-full">
-                  <Link 
-                    to="/"
-                    className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
-                      isRouteActive("/") && "bg-black/20"
-                    )}
-                  >
-                    <Home className="mr-3 h-5 w-5" />
-                    Home
-                  </Link>
+                  
                   <Link 
                     to="/dance"
                     className={cn(
