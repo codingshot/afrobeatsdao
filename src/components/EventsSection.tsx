@@ -21,7 +21,7 @@ type Event = {
 
 const EVENTS: Record<string, Event> = {
   "Afro Nation Portugal": {
-    image_url: "https://www.afronation.com/lineup",
+    image_url: "/afornationportugal.jpg",
     website: "https://www.afronation.com",
     location: "Portimão, Portugal",
     event_description: "Afro Nation Portugal is the world's leading Afrobeats and Amapiano festival, celebrating African music genres on the golden beaches of the Algarve. The 2025 edition features superstars like Burna Boy, Tems, Amaarae, Uncle Waffles, DBN Gogo, and more. Expect exclusive lounges, premium beachfront experiences, and a vibrant gathering of the global African diaspora.",
@@ -61,7 +61,7 @@ const EVENTS: Record<string, Event> = {
     ticket_info: "Ticket prices TBD; previous events had tickets starting around $50–$100. Sign up for priority access at afronation.com."
   },
   "Mawazine Festival": {
-    image_url: "https://www.mawazine.ma/sites/default/files/2023-05/mawazine_2023_poster.jpg",
+    image_url: "/mawazine.webp",
     website: "https://www.mawazine.ma",
     location: "Rabat, Morocco",
     event_description: "Mawazine's Afrobeats night at OLM Souissi stage features artists like Wizkid and Lojay. Part of a larger international music festival, it blends global and African music genres for a diverse audience.",
