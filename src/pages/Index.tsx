@@ -5,6 +5,7 @@ import { MusicSection } from "@/components/MusicSection";
 import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
+import { ClubsSection } from "@/components/ClubsSection";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useEffect, useState } from "react";
 import { HeroSection } from "@/components/HeroSection";
@@ -52,6 +53,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <EventsSection />
+        <ClubsSection />
         <MusicSection />
         <VibeOfTheDay />
         <TeamSection />
