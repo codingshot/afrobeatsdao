@@ -33,31 +33,60 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   };
 
   const createSongFromDanceData = (song: any) => ({
-    id: song.title + song.artist,
+    id: `${song.title}-${song.artist}`,
     title: song.title,
     artist: song.artist,
     youtube: song.youtube,
   });
 
-  const handlePlayNow = (song: any) => {
-    if (audioPlayer && audioPlayer.playNow) {
-      audioPlayer.playNow(createSongFromDanceData(song));
+  const handlePlayNow = (song: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (audioPlayer && song) {
+      try {
+        audioPlayer.playNow(createSongFromDanceData(song));
+        toast({
+          title: "Now Playing",
+          description: `${song.title} by ${song.artist}`,
+        });
+      } catch (error) {
+        console.error("Error playing song:", error);
+      }
     }
   };
 
-  const handleAddToQueue = (song: any) => {
-    if (audioPlayer && audioPlayer.addToQueue) {
-      audioPlayer.addToQueue(createSongFromDanceData(song));
+  const handleAddToQueue = (song: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (audioPlayer && song) {
+      try {
+        audioPlayer.addToQueue(createSongFromDanceData(song));
+        toast({
+          title: "Added to Queue",
+          description: `${song.title} by ${song.artist}`,
+        });
+      } catch (error) {
+        console.error("Error adding song to queue:", error);
+      }
     }
   };
   
-  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number) => {
+  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    
     startDance(dance.id);
     markModuleComplete(dance.id, moduleIndex);
     
+    // Play a relevant song if available for practice mode
+    if (action === 'practice' && dance.songs && dance.songs.length > 0) {
+      const songIndex = moduleIndex % dance.songs.length;
+      handlePlayNow(dance.songs[songIndex]);
+    }
+    
     toast({
       title: action === 'tutorial' ? "Tutorial Started" : "Practice Mode Started",
-      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex]}`,
+      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex] || "this module"}`,
     });
   };
 
@@ -115,6 +144,12 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     }
   };
 
+  // Safely calculate progress percentage
+  const calculateProgress = () => {
+    if (!dance.modules || dance.modules.length === 0) return 0;
+    return (danceProgress.moduleProgress.length * 100) / dance.modules.length;
+  };
+
   return (
     <Card className="bg-black border-[#008751] text-white">
       <div className="relative">
@@ -143,7 +178,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-400">Progress:</span>
             <Progress 
-              value={danceProgress.moduleProgress.length * (100 / (dance.modules?.length || 1))} 
+              value={calculateProgress()} 
               className="w-32 sm:w-48 bg-gray-800"
             />
           </div>

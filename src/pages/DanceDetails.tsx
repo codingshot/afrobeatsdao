@@ -5,18 +5,33 @@ import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceD
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const DanceDetails = () => {
   const { genre, id } = useParams();
   const navigate = useNavigate();
   const [dance, setDance] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [notFound, setNotFound] = useState<boolean>(false);
+  const previousIdRef = useRef<string | undefined>(id);
   
   // Move the dance finding logic to useEffect to avoid race conditions
   useEffect(() => {
+    // If the dance ID has changed, reset states
+    if (previousIdRef.current !== id) {
+      setIsLoading(true);
+      setDance(null);
+      setNotFound(false);
+      previousIdRef.current = id;
+    }
+    
     const findDance = () => {
       let foundDance = null;
+      
+      // Extract all path segments for more flexible matching
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      const potentialId = id || lastSegment;
       
       // Handle direct routes where both genre and id are present in the URL
       if (genre && id) {
@@ -25,13 +40,8 @@ const DanceDetails = () => {
         }
       }
       
-      // Handle hardcoded routes without params
-      if (!foundDance && genre && !id) {
-        // Extract id from the URL path
-        const pathSegments = window.location.pathname.split('/');
-        const potentialId = pathSegments[pathSegments.length - 1];
-        
-        // Search in all genres
+      // If not found, search in all genres
+      if (!foundDance) {
         for (const genreKey in danceCurriculum) {
           const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
             d => d.id === potentialId
@@ -42,25 +52,23 @@ const DanceDetails = () => {
           }
         }
       }
-
-      // Last resort - try to find by scanning all dances
-      if (!foundDance) {
-        const allDances = Object.keys(danceCurriculum).reduce((acc: any[], genreKey) => {
-          return [...acc, ...danceCurriculum[genreKey as keyof typeof danceCurriculum]];
-        }, []);
-        
-        // Try to extract ID from the last part of the URL if not provided in params
-        const urlPathSegments = window.location.pathname.split('/');
-        const lastSegment = urlPathSegments[urlPathSegments.length - 1];
-        
-        foundDance = allDances.find(d => d.id === (id || lastSegment));
+      
+      if (foundDance) {
+        setDance(foundDance);
+        setNotFound(false);
+      } else {
+        setNotFound(true);
       }
       
-      setDance(foundDance);
       setIsLoading(false);
     };
     
-    findDance();
+    // Add a small timeout to ensure clean unmounting of previous components
+    const timeoutId = setTimeout(() => {
+      findDance();
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [genre, id]);
   
   if (isLoading) {
@@ -68,12 +76,13 @@ const DanceDetails = () => {
       <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading dance details...</h1>
+          <div className="w-16 h-16 border-4 border-[#FFD600] border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
-  if (!dance) {
+  if (notFound) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
         <Alert variant="destructive" className="max-w-md mb-6 bg-red-500/10 border-red-500/20 text-white">
@@ -99,4 +108,3 @@ const DanceDetails = () => {
 };
 
 export default DanceDetails;
-
