@@ -87,8 +87,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
 
       try {
         const newPlayer = new window.YT.Player('youtube-player', {
-          height: expandedView && videoVisible ? '240' : '0',
-          width: expandedView && videoVisible ? '426' : '0',
+          height: '240',
+          width: '426',
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
@@ -139,20 +139,21 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         }
       }
     };
-  }, [youtubeApiLoaded, expandedView, videoVisible]);
+  }, [youtubeApiLoaded]);
 
   useEffect(() => {
-    if (player && player.setSize) {
-      try {
-        player.setSize(
-          expandedView && videoVisible ? 426 : 0,
-          expandedView && videoVisible ? 240 : 0
-        );
-      } catch (e) {
-        console.error("Error resizing player:", e);
+    if (playerContainerRef.current) {
+      playerContainerRef.current.style.display = expandedView ? 'block' : 'none';
+      
+      if (playerContainerRef.current.firstChild) {
+        const iframe = playerContainerRef.current.querySelector('iframe');
+        if (iframe) {
+          iframe.style.opacity = videoVisible ? '1' : '0';
+          iframe.style.pointerEvents = videoVisible ? 'auto' : 'none';
+        }
       }
     }
-  }, [expandedView, videoVisible, player]);
+  }, [expandedView, videoVisible]);
 
   const playNow = useCallback((song: Song) => {
     if (currentSong) {
@@ -286,7 +287,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       {children}
       <div 
         ref={playerContainerRef} 
-        className={`${expandedView ? 'block' : 'hidden'} fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
+        className={`fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
+        style={{ display: expandedView ? 'block' : 'none' }}
       >
         <div id="youtube-player"></div>
       </div>
