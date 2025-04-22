@@ -135,9 +135,7 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
     date: event.start_date,
     image: event.image_url.startsWith('/') ? event.image_url : `/${event.image_url}`,
     description: event.event_description,
-    type: event.location.includes("UK") ? "Festival" : 
-          event.event_description.toLowerCase().includes("workshop") ? "Workshop" : 
-          event.event_description.toLowerCase().includes("party") ? "Party" : "Festival",
+    type: event.location.includes("UK") ? "Festival" : event.event_description.toLowerCase().includes("workshop") ? "Workshop" : event.event_description.toLowerCase().includes("party") ? "Party" : "Festival",
     ticketLink: event.ticket_info ? event.website : undefined,
     website: event.website
   };
@@ -146,28 +144,23 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
 // Derive filter options from events
 const EVENT_TYPES = ["All Types", ...Array.from(new Set(EVENTS.map(event => event.type)))];
 const LOCATIONS = ["All Locations", ...Array.from(new Set(EVENTS.map(event => event.location)))];
-
 const Events = () => {
   // State for filters
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [locationFilter, setLocationFilter] = useState("All Locations");
-  
+
   // Filter events based on search query and filters
   const filteredEvents = useMemo(() => {
     return EVENTS.filter(event => {
       // Apply text search
-      const matchesSearch = 
-        event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.location.toLowerCase().includes(searchQuery.toLowerCase());
-      
+      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.description.toLowerCase().includes(searchQuery.toLowerCase()) || event.location.toLowerCase().includes(searchQuery.toLowerCase());
+
       // Apply type filter
       const matchesType = typeFilter === "All Types" || event.type === typeFilter;
-      
+
       // Apply location filter
       const matchesLocation = locationFilter === "All Locations" || event.location === locationFilter;
-      
       return matchesSearch && matchesType && matchesLocation;
     });
   }, [searchQuery, typeFilter, locationFilter]);
@@ -175,10 +168,10 @@ const Events = () => {
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
@@ -187,9 +180,7 @@ const Events = () => {
     const imgElement = e.target as HTMLImageElement;
     imgElement.src = '/AfrobeatsDAOMeta.png';
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main className="container mx-auto px-4 py-24">
@@ -197,7 +188,7 @@ const Events = () => {
           <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4">
             Afrobeats Events
           </h1>
-          <p className="text-xl max-w-2xl mx-auto">
+          <p className="text-xl max-w-2xl mx-auto text-slate-950">
             Discover the hottest Afrobeats festivals, parties, and workshops happening around the world.
           </p>
         </div>
@@ -207,48 +198,33 @@ const Events = () => {
           <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                placeholder="Search events..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+              <Input placeholder="Search events..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10" />
             </div>
             
             <div className="flex-1 md:flex-initial w-full md:w-48">
-              <Select 
-                value={typeFilter} 
-                onValueChange={setTypeFilter}
-              >
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger>
                   <Filter className="mr-2 h-4 w-4" />
                   <SelectValue placeholder="Event Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EVENT_TYPES.map(type => (
-                    <SelectItem key={type} value={type}>
+                  {EVENT_TYPES.map(type => <SelectItem key={type} value={type}>
                       {type}
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             
             <div className="flex-1 md:flex-initial w-full md:w-48">
-              <Select 
-                value={locationFilter} 
-                onValueChange={setLocationFilter}
-              >
+              <Select value={locationFilter} onValueChange={setLocationFilter}>
                 <SelectTrigger>
                   <MapPin className="mr-2 h-4 w-4" />
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {LOCATIONS.map(location => (
-                    <SelectItem key={location} value={location}>
+                  {LOCATIONS.map(location => <SelectItem key={location} value={location}>
                       {location}
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
@@ -257,16 +233,9 @@ const Events = () => {
         
         {/* Events grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map(event => (
-              <Card key={event.id} className="overflow-hidden flex flex-col h-full">
+          {filteredEvents.length > 0 ? filteredEvents.map(event => <Card key={event.id} className="overflow-hidden flex flex-col h-full">
                 <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={event.image} 
-                    alt={event.title} 
-                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
-                    onError={handleImageError}
-                  />
+                  <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform hover:scale-105 duration-300" onError={handleImageError} />
                   <Badge className="absolute top-2 right-2 bg-[#008751] hover:bg-[#008751]/90">
                     {event.type}
                   </Badge>
@@ -289,37 +258,27 @@ const Events = () => {
                 </CardContent>
                 
                 <CardFooter className="flex justify-between border-t pt-4">
-                  {event.ticketLink && (
-                    <Button variant="accent" asChild>
+                  {event.ticketLink && <Button variant="accent" asChild>
                       <a href={event.ticketLink} target="_blank" rel="noopener noreferrer">
                         Get Tickets
                       </a>
-                    </Button>
-                  )}
+                    </Button>}
                   
-                  {event.website && (
-                    <Button variant="outline" asChild>
+                  {event.website && <Button variant="outline" asChild>
                       <a href={event.website} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" />
                         Website
                       </a>
-                    </Button>
-                  )}
+                    </Button>}
                 </CardFooter>
-              </Card>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
+              </Card>) : <div className="col-span-full text-center py-12">
               <h3 className="text-xl font-medium mb-2">No events found</h3>
               <p>Try adjusting your search filters</p>
-            </div>
-          )}
+            </div>}
         </div>
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Events;
