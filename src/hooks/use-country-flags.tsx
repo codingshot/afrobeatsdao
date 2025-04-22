@@ -34,6 +34,12 @@ const countryCodeMap: Record<string, string> = {
   "Burkina Faso": "BF",
   "Guinea": "GN",
   "Ethiopia": "ET",
+  // Added countries needed for clubs
+  "United Kingdom": "GB",
+  "Thailand": "TH",
+  "Ireland": "IE",
+  "Netherlands": "NL",
+  // Add more as needed
 };
 
 export function useCountryFlags() {

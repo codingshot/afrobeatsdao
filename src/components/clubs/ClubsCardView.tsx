@@ -1,10 +1,12 @@
+
 import React from 'react';
 import { Club } from '@/types/club';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { MapPin, ExternalLink, Info } from 'lucide-react';
+import { MapPin, ExternalLink, Info, Clock, Music, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
+import { Badge } from '@/components/ui/badge';
 
 interface ClubsCardViewProps {
   clubs: Club[];
@@ -12,6 +14,15 @@ interface ClubsCardViewProps {
 
 const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
   const { getFlag } = useCountryFlags();
+
+  // Helper function to get country based on city
+  const getCountryFromCity = (city: string) => {
+    if (city === "London") return "United Kingdom";
+    if (city === "Bangkok") return "Thailand";
+    if (city === "Dublin") return "Ireland";
+    if (city === "Amsterdam") return "Netherlands";
+    return "";
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
@@ -21,7 +32,7 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
             <div className="flex justify-between items-start">
               <div className="flex items-start gap-2">
                 <img 
-                  src={getFlag(club.city === "London" ? "United Kingdom" : club.city === "Bangkok" ? "Thailand" : club.city === "Dublin" ? "Ireland" : "Netherlands")} 
+                  src={getFlag(getCountryFromCity(club.city))} 
                   alt={`${club.city} flag`}
                   className="w-6 h-4 object-cover rounded-sm mt-1"
                 />
@@ -37,7 +48,7 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
                     <span className="sr-only">Club details</span>
                   </Button>
                 </HoverCardTrigger>
-                <HoverCardContent className="w-80" align="end">
+                <HoverCardContent className="w-80 z-50" align="end">
                   <div className="space-y-2">
                     <h4 className="text-sm font-semibold">Club Details</h4>
                     {club.year_founded && (
@@ -88,16 +99,34 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
                 {club.address}
               </p>
             )}
+            
             {club.music && (
-              <p className="text-sm mb-2">
-                <span className="font-medium">Music:</span> {club.music}
-              </p>
+              <div className="flex items-start mb-2">
+                <Music className="h-3.5 w-3.5 mr-1 text-muted-foreground mt-0.5" />
+                <div className="flex flex-wrap gap-1">
+                  {club.music.split(',').map((genre, i) => (
+                    <Badge key={i} variant="outline" className="text-xs bg-[#F97316]/10">
+                      {genre.trim()}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             )}
+            
             {club.hours && (
-              <p className="text-sm mb-2">
-                <span className="font-medium">Hours:</span> {club.hours}
+              <p className="text-sm mb-2 flex items-center">
+                <Clock className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                {club.hours}
               </p>
             )}
+            
+            {club.capacity && (
+              <p className="text-sm mb-2 flex items-center">
+                <Users className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                {club.capacity}
+              </p>
+            )}
+            
             {club.general_rating && (
               <p className="text-sm italic text-muted-foreground">{club.general_rating}</p>
             )}

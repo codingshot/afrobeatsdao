@@ -18,7 +18,7 @@
 iframe,
 .react-player,
 .video-container {
-  z-index: 5 !important;
+  z-index: 10 !important;
   position: relative;
 }
 
@@ -27,3 +27,26 @@ iframe,
   z-index: 100 !important;
 }
 
+/* Ensure proper z-index for dropdown menus */
+.selectContent,
+.popoverContent,
+.menuContent,
+.menubarContent,
+.dropdownMenuContent,
+.hover-card-content,
+.navigationMenuContent {
+  z-index: 50 !important;
+}
+
+/* Fix for Leaflet popup content */
+.leaflet-popup-content {
+  min-width: 200px;
+}
+
+/* Fix for mobile display */
+@media (max-width: 768px) {
+  .leaflet-popup-content {
+    min-width: 200px;
+    max-width: 250px;
+  }
+}

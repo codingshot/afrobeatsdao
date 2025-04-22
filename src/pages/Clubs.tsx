@@ -20,6 +20,9 @@ const Clubs = () => {
   
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('name');
+
+  // State for the currently selected club
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   
   // Update view mode when screen size changes
   useEffect(() => {
@@ -84,11 +87,16 @@ const Clubs = () => {
   const musicTypes = useMemo(() => getMusicTypes(), []);
   const clubTypes = useMemo(() => getClubTypes(), []);
 
+  // Handler for selecting a club on the map
+  const handleSelectClub = (club: Club) => {
+    setSelectedClub(club);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-8 mt-16">
         <ClubsFilterBar 
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -102,7 +110,11 @@ const Clubs = () => {
         />
         
         {viewMode === 'map' ? (
-          <ClubsMapView clubs={filteredClubs} />
+          <ClubsMapView 
+            clubs={filteredClubs} 
+            filters={filters}
+            onSelectClub={handleSelectClub}
+          />
         ) : (
           <ClubsCardView clubs={filteredClubs} />
         )}

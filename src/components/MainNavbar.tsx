@@ -8,13 +8,15 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Music, Users, Calendar, Play } from "lucide-react";
+import { Music, Users, Calendar, Play, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
 
 const MainNavbar = ({ className }: { className?: string }) => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const onIndexPage = location.pathname === "/";
 
   useEffect(() => {
@@ -30,6 +32,8 @@ const MainNavbar = ({ className }: { className?: string }) => {
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial scroll position
+    
     return () => window.removeEventListener("scroll", handleScroll);
   }, [onIndexPage]);
 
@@ -37,6 +41,24 @@ const MainNavbar = ({ className }: { className?: string }) => {
   if (onIndexPage && !isScrolled) {
     return null;
   }
+
+  // Handle search submission
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Navigate to appropriate search page based on current route
+    if (location.pathname.includes('/clubs')) {
+      // For example, this could redirect to /clubs with a search param
+      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
+    } else if (location.pathname.includes('/dance')) {
+      window.location.href = `/dance?search=${encodeURIComponent(searchValue)}`;
+    } else if (location.pathname.includes('/events')) {
+      window.location.href = `/events?search=${encodeURIComponent(searchValue)}`;
+    } else {
+      // Default search leads to clubs
+      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
+    }
+  };
 
   return (
     <div
@@ -54,7 +76,19 @@ const MainNavbar = ({ className }: { className?: string }) => {
           />
         </Link>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center space-x-4">
+          {/* Search form */}
+          <form onSubmit={handleSearch} className="relative flex items-center">
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              className="w-48 pl-8 h-9 bg-white/90 border-0 focus-visible:ring-1 focus-visible:ring-[#008751]"
+            />
+            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
+          </form>
+
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -108,7 +142,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                   Music
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[200px] gap-2 p-2">
+                  <ul className="grid w-[200px] gap-2 p-2 z-50 bg-white">
                     <li>
                       <Link to="/#vibe">
                         <NavigationMenuLink
@@ -143,10 +177,20 @@ const MainNavbar = ({ className }: { className?: string }) => {
           </NavigationMenu>
         </div>
 
-        {/* Mobile menu - hamburger icon would go here */}
-        <div className="md:hidden">
-          {/* Implement mobile dropdown in future iteration */}
-          <Link to="/dance" className="px-3 py-2 text-sm font-medium">
+        {/* Mobile menu - improved version */}
+        <div className="md:hidden flex items-center">
+          <form onSubmit={handleSearch} className="relative mr-2">
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              className="w-28 pl-7 h-8 text-xs bg-white/90 border-0"
+            />
+            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
+          </form>
+          
+          <Link to="/dance" className="px-2 py-1 text-sm font-medium">
             Dance
           </Link>
         </div>
