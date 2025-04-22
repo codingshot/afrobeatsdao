@@ -56,7 +56,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "fixed top-0 w-full z-40 bg-[#FFD600] shadow-md transition-all duration-300 py-3",
+        "fixed top-0 w-full z-40 bg-[#FFD600] shadow-md transition-all duration-300 py-3 text-black",
         className
       )}
     >
@@ -87,7 +87,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/dance">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/dance") &&
                         "bg-black/10 text-black"
                     )}
@@ -102,7 +102,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/events">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/events") &&
                         "bg-black/10 text-black"
                     )}
@@ -117,7 +117,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/clubs">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/clubs") &&
                         "bg-black/10 text-black"
                     )}
@@ -169,7 +169,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
           </NavigationMenu>
         </div>
 
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex items-center text-black">
           <form onSubmit={handleSearch} className="relative mr-2">
             <Input
               type="text"
