@@ -7,7 +7,7 @@ import {
   Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 declare global {
   interface Window {
