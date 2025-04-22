@@ -49,6 +49,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [expandedView, setExpandedView] = useState(true);
   const [videoTitle, setVideoTitle] = useState<string>("Loading...");
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
+  const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
@@ -108,6 +109,11 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
             },
             onError: (event: any) => {
               console.error("YouTube player error:", event);
+              if (previousVideoData) {
+                console.log("Error playing video, reverting to previous video");
+                setCurrentSong(previousVideoData);
+                event.target.loadVideoById(previousVideoData.youtube);
+              }
               setVideoTitle("Error loading video");
               setChannelTitle("Unknown");
             },
@@ -148,6 +154,9 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   }, [expandedView, player]);
 
   const playNow = useCallback((song: Song) => {
+    if (currentSong) {
+      setPreviousVideoData(currentSong);
+    }
     setCurrentSong(song);
     setIsPlaying(true);
     if (player && player.loadVideoById) {
@@ -164,11 +173,14 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         player.loadVideoById(videoId);
       } catch (e) {
         console.error("Error loading video:", e, song);
+        if (previousVideoData) {
+          console.log("Reverting to previous video");
+          setCurrentSong(previousVideoData);
+          player.loadVideoById(previousVideoData.youtube);
+        }
       }
-    } else {
-      console.log("Player not ready yet, will try to play when ready");
     }
-  }, [player]);
+  }, [player, currentSong, previousVideoData]);
 
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
@@ -199,7 +211,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       setQueue(prev => prev.slice(1));
       playNow(nextSong);
     } else {
-      // If queue is empty, pick a random Vibe of the Day video
       const currentVideoId = currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
                            currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
                            currentSong?.youtube;
