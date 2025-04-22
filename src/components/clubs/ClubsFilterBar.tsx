@@ -9,18 +9,6 @@ import { Map, List, Filter, Search } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-interface ClubsFilterBarProps {
-  viewMode: ClubViewMode;
-  onViewModeChange: (mode: ClubViewMode) => void;
-  filters: ClubFilters;
-  onFiltersChange: (filters: ClubFilters) => void;
-  sortBy: SortOption;
-  onSortChange: (sort: SortOption) => void;
-  cities: string[];
-  musicTypes: string[];
-  clubTypes: string[];
-}
-
 const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   viewMode,
   onViewModeChange,
@@ -86,50 +74,68 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
             <Select value={filters.city || "all"} onValueChange={handleCityChange}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white text-black">
                 <SelectValue placeholder="City" />
               </SelectTrigger>
-              <SelectContent className="bg-white z-50">
-                <SelectItem value="all">All Cities</SelectItem>
+              <SelectContent className="bg-white text-black z-50">
+                <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Cities</SelectItem>
                 {cities.map(city => (
-                  <SelectItem key={city} value={city}>{city}</SelectItem>
+                  <SelectItem 
+                    key={city} 
+                    value={city} 
+                    className="text-black hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    {city}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             
             <Select value={filters.type || "all"} onValueChange={handleTypeChange}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white text-black">
                 <SelectValue placeholder="Club Type" />
               </SelectTrigger>
-              <SelectContent className="bg-white z-50">
-                <SelectItem value="all">All Types</SelectItem>
+              <SelectContent className="bg-white text-black z-50">
+                <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Types</SelectItem>
                 {clubTypes.map(type => (
-                  <SelectItem key={type} value={type}>{type}</SelectItem>
+                  <SelectItem 
+                    key={type} 
+                    value={type} 
+                    className="text-black hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    {type}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             
             <Select value={filters.music || "all"} onValueChange={handleMusicChange}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white text-black">
                 <SelectValue placeholder="Music Style" />
               </SelectTrigger>
-              <SelectContent className="bg-white z-50">
-                <SelectItem value="all">All Music</SelectItem>
+              <SelectContent className="bg-white text-black z-50">
+                <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Music</SelectItem>
                 {musicTypes.map(music => (
-                  <SelectItem key={music} value={music}>{music}</SelectItem>
+                  <SelectItem 
+                    key={music} 
+                    value={music} 
+                    className="text-black hover:bg-gray-100 focus:bg-gray-100"
+                  >
+                    {music}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             
             <Select value={sortBy} onValueChange={(value) => onSortChange(value as SortOption)}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white text-black">
                 <SelectValue placeholder="Sort By" />
               </SelectTrigger>
-              <SelectContent className="bg-white z-50">
-                <SelectItem value="name">Name</SelectItem>
-                <SelectItem value="city">City</SelectItem>
-                <SelectItem value="year_founded">Year Founded</SelectItem>
-                <SelectItem value="capacity">Capacity</SelectItem>
+              <SelectContent className="bg-white text-black z-50">
+                <SelectItem value="name" className="text-black hover:bg-gray-100 focus:bg-gray-100">Name</SelectItem>
+                <SelectItem value="city" className="text-black hover:bg-gray-100 focus:bg-gray-100">City</SelectItem>
+                <SelectItem value="year_founded" className="text-black hover:bg-gray-100 focus:bg-gray-100">Year Founded</SelectItem>
+                <SelectItem value="capacity" className="text-black hover:bg-gray-100 focus:bg-gray-100">Capacity</SelectItem>
               </SelectContent>
             </Select>
           </div>
