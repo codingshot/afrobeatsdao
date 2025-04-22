@@ -40,8 +40,8 @@ const difficulties = Array.from(
 
 const DancePage = () => {
   const [selectedGenre, setSelectedGenre] = useState("all"); // "all", "afrobeats", "amapiano"
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("all");  // Changed from "" to "all"
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");  // Changed from "" to "all"
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobile();
   const { getFlag } = useCountryFlags();
@@ -101,12 +101,12 @@ const DancePage = () => {
     }
 
     // Apply country filter if selected
-    if (selectedCountry) {
+    if (selectedCountry && selectedCountry !== "all") {
       filteredDances = filteredDances.filter(dance => dance.origin === selectedCountry);
     }
 
     // Apply difficulty filter if selected
-    if (selectedDifficulty) {
+    if (selectedDifficulty && selectedDifficulty !== "all") {
       filteredDances = filteredDances.filter(dance => dance.difficulty === selectedDifficulty);
     }
 
@@ -118,8 +118,8 @@ const DancePage = () => {
   const metaDescription = `Learn ${genreCount} authentic ${selectedGenre === "all" ? "African" : selectedGenre} dances from beginner to advanced levels. Master popular moves and more!`;
 
   const clearFilters = () => {
-    setSelectedCountry("");
-    setSelectedDifficulty("");
+    setSelectedCountry("all");  // Changed from "" to "all"
+    setSelectedDifficulty("all");  // Changed from "" to "all"
   };
 
   return (
@@ -225,7 +225,7 @@ const DancePage = () => {
                         <SelectValue placeholder="Filter by Country" />
                       </SelectTrigger>
                       <SelectContent className="bg-white text-black border-black/10 z-50">
-                        <SelectItem value="">All Countries</SelectItem>
+                        <SelectItem value="all">All Countries</SelectItem>
                         {countries.map(country => (
                           <SelectItem key={country} value={country} className="flex items-center">
                             {country} {getFlag(country) && (
@@ -243,7 +243,7 @@ const DancePage = () => {
                         <SelectValue placeholder="Filter by Difficulty" />
                       </SelectTrigger>
                       <SelectContent className="bg-white text-black border-black/10 z-50">
-                        <SelectItem value="">All Difficulties</SelectItem>
+                        <SelectItem value="all">All Difficulties</SelectItem>
                         {difficulties.map(difficulty => (
                           <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
                         ))}
@@ -251,7 +251,7 @@ const DancePage = () => {
                     </Select>
                   </div>
                   
-                  {(selectedCountry || selectedDifficulty) && (
+                  {(selectedCountry !== "all" || selectedDifficulty !== "all") && (
                     <Button 
                       variant="outline" 
                       onClick={clearFilters}
