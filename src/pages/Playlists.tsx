@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Music, Headphones, Youtube, ExternalLink } from "lucide-react";
+import { Play, ExternalLink, Music2, Headphones, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 
@@ -127,11 +127,11 @@ const Playlists = () => {
       case 'spotify':
         return <Headphones className="h-5 w-5" />;
       case 'apple':
-        return <Music className="h-5 w-5" />;
+        return <Music2 className="h-5 w-5" />;
       case 'youtube':
         return <Youtube className="h-5 w-5" />;
       default:
-        return <Music className="h-5 w-5" />;
+        return <Music2 className="h-5 w-5" />;
     }
   };
 
@@ -148,98 +148,122 @@ const Playlists = () => {
         </div>
         
         <Tabs defaultValue="playlists" className="w-full max-w-6xl mx-auto">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="playlists">Top Playlists</TabsTrigger>
-            <TabsTrigger value="artists">Trending Artists</TabsTrigger>
+          <TabsList className="w-full grid grid-cols-2 mb-8 bg-accent/10">
+            <TabsTrigger 
+              value="playlists"
+              className="data-[state=active]:bg-[#008751] data-[state=active]:text-white"
+            >
+              Top Playlists
+            </TabsTrigger>
+            <TabsTrigger 
+              value="artists"
+              className="data-[state=active]:bg-[#008751] data-[state=active]:text-white"
+            >
+              Trending Artists
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="playlists" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {PLAYLISTS.map(playlist => (
-                <Card key={playlist.id} className="overflow-hidden h-full flex flex-col">
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={playlist.image} 
-                      alt={playlist.title} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
-                      onError={handleImageError} 
-                    />
-                    <div className="absolute bottom-2 right-2 bg-black/70 text-white p-1.5 rounded-full">
-                      {getPlatformIcon(playlist.platform)}
-                    </div>
-                  </div>
-                  
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{playlist.title}</span>
-                    </CardTitle>
-                    <CardDescription>{playlist.description}</CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="mt-auto">
+          <TabsContent value="playlists" className="mt-6 space-y-4">
+            {PLAYLISTS.map(playlist => (
+              <div 
+                key={playlist.id} 
+                className="flex items-center gap-4 p-4 bg-card rounded-lg border hover:bg-accent/5 transition-colors"
+              >
+                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+                  <img 
+                    src={playlist.image} 
+                    alt={playlist.title}
+                    className="h-full w-full object-cover"
+                    onError={handleImageError}
+                  />
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-semibold">{playlist.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {playlist.description}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {playlist.platform === 'youtube' ? (
                     <Button 
-                      className="w-full bg-[#008751] hover:bg-[#008751]/90"
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => playNow({
+                        id: playlist.id,
+                        youtube: playlist.url.split('v=')[1] || playlist.url.split('youtu.be/')[1]
+                      })}
+                      className="text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                    >
+                      <Play className="h-5 w-5" />
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
                       asChild
+                      className="text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
                     >
                       <a href={playlist.url} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Open in {playlist.platform.charAt(0).toUpperCase() + playlist.platform.slice(1)}
+                        {getPlatformIcon(playlist.platform)}
                       </a>
                     </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </TabsContent>
           
-          <TabsContent value="artists" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {TRENDING_ARTISTS.map(artist => (
-                <Card key={artist.id} className="overflow-hidden h-full flex flex-col">
-                  <div className="relative h-60 overflow-hidden">
-                    <img 
-                      src={artist.image} 
-                      alt={artist.name} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
-                      onError={handleImageError}
-                    />
-                  </div>
+          <TabsContent value="artists" className="mt-6 space-y-4">
+            {TRENDING_ARTISTS.map(artist => (
+              <div 
+                key={artist.id} 
+                className="flex items-center gap-4 p-4 bg-card rounded-lg border hover:bg-accent/5 transition-colors"
+              >
+                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full">
+                  <img 
+                    src={artist.image} 
+                    alt={artist.name}
+                    className="h-full w-full object-cover"
+                    onError={handleImageError}
+                  />
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-semibold">{artist.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {artist.popular_song} • {artist.country}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {artist.youtube_id && (
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => playArtistSong(artist)}
+                      className="text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                    >
+                      <Play className="h-5 w-5" />
+                    </Button>
+                  )}
                   
-                  <CardHeader>
-                    <CardTitle>{artist.name}</CardTitle>
-                    <CardDescription className="flex flex-col gap-1">
-                      <span>From: {artist.country}</span>
-                      <span>Popular Song: {artist.popular_song}</span>
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="flex gap-3 mt-auto">
-                    {artist.youtube_id && (
-                      <Button 
-                        className="flex-1 bg-[#E63946] hover:bg-[#E63946]/90"
-                        onClick={() => playArtistSong(artist)}
-                      >
-                        <Play className="mr-2 h-4 w-4" />
-                        Play Song
-                      </Button>
-                    )}
-                    
-                    {artist.spotify_url && (
-                      <Button 
-                        variant="outline" 
-                        className="flex-1"
-                        asChild
-                      >
-                        <a href={artist.spotify_url} target="_blank" rel="noopener noreferrer">
-                          <Headphones className="mr-2 h-4 w-4" />
-                          Spotify
-                        </a>
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  {artist.spotify_url && (
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      asChild
+                      className="text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                    >
+                      <a href={artist.spotify_url} target="_blank" rel="noopener noreferrer">
+                        <Headphones className="h-5 w-5" />
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
           </TabsContent>
         </Tabs>
       </main>
