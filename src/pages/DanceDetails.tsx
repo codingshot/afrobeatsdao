@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { danceCurriculum } from "@/data/dance-curriculum";
 import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceDetails";
@@ -25,16 +26,19 @@ const DanceDetails = () => {
     const findDance = () => {
       let foundDance = null;
       
+      // Get the dance ID from either the URL params or the last segment of the path
       const pathSegments = window.location.pathname.split('/').filter(Boolean);
       const lastSegment = pathSegments[pathSegments.length - 1];
       const potentialId = id || lastSegment;
       
+      // If we have both genre and id, try to find the dance in that specific genre
       if (genre && id) {
         if (danceCurriculum[genre as keyof typeof danceCurriculum]) {
           foundDance = danceCurriculum[genre as keyof typeof danceCurriculum].find(d => d.id === id);
         }
       }
       
+      // If not found or if we only have an id, search across all genres
       if (!foundDance) {
         for (const genreKey in danceCurriculum) {
           const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(

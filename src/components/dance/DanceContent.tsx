@@ -152,27 +152,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
 
   return (
     <Card className="bg-black border-[#008751] text-white">
-      <div className="relative">
-        <div className="h-48 md:h-64 bg-gradient-to-r from-[#008751] to-[#F97316] rounded-t-lg flex items-center justify-center overflow-hidden">
-          <h2 className="text-3xl md:text-4xl font-bold text-white z-10 text-center px-4 font-heading">
-            {dance.name}
-          </h2>
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-        <div className="absolute bottom-0 left-0 bg-black/70 backdrop-blur-sm px-4 py-1 rounded-tr-lg">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-white">Origin: <span className="text-[#FFD600]">{dance.origin}</span></p>
-            {dance.origin && getFlag(dance.origin) && (
-              <img 
-                src={getFlag(dance.origin)} 
-                alt={dance.origin} 
-                className="w-5 h-3"
-              />
-            )}
-          </div>
-        </div>
-      </div>
-
       <div className="p-4 sm:p-6 border-b border-[#008751]/30">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
@@ -185,7 +164,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           <Button
             onClick={handleNextDance}
             variant="outline"
-            className="border-[#008751] text-[#008751] hover:bg-[#008751]/10 font-medium"
+            className="border-[#008751] bg-[#008751] text-white hover:bg-[#008751]/80 font-medium"
           >
             <CircleChevronRight className="mr-2 h-4 w-4" />
             Next Dance
@@ -265,11 +244,17 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                           <div className="flex flex-col sm:flex-row gap-3 mb-3">
                             <Button 
                               variant="outline" 
-                              className="flex-1 border-[#008751] text-[#008751] hover:bg-[#008751]/10"
-                              onClick={() => handleModuleAction('tutorial', idx)}
+                              className={`flex-1 ${
+                                dance.tutorials && dance.tutorials[0] 
+                                ? "border-[#008751] text-[#008751] hover:bg-[#008751]/10" 
+                                : "border-gray-600 text-gray-500 cursor-not-allowed"
+                              }`}
+                              onClick={() => dance.tutorials && dance.tutorials[0] && handleModuleAction('tutorial', idx)}
+                              disabled={!dance.tutorials || !dance.tutorials[0]}
                             >
                               <Play className="mr-2 h-4 w-4" /> 
                               Tutorial
+                              {(!dance.tutorials || !dance.tutorials[0]) && " (Unavailable)"}
                             </Button>
                             <Button 
                               variant="outline" 

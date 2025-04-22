@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Music, Headphones, Share2, ArrowRight, Play, Plus } from "lucide-react";
+import { Music, Headphones, ArrowRight, Play, Plus } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCountryFlags } from "@/hooks/use-country-flags";
 import { danceCurriculum } from "@/data/dance-curriculum";
