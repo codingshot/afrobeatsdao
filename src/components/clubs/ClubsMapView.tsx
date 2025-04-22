@@ -33,21 +33,21 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
   return (
     <div className="rounded-lg overflow-hidden border border-border h-[calc(100vh-200px)] md:h-[600px] w-full">
       <MapContainer 
-        center={defaultCenter}
+        center={defaultCenter as L.LatLngExpression}
         zoom={defaultZoom} 
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
         {clubs.map((club, index) => (
           club.coordinates ? (
             <Marker 
               key={`${club.name}-${index}`} 
-              position={[club.coordinates[1], club.coordinates[0]]}
+              position={[club.coordinates[1], club.coordinates[0]] as L.LatLngExpression}
               eventHandlers={{
                 click: () => {
                   if (onSelectClub) onSelectClub(club);
