@@ -194,7 +194,7 @@ const Events = () => {
         </div>
         
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-4 mb-8 text-slate-800">
           <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
