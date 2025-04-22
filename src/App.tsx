@@ -1,4 +1,5 @@
 
+import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import './App.css';
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -14,7 +15,6 @@ import Clubs from "./pages/Clubs";
 import Events from "./pages/Events";
 import Playlists from "./pages/Playlists";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
-import { useState } from "react";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
