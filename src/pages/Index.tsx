@@ -30,7 +30,7 @@ const Index = () => {
   }, [playNow]);
 
   return (
-    <div className="min-h-screen font-sans">
+    <div className="min-h-screen font-sans pb-[100px]"> {/* Add padding to prevent overlap */}
       <Header />
       <main>
         <HeroSection />
