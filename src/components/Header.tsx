@@ -1,10 +1,19 @@
 
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    // Always show navbar on dance page
+    if (location.pathname.startsWith('/dance')) {
+      setIsVisible(true);
+      return;
+    }
+
+    // Original scroll-based logic for other pages
     const handleScroll = () => {
       const heroSection = document.querySelector('section');
       if (heroSection) {
@@ -15,7 +24,7 @@ export function Header() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <header className={`fixed top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
