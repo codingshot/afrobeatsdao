@@ -49,11 +49,17 @@ body {
 .title-text,
 .section-title,
 .artist-name,
-.playlist-title {
+.playlist-title,
+.hero-title,
+.hero-subtitle,
+.team-title,
+.team-subtitle,
+.event-title {
   color: black !important;
 }
 
-.white-text {
+.white-text,
+.player-text {
   color: white !important;
 }
 
@@ -75,6 +81,21 @@ body {
   color: white !important;
 }
 
+/* Search results and tabs fixes */
+.search-results,
+.tabs-container {
+  width: 100% !important;
+}
+
+/* Text color fixes for specific backgrounds */
+.on-yellow-bg {
+  color: black !important;
+}
+
+.on-dark-bg {
+  color: white !important;
+}
+
 /* Queue integration styles */
 .queue-container {
   position: fixed;
@@ -92,3 +113,19 @@ body {
     border-left: none;
   }
 }
+
+/* Ensure all music/playlist items have proper text color */
+.playlist-item-title,
+.playlist-item-artist {
+  color: black !important;
+}
+
+.dark-mode-text {
+  color: white !important;
+}
+
+/* Ensure tabs are full width */
+.full-width-tabs {
+  width: 100% !important;
+}
+

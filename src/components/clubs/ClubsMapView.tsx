@@ -6,7 +6,7 @@ import { Club, ClubFilters } from '@/types/club';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
-import { MapPin, ExternalLink, Music, Clock, Users, VideoOff } from 'lucide-react';
+import { MapPin, ExternalLink, Music, Clock, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -58,6 +58,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
   const [hoveredClub, setHoveredClub] = useState<Club | null>(null);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
   const [mapRef, setMapRef] = useState<L.Map | null>(null);
+  const [carouselApi, setCarouselApi] = useState<any>(null);
   
   useEffect(() => {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -67,6 +68,13 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
       shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
     });
   }, []);
+
+  // Move to the selected card when activeCardIndex changes
+  useEffect(() => {
+    if (carouselApi) {
+      carouselApi.scrollTo(activeCardIndex);
+    }
+  }, [activeCardIndex, carouselApi]);
 
   const getCountryFromCity = (city: string) => {
     if (city === "London") return "United Kingdom";
@@ -206,8 +214,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
             loop: true,
           }}
           className="w-full"
-          defaultIndex={activeCardIndex}
-          // Fix: Remove onSelect prop as it's not compatible with how we're using it
+          setApi={setCarouselApi}
         >
           <CarouselContent>
             {clubs.map((club, index) => (
@@ -280,3 +287,4 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
 };
 
 export default ClubsMapView;
+
