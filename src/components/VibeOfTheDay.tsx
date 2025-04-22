@@ -1,7 +1,8 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Shuffle } from "lucide-react";
+import { Shuffle, Play } from "lucide-react";
+import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 
 // Export the array of video IDs so it can be used in other components
 export const VIBE_VIDEOS = [
@@ -16,6 +17,7 @@ export function VibeOfTheDay() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(() => 
     Math.floor(Math.random() * VIBE_VIDEOS.length)
   );
+  const { playNow } = useGlobalAudioPlayer();
 
   const shuffleVideo = () => {
     let newIndex;
@@ -23,6 +25,14 @@ export function VibeOfTheDay() {
       newIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
     } while (newIndex === currentVideoIndex);
     setCurrentVideoIndex(newIndex);
+  };
+
+  const playInGlobalPlayer = () => {
+    const videoId = VIBE_VIDEOS[currentVideoIndex];
+    playNow({
+      id: `vibe-${videoId}`,
+      youtube: videoId
+    });
   };
 
   return (
@@ -49,13 +59,23 @@ export function VibeOfTheDay() {
             />
           </div>
           
-          <Button 
-            onClick={shuffleVideo}
-            className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-3 mx-auto"
-          >
-            <Shuffle className="w-6 h-6" />
-            <span>Shuffle Vibe</span>
-          </Button>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button 
+              onClick={shuffleVideo}
+              className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-3"
+            >
+              <Shuffle className="w-6 h-6" />
+              <span>Shuffle Vibe</span>
+            </Button>
+            
+            <Button 
+              onClick={playInGlobalPlayer}
+              className="bg-[#264653] hover:bg-blue-800 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-3"
+            >
+              <Play className="w-6 h-6" />
+              <span>Play in Player</span>
+            </Button>
+          </div>
         </div>
       </div>
     </section>
