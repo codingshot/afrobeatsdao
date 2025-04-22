@@ -522,7 +522,11 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                     <p className="text-sm text-gray-400 mb-3">
                       Comprehensive collection of African dance tutorials and history
                     </p>
-                    <Button variant="outline" size="sm" className="w-full text-white border-gray-700 hover:bg-white/10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full bg-[#008751] text-white border-[#008751] hover:bg-[#008751]/80"
+                    >
                       Visit Website
                     </Button>
                   </CardContent>
@@ -533,7 +537,11 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                     <p className="text-sm text-gray-400 mb-3">
                       Connect with dancers around the world
                     </p>
-                    <Button variant="outline" size="sm" className="w-full text-white border-gray-700 hover:bg-white/10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full bg-[#008751] text-white border-[#008751] hover:bg-[#008751]/80"
+                    >
                       Join Community
                     </Button>
                   </CardContent>
