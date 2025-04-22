@@ -1,4 +1,3 @@
-
 import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { 
@@ -22,17 +21,17 @@ type Event = {
 
 const EVENTS: Record<string, Event> = {
   "Afro Nation Portugal": {
-    image_url: "https://www.skiddle.com/festivals/afro-nation-portugal/images/afro-nation-portugal-2025-lineup.jpg",
+    image_url: "https://www.afronation.com/lineup",
     website: "https://www.afronation.com",
     location: "Portimão, Portugal",
-    event_description: "Afro Nation Portugal is a leading Afrobeats festival featuring top artists like Burna Boy, Tems, DBN Gogo, and Franglish. It celebrates African music genres including Afrobeats and Amapiano, with a vibrant beachside setting, exclusive lounges, and cultural experiences.",
-    organizer: "Afro Nation (founded by Obi Asika and Smade, in association with BBC 1 Xtra)",
+    event_description: "Afro Nation Portugal is the world's leading Afrobeats and Amapiano festival, celebrating African music genres on the golden beaches of the Algarve. The 2025 edition features superstars like Burna Boy, Tems, Amaarae, Uncle Waffles, DBN Gogo, and more. Expect exclusive lounges, premium beachfront experiences, and a vibrant gathering of the global African diaspora.",
+    organizer: "Afro Nation (founded by Obi Asika and Smade, in association with BBC 1Xtra)",
     start_date: "2025-07-09",
     end_date: "2025-07-11",
-    ticket_info: "General admission tickets start at approximately €16. VIP and Golden Ticket packages offer premium amenities like private beach access. Early bird tickets recommended. Purchase at afronation.com."
+    ticket_info: "General admission tickets start at approximately €16. VIP and Golden Ticket packages offer premium amenities like private beach access, spa treatments, and exclusive lounges. Early bird tickets recommended. Purchase at afronation.com."
   },
   "Afro Nation Detroit": {
-    image_url: "https://detroit.afronation.com/static/Lineup_Poster_1080x1350-cb0fadb4b5eecfef98e2.jpg",
+    image_url: "/afrofuture detroit.jpeg",
     website: "https://detroit.afronation.com",
     location: "Detroit, MI, USA",
     event_description: "Held at Bedrock's Douglass Site, Afro Nation Detroit features two stages, one dedicated to Amapiano, with artists like Lil Wayne, Scorpion Kings, and local talent. It's a celebration of Afrobeats and African diaspora culture in the heart of Detroit.",
@@ -70,13 +69,96 @@ const EVENTS: Record<string, Event> = {
     start_date: "2025-06-26",
     end_date: "2025-06-26",
     ticket_info: "Tickets vary by stage access; some performances free, premium tickets $20–$100. Check mawazine.ma for details."
+  },
+  "AfroLOUD Dubai": {
+    image_url: "https://assets.platinumlist.net/uploads/2d/77/2d77d6b5d7c1a0b7b7e2e1e2d3a1d1e7.jpg",
+    website: "https://dubai.platinumlist.net/event-tickets/90958/afro-loud-dubai-2025",
+    location: "Ain Dubai, Bluewaters Island, Dubai, United Arab Emirates",
+    event_description: "AfroLOUD Dubai is the region's biggest Afro music festival, featuring Afrobeats, Amapiano, Afro house, and Afro Desi. Headliners include CKay, Victony, and Scorpion Kings. The event includes food vendors, a Loud Brunch Club, and Fashion Avenue pop-ups.",
+    organizer: "AfroLOUD",
+    start_date: "2025-04-05",
+    end_date: "2025-04-05",
+    ticket_info: "General Admission (AED 199–299), Brunch Package (AED 549), VIP Standing (AED 699). Purchase via PlatinumList."
+  },
+  "AMAFEST UK": {
+    image_url: "https://amafest.com/wp-content/uploads/2024/03/amafest-uk-2025-poster.jpg",
+    website: "https://www.amafest.com",
+    location: "Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK",
+    event_description: "The world's largest Amapiano festival in the UK, featuring top Amapiano artists, immersive art installations, and interactive activities. Past lineups included Uncle Waffles and Musa Keys.",
+    organizer: "AMAFEST",
+    start_date: "2025-07-19",
+    end_date: "2025-07-19",
+    ticket_info: "Tickets available via amafest.com and Eventbrite."
+  },
+  "Amapiano Kingdxm": {
+    image_url: "https://cdn-az.allevents.in/events5/banners/1e6b2a0d6e4c3e6b2a0d6e4c3e6b2a0d.jpg",
+    website: "https://www.eventbrite.co.uk/e/amapiano-kingdxm-2025-tickets-786543209177",
+    location: "Playa del Inglés, Gran Canaria, Spain",
+    event_description: "A weekend of themed parties, pool parties, boat parties, and club nights, featuring top Amapiano DJs and artists. Packages include hotel stays and access to all events.",
+    organizer: "Amapiano Kingdxm",
+    start_date: "2025-10-03",
+    end_date: "2025-10-06",
+    ticket_info: "Event Pass (£169+), Hotel & Events Package (£319+). Book via Eventbrite."
+  },
+  "Amapiano Festival UK": {
+    image_url: "https://d31fr2pwly4c4s.cloudfront.net/3/5/3/162029353_7000968_700x700.jpg",
+    website: "https://www.ents24.com/bideford-events/the-palladium-club/amapiano-festival-2025/7000968",
+    location: "The Palladium Club, Bideford, England, UK",
+    event_description: "The UK's premier South African Amapiano music festival, celebrating the genre's fusion of deep house, jazz, and lounge influences with live performances and DJ sets.",
+    organizer: "Amapiano Festival UK",
+    start_date: "2025-10-25",
+    end_date: "2025-10-25",
+    ticket_info: "Tickets available via Ents24."
+  },
+  "Brisbane Afrobeats Festival": {
+    image_url: "https://s3-ap-southeast-2.amazonaws.com/ticketbooth-images/production/events/afrobeats-brisbane-2025.jpg",
+    website: "https://tickets.oztix.com.au/outlet/event/2b1f5c9c-4e7f-4e3e-8c4b-4c7f2b2d8e8c",
+    location: "Brisbane, Australia (venue TBA)",
+    event_description: "Features live Afrobeats, Amapiano, Afro remixes, DJ sets, dancers, African food, arts, fashion stalls, and business showcases. Open to all 18+.",
+    organizer: "Afrobeats Brisbane",
+    start_date: "2025-08-16",
+    end_date: "2025-08-16",
+    ticket_info: "Presale $45.90 AUD, First Release $57.15 AUD, Second Release $62.25 AUD. Purchase via Oztix."
+  },
+  "Afrobash NYC": {
+    image_url: "https://cdn.evbstatic.com/s3-build/fe/build/images/eb-logo-square-7b7b7b7.png",
+    website: "https://www.eventbrite.com/e/afrobash-afrobeats-amapiano-hip-hop-party-tickets-877859982047",
+    location: "SOB's, 204 Varick Street, New York City, USA",
+    event_description: "A late-night party with Afrobeats, Amapiano, and hip hop, featuring DJ sets, happy hour, and dance classes. Regular monthly editions.",
+    organizer: "Afrobash NYC",
+    start_date: "2025-05-02",
+    end_date: "2025-05-03",
+    ticket_info: "Free with RSVP before 11:30 PM, $0–$20.74 for late entry. Available via Eventbrite."
+  },
+  "Amapiano & Afrobeats Day Festival London": {
+    image_url: "https://www.eventbrite.com/e/amapiano-afrobeats-day-festival-at-studio-338-tickets-1331409253919",
+    website: "https://www.eventbrite.com/e/amapiano-afrobeats-day-festival-at-studio-338-tickets-1331409253919",
+    location: "Studio 338, 388 Boord Street, London, UK",
+    event_description: "A day festival celebrating Amapiano and Afrobeats at one of London's top club venues.",
+    organizer: "Studio 338",
+    start_date: "2025-06-01",
+    end_date: "2025-06-01",
+    ticket_info: "Tickets via Eventbrite."
   }
 };
 
 export function EventsSection() {
   const [showPastEvents, setShowPastEvents] = useState(false);
   const today = new Date();
-  const DEFAULT_IMAGE = '/lovable-uploads/7d55db10-6858-47e9-a593-673aed7a7184.png';
+  const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
+
+  const getImageUrl = (imageUrl: string) => {
+    // If it's a URL (starts with http:// or https://), use it as is
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    // If it's a local path (starts with /), use it as is
+    if (imageUrl.startsWith('/')) {
+      return imageUrl;
+    }
+    // Otherwise, assume it's a path relative to the public folder
+    return `/${imageUrl}`;
+  };
 
   const filteredEvents = Object.entries(EVENTS)
     .filter(([, event]) => {
@@ -138,7 +220,7 @@ export function EventsSection() {
                   >
                     <div className="relative aspect-[16/9]">
                       <img 
-                        src={event.image_url} 
+                        src={getImageUrl(event.image_url)} 
                         onError={(e) => {
                           const imgElement = e.target as HTMLImageElement;
                           imgElement.src = DEFAULT_IMAGE;
