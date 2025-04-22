@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { CLUBS } from '@/data/clubs';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 export const ClubsSection = () => {
   const navigate = useNavigate();
   const {
     getFlag
   } = useCountryFlags();
+
   const getCountryFromCity = (city: string) => {
     if (city === "London") return "United Kingdom";
     if (city === "Bangkok") return "Thailand";
@@ -17,6 +20,17 @@ export const ClubsSection = () => {
     if (city === "Amsterdam") return "Netherlands";
     return "";
   };
+
+  const handleClubClick = (club: typeof CLUBS[0]) => {
+    if (club.website) {
+      window.open(club.website, '_blank');
+    } else if (club.google_maps) {
+      window.open(club.google_maps, '_blank');
+    } else {
+      navigate('/clubs');
+    }
+  };
+
   return <section className="w-full py-12 bg-afro-teal">
       <div className="container">
         <div className="flex justify-between items-center mb-8">
@@ -31,8 +45,12 @@ export const ClubsSection = () => {
         loop: true
       }} className="w-full">
           <CarouselContent className="-ml-2 md:-ml-4">
-            {CLUBS.map((club, index) => <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                <Card className="overflow-hidden transition-all hover:shadow-md">
+            {CLUBS.map((club, index) => (
+              <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
+                <Card 
+                  className="overflow-hidden transition-all hover:shadow-md cursor-pointer"
+                  onClick={() => handleClubClick(club)}
+                >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-2 mb-3">
                       <img src={getFlag(getCountryFromCity(club.city))} alt={`${club.city} flag`} className="w-6 h-4 object-cover rounded-sm mt-1" />
@@ -44,7 +62,8 @@ export const ClubsSection = () => {
                     <p className="text-sm text-muted-foreground line-clamp-2">{club.general_rating}</p>
                   </CardContent>
                 </Card>
-              </CarouselItem>)}
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious className="hidden md:flex" />
           <CarouselNext className="hidden md:flex" />
