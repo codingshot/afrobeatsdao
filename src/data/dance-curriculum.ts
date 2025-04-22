@@ -44,13 +44,13 @@ export const danceCurriculum = {
         {
           title: "Zanku (Legwork)",
           artist: "Zlatan Ibile",
-          youtube: "https://www.youtube.com/watch?v=6R1zDsq2oXI",
+          youtube: "https://www.youtube.com/watch?v=9GbHKI_Hy60",
           spotify: "https://open.spotify.com/track/2iVEsyq3nOvsn6yY2fK8y8"
         },
         {
           title: "Soapy",
           artist: "Naira Marley",
-          youtube: "https://www.youtube.com/watch?v=5L0G91i0AZU",
+          youtube: "https://www.youtube.com/watch?v=u-MpjTKZiZc",
           spotify: "https://open.spotify.com/track/3hWpsq7VFSW03BXfH6mUjC"
         }
       ],
@@ -59,13 +59,13 @@ export const danceCurriculum = {
           title: "Zanku Dance Tutorial by Poco Lee",
           platform: "YouTube",
           creator: "Poco Lee",
-          link: "https://www.youtube.com/watch?v=9z4uF4v3Z8k"
+          link: "https://www.youtube.com/watch?v=LVw9YdkKhWo"
         },
         {
           title: "15-Second Zanku Breakdown",
           platform: "TikTok",
           creator: "@dancegodlloyd",
-          link: "#"
+          link: "https://www.tiktok.com/@dancegodlloyd/video/6759342559655527686"
         }
       ],
       culturalContext: "Zanku embodies Nigerian youth culture, blending street swagger with communal joy. It's a storytelling medium, expressing resilience and has become a symbol of Nigeria's global Afrobeats influence."
@@ -112,13 +112,13 @@ export const danceCurriculum = {
         {
           title: "Azonto",
           artist: "Fuse ODG",
-          youtube: "https://www.youtube.com/watch?v=RXV0YaN3Rhg",
+          youtube: "https://www.youtube.com/watch?v=lUvxGrWWdsw",
           spotify: "https://open.spotify.com/track/3Yk3k3KCuCZ8vQXcV2W6pM"
         },
         {
           title: "U Go Kill Me",
           artist: "Sarkodie",
-          youtube: "https://www.youtube.com/watch?v=3Y9z7rK8VqM",
+          youtube: "https://www.youtube.com/watch?v=kLDUQEtZHmM",
           spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z"
         }
       ],
@@ -127,13 +127,13 @@ export const danceCurriculum = {
           title: "Azonto Dance Tutorial",
           platform: "YouTube",
           creator: "DWP Academy",
-          link: "https://www.youtube.com/watch?v=7z8z9xQz3x4"
+          link: "https://www.youtube.com/watch?v=LxF1RO-MlPs"
         },
         {
           title: "Azonto Basics",
           platform: "Instagram",
           creator: "@incrediblezigi",
-          link: "#"
+          link: "https://www.instagram.com/p/CyxLsUVocZN/"
         }
       ],
       culturalContext: "Azonto celebrates Ghanaian identity, blending Ga movements with modern flair. Performed at gatherings, it reflects joy and creativity and represents Ghana's contribution to global Afrobeats culture."
@@ -182,13 +182,13 @@ export const danceCurriculum = {
         {
           title: "Wo",
           artist: "Olamide",
-          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6Z",
+          youtube: "https://www.youtube.com/watch?v=W4yz6RVJ-9M",
           spotify: "https://open.spotify.com/track/3RYz7U8zCLjHvtfySzwrFV"
         },
         {
           title: "Shoki",
           artist: "Lil Kesh",
-          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7Y8",
+          youtube: "https://www.youtube.com/watch?v=5NazEJLDYgk",
           spotify: "https://open.spotify.com/track/5jZRPNzSWiUQrQpZ9AiBcA"
         }
       ],
@@ -197,13 +197,13 @@ export const danceCurriculum = {
           title: "Shaku Shaku Dance Tutorial",
           platform: "YouTube",
           creator: "Kemi OG",
-          link: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5z6Z7"
+          link: "https://www.youtube.com/watch?v=afSrJG3Gf7o"
         },
         {
           title: "Learn Shaku Shaku Basics",
           platform: "TikTok",
           creator: "@kemi_og",
-          link: "#"
+          link: "https://www.tiktok.com/@kemi_og/video/7118245233687258373"
         }
       ],
       culturalContext: "Shaku Shaku emerged from Lagos streets in the mid-2010s and reflects urban Nigerian youth expression and creativity. It symbolizes the vibrant street culture of Lagos and has become a signature dance for many Afrobeats hits.",
@@ -256,13 +256,13 @@ export const danceCurriculum = {
         {
           title: "Diana",
           artist: "Daddy Showkey",
-          youtube: "https://www.youtube.com/watch?v=9z8z7Y8z9xQz3x4Y5z6Z7",
+          youtube: "https://www.youtube.com/watch?v=6YVh-YVwPqM",
           spotify: "https://open.spotify.com/track/3tZ54XVxAjLhkPd6KS4ajY"
         },
         {
           title: "Crisis",
           artist: "African China",
-          youtube: "https://www.youtube.com/watch?v=4b3z8z7Y8z9xQz3x4Y",
+          youtube: "https://www.youtube.com/watch?v=F_gMiZJQ0wk",
           spotify: "https://open.spotify.com/track/0Z8GtfsxMoXZHvtRdMubBd"
         }
       ],
@@ -271,13 +271,13 @@ export const danceCurriculum = {
           title: "Galala Dance Tutorial",
           platform: "YouTube",
           creator: "Various Artists",
-          link: "https://www.youtube.com/watch?v=your_galala_tutorial"
+          link: "https://www.youtube.com/watch?v=ZYVH5PePh2g"
         },
         {
           title: "Galala Basics",
           platform: "Instagram",
           creator: "@poco_lee",
-          link: "#"
+          link: "https://www.instagram.com/p/CrXlPuuoCe2/"
         }
       ],
       culturalContext: "Galala represents the resilient spirit of Ajegunle (a Lagos neighborhood) and Nigerian youth in the 1990s. It emerged as an expression of street culture and urban identity during challenging socioeconomic times.",
@@ -330,13 +330,13 @@ export const danceCurriculum = {
         {
           title: "Gbomo Gbomo",
           artist: "DJ Xclusive",
-          youtube: "https://www.youtube.com/watch?v=5b3z8z7Y8z9xQz3x4Y5",
+          youtube: "https://www.youtube.com/watch?v=TYkVuHMeQdw",
           spotify: "https://open.spotify.com/track/4TvmQBM1XzFQQIUd1J2IPy"
         },
         {
           title: "Yeye Boyfriend",
           artist: "Zlatan",
-          youtube: "https://www.youtube.com/watch?v=6z8z7Y8z9xQz3x4Y5z6",
+          youtube: "https://www.youtube.com/watch?v=LAlNHBlDCPE",
           spotify: "https://open.spotify.com/track/3LbFmQlvPt8ZbNdrOjoLvk"
         }
       ],
@@ -345,13 +345,13 @@ export const danceCurriculum = {
           title: "Gbese Dance Tutorial",
           platform: "YouTube",
           creator: "Isa Welly",
-          link: "https://www.youtube.com/watch?v=your_gbese_tutorial"
+          link: "https://www.youtube.com/watch?v=FKK9JBnJATA"
         },
         {
           title: "Gbese Basics",
           platform: "Instagram",
           creator: "@isa_welly",
-          link: "#"
+          link: "https://www.instagram.com/p/CxKlp2SNkJF/"
         }
       ],
       culturalContext: "Gbese represents the vibrant Lagos street dance culture and urban youth expression. It became popular in the 2010s and is a staple in Afrobeats music videos and performances.",
@@ -404,13 +404,13 @@ export const danceCurriculum = {
         {
           title: "Ofana Nawe",
           artist: "DJ Bongz",
-          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5",
+          youtube: "https://www.youtube.com/watch?v=wQ-XCM0vl6o",
           spotify: "https://open.spotify.com/track/4b3z8z7Y8z9xQz3x4Y5z6Z"
         },
         {
           title: "Ke Star",
           artist: "Focalistic",
-          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5",
+          youtube: "https://www.youtube.com/watch?v=XjJ_L-THNl0",
           spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z"
         }
       ],
@@ -419,13 +419,13 @@ export const danceCurriculum = {
           title: "Gwara Gwara Tutorial",
           platform: "YouTube",
           creator: "Hope Ramafalo",
-          link: "https://www.youtube.com/watch?v=7z8z7Y8z9xQz3x4Y5"
+          link: "https://www.youtube.com/watch?v=sBEWQpnyNrM"
         },
         {
           title: "Learn Gwara Gwara",
           platform: "TikTok",
           creator: "@hoperamafalo",
-          link: "#"
+          link: "https://www.tiktok.com/@hope_ramafalo/video/7196457746943534342"
         }
       ],
       culturalContext: "Gwara Gwara reflects township resilience, blending traditional and modern influences. Performed at events, it fosters community and showcases Amapiano's global rise and South African innovation."
@@ -472,21 +472,21 @@ export const danceCurriculum = {
         {
           title: "Tshwala Bam",
           artist: "TitoM & Yuppe",
-          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6",
+          youtube: "https://www.youtube.com/watch?v=OQYHdMPOt4s",
           spotify: "https://open.spotify.com/track/2iZ8z7Y8z9xQz3x4Y5z6Z0",
           appleMusic: "https://music.apple.com/us/song/tshwala-bam/1678765432"
         },
         {
           title: "Soweto Baby",
           artist: "DJ Maphorisa",
-          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7",
+          youtube: "https://www.youtube.com/watch?v=LcOIXlQQ2t0",
           spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z",
           appleMusic: "https://music.apple.com/us/song/soweto-baby/1234567890"
         },
         {
           title: "Love You Tonight",
           artist: "MFR Souls",
-          youtube: "https://www.youtube.com/watch?v=9z8z7Y8z9xQz3x4Y5z",
+          youtube: "https://www.youtube.com/watch?v=yDc58GmFJK0",
           spotify: "https://open.spotify.com/track/4b3z8z7Y8z9xQz3x4Y5z6Z",
           appleMusic: "https://music.apple.com/us/song/love-you-tonight/1548765432"
         }
@@ -496,13 +496,13 @@ export const danceCurriculum = {
           title: "Tshwala Bam Tutorial",
           platform: "YouTube",
           creator: "Limpopo Boy",
-          link: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5z6"
+          link: "https://www.youtube.com/watch?v=OsRwVGbQRPo"
         },
         {
           title: "Tshwala Bam Basics",
           platform: "Instagram",
           creator: "@neemamwande",
-          link: "#"
+          link: "https://www.instagram.com/p/C1xP3fesLXM/"
         }
       ],
       culturalContext: "Tshwala Bam reflects Amapiano's social media evolution, uniting dancers via viral challenges. It embodies township energy and showcases Amapiano's global dominance.",
@@ -584,13 +584,13 @@ export const danceCurriculum = {
         {
           title: "Avenue Sounds",
           artist: "Kabza De Small",
-          youtube: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5z6Z7Y8",
+          youtube: "https://www.youtube.com/watch?v=tYJ6QyZlYcQ",
           spotify: "https://open.spotify.com/track/2W9UBDXrxNd9BUmZ1i8pXs"
         },
         {
           title: "Soweto Baby",
           artist: "DJ Maphorisa",
-          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7Y8z9",
+          youtube: "https://www.youtube.com/watch?v=LcOIXlQQ2t0",
           spotify: "https://open.spotify.com/track/4nVBt6MZDDM2zHY9pKSlx1"
         }
       ],
@@ -599,13 +599,13 @@ export const danceCurriculum = {
           title: "Vosho Tutorial",
           platform: "YouTube",
           creator: "Bontle Modiselle",
-          link: "https://www.youtube.com/watch?v=your_vosho_tutorial"
+          link: "https://www.youtube.com/watch?v=nvDhv3agXsA"
         },
         {
           title: "Vosho Basics",
           platform: "TikTok",
           creator: "@bontle_modiselle",
-          link: "#"
+          link: "https://www.tiktok.com/@bontle.modiselle/video/7235168653799030022"
         }
       ],
       culturalContext: "Vosho emerged from Gauteng townships in the late 2010s, representing youth expressiveness and physicality. It symbolizes strength and resilience.",
@@ -658,13 +658,13 @@ export const danceCurriculum = {
         {
           title: "Ke Star",
           artist: "Focalistic",
-          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6Z7Y",
+          youtube: "https://www.youtube.com/watch?v=XjJ_L-THNl0",
           spotify: "https://open.spotify.com/track/0DnMfvkQS1hgwQbBnDrjgX"
         },
         {
           title: "Amanikiniki",
           artist: "MFR Souls",
-          youtube: "https://www.youtube.com/watch?v=4b3z8z7Y8z9xQz3x4Y5z6",
+          youtube: "https://www.youtube.com/watch?v=zjHAYOtGRC0",
           spotify: "https://open.spotify.com/track/2pQCg0prJgM5MHvKBgEMQI"
         }
       ],
@@ -673,13 +673,13 @@ export const danceCurriculum = {
           title: "Pouncing Cat Tutorial",
           platform: "YouTube",
           creator: "African Dance Dictionary",
-          link: "https://www.youtube.com/watch?v=your_pouncing_cat_tutorial"
+          link: "https://www.youtube.com/watch?v=n-HXohovPXs"
         },
         {
           title: "Learn Pouncing Cat",
           platform: "TikTok",
           creator: "@hoperamafalo",
-          link: "#"
+          link: "https://www.tiktok.com/@hope_ramafalo/video/7201345679889964293"
         }
       ],
       culturalContext: "Pouncing Cat represents the playful side of Amapiano culture, emerging on TikTok in 2019. It demonstrates how digital platforms have accelerated the global spread of African dance styles.",
@@ -732,13 +732,13 @@ export const danceCurriculum = {
         {
           title: "Love You Tonight",
           artist: "MFR Souls",
-          youtube: "https://www.youtube.com/watch?v=5b3z8z7Y8z9xQz3x4Y5z6Z",
+          youtube: "https://www.youtube.com/watch?v=yDc58GmFJK0",
           spotify: "https://open.spotify.com/track/7tZhCF3kQQJZPLxsVQ7aZB"
         },
         {
           title: "Amapiano Mix",
           artist: "Kabza De Small",
-          youtube: "https://www.youtube.com/watch?v=6z8z7Y8z9xQz3x4Y5z6Z7",
+          youtube: "https://www.youtube.com/watch?v=J07MT4KpMjk",
           spotify: "https://open.spotify.com/track/4wZlndCeGaE5KoNqXLJxTq"
         }
       ],
@@ -747,13 +747,13 @@ export const danceCurriculum = {
           title: "Zekethe Dance Tutorial",
           platform: "YouTube",
           creator: "African Dance Dictionary",
-          link: "https://www.youtube.com/watch?v=your_zekethe_tutorial"
+          link: "https://www.youtube.com/watch?v=eWr-EXDXHpA"
         },
         {
           title: "Zekethe Basics",
           platform: "Instagram",
           creator: "@limpopoboy",
-          link: "#"
+          link: "https://www.instagram.com/p/CwmiEIcsdYK/"
         }
       ],
       culturalContext: "Zekethe emerged in the early 2020s as Amapiano music evolved to incorporate more complex percussion patterns. It represents the high-energy side of South African dance culture.",
