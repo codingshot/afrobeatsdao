@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2, Maximize, Minimize
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 
@@ -50,6 +50,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [videoTitle, setVideoTitle] = useState<string>("Loading...");
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
+  const [videoVisible, setVideoVisible] = useState(true);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
@@ -86,8 +87,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
 
       try {
         const newPlayer = new window.YT.Player('youtube-player', {
-          height: expandedView ? '240' : '0',
-          width: expandedView ? '426' : '0',
+          height: expandedView && videoVisible ? '240' : '0',
+          width: expandedView && videoVisible ? '426' : '0',
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
@@ -138,20 +139,20 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         }
       }
     };
-  }, [youtubeApiLoaded, expandedView]);
+  }, [youtubeApiLoaded, expandedView, videoVisible]);
 
   useEffect(() => {
     if (player && player.setSize) {
       try {
         player.setSize(
-          expandedView ? 426 : 0,
-          expandedView ? 240 : 0
+          expandedView && videoVisible ? 426 : 0,
+          expandedView && videoVisible ? 240 : 0
         );
       } catch (e) {
         console.error("Error resizing player:", e);
       }
     }
-  }, [expandedView, player]);
+  }, [expandedView, videoVisible, player]);
 
   const playNow = useCallback((song: Song) => {
     if (currentSong) {
@@ -257,6 +258,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     });
   }, []);
 
+  const toggleVideo = useCallback(() => {
+    setVideoVisible(prev => !prev);
+  }, []);
+
   const toggleExpandedView = useCallback(() => {
     setExpandedView(prev => !prev);
   }, []);
@@ -337,6 +342,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleVideo}
+                className="text-white hover:bg-white/10"
+                title={videoVisible ? "Hide video" : "Show video"}
+              >
+                {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+              </Button>
+              
               <Button
                 variant="ghost"
                 size="icon"
