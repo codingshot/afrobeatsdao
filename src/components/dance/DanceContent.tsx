@@ -16,6 +16,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const [selectedTab, setSelectedTab] = useState("overview");
   const [moduleVisible, setModuleVisible] = useState<number | null>(null);
   const { getFlag } = useCountryFlags();
+  
   const audioPlayer = useGlobalAudioPlayer();
 
   const toggleModule = (index: number) => {
@@ -28,6 +29,18 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     artist: song.artist,
     youtube: song.youtube,
   });
+
+  const handlePlayNow = (song: any) => {
+    if (audioPlayer && audioPlayer.playNow) {
+      audioPlayer.playNow(createSongFromDanceData(song));
+    }
+  };
+
+  const handleAddToQueue = (song: any) => {
+    if (audioPlayer && audioPlayer.addToQueue) {
+      audioPlayer.addToQueue(createSongFromDanceData(song));
+    }
+  };
 
   return (
     <Card className="bg-black border-[#008751] text-white">
@@ -215,7 +228,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                           variant="outline" 
                           size="sm" 
                           className="flex-1 border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10"
-                          onClick={() => audioPlayer.playNow(createSongFromDanceData(song))}
+                          onClick={() => handlePlayNow(song)}
                         >
                           <Play className="mr-2 h-4 w-4" />
                           Play Now
@@ -224,7 +237,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                           variant="outline" 
                           size="sm" 
                           className="flex-1 border-gray-700 text-white hover:bg-white/10"
-                          onClick={() => audioPlayer.addToQueue(createSongFromDanceData(song))}
+                          onClick={() => handleAddToQueue(song)}
                         >
                           <SkipForward className="mr-2 h-4 w-4" />
                           Add to Queue

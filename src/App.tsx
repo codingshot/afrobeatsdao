@@ -16,13 +16,14 @@ const App = () => {
   // Create QueryClient inside the component to ensure proper React hooks context
   const [queryClient] = useState(() => new QueryClient());
 
+  // Restructure the providers to ensure proper nesting
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <GlobalAudioPlayerProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+      <BrowserRouter>
+        <TooltipProvider>
+          <GlobalAudioPlayerProvider>
+            <Toaster />
+            <Sonner />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/dance" element={<Dance />} />
@@ -40,9 +41,9 @@ const App = () => {
               <Route path="/dance/amapiano/zekethe" element={<DanceDetails />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </GlobalAudioPlayerProvider>
-      </TooltipProvider>
+          </GlobalAudioPlayerProvider>
+        </TooltipProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

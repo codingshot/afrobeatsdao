@@ -19,7 +19,7 @@ const DancePage = () => {
   const isMobile = useIsMobile();
   const { getFlag } = useCountryFlags();
   const navigate = useNavigate();
-  const { playNow, addToQueue } = useGlobalAudioPlayer();
+  const audioPlayer = useGlobalAudioPlayer();
 
   const handleDanceSelect = (dance: any) => {
     navigate(`/dance/${selectedGenre}/${dance.id}`);
@@ -27,8 +27,8 @@ const DancePage = () => {
 
   const handlePlaySong = (e: React.MouseEvent, song: any) => {
     e.stopPropagation();
-    if (song && song.youtube && song.title && song.artist) {
-      playNow({
+    if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.playNow) {
+      audioPlayer.playNow({
         id: `${song.artist}-${song.title}`,
         title: song.title,
         artist: song.artist,
@@ -39,8 +39,8 @@ const DancePage = () => {
 
   const handleAddToQueue = (e: React.MouseEvent, song: any) => {
     e.stopPropagation();
-    if (song && song.youtube && song.title && song.artist) {
-      addToQueue({
+    if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.addToQueue) {
+      audioPlayer.addToQueue({
         id: `${song.artist}-${song.title}`,
         title: song.title,
         artist: song.artist,
