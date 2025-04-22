@@ -1,6 +1,14 @@
 
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { 
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import { Home, Music2, Calendar, Dance, Users } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
@@ -19,40 +27,21 @@ export function Header() {
       return;
     }
 
-    // Don't handle scroll-based visibility for home page
-    // since MainNavbar will handle it
-    if (onIndexPage) {
-      setIsVisible(false);
-      return;
-    }
-
-    // Original scroll-based logic for other pages
     const handleScroll = () => {
-      const heroSection = document.querySelector('section');
-      if (heroSection) {
-        const heroBottom = heroSection.getBoundingClientRect().bottom;
-        setIsVisible(heroBottom <= 0);
-      } else {
-        setIsVisible(true);
-      }
+      const scrollPosition = window.scrollY;
+      setIsVisible(scrollPosition > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
-    // Initial check
-    handleScroll();
+    handleScroll(); // Check initial scroll position
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname, onIndexPage]);
+  }, [location.pathname]);
 
   const onDancePage = location.pathname.startsWith('/dance');
 
-  // Don't render anything on home page to avoid double navbar
-  if (onIndexPage) {
-    return null;
-  }
-
   return (
-    <header className={`fixed top-0 w-full z-30 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
+    <header className={`fixed top-0 w-full z-40 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
     }`}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -63,6 +52,82 @@ export function Header() {
             className="h-12 w-auto"
           />
         </Link>
+
+        <div className="hidden md:flex items-center space-x-4">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      location.pathname === "/" && "bg-accent/50 text-accent-foreground"
+                    )}
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/dance">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      location.pathname.startsWith("/dance") && "bg-accent/50 text-accent-foreground"
+                    )}
+                  >
+                    <Dance className="mr-2 h-4 w-4" />
+                    Dance
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/clubs">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      location.pathname.startsWith("/clubs") && "bg-accent/50 text-accent-foreground"
+                    )}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Clubs
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/events">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      location.pathname.startsWith("/events") && "bg-accent/50 text-accent-foreground"
+                    )}
+                  >
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Events
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/playlists">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
+                      location.pathname.startsWith("/playlists") && "bg-accent/50 text-accent-foreground"
+                    )}
+                  >
+                    <Music2 className="mr-2 h-4 w-4" />
+                    Music
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
 
         {/* Progress indicator for dance page */}
         {onDancePage && (
@@ -78,7 +143,7 @@ export function Header() {
                   )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10 z-50">
+              <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10">
                 <div className="p-2 text-sm font-medium border-b border-black/10">
                   Your Dance Progress
                 </div>
@@ -101,7 +166,20 @@ export function Header() {
             </DropdownMenu>
           </div>
         )}
+
+        {/* Mobile menu */}
+        <div className="md:hidden flex items-center space-x-2">
+          <Link to="/dance" className="px-2 py-1 text-sm font-medium">
+            <Dance className="h-5 w-5" />
+          </Link>
+          <Link to="/clubs" className="px-2 py-1 text-sm font-medium">
+            <Users className="h-5 w-5" />
+          </Link>
+          <Link to="/events" className="px-2 py-1 text-sm font-medium">
+            <Calendar className="h-5 w-5" />
+          </Link>
+        </div>
       </div>
     </header>
   );
-};
+}
