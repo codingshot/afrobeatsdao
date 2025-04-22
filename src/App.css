@@ -14,3 +14,16 @@
   font-weight: 600;
 }
 
+/* Make sure video players are always on top */
+iframe,
+.react-player,
+.video-container {
+  z-index: 5 !important;
+  position: relative;
+}
+
+/* Global audio player should always be on top */
+.global-audio-player {
+  z-index: 100 !important;
+}
+

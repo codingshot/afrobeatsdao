@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import Dance from "./pages/Dance";
 import DanceDetails from "./pages/DanceDetails";
 import Clubs from "./pages/Clubs";
+import Events from "./pages/Events";
+import Playlists from "./pages/Playlists";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 import { useState } from "react";
 
@@ -34,6 +36,9 @@ const App = () => {
               <Route path="/dance/:id" element={<DanceDetails />} />
               {/* New route for clubs */}
               <Route path="/clubs" element={<Clubs />} />
+              {/* New routes for events and playlists */}
+              <Route path="/events" element={<Events />} />
+              <Route path="/playlists" element={<Playlists />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </GlobalAudioPlayerProvider>
