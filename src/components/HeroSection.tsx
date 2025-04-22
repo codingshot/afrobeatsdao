@@ -24,7 +24,7 @@ export function HeroSection() {
               className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
               onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}
             >
-              Join the Vibe
+              Join the Movement
             </Button>
             <Button 
               className="bg-[#008751] hover:bg-[#006b3e] text-white font-heading text-xl px-8 py-5 rounded-full shadow-lg transition-all hover:scale-105 flex items-center gap-3 w-full" 
