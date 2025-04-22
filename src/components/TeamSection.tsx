@@ -8,8 +8,8 @@ type TeamMember = {
 };
 const teamMembers: TeamMember[] = [{
   name: "Larkim",
-  role: "Artist and Creative",
-  image: "/lovable-uploads/eae83191-58b6-4b0b-a31e-3a00a104c730.png",
+  role: "Artist",
+  image: "/larkim.png",
   twitter: "https://x.com/boy_larkim",
   instagram: "https://www.instagram.com/larkimolorin/"
 }];
