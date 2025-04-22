@@ -24,6 +24,17 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/dance" element={<Dance />} />
             <Route path="/dance/:genre/:id" element={<DanceDetails />} />
+            {/* Direct dance routes for easier sharing */}
+            <Route path="/dance/afrobeats/zanku" element={<DanceDetails />} />
+            <Route path="/dance/afrobeats/azonto" element={<DanceDetails />} />
+            <Route path="/dance/afrobeats/shaku-shaku" element={<DanceDetails />} />
+            <Route path="/dance/afrobeats/galala" element={<DanceDetails />} />
+            <Route path="/dance/afrobeats/gbese" element={<DanceDetails />} />
+            <Route path="/dance/amapiano/gwara-gwara" element={<DanceDetails />} />
+            <Route path="/dance/amapiano/tshwala-bam" element={<DanceDetails />} />
+            <Route path="/dance/amapiano/vosho" element={<DanceDetails />} />
+            <Route path="/dance/amapiano/pouncing-cat" element={<DanceDetails />} />
+            <Route path="/dance/amapiano/zekethe" element={<DanceDetails />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

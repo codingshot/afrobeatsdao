@@ -9,8 +9,15 @@ const DanceDetails = () => {
   const { genre, id } = useParams();
   const navigate = useNavigate();
   
-  const allDances = [...danceCurriculum.afrobeats, ...danceCurriculum.amapiano];
-  const dance = allDances.find(d => d.id === id);
+  // Find dance in curriculum
+  let dance;
+  if (genre === 'afrobeats' || genre === 'amapiano') {
+    dance = danceCurriculum[genre].find(d => d.id === id);
+  } else {
+    // If no genre specified, search all genres
+    const allDances = [...danceCurriculum.afrobeats, ...danceCurriculum.amapiano];
+    dance = allDances.find(d => d.id === id);
+  }
   
   if (!dance) {
     return (

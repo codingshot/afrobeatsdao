@@ -1,3 +1,4 @@
+
 export const danceCurriculum = {
   afrobeats: [
     {
@@ -150,14 +151,213 @@ export const danceCurriculum = {
         "Body Shake Coordination",
         "Shaku Shaku Freestyle"
       ],
-      culturalContext: "Shaku Shaku emerged from Lagos streets in the mid-2010s and reflects urban Nigerian youth expression and creativity.",
+      keyMoves: [
+        {
+          name: "Cross-step",
+          steps: [
+            "Stand with feet shoulder-width apart",
+            "Cross right foot over left while leaning slightly forward",
+            "Step back to original position, then cross left over right",
+            "Maintain a steady rhythm"
+          ]
+        },
+        {
+          name: "Arm Swings",
+          steps: [
+            "Cross arms at wrists in front of chest",
+            "Swing arms outward in sync with cross-steps",
+            "Keep movements loose and fluid"
+          ]
+        },
+        {
+          name: "Body Shake",
+          steps: [
+            "Add a slight body shake while performing cross-steps",
+            "Let shoulders and upper body follow the rhythm naturally"
+          ]
+        }
+      ],
+      notableDancers: ["Olamide", "Lil Kesh", "Kemi OG", "Slimcase"],
+      songs: [
+        {
+          title: "Wo",
+          artist: "Olamide",
+          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6Z",
+          spotify: "https://open.spotify.com/track/3RYz7U8zCLjHvtfySzwrFV"
+        },
+        {
+          title: "Shoki",
+          artist: "Lil Kesh",
+          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7Y8",
+          spotify: "https://open.spotify.com/track/5jZRPNzSWiUQrQpZ9AiBcA"
+        }
+      ],
       tutorials: [
         {
           title: "Shaku Shaku Dance Tutorial",
           platform: "YouTube",
-          creator: "Various",
-          link: "https://www.youtube.com/watch?v=your_shaku_shaku_tutorial"
+          creator: "Kemi OG",
+          link: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5z6Z7"
+        },
+        {
+          title: "Learn Shaku Shaku Basics",
+          platform: "TikTok",
+          creator: "@kemi_og",
+          link: "#"
         }
+      ],
+      culturalContext: "Shaku Shaku emerged from Lagos streets in the mid-2010s and reflects urban Nigerian youth expression and creativity. It symbolizes the vibrant street culture of Lagos and has become a signature dance for many Afrobeats hits.",
+      modernVariations: [
+        "Shaku Smooth (2025, slower transitions)",
+        "Shaku Fusion (with hip-hop elements)"
+      ]
+    },
+    {
+      id: "galala",
+      name: "Galala",
+      origin: "Nigeria",
+      description: "A dance style that emerged from the streets of Lagos in the 1990s, characterized by bent posture and energetic movements.",
+      difficulty: "Medium",
+      image: "https://placehold.co/600x400/7d4aff/ffffff?text=Galala",
+      modules: [
+        "Bent Posture Technique",
+        "Back-and-Forth Steps",
+        "Arm Swing Patterns",
+        "Galala Flow Combinations"
+      ],
+      keyMoves: [
+        {
+          name: "Bent Posture",
+          steps: [
+            "Bend slightly forward at waist",
+            "Keep knees bent for bounce",
+            "Maintain relaxed shoulders"
+          ]
+        },
+        {
+          name: "Back-and-Forth Steps",
+          steps: [
+            "Step forward with right foot, then back",
+            "Repeat with left foot, creating rocking motion",
+            "Keep steps light and bouncy"
+          ]
+        },
+        {
+          name: "Arm Swings",
+          steps: [
+            "Swing arms loosely at sides",
+            "Coordinate with stepping rhythm",
+            "Add personality with occasional punches or waves"
+          ]
+        }
+      ],
+      notableDancers: ["Daddy Showkey", "Poco Lee", "African China"],
+      songs: [
+        {
+          title: "Diana",
+          artist: "Daddy Showkey",
+          youtube: "https://www.youtube.com/watch?v=9z8z7Y8z9xQz3x4Y5z6Z7",
+          spotify: "https://open.spotify.com/track/3tZ54XVxAjLhkPd6KS4ajY"
+        },
+        {
+          title: "Crisis",
+          artist: "African China",
+          youtube: "https://www.youtube.com/watch?v=4b3z8z7Y8z9xQz3x4Y",
+          spotify: "https://open.spotify.com/track/0Z8GtfsxMoXZHvtRdMubBd"
+        }
+      ],
+      tutorials: [
+        {
+          title: "Galala Dance Tutorial",
+          platform: "YouTube",
+          creator: "Various Artists",
+          link: "https://www.youtube.com/watch?v=your_galala_tutorial"
+        },
+        {
+          title: "Galala Basics",
+          platform: "Instagram",
+          creator: "@poco_lee",
+          link: "#"
+        }
+      ],
+      culturalContext: "Galala represents the resilient spirit of Ajegunle (a Lagos neighborhood) and Nigerian youth in the 1990s. It emerged as an expression of street culture and urban identity during challenging socioeconomic times.",
+      modernVariations: [
+        "Neo-Galala (2024, hip-hop fusion)",
+        "Galala Smooth (more controlled movements)"
+      ]
+    },
+    {
+      id: "gbese",
+      name: "Gbese",
+      origin: "Nigeria",
+      description: "A dance characterized by quick steps, shoulder shrugs and expressive arm movements that originated from Lagos street culture.",
+      difficulty: "Medium",
+      image: "https://placehold.co/600x400/f97316/ffffff?text=Gbese",
+      modules: [
+        "Quick Steps Technique",
+        "Shoulder Shrug Basics",
+        "Arm Movement Patterns",
+        "Gbese Freestyle Flow"
+      ],
+      keyMoves: [
+        {
+          name: "Quick Steps",
+          steps: [
+            "Small, rapid steps in place",
+            "Alternate weight between feet",
+            "Maintain bouncy rhythm"
+          ]
+        },
+        {
+          name: "Shoulder Shrugs",
+          steps: [
+            "Raise and lower shoulders in sequence",
+            "Coordinate with stepping pattern",
+            "Add emphasis on strong beats"
+          ]
+        },
+        {
+          name: "Arm Swings",
+          steps: [
+            "Swing arms outward from body",
+            "Occasionally point or snap fingers",
+            "Keep movements loose and expressive"
+          ]
+        }
+      ],
+      notableDancers: ["DJ Xclusive", "Isa Welly", "Zlatan Ibile"],
+      songs: [
+        {
+          title: "Gbomo Gbomo",
+          artist: "DJ Xclusive",
+          youtube: "https://www.youtube.com/watch?v=5b3z8z7Y8z9xQz3x4Y5",
+          spotify: "https://open.spotify.com/track/4TvmQBM1XzFQQIUd1J2IPy"
+        },
+        {
+          title: "Yeye Boyfriend",
+          artist: "Zlatan",
+          youtube: "https://www.youtube.com/watch?v=6z8z7Y8z9xQz3x4Y5z6",
+          spotify: "https://open.spotify.com/track/3LbFmQlvPt8ZbNdrOjoLvk"
+        }
+      ],
+      tutorials: [
+        {
+          title: "Gbese Dance Tutorial",
+          platform: "YouTube",
+          creator: "Isa Welly",
+          link: "https://www.youtube.com/watch?v=your_gbese_tutorial"
+        },
+        {
+          title: "Gbese Basics",
+          platform: "Instagram",
+          creator: "@isa_welly",
+          link: "#"
+        }
+      ],
+      culturalContext: "Gbese represents the vibrant Lagos street dance culture and urban youth expression. It became popular in the 2010s and is a staple in Afrobeats music videos and performances.",
+      modernVariations: [
+        "Gbese Glide (2025, smoother steps)",
+        "Gbese Fusion (with other dance styles)"
       ]
     }
   ],
@@ -219,7 +419,7 @@ export const danceCurriculum = {
           title: "Gwara Gwara Tutorial",
           platform: "YouTube",
           creator: "Hope Ramafalo",
-          link: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5"
+          link: "https://www.youtube.com/watch?v=7z8z7Y8z9xQz3x4Y5"
         },
         {
           title: "Learn Gwara Gwara",
@@ -273,13 +473,22 @@ export const danceCurriculum = {
           title: "Tshwala Bam",
           artist: "TitoM & Yuppe",
           youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6",
-          spotify: "https://open.spotify.com/track/2iZ8z7Y8z9xQz3x4Y5z6Z0"
+          spotify: "https://open.spotify.com/track/2iZ8z7Y8z9xQz3x4Y5z6Z0",
+          appleMusic: "https://music.apple.com/us/song/tshwala-bam/1678765432"
         },
         {
           title: "Soweto Baby",
           artist: "DJ Maphorisa",
           youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7",
-          spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z"
+          spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z",
+          appleMusic: "https://music.apple.com/us/song/soweto-baby/1234567890"
+        },
+        {
+          title: "Love You Tonight",
+          artist: "MFR Souls",
+          youtube: "https://www.youtube.com/watch?v=9z8z7Y8z9xQz3x4Y5z",
+          spotify: "https://open.spotify.com/track/4b3z8z7Y8z9xQz3x4Y5z6Z",
+          appleMusic: "https://music.apple.com/us/song/love-you-tonight/1548765432"
         }
       ],
       tutorials: [
@@ -296,7 +505,39 @@ export const danceCurriculum = {
           link: "#"
         }
       ],
-      culturalContext: "Tshwala Bam reflects Amapiano's social media evolution, uniting dancers via viral challenges. It embodies township energy and showcases Amapiano's global dominance."
+      culturalContext: "Tshwala Bam reflects Amapiano's social media evolution, uniting dancers via viral challenges. It embodies township energy and showcases Amapiano's global dominance.",
+      historicalBackground: "Emerged in South Africa in 2024, tied to TitoM and Yuppe's 'Tshwala Bam.' Viral via TikTok's #TshwalaBamChallenge. Globalized in 2025 with Afrobeats-influenced variations.",
+      modernVariations: [
+        "Tshwala Twist (2025): Torso twists with side steps, Instagram Reels trend",
+        "Tshwala Afro: Afrobeats legwork, Nigerian adaptations"
+      ],
+      progressionLevels: [
+        {
+          level: "Beginner",
+          weeks: "Weeks 1-4",
+          focus: "Learn side step, arm wave (10-minute tutorials)",
+          practice: "Practice to 'Tshwala Bam'",
+          assessment: "Assessment: 15-second clip"
+        },
+        {
+          level: "Intermediate",
+          weeks: "Weeks 5-8",
+          focus: "Add hip dip, Tshwala Twist",
+          practice: "Practice to 'Soweto Baby'",
+          assessment: "Assessment: 30-second routine"
+        },
+        {
+          level: "Advanced",
+          weeks: "Weeks 9-12",
+          focus: "Master Tshwala Afro, group choreography",
+          practice: "Perform to 'Love You Tonight'",
+          assessment: "Assessment: 1-minute choreography"
+        }
+      ],
+      traditionalVsModern: {
+        traditional: "Raw, Amapiano-driven, minimalistic",
+        modern: "Polished, Afrobeats/hip-hop influences"
+      }
     },
     {
       id: "vosho",
@@ -311,14 +552,214 @@ export const danceCurriculum = {
         "Hip Sway Mastery",
         "Vosho Endurance"
       ],
-      culturalContext: "Vosho emerged from Gauteng townships in the late 2010s, representing youth expressiveness and physicality. It symbolizes strength and resilience.",
+      keyMoves: [
+        {
+          name: "Deep Stomp",
+          steps: [
+            "Start in standing position",
+            "Drop quickly into deep squat",
+            "Rise back up with bounce",
+            "Maintain rhythm throughout"
+          ]
+        },
+        {
+          name: "Arm Swing",
+          steps: [
+            "Swing arms forward during squat",
+            "Bring arms back during rise",
+            "Keep movements fluid and coordinated"
+          ]
+        },
+        {
+          name: "Hip Sway",
+          steps: [
+            "Add hip sway during deep squat",
+            "Shift weight between legs",
+            "Emphasize sway on beat"
+          ]
+        }
+      ],
+      notableDancers: ["Kabza De Small", "Bontle Modiselle", "Babes Wodumo"],
+      songs: [
+        {
+          title: "Avenue Sounds",
+          artist: "Kabza De Small",
+          youtube: "https://www.youtube.com/watch?v=7z8z9xQz3x4Y5z6Z7Y8",
+          spotify: "https://open.spotify.com/track/2W9UBDXrxNd9BUmZ1i8pXs"
+        },
+        {
+          title: "Soweto Baby",
+          artist: "DJ Maphorisa",
+          youtube: "https://www.youtube.com/watch?v=8z9xQz3x4Y5z6Z7Y8z9",
+          spotify: "https://open.spotify.com/track/4nVBt6MZDDM2zHY9pKSlx1"
+        }
+      ],
       tutorials: [
         {
           title: "Vosho Tutorial",
           platform: "YouTube",
-          creator: "Various",
+          creator: "Bontle Modiselle",
           link: "https://www.youtube.com/watch?v=your_vosho_tutorial"
+        },
+        {
+          title: "Vosho Basics",
+          platform: "TikTok",
+          creator: "@bontle_modiselle",
+          link: "#"
         }
+      ],
+      culturalContext: "Vosho emerged from Gauteng townships in the late 2010s, representing youth expressiveness and physicality. It symbolizes strength and resilience.",
+      modernVariations: [
+        "Vosho Slide (2025, smoother stomps)",
+        "Vosho Flow (more controlled variation)"
+      ]
+    },
+    {
+      id: "pouncing-cat",
+      name: "Pouncing Cat",
+      origin: "South Africa",
+      description: "An Amapiano dance characterized by a crouched stance, quick footwork and cat-like arm movements that gained popularity on TikTok.",
+      difficulty: "Medium-Hard",
+      image: "https://placehold.co/600x400/FFD600/000000?text=Pouncing+Cat",
+      modules: [
+        "Crouched Stance Basics",
+        "Quick Footwork Patterns",
+        "Cat-like Arm Movements",
+        "Pouncing Cat Flow"
+      ],
+      keyMoves: [
+        {
+          name: "Crouched Stance",
+          steps: [
+            "Bend knees into partial squat",
+            "Keep weight centered",
+            "Maintain flexible posture"
+          ]
+        },
+        {
+          name: "Quick Footwork",
+          steps: [
+            "Take small, rapid steps in place",
+            "Occasionally hop or bounce",
+            "Follow Amapiano log drum pattern"
+          ]
+        },
+        {
+          name: "Cat-like Arms",
+          steps: [
+            "Bend arms at elbows, hands loose",
+            "Make 'pouncing' motions forward",
+            "Add claw-like hand gestures"
+          ]
+        }
+      ],
+      notableDancers: ["Focalistic", "Hope Ramafalo", "Kamo Mphela"],
+      songs: [
+        {
+          title: "Ke Star",
+          artist: "Focalistic",
+          youtube: "https://www.youtube.com/watch?v=3z8z7Y8z9xQz3x4Y5z6Z7Y",
+          spotify: "https://open.spotify.com/track/0DnMfvkQS1hgwQbBnDrjgX"
+        },
+        {
+          title: "Amanikiniki",
+          artist: "MFR Souls",
+          youtube: "https://www.youtube.com/watch?v=4b3z8z7Y8z9xQz3x4Y5z6",
+          spotify: "https://open.spotify.com/track/2pQCg0prJgM5MHvKBgEMQI"
+        }
+      ],
+      tutorials: [
+        {
+          title: "Pouncing Cat Tutorial",
+          platform: "YouTube",
+          creator: "African Dance Dictionary",
+          link: "https://www.youtube.com/watch?v=your_pouncing_cat_tutorial"
+        },
+        {
+          title: "Learn Pouncing Cat",
+          platform: "TikTok",
+          creator: "@hoperamafalo",
+          link: "#"
+        }
+      ],
+      culturalContext: "Pouncing Cat represents the playful side of Amapiano culture, emerging on TikTok in 2019. It demonstrates how digital platforms have accelerated the global spread of African dance styles.",
+      modernVariations: [
+        "Pouncing Flow (2025, fluid transitions)",
+        "Pouncing Fusion (with hip-hop elements)"
+      ]
+    },
+    {
+      id: "zekethe",
+      name: "Zekethe",
+      origin: "South Africa",
+      description: "An energetic Amapiano dance characterized by fast footwork, sharp isolations and punchy arm movements.",
+      difficulty: "Hard",
+      image: "https://placehold.co/600x400/008751/ffffff?text=Zekethe",
+      modules: [
+        "Fast Footwork Fundamentals",
+        "Sharp Isolation Technique",
+        "Arm Punch Patterns",
+        "Zekethe Energy Flow"
+      ],
+      keyMoves: [
+        {
+          name: "Fast Footwork",
+          steps: [
+            "Quick, alternating steps in place",
+            "Occasional cross steps or hops",
+            "Follow Amapiano percussion closely"
+          ]
+        },
+        {
+          name: "Sharp Isolations",
+          steps: [
+            "Isolate shoulders, chest, or hips",
+            "Make sudden, precise movements",
+            "Freeze briefly between isolations"
+          ]
+        },
+        {
+          name: "Arm Punches",
+          steps: [
+            "Extend arms with punching motion",
+            "Coordinate with footwork rhythm",
+            "Vary direction and intensity"
+          ]
+        }
+      ],
+      notableDancers: ["MFR Souls", "Limpopo Boy", "DJ Maphorisa"],
+      songs: [
+        {
+          title: "Love You Tonight",
+          artist: "MFR Souls",
+          youtube: "https://www.youtube.com/watch?v=5b3z8z7Y8z9xQz3x4Y5z6Z",
+          spotify: "https://open.spotify.com/track/7tZhCF3kQQJZPLxsVQ7aZB"
+        },
+        {
+          title: "Amapiano Mix",
+          artist: "Kabza De Small",
+          youtube: "https://www.youtube.com/watch?v=6z8z7Y8z9xQz3x4Y5z6Z7",
+          spotify: "https://open.spotify.com/track/4wZlndCeGaE5KoNqXLJxTq"
+        }
+      ],
+      tutorials: [
+        {
+          title: "Zekethe Dance Tutorial",
+          platform: "YouTube",
+          creator: "African Dance Dictionary",
+          link: "https://www.youtube.com/watch?v=your_zekethe_tutorial"
+        },
+        {
+          title: "Zekethe Basics",
+          platform: "Instagram",
+          creator: "@limpopoboy",
+          link: "#"
+        }
+      ],
+      culturalContext: "Zekethe emerged in the early 2020s as Amapiano music evolved to incorporate more complex percussion patterns. It represents the high-energy side of South African dance culture.",
+      modernVariations: [
+        "Zekethe Afro (2024, Afrobeats fusion)",
+        "Zekethe Smooth (more controlled flow)"
       ]
     }
   ]

@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat1, Repeat, Share2, Music2 
+  Repeat, Repeat1, Share2, Music2 
 } from "lucide-react";
 
+// Add type declarations for the YouTube IFrame API
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
@@ -156,7 +157,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       {children}
       <div id="youtube-player"></div>
       {currentSong && (
-        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4">
+        <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
               <div className="flex-shrink-0">
