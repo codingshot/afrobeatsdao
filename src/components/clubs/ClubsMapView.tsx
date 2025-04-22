@@ -6,7 +6,7 @@ import { Club, ClubFilters } from '@/types/club';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
-import { MapPin, ExternalLink, Clock, Music } from 'lucide-react';
+import { MapPin, ExternalLink, Clock, Music, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -77,7 +77,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
         center={defaultCenter as L.LatLngExpression}
         zoom={defaultZoom} 
         style={{ height: '100%', width: '100%' }}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         className="z-0"
         {...{} as ExtendedMapContainerProps}
       >
@@ -118,7 +118,6 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                       
                       <div className="flex items-center gap-1">
                         <Music className="h-3.5 w-3.5 text-muted-foreground" />
-                        <span className="font-medium mr-1">Music:</span>
                         <div className="flex flex-wrap gap-1">
                           {club.music.split(',').map((genre, i) => (
                             <Badge key={i} variant="outline" className="text-xs bg-[#F97316]/10">
@@ -131,7 +130,14 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                       {club.hours && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                          <span className="font-medium mr-1">Hours:</span> {club.hours}
+                          <span>{club.hours}</span>
+                        </div>
+                      )}
+                      
+                      {club.capacity && (
+                        <div className="flex items-center gap-1">
+                          <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span>{club.capacity}</span>
                         </div>
                       )}
                     </div>
