@@ -1,25 +1,34 @@
-
 import React from 'react';
 import { Club } from '@/types/club';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { MapPin, ExternalLink, Info } from 'lucide-react';
+import { useCountryFlags } from '@/hooks/use-country-flags';
 
 interface ClubsCardViewProps {
   clubs: Club[];
 }
 
 const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
+  const { getFlag } = useCountryFlags();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
       {clubs.map((club, index) => (
-        <Card key={`${club.name}-${index}`} className="overflow-hidden transition-all hover:shadow-md">
+        <Card key={`${club.name}-${index}`} className="overflow-hidden transition-all hover:shadow-md border-[#008751]/20">
           <CardHeader className="p-4 pb-2">
             <div className="flex justify-between items-start">
-              <div>
-                <CardTitle className="text-xl">{club.name}</CardTitle>
-                <CardDescription>{club.city}</CardDescription>
+              <div className="flex items-start gap-2">
+                <img 
+                  src={getFlag(club.city === "London" ? "United Kingdom" : club.city === "Bangkok" ? "Thailand" : club.city === "Dublin" ? "Ireland" : "Netherlands")} 
+                  alt={`${club.city} flag`}
+                  className="w-6 h-4 object-cover rounded-sm mt-1"
+                />
+                <div>
+                  <CardTitle className="text-xl">{club.name}</CardTitle>
+                  <CardDescription>{club.city}</CardDescription>
+                </div>
               </div>
               <HoverCard>
                 <HoverCardTrigger asChild>
