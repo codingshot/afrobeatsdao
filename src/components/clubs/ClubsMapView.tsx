@@ -9,17 +9,6 @@ import { MapPin, ExternalLink } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix for Leaflet marker icons
-useEffect(() => {
-  // Fix Leaflet icon issue
-  delete (L.Icon.Default.prototype as any)._getIconUrl;
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-  });
-}, []);
-
 interface ClubsMapViewProps {
   clubs: Club[];
   onSelectClub?: (club: Club) => void;
@@ -29,6 +18,17 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
   const isMobile = useIsMobile();
   const defaultCenter: [number, number] = [20, 0]; // Default center of the map
   const defaultZoom = 2;
+  
+  // Fix for Leaflet marker icons
+  useEffect(() => {
+    // Fix Leaflet icon issue
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    });
+  }, []);
 
   return (
     <div className="rounded-lg overflow-hidden border border-border h-[calc(100vh-200px)] md:h-[600px] w-full">
@@ -36,7 +36,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
         center={defaultCenter} 
         zoom={defaultZoom} 
         style={{ height: '100%', width: '100%' }}
-        attributionControl={false}
+        scrollWheelZoom={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -54,7 +54,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
                 }
               }}
             >
-              <Popup className="min-w-[250px] sm:min-w-[300px]">
+              <Popup>
                 <Card className="border-0 shadow-none">
                   <CardContent className="p-2">
                     <h3 className="text-lg font-bold">{club.name}</h3>
