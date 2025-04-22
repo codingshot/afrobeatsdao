@@ -5,33 +5,41 @@ import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceD
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const DanceDetails = () => {
   const { genre, id } = useParams();
   const navigate = useNavigate();
   const [dance, setDance] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [notFound, setNotFound] = useState<boolean>(false);
+  const previousIdRef = useRef<string | undefined>(id);
   
-  // Move the dance finding logic to useEffect to avoid race conditions
   useEffect(() => {
+    if (previousIdRef.current !== id) {
+      setIsLoading(true);
+      setDance(null);
+      setNotFound(false);
+      previousIdRef.current = id;
+    }
+    
     const findDance = () => {
       let foundDance = null;
       
-      // Handle direct routes where both genre and id are present in the URL
+      // Get the dance ID from either the URL params or the last segment of the path
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      const potentialId = id || lastSegment;
+      
+      // If we have both genre and id, try to find the dance in that specific genre
       if (genre && id) {
         if (danceCurriculum[genre as keyof typeof danceCurriculum]) {
           foundDance = danceCurriculum[genre as keyof typeof danceCurriculum].find(d => d.id === id);
         }
       }
       
-      // Handle hardcoded routes without params
-      if (!foundDance && genre && !id) {
-        // Extract id from the URL path
-        const pathSegments = window.location.pathname.split('/');
-        const potentialId = pathSegments[pathSegments.length - 1];
-        
-        // Search in all genres
+      // If not found or if we only have an id, search across all genres
+      if (!foundDance) {
         for (const genreKey in danceCurriculum) {
           const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
             d => d.id === potentialId
@@ -42,40 +50,38 @@ const DanceDetails = () => {
           }
         }
       }
-
-      // Last resort - try to find by scanning all dances
-      if (!foundDance) {
-        const allDances = Object.keys(danceCurriculum).reduce((acc: any[], genreKey) => {
-          return [...acc, ...danceCurriculum[genreKey as keyof typeof danceCurriculum]];
-        }, []);
-        
-        // Try to extract ID from the last part of the URL if not provided in params
-        const urlPathSegments = window.location.pathname.split('/');
-        const lastSegment = urlPathSegments[urlPathSegments.length - 1];
-        
-        foundDance = allDances.find(d => d.id === (id || lastSegment));
+      
+      if (foundDance) {
+        setDance(foundDance);
+        setNotFound(false);
+      } else {
+        setNotFound(true);
       }
       
-      setDance(foundDance);
       setIsLoading(false);
     };
     
-    findDance();
+    const timeoutId = setTimeout(() => {
+      findDance();
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [genre, id]);
   
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading dance details...</h1>
+          <div className="w-16 h-16 border-4 border-[#FFD600] border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
   }
 
-  if (!dance) {
+  if (notFound) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
         <Alert variant="destructive" className="max-w-md mb-6 bg-red-500/10 border-red-500/20 text-white">
           <AlertTitle className="text-xl font-heading mb-2">Dance Not Found</AlertTitle>
           <AlertDescription className="text-gray-200">
@@ -99,4 +105,3 @@ const DanceDetails = () => {
 };
 
 export default DanceDetails;
-

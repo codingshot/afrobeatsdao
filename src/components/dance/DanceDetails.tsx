@@ -56,7 +56,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const { getFlag } = useCountryFlags();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <Button 
           onClick={() => navigate("/dance")}
@@ -99,4 +99,3 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     </div>
   );
 };
-

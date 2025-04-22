@@ -1,10 +1,10 @@
 
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2 
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize
 } from "lucide-react";
 
 // Add type declarations for the YouTube IFrame API
@@ -46,40 +46,107 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(100);
   const [repeat, setRepeat] = useState(false);
+  const [youtubeApiLoaded, setYoutubeApiLoaded] = useState(false);
+  const [expandedView, setExpandedView] = useState(false);
+  const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Load YouTube API only once when component mounts
   useEffect(() => {
-    // Load YouTube API
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+    if (!window.YT && !document.getElementById('youtube-iframe-api')) {
+      const tag = document.createElement('script');
+      tag.id = 'youtube-iframe-api';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
-    window.onYouTubeIframeAPIReady = () => {
-      const newPlayer = new window.YT.Player('youtube-player', {
-        height: '0',
-        width: '0',
-        events: {
-          onStateChange: (event: any) => {
-            if (event.data === window.YT.PlayerState.ENDED) {
-              if (repeat) {
-                event.target.playVideo();
-              } else {
-                nextSong();
+      window.onYouTubeIframeAPIReady = () => {
+        setYoutubeApiLoaded(true);
+      };
+    } else if (window.YT) {
+      setYoutubeApiLoaded(true);
+    }
+  }, []);
+
+  // Initialize the player after YouTube API is loaded
+  useEffect(() => {
+    if (youtubeApiLoaded && playerContainerRef.current) {
+      // Destroy existing player if it exists
+      if (player) {
+        try {
+          player.destroy();
+        } catch (e) {
+          console.error("Error destroying player:", e);
+        }
+      }
+
+      try {
+        const newPlayer = new window.YT.Player('youtube-player', {
+          height: expandedView ? '240' : '0',
+          width: expandedView ? '426' : '0',
+          events: {
+            onStateChange: (event: any) => {
+              if (event.data === window.YT.PlayerState.ENDED) {
+                if (repeat) {
+                  event.target.playVideo();
+                } else {
+                  nextSong();
+                }
+              } else if (event.data === window.YT.PlayerState.PLAYING) {
+                setIsPlaying(true);
+              } else if (event.data === window.YT.PlayerState.PAUSED) {
+                setIsPlaying(false);
               }
+            },
+            onError: (event: any) => {
+              console.error("YouTube player error:", event);
+            },
+            onReady: (event: any) => {
+              event.target.setVolume(volume);
             }
           },
-        },
-      });
-      setPlayer(newPlayer);
+        });
+        setPlayer(newPlayer);
+      } catch (e) {
+        console.error("Error initializing YouTube player:", e);
+      }
+    }
+
+    // Cleanup function
+    return () => {
+      if (player) {
+        try {
+          player.destroy();
+        } catch (e) {
+          console.error("Error destroying player on unmount:", e);
+        }
+      }
     };
-  }, []);
+  }, [youtubeApiLoaded, expandedView]);
+
+  // Update player size when expandedView changes
+  useEffect(() => {
+    if (player && player.setSize) {
+      try {
+        player.setSize(
+          expandedView ? 426 : 0,
+          expandedView ? 240 : 0
+        );
+      } catch (e) {
+        console.error("Error resizing player:", e);
+      }
+    }
+  }, [expandedView, player]);
 
   const playNow = useCallback((song: Song) => {
     setCurrentSong(song);
     setIsPlaying(true);
     if (player && player.loadVideoById) {
-      const videoId = song.youtube.split('=')[1] || song.youtube.split('/').pop();
-      player.loadVideoById(videoId);
+      try {
+        const videoId = song.youtube.split('=')[1] || song.youtube.split('/').pop();
+        player.loadVideoById(videoId);
+      } catch (e) {
+        console.error("Error loading video:", e);
+      }
     }
   }, [player]);
 
@@ -93,12 +160,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
 
   const togglePlay = useCallback(() => {
     if (player) {
-      if (isPlaying) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
+      try {
+        if (isPlaying) {
+          player.pauseVideo();
+        } else {
+          player.playVideo();
+        }
+        setIsPlaying(!isPlaying);
+      } catch (e) {
+        console.error("Error toggling play state:", e);
       }
-      setIsPlaying(!isPlaying);
     }
   }, [isPlaying, player]);
 
@@ -113,14 +184,22 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const previousSong = useCallback(() => {
     // Restart current song
     if (player) {
-      player.seekTo(0);
+      try {
+        player.seekTo(0);
+      } catch (e) {
+        console.error("Error seeking to start:", e);
+      }
     }
   }, [player]);
 
   const updateVolume = useCallback((value: number) => {
     if (player) {
-      player.setVolume(value);
-      setVolume(value);
+      try {
+        player.setVolume(value);
+        setVolume(value);
+      } catch (e) {
+        console.error("Error setting volume:", e);
+      }
     }
   }, [player]);
 
@@ -135,6 +214,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       newQueue.splice(to, 0, removed);
       return newQueue;
     });
+  }, []);
+
+  const toggleExpandedView = useCallback(() => {
+    setExpandedView(prev => !prev);
   }, []);
 
   return (
@@ -155,21 +238,26 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       }}
     >
       {children}
-      <div id="youtube-player"></div>
+      <div 
+        ref={playerContainerRef} 
+        className={`${expandedView ? 'block' : 'hidden'} fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
+      >
+        <div id="youtube-player"></div>
+      </div>
       {currentSong && (
         <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 min-w-0">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
               <div className="flex-shrink-0">
-                <Music2 className="h-10 w-10 text-[#FFD600]" />
+                <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <h3 className="text-sm font-medium truncate">{currentSong.title}</h3>
                 <p className="text-xs text-gray-400 truncate">{currentSong.artist}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
               <Button
                 variant="ghost"
                 size="icon"
@@ -207,7 +295,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
               </Button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
               <Button
                 variant="ghost"
                 size="icon"
@@ -227,6 +315,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                   className="cursor-pointer"
                 />
               </div>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleExpandedView}
+                className="text-white hover:bg-white/10"
+                title={expandedView ? "Collapse video" : "Show video"}
+              >
+                {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
         </div>

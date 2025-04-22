@@ -33,31 +33,59 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   };
 
   const createSongFromDanceData = (song: any) => ({
-    id: song.title + song.artist,
+    id: `${song.title}-${song.artist}`,
     title: song.title,
     artist: song.artist,
     youtube: song.youtube,
   });
 
-  const handlePlayNow = (song: any) => {
-    if (audioPlayer && audioPlayer.playNow) {
-      audioPlayer.playNow(createSongFromDanceData(song));
+  const handlePlayNow = (song: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (audioPlayer && song) {
+      try {
+        audioPlayer.playNow(createSongFromDanceData(song));
+        toast({
+          title: "Now Playing",
+          description: `${song.title} by ${song.artist}`,
+        });
+      } catch (error) {
+        console.error("Error playing song:", error);
+      }
     }
   };
 
-  const handleAddToQueue = (song: any) => {
-    if (audioPlayer && audioPlayer.addToQueue) {
-      audioPlayer.addToQueue(createSongFromDanceData(song));
+  const handleAddToQueue = (song: any, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (audioPlayer && song) {
+      try {
+        audioPlayer.addToQueue(createSongFromDanceData(song));
+        toast({
+          title: "Added to Queue",
+          description: `${song.title} by ${song.artist}`,
+        });
+      } catch (error) {
+        console.error("Error adding song to queue:", error);
+      }
     }
   };
   
-  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number) => {
+  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    
     startDance(dance.id);
     markModuleComplete(dance.id, moduleIndex);
     
+    if (action === 'practice' && dance.songs && dance.songs.length > 0) {
+      const songIndex = moduleIndex % dance.songs.length;
+      handlePlayNow(dance.songs[songIndex]);
+    }
+    
     toast({
       title: action === 'tutorial' ? "Tutorial Started" : "Practice Mode Started",
-      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex]}`,
+      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex] || "this module"}`,
     });
   };
 
@@ -80,7 +108,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     const currentCategory = categories[currentCategoryIndex];
     const dances = danceCurriculum[currentCategory as keyof typeof danceCurriculum];
 
-    // Try next dance in current category
     if (currentDanceIndex < dances.length - 1) {
       return {
         category: currentCategory,
@@ -88,7 +115,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
       };
     }
 
-    // Try first dance of next category
     if (currentCategoryIndex < categories.length - 1) {
       const nextCategory = categories[currentCategoryIndex + 1];
       const nextCategoryDances = danceCurriculum[nextCategory as keyof typeof danceCurriculum];
@@ -115,42 +141,30 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     }
   };
 
+  const calculateProgress = () => {
+    if (!dance.modules || dance.modules.length === 0) return 0;
+    return (danceProgress.moduleProgress.length * 100) / dance.modules.length;
+  };
+
+  const isTutorialAvailable = (tutorial: any) => {
+    return tutorial && tutorial.link && (tutorial.link.includes('youtube.com') || tutorial.link.includes('youtu.be'));
+  };
+
   return (
     <Card className="bg-black border-[#008751] text-white">
-      <div className="relative">
-        <div className="h-48 md:h-64 bg-gradient-to-r from-[#008751] to-[#F97316] rounded-t-lg flex items-center justify-center overflow-hidden">
-          <h2 className="text-3xl md:text-4xl font-bold text-white z-10 text-center px-4 font-heading">
-            {dance.name}
-          </h2>
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-        <div className="absolute bottom-0 left-0 bg-black/70 backdrop-blur-sm px-4 py-1 rounded-tr-lg">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-white">Origin: <span className="text-[#FFD600]">{dance.origin}</span></p>
-            {dance.origin && getFlag(dance.origin) && (
-              <img 
-                src={getFlag(dance.origin)} 
-                alt={dance.origin} 
-                className="w-5 h-3"
-              />
-            )}
-          </div>
-        </div>
-      </div>
-
       <div className="p-4 sm:p-6 border-b border-[#008751]/30">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-400">Progress:</span>
             <Progress 
-              value={danceProgress.moduleProgress.length * (100 / (dance.modules?.length || 1))} 
+              value={calculateProgress()} 
               className="w-32 sm:w-48 bg-gray-800"
             />
           </div>
           <Button
             onClick={handleNextDance}
             variant="outline"
-            className="border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
+            className="border-[#008751] bg-[#008751] text-white hover:bg-[#008751]/80 font-medium"
           >
             <CircleChevronRight className="mr-2 h-4 w-4" />
             Next Dance
@@ -230,11 +244,17 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                           <div className="flex flex-col sm:flex-row gap-3 mb-3">
                             <Button 
                               variant="outline" 
-                              className="flex-1 border-[#008751] text-[#008751] hover:bg-[#008751]/10"
-                              onClick={() => handleModuleAction('tutorial', idx)}
+                              className={`flex-1 ${
+                                dance.tutorials && dance.tutorials[0] 
+                                ? "border-[#008751] text-[#008751] hover:bg-[#008751]/10" 
+                                : "border-gray-600 text-gray-500 cursor-not-allowed"
+                              }`}
+                              onClick={() => dance.tutorials && dance.tutorials[0] && handleModuleAction('tutorial', idx)}
+                              disabled={!dance.tutorials || !dance.tutorials[0]}
                             >
                               <Play className="mr-2 h-4 w-4" /> 
                               Tutorial
+                              {(!dance.tutorials || !dance.tutorials[0]) && " (Unavailable)"}
                             </Button>
                             <Button 
                               variant="outline" 
@@ -264,29 +284,40 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           {dance.tutorials && dance.tutorials[0] && (
             <div className="space-y-4">
               <h3 className="text-lg md:text-xl font-semibold text-[#FFD600]">Video Tutorial</h3>
-              <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}`}
-                  title={dance.tutorials[0].title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium text-white">{dance.tutorials[0].title}</h4>
-                  <p className="text-sm text-gray-400">
-                    By {dance.tutorials[0].creator || dance.tutorials[0].platform}
-                  </p>
+              {isTutorialAvailable(dance.tutorials[0]) ? (
+                <>
+                  <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}`}
+                      title={dance.tutorials[0].title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-white">{dance.tutorials[0].title}</h4>
+                      <p className="text-sm text-gray-400">
+                        By {dance.tutorials[0].creator || dance.tutorials[0].platform}
+                      </p>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-white border-gray-700 hover:bg-white/10"
+                      onClick={() => window.open(dance.tutorials[0].link, '_blank')}
+                    >
+                      <Youtube className="mr-2 h-4 w-4" />
+                      Open on YouTube
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="aspect-video bg-gray-900/50 rounded-lg flex items-center justify-center">
+                  <p className="text-gray-400">Tutorial not available</p>
                 </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" className="text-white border-gray-700 hover:bg-white/10">
-                    <Youtube className="mr-2 h-4 w-4" />
-                    Open on YouTube
-                  </Button>
-                </div>
-              </div>
+              )}
             </div>
           )}
           
