@@ -4,6 +4,7 @@ import { danceCurriculum } from "@/data/dance-curriculum";
 import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceDetails";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useState } from "react";
 
 const DanceDetails = () => {
@@ -64,9 +65,9 @@ const DanceDetails = () => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Loading dance details...</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading dance details...</h1>
         </div>
       </div>
     );
@@ -74,18 +75,22 @@ const DanceDetails = () => {
 
   if (!dance) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Dance not found</h1>
-          <Button 
-            onClick={() => navigate("/dance")}
-            variant="white"
-            className="text-black"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dances
-          </Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+        <Alert variant="destructive" className="max-w-md mb-6 bg-red-500/10 border-red-500/20 text-white">
+          <AlertTitle className="text-xl font-heading mb-2">Dance Not Found</AlertTitle>
+          <AlertDescription className="text-gray-200">
+            Sorry, we couldn't find the dance you're looking for. It might have been moved or doesn't exist.
+          </AlertDescription>
+        </Alert>
+        
+        <Button 
+          onClick={() => navigate("/dance")}
+          variant="default"
+          className="bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dance Library
+        </Button>
       </div>
     );
   }
@@ -94,3 +99,4 @@ const DanceDetails = () => {
 };
 
 export default DanceDetails;
+
