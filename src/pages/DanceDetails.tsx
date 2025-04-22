@@ -9,14 +9,46 @@ const DanceDetails = () => {
   const { genre, id } = useParams();
   const navigate = useNavigate();
   
-  // Find dance in curriculum
+  // Find dance in curriculum with improved handling
   let dance;
-  if (genre === 'afrobeats' || genre === 'amapiano') {
-    dance = danceCurriculum[genre].find(d => d.id === id);
-  } else {
-    // If no genre specified, search all genres
-    const allDances = [...danceCurriculum.afrobeats, ...danceCurriculum.amapiano];
-    dance = allDances.find(d => d.id === id);
+  
+  // Handle direct routes where both genre and id are present in the URL
+  if (genre && id) {
+    if (danceCurriculum[genre as keyof typeof danceCurriculum]) {
+      dance = danceCurriculum[genre as keyof typeof danceCurriculum].find(d => d.id === id);
+    }
+  }
+  
+  // Handle hardcoded routes without params
+  if (!dance && genre && !id) {
+    // Extract id from the URL path
+    const pathSegments = window.location.pathname.split('/');
+    const potentialId = pathSegments[pathSegments.length - 1];
+    
+    // Search in all genres
+    for (const genreKey in danceCurriculum) {
+      const foundDance = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
+        d => d.id === potentialId
+      );
+      if (foundDance) {
+        dance = foundDance;
+        break;
+      }
+    }
+  }
+
+  // Last resort - try to find by scanning all dances
+  if (!dance) {
+    const allDances = [
+      ...danceCurriculum.afrobeats, 
+      ...danceCurriculum.amapiano
+    ];
+    
+    // Try to extract ID from the last part of the URL if not provided in params
+    const urlPathSegments = window.location.pathname.split('/');
+    const lastSegment = urlPathSegments[urlPathSegments.length - 1];
+    
+    dance = allDances.find(d => d.id === (id || lastSegment));
   }
   
   if (!dance) {

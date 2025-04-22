@@ -1,3 +1,4 @@
+
 /* This file intentionally left mostly blank as we're using Tailwind for styling */
 #root {
   max-width: 100%;
@@ -5,3 +6,11 @@
   padding: 0;
   text-align: left;
 }
+
+/* Ensure proper contrast for yellow buttons */
+.bg-[#FFD600], 
+.bg-accent {
+  color: #000 !important;
+  font-weight: 600;
+}
+
