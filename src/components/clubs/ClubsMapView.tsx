@@ -16,7 +16,7 @@ interface ClubsMapViewProps {
 
 const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
   const isMobile = useIsMobile();
-  const defaultCenter: [number, number] = [20, 0]; // Default center of the map
+  const defaultCenter = [20, 0] as [number, number]; // Default center of the map
   const defaultZoom = 2;
   
   // Fix for Leaflet marker icons
@@ -33,7 +33,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
   return (
     <div className="rounded-lg overflow-hidden border border-border h-[calc(100vh-200px)] md:h-[600px] w-full">
       <MapContainer 
-        center={defaultCenter} 
+        center={defaultCenter}
         zoom={defaultZoom} 
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
