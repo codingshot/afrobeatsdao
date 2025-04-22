@@ -1,11 +1,10 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, 
-  Repeat, RepeatOne, Music, Volume2, Shuffle 
+  Repeat, Repeat1, Music, Volume2, Shuffle 
 } from "lucide-react";
 
 export type Song = {
@@ -15,6 +14,12 @@ export type Song = {
   youtube: string;
   thumbnail?: string;
 };
+
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
 
 type GlobalAudioPlayerProps = {
   initialQueue?: Song[];
@@ -33,7 +38,6 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
   const youtubeIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // Check if we have songs and no current song is selected
     if (queue.length > 0 && currentIndex === -1) {
       setCurrentIndex(0);
     }
@@ -53,25 +57,20 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
     };
   }, [isPlaying]);
 
-  // Set up YouTube API
   useEffect(() => {
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
 
-    // To avoid errors in the build process, define window.onYouTubeIframeAPIReady
-    // without attempting to configure the player here
     window.onYouTubeIframeAPIReady = () => {
       console.log("YouTube API ready");
     };
 
     return () => {
-      // Clean up if needed
     };
   }, []);
 
-  // Extract YouTube ID from URL
   const getYoutubeId = (url: string): string => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
@@ -86,10 +85,7 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
       const videoId = getYoutubeId(queue[index].youtube);
       youtubeIdRef.current = videoId;
       
-      // If we have an audio element, update it with the YouTube audio URL
       if (audioRef.current) {
-        // This is a simplified approach - in a real app you might use YouTube API or a service
-        // that extracts audio from YouTube
         audioRef.current.src = `https://www.youtube.com/embed/${videoId}`;
         audioRef.current.play();
       }
@@ -115,7 +111,6 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
     let nextIndex: number;
     
     if (isShuffle) {
-      // Random index except the current one
       const availableIndices = [...Array(queue.length).keys()].filter(i => i !== currentIndex);
       nextIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
     } else {
@@ -131,11 +126,9 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
     let prevIndex: number;
     
     if (audioRef.current && audioRef.current.currentTime > 3) {
-      // If more than 3 seconds have passed, restart the current song
       audioRef.current.currentTime = 0;
       return;
     } else if (isShuffle) {
-      // Random index except the current one
       const availableIndices = [...Array(queue.length).keys()].filter(i => i !== currentIndex);
       prevIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
     } else {
@@ -197,10 +190,8 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
     const songIndex = queue.findIndex(s => s.id === song.id);
     
     if (songIndex !== -1) {
-      // Song is in queue, play it
       play(songIndex);
     } else {
-      // Add to queue and play
       setQueue(prev => [...prev, song]);
       play(queue.length);
     }
@@ -208,7 +199,6 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
 
   const removeFromQueue = (index: number) => {
     if (index === currentIndex) {
-      // If removing current song, play next
       nextSong();
     }
     
@@ -232,14 +222,12 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
     
     setQueue(newQueue);
     
-    // Update currentIndex if the current song was moved
     if (currentIndex === fromIndex) {
       setCurrentIndex(toIndex);
     } else if (
       (currentIndex > fromIndex && currentIndex <= toIndex) || 
       (currentIndex < fromIndex && currentIndex >= toIndex)
     ) {
-      // Adjust currentIndex if it was affected by the move
       setCurrentIndex(
         currentIndex + (fromIndex < toIndex ? -1 : 1)
       );
@@ -340,7 +328,7 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
                 onClick={toggleRepeatMode}
               >
                 {repeatMode === 'one' ? (
-                  <RepeatOne className="h-5 w-5 text-afro-teal" />
+                  <Repeat1 className="h-5 w-5 text-afro-teal" />
                 ) : repeatMode === 'all' ? (
                   <Repeat className="h-5 w-5 text-afro-teal" />
                 ) : (
@@ -457,14 +445,11 @@ export const GlobalAudioPlayer = ({ initialQueue = [] }: GlobalAudioPlayerProps)
         </CardContent>
       </Card>
       
-      {/* Add padding at the bottom to account for the player */}
       <div className={`h-20 w-full ${isExpanded ? 'hidden' : 'block'}`}></div>
     </>
   );
 };
 
-// Global store for the audio player
-// This allows components to access the player from anywhere in the app
 export const useGlobalAudioPlayer = () => {
   const [globalPlayerState] = useState({
     addToQueue: (song: Song) => {
@@ -484,7 +469,6 @@ export const useGlobalAudioPlayer = () => {
   return globalPlayerState;
 };
 
-// Component to handle global player events
 export const GlobalAudioPlayerProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
@@ -498,16 +482,13 @@ export const GlobalAudioPlayerProvider: React.FC<{
     const handlePlayNow = (event: CustomEvent<Song>) => {
       const song = event.detail;
       setQueue(prev => {
-        // Check if song is already in queue
         const songIndex = prev.findIndex(s => s.id === song.id);
         
         if (songIndex !== -1) {
-          // Move song to the top of the queue
           const newQueue = [...prev];
           const [removed] = newQueue.splice(songIndex, 1);
           return [removed, ...newQueue];
         } else {
-          // Add song to the beginning of the queue
           return [song, ...prev];
         }
       });
