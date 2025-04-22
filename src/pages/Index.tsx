@@ -4,7 +4,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
-import { VibeOfTheDay } from "@/components/VibeOfTheDay";
+import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
@@ -13,17 +13,21 @@ import { useEffect } from "react";
 const Index = () => {
   const { playNow } = useGlobalAudioPlayer();
 
-  // Set a default song to play when the component mounts
+  // Set the current Vibe of the Day video to play when the component mounts
   useEffect(() => {
-    // Example song to play automatically when the page loads
+    // Get a random Vibe of the Day video to use as the default song
+    const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
+    const vibeVideoId = VIBE_VIDEOS[randomIndex];
+    
+    // Create a song object from the Vibe of the Day
     const defaultSong = {
-      id: "default-song",
-      title: "Welcome to Afrobeats DAO",
-      artist: "Afrobeats Community",
-      youtube: "https://www.youtube.com/watch?v=Oe8KGEEvZ0w" // Sample Afrobeats song
+      id: `vibe-${vibeVideoId}`,
+      title: "Vibe of the Day",
+      artist: "Afrobeats DAO",
+      youtube: vibeVideoId // Use the video ID directly
     };
     
-    // Play the default song
+    // Play the Vibe of the Day video
     playNow(defaultSong);
   }, [playNow]);
 
