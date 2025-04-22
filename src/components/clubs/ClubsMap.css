@@ -1,0 +1,20 @@
+
+/* Fix for Leaflet marker icons */
+.leaflet-default-icon-path {
+  background-image: url(https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png);
+}
+
+.leaflet-default-shadow-path {
+  background-image: url(https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png);
+}
+
+/* Fix for popup width on mobile */
+.leaflet-popup-content {
+  min-width: 200px;
+}
+
+@media (min-width: 640px) {
+  .leaflet-popup-content {
+    min-width: 250px;
+  }
+}

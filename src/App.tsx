@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dance from "./pages/Dance";
 import DanceDetails from "./pages/DanceDetails";
+import Clubs from "./pages/Clubs";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 import { useState } from "react";
 
@@ -31,6 +32,8 @@ const App = () => {
               <Route path="/dance/:genre/:id" element={<DanceDetails />} />
               {/* Generic route for direct dance access */}
               <Route path="/dance/:id" element={<DanceDetails />} />
+              {/* New route for clubs */}
+              <Route path="/clubs" element={<Clubs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </GlobalAudioPlayerProvider>
