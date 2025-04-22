@@ -24,11 +24,11 @@ export function HeroSection() {
           Afrobeats DAO
         </h1>
         <p className="text-white text-xl md:text-2xl max-w-2xl mx-auto hero-subtitle">
-          Experience the best of African music and culture
+          Join the movement and jam to the best of African music and culture
         </p>
         <div className="space-x-4">
           <Button size="lg" className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90">
-            Explore Events
+            Join The Movement
           </Button>
           <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
             Discover Music

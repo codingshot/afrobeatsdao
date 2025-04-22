@@ -28,11 +28,17 @@ export function FlippableAlbum({ coverImage }: FlippableAlbumProps) {
       <HoverCardTrigger>
         <div 
           className="relative aspect-square max-w-md mx-auto cursor-pointer transition-transform duration-700 transform-style-3d"
-          style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)' }}
+          style={{ 
+            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0)',
+            transformStyle: 'preserve-3d' // Add this line
+          }}
           onClick={() => setIsFlipped(!isFlipped)}
         >
           {/* Front of card (Album Cover) */}
-          <div className="absolute inset-0 backface-hidden">
+          <div 
+            className="absolute inset-0 backface-hidden"
+            style={{ backfaceVisibility: 'hidden' }}
+          >
             <div className="absolute inset-2 border-4 border-dashed border-[#FFD600] rounded-2xl"></div>
             <img 
               alt="Afrobeats Album Cover" 
@@ -46,8 +52,11 @@ export function FlippableAlbum({ coverImage }: FlippableAlbumProps) {
 
           {/* Back of card (Tracklist) */}
           <div 
-            className="absolute inset-0 backface-hidden bg-[#1A1F2C] rounded-2xl shadow-2xl"
-            style={{ transform: 'rotateY(180deg)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+            className="absolute inset-0 bg-[#1A1F2C] rounded-2xl shadow-2xl"
+            style={{ 
+              transform: 'rotateY(180deg)', 
+              backfaceVisibility: 'hidden'
+            }}
           >
             <div className="p-6 h-full">
               <h3 className="text-2xl font-bold text-[#FFD600] mb-4">Tracklist</h3>

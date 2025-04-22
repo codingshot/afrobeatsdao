@@ -16,7 +16,10 @@ const Index = () => {
   // Only initialize player if no song is currently playing
   useEffect(() => {
     // Only initialize once and only if no song is currently playing
-    if (isPlayerInitialized || currentSong) return;
+    if (isPlayerInitialized || currentSong) {
+      setIsPlayerInitialized(true); // Mark as initialized if there's a current song
+      return;
+    }
     
     // Add a small delay to ensure the player is fully initialized
     const timer = setTimeout(() => {

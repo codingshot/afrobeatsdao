@@ -20,7 +20,14 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-/* ... keep existing code (3D transform styles) */
+/* 3D transform styles */
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
 
 /* Custom scrollbar styling */
 /* ... keep existing code (scrollbar styles) */
