@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { MapContainerProps } from 'react-leaflet';
@@ -5,7 +6,7 @@ import { Club, ClubFilters } from '@/types/club';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
-import { MapPin, ExternalLink } from 'lucide-react';
+import { MapPin, ExternalLink, Music, Clock, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -193,8 +194,8 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
             loop: true,
           }}
           className="w-full"
-          value={{ selectedIndex: activeCardIndex }}
-          onValueChange={(value: any) => setActiveCardIndex(value.selectedIndex)}
+          onSelect={(index) => setActiveCardIndex(index)}
+          defaultIndex={activeCardIndex}
         >
           <CarouselContent>
             {clubs.map((club, index) => (
