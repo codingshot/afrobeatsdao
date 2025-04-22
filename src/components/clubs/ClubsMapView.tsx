@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { MapContainerProps } from 'react-leaflet';
@@ -206,7 +207,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
           }}
           className="w-full"
           defaultIndex={activeCardIndex}
-          onSelect={(index: number) => setActiveCardIndex(index)}
+          // Fix: Remove onSelect prop as it's not compatible with how we're using it
         >
           <CarouselContent>
             {clubs.map((club, index) => (
