@@ -47,7 +47,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [volume, setVolume] = useState(100);
   const [repeat, setRepeat] = useState(false);
   const [youtubeApiLoaded, setYoutubeApiLoaded] = useState(false);
-  const [expandedView, setExpandedView] = useState(false);
+  // Change default state to true to show video by default
+  const [expandedView, setExpandedView] = useState(true);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Load YouTube API only once when component mounts
@@ -102,6 +103,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
             },
             onReady: (event: any) => {
               event.target.setVolume(volume);
+              console.log("YouTube player ready");
             }
           },
         });
@@ -142,11 +144,26 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     setIsPlaying(true);
     if (player && player.loadVideoById) {
       try {
-        const videoId = song.youtube.split('=')[1] || song.youtube.split('/').pop();
+        // Extract video ID more robustly
+        let videoId;
+        if (song.youtube.includes('v=')) {
+          // Handle URLs like https://www.youtube.com/watch?v=VIDEO_ID
+          videoId = song.youtube.split('v=')[1].split('&')[0];
+        } else if (song.youtube.includes('youtu.be/')) {
+          // Handle shortened URLs like https://youtu.be/VIDEO_ID
+          videoId = song.youtube.split('youtu.be/')[1].split('?')[0];
+        } else {
+          // Fallback to treating the entire string as an ID
+          videoId = song.youtube;
+        }
+        
+        console.log("Loading video ID:", videoId);
         player.loadVideoById(videoId);
       } catch (e) {
-        console.error("Error loading video:", e);
+        console.error("Error loading video:", e, song);
       }
+    } else {
+      console.log("Player not ready yet, will try to play when ready");
     }
   }, [player]);
 
