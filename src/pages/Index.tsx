@@ -8,26 +8,42 @@ import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Index = () => {
   const { playNow } = useGlobalAudioPlayer();
+  const [isPlayerInitialized, setIsPlayerInitialized] = useState(false);
 
   // Set the current Vibe of the Day video to play when the component mounts
   useEffect(() => {
-    // Get a random Vibe of the Day video to use as the default song
-    const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
-    const vibeVideoId = VIBE_VIDEOS[randomIndex];
+    // Only initialize once
+    if (isPlayerInitialized) return;
     
-    // Create a song object from the Vibe of the Day
-    const defaultSong = {
-      id: `vibe-${vibeVideoId}`,
-      youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
-    };
+    // Add a small delay to ensure the player is fully initialized
+    const timer = setTimeout(() => {
+      try {
+        // Get a random Vibe of the Day video to use as the default song
+        const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
+        const vibeVideoId = VIBE_VIDEOS[randomIndex];
+        
+        console.log("Initializing player with video ID:", vibeVideoId);
+        
+        // Create a song object from the Vibe of the Day
+        const defaultSong = {
+          id: `vibe-${vibeVideoId}`,
+          youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
+        };
+        
+        // Play the Vibe of the Day video
+        playNow(defaultSong);
+        setIsPlayerInitialized(true);
+      } catch (error) {
+        console.error("Error initializing player:", error);
+      }
+    }, 1000); // 1 second delay to ensure player is ready
     
-    // Play the Vibe of the Day video
-    playNow(defaultSong);
-  }, [playNow]);
+    return () => clearTimeout(timer);
+  }, [playNow, isPlayerInitialized]);
 
   return (
     <div className="min-h-screen font-sans pb-[100px]"> {/* Add padding to prevent overlap */}

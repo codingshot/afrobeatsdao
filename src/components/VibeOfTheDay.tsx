@@ -28,11 +28,17 @@ export function VibeOfTheDay() {
   };
 
   const playInGlobalPlayer = () => {
-    const videoId = VIBE_VIDEOS[currentVideoIndex];
-    playNow({
-      id: `vibe-${videoId}`,
-      youtube: videoId
-    });
+    try {
+      const videoId = VIBE_VIDEOS[currentVideoIndex];
+      console.log("VibeOfTheDay: Playing video in global player:", videoId);
+      
+      playNow({
+        id: `vibe-${videoId}`,
+        youtube: videoId
+      });
+    } catch (error) {
+      console.error("Error playing vibe in global player:", error);
+    }
   };
 
   return (
