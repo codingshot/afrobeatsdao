@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2 
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize
 } from "lucide-react";
 
 // Add type declarations for the YouTube IFrame API
@@ -47,6 +47,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [volume, setVolume] = useState(100);
   const [repeat, setRepeat] = useState(false);
   const [youtubeApiLoaded, setYoutubeApiLoaded] = useState(false);
+  const [expandedView, setExpandedView] = useState(false);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Load YouTube API only once when component mounts
@@ -80,8 +81,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
 
       try {
         const newPlayer = new window.YT.Player('youtube-player', {
-          height: '0',
-          width: '0',
+          height: expandedView ? '240' : '0',
+          width: expandedView ? '426' : '0',
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
@@ -120,7 +121,21 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         }
       }
     };
-  }, [youtubeApiLoaded]);
+  }, [youtubeApiLoaded, expandedView]);
+
+  // Update player size when expandedView changes
+  useEffect(() => {
+    if (player && player.setSize) {
+      try {
+        player.setSize(
+          expandedView ? 426 : 0,
+          expandedView ? 240 : 0
+        );
+      } catch (e) {
+        console.error("Error resizing player:", e);
+      }
+    }
+  }, [expandedView, player]);
 
   const playNow = useCallback((song: Song) => {
     setCurrentSong(song);
@@ -201,6 +216,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     });
   }, []);
 
+  const toggleExpandedView = useCallback(() => {
+    setExpandedView(prev => !prev);
+  }, []);
+
   return (
     <GlobalAudioPlayerContext.Provider
       value={{
@@ -219,7 +238,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       }}
     >
       {children}
-      <div ref={playerContainerRef} className="hidden">
+      <div 
+        ref={playerContainerRef} 
+        className={`${expandedView ? 'block' : 'hidden'} fixed bottom-[80px] right-4 z-50 bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl`}
+      >
         <div id="youtube-player"></div>
       </div>
       {currentSong && (
@@ -293,6 +315,16 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                   className="cursor-pointer"
                 />
               </div>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleExpandedView}
+                className="text-white hover:bg-white/10"
+                title={expandedView ? "Collapse video" : "Show video"}
+              >
+                {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
         </div>
