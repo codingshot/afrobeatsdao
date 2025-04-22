@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "react-router-dom";
 import {
   NavigationMenu,
@@ -78,7 +79,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               className="w-48 pl-8 h-9 bg-white/90 border-0 focus-visible:ring-1 focus-visible:ring-[#008751]"
             />
-            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2 h-4 w-4 text-black" />
           </form>
 
           <NavigationMenu>
@@ -87,7 +88,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/dance">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/dance") &&
                         "bg-black/10 text-black"
                     )}
@@ -102,7 +103,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/events">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/events") &&
                         "bg-black/10 text-black"
                     )}
@@ -117,7 +118,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                 <Link to="/clubs">
                   <NavigationMenuLink
                     className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 text-black hover:text-black",
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
                       location.pathname.startsWith("/clubs") &&
                         "bg-black/10 text-black"
                     )}
@@ -138,7 +139,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                     <li>
                       <Link to="/#vibe">
                         <NavigationMenuLink
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
                         >
                           Vibe of the Day
                         </NavigationMenuLink>
@@ -147,7 +148,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                     <li>
                       <Link to="/#music">
                         <NavigationMenuLink
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
                         >
                           Albums
                         </NavigationMenuLink>
@@ -156,7 +157,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                     <li>
                       <Link to="/music">
                         <NavigationMenuLink
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
                         >
                           Playlists
                         </NavigationMenuLink>
@@ -178,7 +179,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               className="w-28 pl-7 h-8 text-xs bg-white/90 border-0"
             />
-            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
+            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-black" />
           </form>
           
           <Link to="/dance" className="px-2 py-1 text-sm font-medium text-black">
@@ -191,3 +192,4 @@ const MainNavbar = ({ className }: { className?: string }) => {
 };
 
 export default MainNavbar;
+

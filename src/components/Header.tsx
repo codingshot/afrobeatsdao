@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { 
@@ -81,8 +82,8 @@ export function Header() {
                   <Link to="/">
                     <NavigationMenuLink
                       className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/") && "bg-black/20"
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                        isRouteActive("/") && "bg-black/10"
                       )}
                     >
                       <Home className="mr-2 h-4 w-4" />
@@ -95,8 +96,8 @@ export function Header() {
                   <Link to="/dance">
                     <NavigationMenuLink
                       className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/dance") && "bg-black/20"
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                        isRouteActive("/dance") && "bg-black/10"
                       )}
                     >
                       <Disc3 className="mr-2 h-4 w-4" />
@@ -109,8 +110,8 @@ export function Header() {
                   <Link to="/clubs">
                     <NavigationMenuLink
                       className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/clubs") && "bg-black/20"
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                        isRouteActive("/clubs") && "bg-black/10"
                       )}
                     >
                       <Users className="mr-2 h-4 w-4" />
@@ -123,8 +124,8 @@ export function Header() {
                   <Link to="/events">
                     <NavigationMenuLink
                       className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/events") && "bg-black/20"
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                        isRouteActive("/events") && "bg-black/10"
                       )}
                     >
                       <Calendar className="mr-2 h-4 w-4" />
@@ -137,8 +138,8 @@ export function Header() {
                   <Link to="/music">
                     <NavigationMenuLink
                       className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50 hover:text-accent-foreground",
-                        isRouteActive("/music") && "bg-black/20"
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                        isRouteActive("/music") && "bg-black/10"
                       )}
                     >
                       <Music className="mr-2 h-4 w-4" />
@@ -229,7 +230,7 @@ export function Header() {
                   <Link 
                     to="/"
                     className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
+                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
                       isRouteActive("/") && "bg-black/20"
                     )}
                   >
@@ -239,7 +240,7 @@ export function Header() {
                   <Link 
                     to="/dance"
                     className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
+                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
                       isRouteActive("/dance") && "bg-black/20"
                     )}
                   >
@@ -249,7 +250,7 @@ export function Header() {
                   <Link 
                     to="/clubs"
                     className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
+                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
                       isRouteActive("/clubs") && "bg-black/20"
                     )}
                   >
@@ -259,7 +260,7 @@ export function Header() {
                   <Link 
                     to="/events"
                     className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
+                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
                       isRouteActive("/events") && "bg-black/20"
                     )}
                   >
@@ -269,7 +270,7 @@ export function Header() {
                   <Link 
                     to="/music"
                     className={cn(
-                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20",
+                      "flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black",
                       isRouteActive("/music") && "bg-black/20"
                     )}
                   >
@@ -285,3 +286,4 @@ export function Header() {
     </>
   );
 }
+
