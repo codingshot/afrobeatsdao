@@ -28,7 +28,7 @@ const App = () => {
               <Header />
               <Toaster />
               <Sonner />
-              <main className="pt-16"> {/* Add padding-top to prevent header overlap */}
+              <main> {/* Removed pt-16 class to eliminate top padding */}
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/dance" element={<Dance />} />

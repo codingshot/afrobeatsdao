@@ -1,4 +1,3 @@
-
 /* This file intentionally left mostly blank as we're using Tailwind for styling */
 #root {
   max-width: 100%;
@@ -53,7 +52,7 @@ iframe,
 
 /* Add padding to main content to prevent header overlap */
 main {
-  padding-top: 64px;
+  padding-top: 0;
 }
 
 /* Ensure h1 headings are black */
