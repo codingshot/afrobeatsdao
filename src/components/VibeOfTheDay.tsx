@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Shuffle, Play } from "lucide-react";
@@ -38,15 +37,11 @@ export function VibeOfTheDay() {
             <span className="text-4xl">🎵</span>
           </h2>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            Daily dose of Afrobeats magic. Refresh your spirit!
+            Daily dose of Afrobeats magic. Refresh your spirit! Use the player controls below to toggle video view.
           </p>
         </div>
         
         <div className="max-w-4xl mx-auto">
-          <div className="relative pt-[56.25%] bg-black rounded-2xl overflow-hidden shadow-xl mb-6">
-            <iframe className="absolute top-0 left-0 w-full h-full" src={`https://www.youtube.com/embed/${VIBE_VIDEOS[currentVideoIndex]}`} title="Vibe of the Day" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-          </div>
-          
           <div className="flex flex-wrap gap-4 justify-center">
             <Button onClick={shuffleVideo} className="bg-[#E63946] hover:bg-red-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-3">
               <Shuffle className="w-6 h-6" />

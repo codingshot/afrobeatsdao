@@ -56,7 +56,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [channelTitle, setChannelTitle] = useState<string>("Loading...");
   const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
   const isMobile = useIsMobile();
-  const [videoVisible, setVideoVisible] = useState(!isMobile);
+  const [videoVisible, setVideoVisible] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -108,6 +108,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         const newPlayer = new window.YT.Player('youtube-player', {
           height: '240',
           width: '426',
+          playerVars: {
+            playsinline: 1,
+            controls: 1,
+          },
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
