@@ -39,6 +39,23 @@ const MarkdownPreviewDialog = ({
     }
   };
 
+  // Process the markdown to make links clickable in the preview
+  const processMarkdown = (content: string) => {
+    // Convert markdown links to HTML links for the preview
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const processedContent = content.replace(linkRegex, (match, text, url) => {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">${text}</a>`;
+    });
+    
+    // Convert markdown headers to styled text
+    const headerRegex = /^(#{1,6})\s+(.+)$/gm;
+    return processedContent.replace(headerRegex, (match, hashes, text) => {
+      const level = hashes.length;
+      const fontSize = 6 - level + 1; // h1 is largest, h6 is smallest
+      return `<div class="font-bold text-${fontSize}xl my-2">${text}</div>`;
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl bg-white text-black">
@@ -50,17 +67,18 @@ const MarkdownPreviewDialog = ({
         </DialogHeader>
 
         <ScrollArea className="h-[400px] w-full rounded-md border p-4 my-4 bg-white text-black">
-          <pre className="whitespace-pre-wrap font-mono text-sm text-black">
-            {markdownContent}
-          </pre>
+          <div 
+            className="whitespace-pre-wrap font-mono text-sm text-black"
+            dangerouslySetInnerHTML={{ __html: processMarkdown(markdownContent) }}
+          />
         </ScrollArea>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={handleCopyToClipboard}>
+          <Button variant="outline" onClick={handleCopyToClipboard} className="text-black border-black">
             <Copy className="h-4 w-4 mr-2" />
             Copy to Clipboard
           </Button>
-          <Button onClick={handleDownload}>
+          <Button onClick={handleDownload} className="bg-black text-white">
             <Download className="h-4 w-4 mr-2" />
             Download
           </Button>

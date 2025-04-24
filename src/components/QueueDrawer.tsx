@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -143,10 +144,12 @@ const QueueDrawer = ({
           ) : (
             <>
               <div className="flex items-center justify-between mb-4">
-                <TabsList className="grid grid-cols-2 w-[200px]">
-                  <TabsTrigger value="queue">Queue</TabsTrigger>
-                  <TabsTrigger value="history">History</TabsTrigger>
-                </TabsList>
+                <Tabs value={activeTab} onValueChange={(value: string) => setActiveTab(value as TabType)}>
+                  <TabsList className="grid grid-cols-2 w-[200px]">
+                    <TabsTrigger value="queue">Queue</TabsTrigger>
+                    <TabsTrigger value="history">History</TabsTrigger>
+                  </TabsList>
+                </Tabs>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -156,92 +159,166 @@ const QueueDrawer = ({
                   <Minimize className="h-4 w-4" />
                 </Button>
               </div>
-              <ScrollArea className="h-[500px] pr-4">
-                {filteredQueue.length > 0 ? (
-                  <DragDropContext onDragEnd={handleDragEnd}>
-                    <Droppable droppableId="queue-drawer-droppable">
-                      {(provided) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          className="space-y-3"
-                        >
-                          {filteredQueue.map((song, index) => {
-                            const videoId = getVideoIdFromUrl(song.youtube);
-                            return (
-                              <Draggable 
-                                key={`queue-item-${song.id}`} 
-                                draggableId={`queue-item-${song.id}`} 
-                                index={index}
-                              >
-                                {(provided) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10 group"
+              
+              <Tabs value={activeTab} onValueChange={(value: string) => setActiveTab(value as TabType)}>
+                <TabsContent value="queue" className="mt-2">
+                  <ScrollArea className="h-[500px] pr-4">
+                    {filteredQueue.length > 0 ? (
+                      <DragDropContext onDragEnd={handleDragEnd}>
+                        <Droppable droppableId="queue-drawer-droppable">
+                          {(provided) => (
+                            <div
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                              className="space-y-3"
+                            >
+                              {filteredQueue.map((song, index) => {
+                                const videoId = getVideoIdFromUrl(song.youtube);
+                                return (
+                                  <Draggable 
+                                    key={`queue-drawer-item-${song.id}`} 
+                                    draggableId={`queue-drawer-item-${song.id}`} 
+                                    index={index}
                                   >
-                                    <div 
-                                      {...provided.dragHandleProps}
-                                      className="text-gray-400 hover:text-gray-600 cursor-grab"
-                                    >
-                                      <MoveVertical className="h-4 w-4" />
-                                    </div>
-                                    
-                                    <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">
-                                      <img 
-                                        src={getVideoThumbnail(videoId)}
-                                        alt={song.title || "Video thumbnail"}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                          e.currentTarget.src = "/AfrobeatsDAOMeta.png";
-                                        }}
-                                      />
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 text-white"
-                                        onClick={() => playNow(song)}
+                                    {(provided) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10 group"
                                       >
-                                        <Play className="h-4 w-4" />
-                                      </Button>
-                                    </div>
-                                    
-                                    <div className="flex-1 min-w-0">
-                                      <h4 className="font-medium text-sm truncate text-black">
-                                        {song.title || "Unknown Title"}
-                                      </h4>
-                                      <p className="text-xs text-muted-foreground truncate">
-                                        {song.artist || "Unknown Artist"}
-                                      </p>
-                                    </div>
-                                    
-                                    {playedSongs.has(song.id) && (
-                                      <Badge variant="outline" className="ml-auto">
-                                        Played
-                                      </Badge>
+                                        <div 
+                                          {...provided.dragHandleProps}
+                                          className="text-gray-400 hover:text-gray-600 cursor-grab"
+                                        >
+                                          <MoveVertical className="h-4 w-4" />
+                                        </div>
+                                        
+                                        <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">
+                                          <img 
+                                            src={getVideoThumbnail(videoId)}
+                                            alt={song.title || "Video thumbnail"}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                              e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+                                            }}
+                                          />
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 text-white"
+                                            onClick={() => playNow(song)}
+                                          >
+                                            <Play className="h-4 w-4" />
+                                          </Button>
+                                        </div>
+                                        
+                                        <div className="flex-1 min-w-0">
+                                          <h4 className="font-medium text-sm truncate text-black">
+                                            {song.title || "Title of video"}
+                                          </h4>
+                                          <p className="text-xs text-muted-foreground truncate">
+                                            {song.artist || "Unknown Artist"}
+                                          </p>
+                                        </div>
+                                        
+                                        {playedSongs.has(song.id) && (
+                                          <Badge variant="outline" className="ml-auto">
+                                            Played
+                                          </Badge>
+                                        )}
+                                      </div>
                                     )}
-                                  </div>
-                                )}
-                              </Draggable>
-                            );
-                          })}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <ListMusic className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>Your queue is empty</p>
-                    <p className="text-sm mt-2">Add songs from playlists</p>
-                  </div>
-                )}
-              </ScrollArea>
+                                  </Draggable>
+                                );
+                              })}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <ListMusic className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <p>Your queue is empty</p>
+                        <p className="text-sm mt-2">Add songs from playlists</p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
+                
+                <TabsContent value="history" className="mt-2">
+                  <ScrollArea className="h-[500px] pr-4">
+                    {playedSongsList.length > 0 ? (
+                      <div className="space-y-3">
+                        {playedSongsList.map((song, index) => {
+                          const videoId = getVideoIdFromUrl(song.youtube);
+                          return (
+                            <div 
+                              key={`history-item-${song.id}`}
+                              className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10 group"
+                            >
+                              <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">
+                                <img 
+                                  src={getVideoThumbnail(videoId)}
+                                  alt={song.title || "Video thumbnail"}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+                                  }}
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 text-white"
+                                  onClick={() => playNow(song)}
+                                >
+                                  <Play className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-sm truncate text-black">
+                                  {song.title || "Title of video"}
+                                </h4>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  {song.artist || "Unknown Artist"}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <ListMusic className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <p>No play history yet</p>
+                        <p className="text-sm mt-2">Songs will appear here after playing</p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
+              
+              <Button 
+                variant="outline" 
+                className="w-full mt-4 flex items-center gap-2"
+                onClick={handleExportClick}
+              >
+                <Download className="h-4 w-4" />
+                {activeTab === "queue" ? "Export Queue" : "Export History"}
+              </Button>
             </>
           )}
         </CardContent>
       </Card>
+      
+      <MarkdownPreviewDialog
+        open={markdownDialogOpen}
+        onOpenChange={setMarkdownDialogOpen}
+        markdownContent={markdownContent}
+        handleDownload={handleDownload}
+        title={activeTab === "queue" ? "Export Queue" : "Export Play History"}
+      />
     </div>
   );
 };
