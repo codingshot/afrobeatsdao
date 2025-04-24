@@ -114,7 +114,7 @@ const DancePage = () => {
 
   const filteredDances = filterDances();
   const genreCount = filteredDances.length;
-  const metaDescription = `Learn ${genreCount} authentic ${selectedGenre === "all" ? "African" : selectedGenre} dances from beginner to advanced levels. Master popular moves and more!`;
+  const metaDescription = `Learn ${genreCount} authentic ${selectedGenre === "all" ? "African" : selectedGenre} dances from beginner to advanced levels. Interactive tutorials, cultural context, and music recommendations included.`;
 
   const clearFilters = () => {
     setSelectedCountry("all");  // Changed from "" to "all"
@@ -124,12 +124,13 @@ const DancePage = () => {
   return (
     <>
       <Helmet>
-        <title>African Dance Curriculum - Learn {selectedGenre === "all" ? "African" : selectedGenre.charAt(0).toUpperCase() + selectedGenre.slice(1)} Dances</title>
+        <title>African Dance Curriculum - Learn {selectedGenre === "all" ? "African" : selectedGenre} Dances</title>
         <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={`Learn ${selectedGenre === "all" ? "African" : selectedGenre} Dance - African Dance Curriculum`} />
+        <meta property="og:title" content={`Learn ${selectedGenre === "all" ? "African" : selectedGenre} Dance - Interactive Tutorials`} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content={`african dance, ${selectedGenre}, dance tutorial, dance curriculum`} />
+        <meta name="keywords" content={`african dance, ${selectedGenre}, dance tutorial, dance curriculum, ${difficulties.join(', ')} level`} />
+        <link rel="canonical" href={window.location.href} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -143,6 +144,11 @@ const DancePage = () => {
             },
             "coursePrerequisites": "No prior dance experience required",
             "numberOfLessons": genreCount,
+            "educationalLevel": difficulties.join(', '),
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online"
+            }
           })}
         </script>
       </Helmet>
