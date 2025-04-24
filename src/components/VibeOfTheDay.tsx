@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Shuffle, Play } from "lucide-react";
@@ -24,8 +23,7 @@ export function VibeOfTheDay() {
       console.log("VibeOfTheDay: Playing video in global player:", videoId);
       playNow({
         id: `vibe-${videoId}`,
-        youtube: videoId,
-        title: "Vibe of the Day" // Add required title property
+        youtube: videoId
       });
     } catch (error) {
       console.error("Error playing vibe in global player:", error);

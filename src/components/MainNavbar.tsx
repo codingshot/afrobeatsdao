@@ -1,116 +1,195 @@
 
-import { useEffect, useState } from 'react';
-import { Link, useMatch, useLocation } from 'react-router-dom';
-import { Menu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
-import { useDanceProgress } from '@/hooks/use-dance-progress';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Link, useLocation } from "react-router-dom";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { Music, Users, Calendar, Play, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
 
-// Define the navigation links
-const links = [
-  { href: '/music', label: 'Music' },
-  { href: '/dance', label: 'Dance' },
-  { href: '/clubs', label: 'Clubs' },
-  { href: '/events', label: 'Events' }
-];
-
-export function MainNavbar() {
-  const isMobile = useIsMobile();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const { getTotalProgress } = useDanceProgress();
-  const danceMatch = useMatch("/dance/*");
+const MainNavbar = ({ className }: { className?: string }) => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
-  const progressData = danceMatch ? getTotalProgress() : { total: 0, started: 0, completed: 0 };
-  const progress = danceMatch ? ((progressData.completed / progressData.total) * 100) || 0 : 0;
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const onIndexPage = location.pathname === "/";
 
   useEffect(() => {
-    const handleScroll = () => {
-      const heroHeight = isHomePage ? window.innerHeight : 0;
-      setIsScrolled(window.scrollY > (isHomePage ? heroHeight - 100 : 10));
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isHomePage]);
+    if (!onIndexPage) {
+      setIsScrolled(true);
+      return;
+    }
 
-  if (isHomePage && !isScrolled) return null;
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [onIndexPage]);
+
+  if (onIndexPage && !isScrolled) {
+    return null;
+  }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (location.pathname.includes('/clubs')) {
+      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
+    } else if (location.pathname.includes('/dance')) {
+      window.location.href = `/dance?search=${encodeURIComponent(searchValue)}`;
+    } else if (location.pathname.includes('/events')) {
+      window.location.href = `/events?search=${encodeURIComponent(searchValue)}`;
+    } else {
+      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
+    }
+  };
 
   return (
-    <header
+    <div
       className={cn(
-        'fixed top-0 left-0 right-0 z-40 transition-all duration-200 py-2',
-        isScrolled ? 'bg-[#FFD600]/90 backdrop-blur-lg shadow-md' : 'bg-transparent'
+        "fixed top-0 w-full z-40 bg-[#FFD600] shadow-md transition-all duration-300 py-3",
+        className
       )}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img
-              src="/afrobeatsdaologo.png"
-              alt="Afrobeats DAO"
-              className="h-12 mr-2"
+      <div className="container mx-auto flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png"
+            alt="Afrobeats Logo"
+            className="h-10 w-auto"
+          />
+        </Link>
+
+        <div className="hidden md:flex items-center space-x-4">
+          <form onSubmit={handleSearch} className="relative flex items-center">
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              className="w-48 pl-8 h-9 bg-white border-0 focus-visible:ring-1 focus-visible:ring-[#008751] text-black"
             />
-            <span className="text-black font-heading font-bold text-xl hidden sm:block">
-              Afrobeats DAO
-            </span>
+            <Search className="absolute left-2 h-4 w-4 text-black" />
+          </form>
+
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/dance">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                      location.pathname.startsWith("/dance") &&
+                        "bg-black/10 text-black"
+                    )}
+                  >
+                    <Play className="mr-2 h-4 w-4" />
+                    Dance
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/events">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                      location.pathname.startsWith("/events") &&
+                        "bg-black/10 text-black"
+                    )}
+                  >
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Events
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/clubs">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                      location.pathname.startsWith("/clubs") &&
+                        "bg-black/10 text-black"
+                    )}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Clubs
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="group inline-flex h-10 w-max items-center justify-center px-4 py-2 text-sm font-medium text-black">
+                  <Music className="mr-2 h-4 w-4" />
+                  Music
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[200px] gap-2 p-2 z-50 bg-white shadow-lg border border-gray-200">
+                    <li>
+                      <Link to="/#vibe">
+                        <NavigationMenuLink
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
+                        >
+                          Vibe of the Day
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/#music">
+                        <NavigationMenuLink
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
+                        >
+                          Albums
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/music">
+                        <NavigationMenuLink
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-black/10 text-black hover:text-black"
+                        >
+                          Playlists
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        <div className="md:hidden flex items-center">
+          <form onSubmit={handleSearch} className="relative mr-2">
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              className="w-28 pl-7 h-8 text-xs bg-white/90 border-0"
+            />
+            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-black" />
+          </form>
+          
+          <Link to="/dance" className="px-2 py-1 text-sm font-medium text-black">
+            Dance
           </Link>
-
-          {/* Mobile: Progress indicator and menu button */}
-          <div className="flex items-center gap-4 sm:hidden">
-            {danceMatch && progress > 0 && (
-              <div className="flex items-center">
-                <div className="bg-afro-yellow h-2 rounded-full overflow-hidden w-24">
-                  <div
-                    className="bg-[#008751] h-full rounded-full"
-                    style={{ width: `${progress}%` }}
-                  ></div>
-                </div>
-                <span className="text-white text-xs ml-2">
-                  {Math.round(progress)}%
-                </span>
-              </div>
-            )}
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-black">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="bg-black text-white">
-                <nav className="flex flex-col gap-4 mt-8">
-                  {links.map((link) => (
-                    <Link
-                      key={link.href}
-                      to={link.href}
-                      className="text-xl font-heading font-bold py-2 hover:text-afro-yellow transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          {/* Desktop navigation */}
-          <nav className="hidden sm:flex items-center space-x-6">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="text-black hover:text-afro-yellow font-medium transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
       </div>
-    </header>
+    </div>
   );
-}
+};
+
+export default MainNavbar;
+
