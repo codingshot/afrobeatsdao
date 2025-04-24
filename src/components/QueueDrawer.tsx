@@ -5,9 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Filter, Play, ListMusic, MoveVertical } from 'lucide-react';
+import { Filter, Play, ListMusic, MoveVertical, Download } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 interface QueueDrawerProps {
   queue: Song[];
@@ -29,6 +30,7 @@ const QueueDrawer = ({
   setShowPlayedSongs
 }: QueueDrawerProps) => {
   const [activeTab, setActiveTab] = useState<string>("queue");
+  const { toast } = useToast();
   
   const getVideoThumbnail = (videoId: string) => {
     return `https://img.youtube.com/vi/${videoId}/default.jpg`;
@@ -50,6 +52,52 @@ const QueueDrawer = ({
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
     reorderQueue(result.source.index, result.destination.index);
+  };
+
+  const exportQueueAsMarkdown = () => {
+    let markdownContent = "# Afrobeats Music Queue\n\n";
+    
+    if (activeTab === "queue") {
+      markdownContent += "## Current Queue\n\n";
+      if (filteredQueue.length === 0) {
+        markdownContent += "*Queue is empty*\n\n";
+      } else {
+        filteredQueue.forEach((song, index) => {
+          markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+          markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+          markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+        });
+      }
+    } else {
+      markdownContent += "## Play History\n\n";
+      if (playedSongsList.length === 0) {
+        markdownContent += "*No play history*\n\n";
+      } else {
+        playedSongsList.forEach((song, index) => {
+          markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+          markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+          markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+        });
+      }
+    }
+    
+    markdownContent += "---\n";
+    markdownContent += `Exported on ${new Date().toLocaleString()}\n`;
+    
+    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = activeTab === "queue" ? "afrobeats-queue.md" : "afrobeats-history.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Export successful",
+      description: activeTab === "queue" ? "Queue exported as markdown file" : "Play history exported as markdown file"
+    });
   };
 
   if (!isVisible) return null;
@@ -90,7 +138,7 @@ const QueueDrawer = ({
               <ScrollArea className="h-[500px] pr-4">
                 {filteredQueue.length > 0 ? (
                   <DragDropContext onDragEnd={handleDragEnd}>
-                    <Droppable droppableId="droppable-queue">
+                    <Droppable droppableId="droppable-queue-drawer">
                       {(provided) => (
                         <div
                           {...provided.droppableProps}
@@ -101,8 +149,8 @@ const QueueDrawer = ({
                             const videoId = getVideoIdFromUrl(song.youtube);
                             return (
                               <Draggable 
-                                key={`${song.id}-${index}`} 
-                                draggableId={`${song.id}-${index}`} 
+                                key={`queue-drawer-${song.id}-${index}`} 
+                                draggableId={`queue-drawer-${song.id}-${index}`} 
                                 index={index}
                               >
                                 {(provided) => (
@@ -227,6 +275,15 @@ const QueueDrawer = ({
               </ScrollArea>
             </TabsContent>
           </Tabs>
+          
+          <Button 
+            variant="outline" 
+            className="w-full mt-4 flex items-center gap-2 bg-white text-black"
+            onClick={exportQueueAsMarkdown}
+          >
+            <Download className="h-4 w-4" />
+            Export {activeTab === "queue" ? "Queue" : "History"} as Markdown
+          </Button>
         </CardContent>
       </Card>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, ExternalLink, Music2, Headphones, Youtube, Search, Filter, List, ArrowUp, ArrowDown, Shuffle } from "lucide-react";
+import { Play, ExternalLink, Music2, Headphones, Youtube, Search, Filter, List, ArrowUp, ArrowDown, Shuffle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { Input } from "@/components/ui/input";
@@ -208,10 +208,52 @@ const Playlists = () => {
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
-    const items = Array.from(queue);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
     reorderQueue(result.source.index, result.destination.index);
+  };
+
+  const exportQueueAsMarkdown = () => {
+    let markdownContent = "# Afrobeats Music Queue\n\n";
+    
+    markdownContent += "## Current Queue\n\n";
+    if (filteredQueue.length === 0) {
+      markdownContent += "*Queue is empty*\n\n";
+    } else {
+      filteredQueue.forEach((song, index) => {
+        markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+        markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+        markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+      });
+    }
+    
+    markdownContent += "## Play History\n\n";
+    if (playedSongs.size === 0) {
+      markdownContent += "*No play history*\n\n";
+    } else {
+      Array.from(playedSongs).forEach((id, index) => {
+        const song = queue.find(s => s.id === id) || { id, youtube: id.replace('vibe-', ''), title: 'Previously played song', artist: '' };
+        markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+        markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+        markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+      });
+    }
+    
+    markdownContent += "---\n";
+    markdownContent += `Exported on ${new Date().toLocaleString()}\n`;
+    
+    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "afrobeats-music-collection.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Export successful",
+      description: "Music collection exported as markdown file"
+    });
   };
 
   const filteredQueue = queue.filter(song => !showPlayedSongs || !playedSongs.has(song.id));
@@ -435,7 +477,11 @@ const Playlists = () => {
                                 {filteredQueue.map((song, index) => {
                                   const videoId = getVideoIdFromUrl(song.youtube);
                                   return (
-                                    <Draggable key={`${song.id}-${index}`} draggableId={`${song.id}-${index}`} index={index}>
+                                    <Draggable 
+                                      key={`playlist-${song.id}-${index}`} 
+                                      draggableId={`playlist-${song.id}-${index}`} 
+                                      index={index}
+                                    >
                                       {provided => (
                                         <div 
                                           ref={provided.innerRef} 
@@ -497,6 +543,15 @@ const Playlists = () => {
                         </div>
                       )}
                     </ScrollArea>
+                    
+                    <Button 
+                      variant="outline" 
+                      className="w-full mt-4 flex items-center gap-2 bg-white text-black"
+                      onClick={exportQueueAsMarkdown}
+                    >
+                      <Download className="h-4 w-4" />
+                      Export Music Collection
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>

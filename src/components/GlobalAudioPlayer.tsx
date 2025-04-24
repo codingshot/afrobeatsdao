@@ -6,18 +6,22 @@ import QueueDrawer from "./QueueDrawer";
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, List, ListCollapse } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useToast } from "@/hooks/use-toast";
+
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
     YT: any;
   }
 }
+
 export interface Song {
   id: string;
   youtube: string;
   title?: string;
   artist?: string;
 }
+
 interface GlobalAudioPlayerContextType {
   currentSong: Song | null;
   queue: Song[];
@@ -35,7 +39,9 @@ interface GlobalAudioPlayerContextType {
   currentTime: number;
   isDragging: boolean;
 }
+
 const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | null>(null);
+
 export const GlobalAudioPlayerProvider = ({
   children
 }: {
@@ -63,10 +69,13 @@ export const GlobalAudioPlayerProvider = ({
   const [queueVisible, setQueueVisible] = useState(false);
   const [showPlayedSongs, setShowPlayedSongs] = useState(false);
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
+  const { toast } = useToast();
+
   const toggleQueueVisibility = useCallback(() => {
     console.log("Toggling queue visibility, current state:", queueVisible);
     setQueueVisible(prev => !prev);
   }, [queueVisible]);
+
   useEffect(() => {
     if (youtubeApiLoaded && player && !currentSong) {
       const defaultVideo = getRandomVibeVideo();
@@ -76,11 +85,13 @@ export const GlobalAudioPlayerProvider = ({
       });
     }
   }, [youtubeApiLoaded, player, currentSong]);
+
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
     const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
     const randomIndex = Math.floor(Math.random() * availableVideos.length);
     return availableVideos[randomIndex];
   }, []);
+
   useEffect(() => {
     if (!window.YT && !document.getElementById('youtube-iframe-api')) {
       const tag = document.createElement('script');
@@ -95,6 +106,7 @@ export const GlobalAudioPlayerProvider = ({
       setYoutubeApiLoaded(true);
     }
   }, []);
+
   useEffect(() => {
     if (youtubeApiLoaded && playerContainerRef.current) {
       if (player) {
@@ -140,13 +152,25 @@ export const GlobalAudioPlayerProvider = ({
             onError: (event: any) => {
               console.error("YouTube player error:", event);
               setIsLoading(false);
-              if (previousVideoData) {
+              
+              if (currentSong) {
+                const errorSong = {...currentSong};
+                toast({
+                  title: "Error playing song",
+                  description: "This song couldn't be played. Adding to end of queue and moving to next."
+                });
+                
+                setQueue(prevQueue => [...prevQueue, errorSong]);
+                
+                nextSong();
+              } else if (previousVideoData) {
                 console.log("Error playing video, reverting to previous video");
                 setCurrentSong(previousVideoData);
                 event.target.loadVideoById(previousVideoData.youtube);
+              } else {
+                setVideoTitle("Error loading video");
+                setChannelTitle("Unknown");
               }
-              setVideoTitle("Error loading video");
-              setChannelTitle("Unknown");
             },
             onReady: (event: any) => {
               event.target.setVolume(volume);
@@ -169,26 +193,20 @@ export const GlobalAudioPlayerProvider = ({
       }
     };
   }, [youtubeApiLoaded]);
-  useEffect(() => {
-    if (!player || !isPlaying) return;
-    const interval = setInterval(() => {
-      if (player.getCurrentTime && !isDragging) {
-        setCurrentTime(player.getCurrentTime());
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [player, isPlaying, isDragging]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
+
   const handleTimeChange = (value: number) => {
     if (player && player.seekTo) {
       player.seekTo(value);
       setCurrentTime(value);
     }
   };
+
   const playNow = useCallback((song: Song) => {
     setIsLoading(true);
     setLoadingTitle(song.title || "Loading...");
@@ -212,20 +230,23 @@ export const GlobalAudioPlayerProvider = ({
       } catch (e) {
         console.error("Error loading video:", e, song);
         setIsLoading(false);
-        if (previousVideoData) {
-          console.log("Error playing video, reverting to previous video");
-          setCurrentSong(previousVideoData);
-          player.loadVideoById(previousVideoData.youtube);
-        }
+        toast({
+          title: "Error loading video",
+          description: "Couldn't load the requested video. Trying next song."
+        });
+        nextSong();
       }
     }
   }, [player, currentSong, previousVideoData]);
+
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
   }, []);
+
   const removeFromQueue = useCallback((songId: string) => {
     setQueue(prev => prev.filter(song => song.id !== songId));
   }, []);
+
   const togglePlay = useCallback(() => {
     if (player) {
       try {
@@ -240,6 +261,7 @@ export const GlobalAudioPlayerProvider = ({
       }
     }
   }, [isPlaying, player]);
+
   const nextSong = useCallback(() => {
     if (queue.length > 0) {
       const nextSong = queue[0];
@@ -254,6 +276,7 @@ export const GlobalAudioPlayerProvider = ({
       });
     }
   }, [queue, playNow, currentSong, getRandomVibeVideo]);
+
   const previousSong = useCallback(() => {
     if (player) {
       try {
@@ -263,6 +286,7 @@ export const GlobalAudioPlayerProvider = ({
       }
     }
   }, [player]);
+
   const updateVolume = useCallback((value: number) => {
     if (player) {
       try {
@@ -273,9 +297,11 @@ export const GlobalAudioPlayerProvider = ({
       }
     }
   }, [player]);
+
   const toggleRepeat = useCallback(() => {
     setRepeat(prev => !prev);
   }, []);
+
   const reorderQueue = useCallback((from: number, to: number) => {
     setQueue(prev => {
       const newQueue = [...prev];
@@ -284,17 +310,21 @@ export const GlobalAudioPlayerProvider = ({
       return newQueue;
     });
   }, []);
+
   const toggleVideo = useCallback(() => {
     setVideoVisible(prev => !prev);
   }, []);
+
   const toggleExpandedView = useCallback(() => {
     setExpandedView(prev => !prev);
   }, []);
+
   useEffect(() => {
     if (currentSong?.id) {
       setPlayedSongs(prev => new Set([...prev, currentSong.id]));
     }
   }, [currentSong]);
+
   return <GlobalAudioPlayerContext.Provider value={{
     currentSong,
     queue,
@@ -379,8 +409,6 @@ export const GlobalAudioPlayerProvider = ({
                 <div className="w-24">
                   <Slider value={[volume]} min={0} max={100} step={1} onValueChange={([value]) => updateVolume(value)} className="cursor-pointer flex-1" />
                 </div>
-                
-                
               </div>
             </div>
 
@@ -419,6 +447,7 @@ export const GlobalAudioPlayerProvider = ({
       </div>
     </GlobalAudioPlayerContext.Provider>;
 };
+
 export const useGlobalAudioPlayer = () => {
   const context = useContext(GlobalAudioPlayerContext);
   if (!context) {
