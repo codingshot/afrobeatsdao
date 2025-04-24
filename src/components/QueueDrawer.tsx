@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,7 +30,7 @@ const QueueDrawer = ({
   showPlayedSongs,
   setShowPlayedSongs
 }: QueueDrawerProps) => {
-  const [activeTab, setActiveTab] = useState<string>("queue");
+  const [activeTab, setActiveTab] = useState<"queue" | "history">("queue");
   const [markdownDialogOpen, setMarkdownDialogOpen] = useState(false);
   const [markdownContent, setMarkdownContent] = useState("");
   const { toast } = useToast();
