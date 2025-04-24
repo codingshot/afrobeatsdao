@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { danceCurriculum } from "@/data/dance-curriculum";
 
