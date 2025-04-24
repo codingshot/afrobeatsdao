@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +20,8 @@ interface QueueDrawerProps {
   setShowPlayedSongs: (show: boolean) => void;
 }
 
+type TabType = "queue" | "history";
+
 const QueueDrawer = ({
   queue,
   isVisible,
@@ -30,7 +31,7 @@ const QueueDrawer = ({
   showPlayedSongs,
   setShowPlayedSongs
 }: QueueDrawerProps) => {
-  const [activeTab, setActiveTab] = useState<"queue" | "history">("queue");
+  const [activeTab, setActiveTab] = useState<TabType>("queue");
   const [markdownDialogOpen, setMarkdownDialogOpen] = useState(false);
   const [markdownContent, setMarkdownContent] = useState("");
   const { toast } = useToast();
@@ -57,7 +58,7 @@ const QueueDrawer = ({
     reorderQueue(result.source.index, result.destination.index);
   };
 
-  const generateMarkdownContent = (tab: "queue" | "history") => {
+  const generateMarkdownContent = (tab: TabType) => {
     let content = "# Afrobeats Music History\n\n";
     
     if (tab === "queue") {
@@ -125,7 +126,11 @@ const QueueDrawer = ({
     <div className="fixed right-4 bottom-[80px] w-[350px] z-40">
       <Card className="border bg-white shadow-lg">
         <CardContent className="p-4">
-          <Tabs defaultValue="queue" value={activeTab} onValueChange={setActiveTab}>
+          <Tabs 
+            defaultValue="queue" 
+            value={activeTab} 
+            onValueChange={(value: TabType) => setActiveTab(value)}
+          >
             <div className="flex items-center justify-between mb-4">
               <TabsList className="grid grid-cols-2 w-[200px]">
                 <TabsTrigger value="queue">Queue</TabsTrigger>
