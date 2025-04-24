@@ -60,6 +60,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingTitle, setLoadingTitle] = useState<string>("Loading...");
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -115,12 +117,14 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
           events: {
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
+                setIsLoading(false);
                 if (repeat) {
                   event.target.playVideo();
                 } else {
                   nextSong();
                 }
               } else if (event.data === window.YT.PlayerState.PLAYING) {
+                setIsLoading(false);
                 setIsPlaying(true);
                 const videoData = event.target.getVideoData();
                 if (videoData) {
@@ -129,11 +133,15 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 }
                 setDuration(event.target.getDuration());
               } else if (event.data === window.YT.PlayerState.PAUSED) {
+                setIsLoading(false);
                 setIsPlaying(false);
+              } else if (event.data === window.YT.PlayerState.BUFFERING) {
+                setIsLoading(true);
               }
             },
             onError: (event: any) => {
               console.error("YouTube player error:", event);
+              setIsLoading(false);
               if (previousVideoData) {
                 console.log("Error playing video, reverting to previous video");
                 setCurrentSong(previousVideoData);
@@ -191,6 +199,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   };
 
   const playNow = useCallback((song: Song) => {
+    setIsLoading(true);
+    setLoadingTitle(song.title || "Loading...");
     if (currentSong) {
       setPreviousVideoData(currentSong);
     }
@@ -210,6 +220,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         player.loadVideoById(videoId);
       } catch (e) {
         console.error("Error loading video:", e, song);
+        setIsLoading(false);
         if (previousVideoData) {
           console.log("Reverting to previous video");
           setCurrentSong(previousVideoData);
@@ -334,7 +345,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         <div id="youtube-player"></div>
       </div>
       <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
-        {currentSong ? (
+        {currentSong || isLoading ? (
           <div className="max-w-7xl mx-auto flex flex-col gap-2">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
@@ -342,8 +353,12 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                   <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-sm font-medium truncate">{videoTitle}</h3>
-                  <p className="text-xs text-gray-400 truncate">{channelTitle}</p>
+                  <h3 className="text-sm font-medium truncate">
+                    {isLoading ? loadingTitle : videoTitle}
+                  </h3>
+                  <p className="text-xs text-gray-400 truncate">
+                    {isLoading ? "Loading..." : channelTitle}
+                  </p>
                 </div>
               </div>
 
@@ -463,7 +478,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 const defaultVideo = getRandomVibeVideo();
                 playNow({
                   id: `default-vibe-${defaultVideo}`,
-                  youtube: defaultVideo
+                  youtube: defaultVideo,
+                  title: "Random Vibe"
                 });
               }}
               className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90"
