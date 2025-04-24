@@ -274,9 +274,7 @@ const Playlists = () => {
   return <div className="min-h-screen bg-background pt-4">
       <main className="container mx-auto px-4 py-4">
         <div className="flex flex-col items-center text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-black">
-            Afrobeats Playlists
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-black">Afrobeats Music</h1>
           <p className="text-xl max-w-2xl mx-auto text-black/90">
             Discover the best curated Afrobeats playlists across major streaming platforms.
           </p>
