@@ -9,7 +9,6 @@ export const VIBE_VIDEOS = ['ul_Iy9HC0GE', 'hvf_K273XIY', '6xd4oIP6Uws', 'yaie5U
 
 export function VibeOfTheDay() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(() => Math.floor(Math.random() * VIBE_VIDEOS.length));
-  const [showVideoEmbed, setShowVideoEmbed] = useState(false);
   const { playNow } = useGlobalAudioPlayer();
 
   const shuffleVideo = () => {
@@ -18,7 +17,6 @@ export function VibeOfTheDay() {
       newIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
     } while (newIndex === currentVideoIndex);
     setCurrentVideoIndex(newIndex);
-    setShowVideoEmbed(false); // Reset video display on shuffle
   };
 
   const playInGlobalPlayer = () => {
@@ -34,10 +32,6 @@ export function VibeOfTheDay() {
     }
   };
 
-  const toggleVideoEmbed = () => {
-    setShowVideoEmbed(!showVideoEmbed);
-  };
-
   return (
     <section id="vibe" className="py-16 bg-white font-afro">
       <div className="container mx-auto px-4">
@@ -47,22 +41,20 @@ export function VibeOfTheDay() {
             <span className="text-4xl">🎵</span>
           </h2>
           <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            Daily dose of Afrobeats magic. Refresh your spirit! Use the player controls below to toggle video view.
+            Daily dose of Afrobeats magic. Refresh your spirit!
           </p>
         </div>
         
-        {showVideoEmbed && (
-          <div className="max-w-4xl mx-auto mb-8 aspect-video">
-            <iframe 
-              src={`https://www.youtube.com/embed/${VIBE_VIDEOS[currentVideoIndex]}`}
-              className="w-full h-full rounded-lg shadow-lg"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        )}
+        <div className="max-w-4xl mx-auto mb-8 aspect-video">
+          <iframe 
+            src={`https://www.youtube.com/embed/${VIBE_VIDEOS[currentVideoIndex]}`}
+            className="w-full h-full rounded-lg shadow-lg"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
 
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap gap-4 justify-center">
@@ -80,13 +72,6 @@ export function VibeOfTheDay() {
             >
               <Play className="w-6 h-6" />
               <span>Play in Player</span>
-            </Button>
-            
-            <Button 
-              onClick={toggleVideoEmbed} 
-              className="bg-[#008751] hover:bg-green-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105"
-            >
-              {showVideoEmbed ? "Hide Video" : "Show Video"}
             </Button>
           </div>
         </div>

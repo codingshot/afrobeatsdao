@@ -54,10 +54,10 @@ const Index = () => {
         <HeroSection />
         <EventsSection />
         <ClubsSection />
-        <MusicSection />
         <VibeOfTheDay />
-        <TeamSection />
+        <MusicSection />
         <FutureSection />
+        <TeamSection />
       </main>
       <Footer />
     </div>

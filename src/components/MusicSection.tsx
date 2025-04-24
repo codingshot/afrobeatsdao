@@ -1,10 +1,9 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
+import { Apple, Youtube, Headphones, ChevronDown, CreativeCommons } from "lucide-react";
 import { FlippableAlbum } from "./FlippableAlbum";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CreativeCommons } from "lucide-react";
 
 function AlbumCountdown() {
   const releaseDate = new Date("2025-06-06T00:00:00Z");
@@ -37,19 +36,20 @@ export function MusicSection() {
             <span>Album</span>
             <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
-          <p className="text-xl max-w-2xl mx-auto text-black flex items-center justify-center gap-2">
-            Afrobeats is a{" "}
+          <p className="text-xl max-w-2xl mx-auto text-black flex flex-wrap items-center justify-center gap-2 px-4">
+            Afrobeats is A Public Good Album 
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <CreativeCommons className="w-6 h-6 text-black" />
+                <TooltipTrigger className="flex items-center">
+                  <CreativeCommons className="h-6 w-6 mx-1" />
+                  <span className="font-bold">CC0</span>
                 </TooltipTrigger>
-                <TooltipContent className="max-w-xs text-center">
-                  CC0 is a Creative Commons license that allows creators to waive all copyright and related rights to their work, placing it in the public domain for free use without restrictions.
+                <TooltipContent>
+                  <p>CC0 (Creative Commons Zero): A public domain dedication that allows completely free use, modification, and distribution of creative work with no restrictions.</p>
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>{" "}
-            <b>Public Good Album</b> 🆓 — our CC0 album available everywhere soon.
+            </TooltipProvider>
+            🆓 — available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
             Album drops June 6th, 2025!
