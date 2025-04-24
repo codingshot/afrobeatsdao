@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { Menu } from 'lucide-react';
@@ -11,8 +10,9 @@ import { useIsMobile } from '@/hooks/use-mobile';
 export function MainNavbar() {
   const isMobile = useIsMobile();
   const [isScrolled, setIsScrolled] = useState(false);
-  const { currentProgress } = useDanceProgress();
+  const { getTotalProgress } = useDanceProgress();
   const danceMatch = useMatch("/dance/*");
+  const progress = danceMatch ? getTotalProgress().percentage : 0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,16 +56,16 @@ export function MainNavbar() {
 
           {/* Mobile: Progress indicator and menu button */}
           <div className="flex items-center gap-4 sm:hidden">
-            {danceMatch && currentProgress > 0 && (
+            {danceMatch && progress > 0 && (
               <div className="flex items-center">
                 <div className="bg-afro-yellow h-2 rounded-full overflow-hidden w-24">
                   <div
                     className="bg-[#008751] h-full rounded-full"
-                    style={{ width: `${currentProgress}%` }}
+                    style={{ width: `${progress}%` }}
                   ></div>
                 </div>
                 <span className="text-white text-xs ml-2">
-                  {Math.round(currentProgress)}%
+                  {Math.round(progress)}%
                 </span>
               </div>
             )}

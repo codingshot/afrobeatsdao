@@ -1,487 +1,357 @@
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
-import { Button } from "@/components/ui/button";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import YouTube, { YouTubeProps } from "react-youtube";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Mic2, MicOff } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { Progress } from "@/components/ui/progress";
-import { 
-  Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
-} from "lucide-react";
-import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
+import { Button } from "@/components/ui/button";
+import { useIsClient } from "@/hooks/use-client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { maximize } from "lucide-react";
 
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: () => void;
-    YT: any;
-  }
-}
-
-export interface Song {
+interface Track {
   id: string;
   youtube: string;
-  title?: string;
+  title: string;
   artist?: string;
 }
 
-interface GlobalAudioPlayerContextType {
-  currentSong: Song | null;
-  queue: Song[];
+interface GlobalAudioPlayerContextProps {
+  currentTrack: Track | null;
   isPlaying: boolean;
-  playNow: (song: Song) => void;
-  addToQueue: (song: Song) => void;
-  removeFromQueue: (songId: string) => void;
+  volume: number;
+  isMuted: boolean;
+  isCameraOn: boolean;
+  isAudioOn: boolean;
+  playTrack: (index: number) => void;
+  playNow: (track: Track) => void;
   togglePlay: () => void;
-  nextSong: () => void;
-  previousSong: () => void;
-  setVolume: (value: number) => void;
-  toggleRepeat: () => void;
-  reorderQueue: (from: number, to: number) => void;
-  duration: number;
-  currentTime: number;
-  isDragging: boolean;
+  nextTrack: () => void;
+  prevTrack: () => void;
+  setVolume: (volume: number) => void;
+  toggleMute: () => void;
+  toggleCamera: () => void;
+  toggleAudio: () => void;
+  queue: Track[];
+  addToQueue: (track: Track) => void;
+  removeFromQueue: (trackId: string) => void;
 }
 
-const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | null>(null);
-
-export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [player, setPlayer] = useState<any>(null);
-  const [currentSong, setCurrentSong] = useState<Song | null>(null);
-  const [queue, setQueue] = useState<Song[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(100);
-  const [repeat, setRepeat] = useState(false);
-  const [youtubeApiLoaded, setYoutubeApiLoaded] = useState(false);
-  const [expandedView, setExpandedView] = useState(true);
-  const [videoTitle, setVideoTitle] = useState<string>("Loading...");
-  const [channelTitle, setChannelTitle] = useState<string>("Loading...");
-  const [previousVideoData, setPreviousVideoData] = useState<Song | null>(null);
-  const isMobile = useIsMobile();
-  const [videoVisible, setVideoVisible] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const playerContainerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (youtubeApiLoaded && player && !currentSong) {
-      const defaultVideo = getRandomVibeVideo();
-      playNow({
-        id: `default-vibe-${defaultVideo}`,
-        youtube: defaultVideo
-      });
-    }
-  }, [youtubeApiLoaded, player, currentSong]);
-
-  const getRandomVibeVideo = useCallback((excludeId?: string) => {
-    const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
-    const randomIndex = Math.floor(Math.random() * availableVideos.length);
-    return availableVideos[randomIndex];
-  }, []);
-
-  useEffect(() => {
-    if (!window.YT && !document.getElementById('youtube-iframe-api')) {
-      const tag = document.createElement('script');
-      tag.id = 'youtube-iframe-api';
-      tag.src = 'https://www.youtube.com/iframe_api';
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-      window.onYouTubeIframeAPIReady = () => {
-        setYoutubeApiLoaded(true);
-      };
-    } else if (window.YT) {
-      setYoutubeApiLoaded(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (youtubeApiLoaded && playerContainerRef.current) {
-      if (player) {
-        try {
-          player.destroy();
-        } catch (e) {
-          console.error("Error destroying player:", e);
-        }
-      }
-
-      try {
-        const newPlayer = new window.YT.Player('youtube-player', {
-          height: '240',
-          width: '426',
-          playerVars: {
-            playsinline: 1,
-            controls: 1,
-          },
-          events: {
-            onStateChange: (event: any) => {
-              if (event.data === window.YT.PlayerState.ENDED) {
-                if (repeat) {
-                  event.target.playVideo();
-                } else {
-                  nextSong();
-                }
-              } else if (event.data === window.YT.PlayerState.PLAYING) {
-                setIsPlaying(true);
-                const videoData = event.target.getVideoData();
-                if (videoData) {
-                  setVideoTitle(videoData.title || "Unknown Title");
-                  setChannelTitle(videoData.author || "Unknown Channel");
-                }
-                setDuration(event.target.getDuration());
-              } else if (event.data === window.YT.PlayerState.PAUSED) {
-                setIsPlaying(false);
-              }
-            },
-            onError: (event: any) => {
-              console.error("YouTube player error:", event);
-              if (previousVideoData) {
-                console.log("Error playing video, reverting to previous video");
-                setCurrentSong(previousVideoData);
-                event.target.loadVideoById(previousVideoData.youtube);
-              }
-              setVideoTitle("Error loading video");
-              setChannelTitle("Unknown");
-            },
-            onReady: (event: any) => {
-              event.target.setVolume(volume);
-              console.log("YouTube player ready");
-            }
-          },
-        });
-        setPlayer(newPlayer);
-      } catch (e) {
-        console.error("Error initializing YouTube player:", e);
-      }
-    }
-
-    return () => {
-      if (player) {
-        try {
-          player.destroy();
-        } catch (e) {
-          console.error("Error destroying player on unmount:", e);
-        }
-      }
-    };
-  }, [youtubeApiLoaded]);
-
-  useEffect(() => {
-    if (!player || !isPlaying) return;
-
-    const interval = setInterval(() => {
-      if (player.getCurrentTime && !isDragging) {
-        setCurrentTime(player.getCurrentTime());
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [player, isPlaying, isDragging]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const handleTimeChange = (value: number) => {
-    if (player && player.seekTo) {
-      player.seekTo(value);
-      setCurrentTime(value);
-    }
-  };
-
-  const playNow = useCallback((song: Song) => {
-    if (currentSong) {
-      setPreviousVideoData(currentSong);
-    }
-    setCurrentSong(song);
-    setIsPlaying(true);
-    if (player && player.loadVideoById) {
-      try {
-        let videoId;
-        if (song.youtube.includes('v=')) {
-          videoId = song.youtube.split('v=')[1].split('&')[0];
-        } else if (song.youtube.includes('youtu.be/')) {
-          videoId = song.youtube.split('youtu.be/')[1].split('?')[0];
-        } else {
-          videoId = song.youtube;
-        }
-        console.log("Loading video ID:", videoId);
-        player.loadVideoById(videoId);
-      } catch (e) {
-        console.error("Error loading video:", e, song);
-        if (previousVideoData) {
-          console.log("Reverting to previous video");
-          setCurrentSong(previousVideoData);
-          player.loadVideoById(previousVideoData.youtube);
-        }
-      }
-    }
-  }, [player, currentSong, previousVideoData]);
-
-  const addToQueue = useCallback((song: Song) => {
-    setQueue(prev => [...prev, song]);
-  }, []);
-
-  const removeFromQueue = useCallback((songId: string) => {
-    setQueue(prev => prev.filter(song => song.id !== songId));
-  }, []);
-
-  const togglePlay = useCallback(() => {
-    if (player) {
-      try {
-        if (isPlaying) {
-          player.pauseVideo();
-        } else {
-          player.playVideo();
-        }
-        setIsPlaying(!isPlaying);
-      } catch (e) {
-        console.error("Error toggling play state:", e);
-      }
-    }
-  }, [isPlaying, player]);
-
-  const nextSong = useCallback(() => {
-    if (queue.length > 0) {
-      const nextSong = queue[0];
-      setQueue(prev => prev.slice(1));
-      playNow(nextSong);
-    } else {
-      const currentVideoId = currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
-                           currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
-                           currentSong?.youtube;
-      
-      const newVibeVideo = getRandomVibeVideo(currentVideoId);
-      playNow({
-        id: `vibe-${newVibeVideo}`,
-        youtube: newVibeVideo
-      });
-    }
-  }, [queue, playNow, currentSong, getRandomVibeVideo]);
-
-  const previousSong = useCallback(() => {
-    if (player) {
-      try {
-        player.seekTo(0);
-      } catch (e) {
-        console.error("Error seeking to start:", e);
-      }
-    }
-  }, [player]);
-
-  const updateVolume = useCallback((value: number) => {
-    if (player) {
-      try {
-        player.setVolume(value);
-        setVolume(value);
-      } catch (e) {
-        console.error("Error setting volume:", e);
-      }
-    }
-  }, [player]);
-
-  const toggleRepeat = useCallback(() => {
-    setRepeat(prev => !prev);
-  }, []);
-
-  const reorderQueue = useCallback((from: number, to: number) => {
-    setQueue(prev => {
-      const newQueue = [...prev];
-      const [removed] = newQueue.splice(from, 1);
-      newQueue.splice(to, 0, removed);
-      return newQueue;
-    });
-  }, []);
-
-  const toggleVideo = useCallback(() => {
-    setVideoVisible(prev => !prev);
-  }, []);
-
-  const toggleExpandedView = useCallback(() => {
-    setExpandedView(prev => !prev);
-  }, []);
-
-  return (
-    <GlobalAudioPlayerContext.Provider value={{
-      currentSong,
-      queue,
-      isPlaying,
-      playNow,
-      addToQueue,
-      removeFromQueue,
-      togglePlay,
-      nextSong,
-      previousSong,
-      setVolume: updateVolume,
-      toggleRepeat,
-      reorderQueue,
-      duration,
-      currentTime,
-      isDragging,
-    }}>
-      {children}
-      <div 
-        ref={playerContainerRef} 
-        className="fixed bottom-[80px] right-4 z-[100] bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl"
-        style={{
-          display: expandedView ? 'block' : 'none',
-          visibility: videoVisible ? 'visible' : 'hidden',
-          position: 'fixed',
-          ...(expandedView && !videoVisible ? { left: '-9999px' } : { right: '4px' })
-        }}
-      >
-        <div id="youtube-player"></div>
-      </div>
-      <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
-        {currentSong ? (
-          <div className="max-w-7xl mx-auto flex flex-col gap-2">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
-                <div className="flex-shrink-0">
-                  <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-sm font-medium truncate">{videoTitle}</h3>
-                  <p className="text-xs text-gray-400 truncate">{channelTitle}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={previousSong}
-                  className="text-white hover:bg-white/10"
-                >
-                  <SkipBack className="h-5 w-5" />
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={togglePlay}
-                  className="text-white hover:bg-white/10"
-                >
-                  {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={nextSong}
-                  className="text-white hover:bg-white/10"
-                >
-                  <SkipForward className="h-5 w-5" />
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleRepeat}
-                  className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}
-                >
-                  {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleVideo}
-                  className="text-white hover:bg-white/10"
-                  title={videoVisible ? "Hide video" : "Show video"}
-                >
-                  {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setVolume(volume === 0 ? 100 : 0)}
-                  className="text-white hover:bg-white/10"
-                >
-                  {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                </Button>
-                
-                <div className="w-24">
-                  <Slider
-                    value={[volume]}
-                    min={0}
-                    max={100}
-                    step={1}
-                    onValueChange={([value]) => updateVolume(value)}
-                    className="cursor-pointer flex-1"
-                  />
-                </div>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleExpandedView}
-                  className="text-white hover:bg-white/10"
-                  title={expandedView ? "Collapse video" : "Show video"}
-                >
-                  {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 w-full px-2">
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(currentTime)}
-              </span>
-              <Slider
-                value={[currentTime]}
-                min={0}
-                max={duration}
-                step={1}
-                onValueChange={([value]) => {
-                  setCurrentTime(value);
-                  setIsDragging(true);
-                }}
-                onValueCommit={([value]) => {
-                  handleTimeChange(value);
-                  setIsDragging(false);
-                }}
-                className="cursor-pointer flex-1"
-              />
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(duration)}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Music2 className="h-8 w-8 text-[#FFD600]" />
-              <span className="text-sm">Afrobeats Player</span>
-            </div>
-            <Button 
-              onClick={() => {
-                const defaultVideo = getRandomVibeVideo();
-                playNow({
-                  id: `default-vibe-${defaultVideo}`,
-                  youtube: defaultVideo
-                });
-              }}
-              className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90"
-            >
-              <Play className="mr-2 h-4 w-4" />
-              Play Something
-            </Button>
-          </div>
-        )}
-      </div>
-    </GlobalAudioPlayerContext.Provider>
-  );
-};
+const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextProps | undefined>(
+  undefined
+);
 
 export const useGlobalAudioPlayer = () => {
   const context = useContext(GlobalAudioPlayerContext);
   if (!context) {
-    throw new Error("useGlobalAudioPlayer must be used within a GlobalAudioPlayerProvider");
+    throw new Error(
+      "useGlobalAudioPlayer must be used within a GlobalAudioPlayerProvider"
+    );
   }
   return context;
+};
+
+interface GlobalAudioPlayerProviderProps {
+  children: React.ReactNode;
+}
+
+export const GlobalAudioPlayerProvider = ({
+  children,
+}: GlobalAudioPlayerProviderProps) => {
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isCameraOn, setIsCameraOn] = useState(false);
+  const [isAudioOn, setIsAudioOn] = useState(false);
+  const [queue, setQueue] = useState<Track[]>([]);
+  const playerRef = useRef<YouTube | null>(null);
+  const isClient = useIsClient();
+  const isMobile = useIsMobile();
+
+  const playTrack = (index: number) => {
+    if (index >= 0 && index < queue.length) {
+      setCurrentTrack(queue[index]);
+      setQueue(queue.slice(index));
+      setIsPlaying(true);
+    }
+  };
+
+  const playNow = (track: Track) => {
+    setCurrentTrack(track);
+    setIsPlaying(true);
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const nextTrack = () => {
+    if (queue.length > 1) {
+      const next = queue[1];
+      setCurrentTrack(next);
+      setQueue(queue.slice(1));
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  };
+
+  const prevTrack = () => {
+    // TODO: Implement going to the previous track
+  };
+
+  const handleVolumeChange = (value: number[]) => {
+    setVolume(value[0]);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
+  const toggleCamera = () => {
+    setIsCameraOn(!isCameraOn);
+  };
+
+  const toggleAudio = () => {
+    setIsAudioOn(!isAudioOn);
+  };
+
+  const addToQueue = (track: Track) => {
+    setQueue((prevQueue) => [...prevQueue, track]);
+  };
+
+  const removeFromQueue = (trackId: string) => {
+    setQueue((prevQueue) => prevQueue.filter((track) => track.id !== trackId));
+  };
+
+  const youtubeOptions: YouTubeProps["opts"] = {
+    height: isMobile ? '200' : '390',
+    width: isMobile ? '300' : '640',
+    playerVars: {
+      autoplay: isPlaying ? 1 : 0,
+    },
+  };
+
+  useEffect(() => {
+    if (playerRef.current && currentTrack) {
+      if (isPlaying) {
+        playerRef.current.internalPlayer.playVideo();
+      } else {
+        playerRef.current.internalPlayer.pauseVideo();
+      }
+    }
+  }, [isPlaying, currentTrack]);
+
+  const value = {
+    currentTrack,
+    isPlaying,
+    volume,
+    isMuted,
+    isCameraOn,
+    isAudioOn,
+    playTrack,
+    playNow,
+    togglePlay,
+    nextTrack,
+    prevTrack,
+    setVolume,
+    toggleMute,
+    toggleCamera,
+    toggleAudio,
+    queue,
+    addToQueue,
+    removeFromQueue,
+  };
+
+  return (
+    <GlobalAudioPlayerContext.Provider value={value}>
+      {children}
+      {currentTrack && (
+        <div className="fixed bottom-0 left-0 right-0 bg-black/90 text-white p-4 backdrop-blur-lg border-t border-white/10">
+          <div className="container mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              {currentTrack.artist && (
+                <div className="text-sm">{currentTrack.artist}</div>
+              )}
+              <div className="font-bold">{currentTrack.title}</div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={prevTrack}
+                disabled
+              >
+                <SkipBack className="h-5 w-5" />
+                <span className="sr-only">Previous</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={togglePlay}
+              >
+                {isPlaying ? (
+                  <Pause className="h-5 w-5" />
+                ) : (
+                  <Play className="h-5 w-5" />
+                )}
+                <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={nextTrack}
+              >
+                <SkipForward className="h-5 w-5" />
+                <span className="sr-only">Next</span>
+              </Button>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={toggleMute}
+              >
+                {isMuted ? (
+                  <VolumeX className="h-5 w-5" />
+                ) : (
+                  <Volume2 className="h-5 w-5" />
+                )}
+                <span className="sr-only">Toggle Mute</span>
+              </Button>
+              <Slider
+                defaultValue={[volume]}
+                max={100}
+                step={1}
+                onValueChange={handleVolumeChange}
+                aria-label="volume"
+                className="w-24 md:w-32"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={toggleCamera}
+                disabled
+              >
+                {isCameraOn ? (
+                  <Mic2 className="h-5 w-5" />
+                ) : (
+                  <MicOff className="h-5 w-5" />
+                )}
+                <span className="sr-only">Toggle Camera</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={toggleAudio}
+                disabled
+              >
+                {isAudioOn ? (
+                  <Mic2 className="h-5 w-5" />
+                ) : (
+                  <MicOff className="h-5 w-5" />
+                )}
+                <span className="sr-only">Toggle Audio</span>
+              </Button>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="text-white hover:bg-white/10"
+                  >
+                    <maximize className="h-5 w-5" />
+                    <span className="sr-only">Expand Queue</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-black/95 text-white border-white/10">
+                  <DialogHeader>
+                    <DialogTitle className="text-xl font-bold">Up Next</DialogTitle>
+                  </DialogHeader>
+                  <div className="mt-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                    {queue.map((track, index) => (
+                      <div
+                        key={`${track.id}-${index}`}
+                        className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <h4 className="font-medium">{track.title}</h4>
+                            {track.artist && (
+                              <p className="text-sm text-gray-400">{track.artist}</p>
+                            )}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-white hover:bg-white/10"
+                          onClick={() => playTrack(index)}
+                        >
+                          <Play className="h-4 w-4" />
+                          <span className="sr-only">Play</span>
+                        </Button>
+                      </div>
+                    ))}
+                    
+                    {queue.length === 0 && (
+                      <div className="text-center py-8 text-gray-400">
+                        No tracks in queue
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+      )}
+      {isClient && currentTrack && (
+        <div className="hidden">
+          <YouTube
+            videoId={currentTrack.youtube}
+            opts={youtubeOptions}
+            ref={playerRef}
+            onReady={(event) => {
+              // Access to player in all event handlers via event.target
+              playerRef.current = event.target;
+            }}
+            onStateChange={(event) => {
+              if (event.data === 0) {
+                nextTrack();
+              }
+            }}
+            onVolumeChange={(event) => {
+              setVolume(event.target.getVolume());
+            }}
+          />
+        </div>
+      )}
+    </GlobalAudioPlayerContext.Provider>
+  );
 };
