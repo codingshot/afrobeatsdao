@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown, CreativeCommons } from "lucide-react";
 import { FlippableAlbum } from "./FlippableAlbum";
@@ -37,7 +37,7 @@ export function MusicSection() {
             <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
           <p className="text-xl max-w-2xl mx-auto text-black flex flex-wrap items-center justify-center gap-2 px-4">
-            Afrobeats is a 
+            Afrobeats is A Public Good Album 
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="flex items-center">
@@ -45,11 +45,11 @@ export function MusicSection() {
                   <span className="font-bold">CC0</span>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Creative Commons Zero (CC0): A public domain dedication that allows free use, modification, and distribution of creative work with no restrictions.</p>
+                  <p>CC0 (Creative Commons Zero): A public domain dedication that allows completely free use, modification, and distribution of creative work with no restrictions.</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            (Creative Commons Zero) Public Good Album 🆓 — our album available everywhere soon.
+            🆓 — available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
             Album drops June 6th, 2025!
