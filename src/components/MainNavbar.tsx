@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { Link, useMatch, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -13,33 +12,27 @@ export function MainNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { getTotalProgress } = useDanceProgress();
   const danceMatch = useMatch("/dance/*");
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
   const progressData = danceMatch ? getTotalProgress() : { total: 0, started: 0, completed: 0 };
-  // Calculate percentage manually since it's not returned directly
   const progress = danceMatch ? ((progressData.completed / progressData.total) * 100) || 0 : 0;
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      const heroHeight = isHomePage ? window.innerHeight : 0;
+      setIsScrolled(window.scrollY > (isHomePage ? heroHeight - 100 : 10));
     };
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHomePage]);
 
-  const links = [
-    { href: '/', label: 'Home' },
-    { href: '/music', label: 'Music' },
-    { href: '/dance', label: 'Dance' },
-    { href: '/clubs', label: 'Clubs' },
-    { href: '/events', label: 'Events' }
-  ];
+  if (isHomePage && !isScrolled) return null;
 
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-40 transition-all duration-200 py-2',
-        isScrolled ? 'bg-black/90 backdrop-blur-lg shadow-md' : 'bg-transparent'
+        isScrolled ? 'bg-[#FFD600]/90 backdrop-blur-lg shadow-md' : 'bg-transparent'
       )}
     >
       <div className="container mx-auto px-4">

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ARTISTS, Artist } from '@/data/artists';
@@ -26,7 +25,6 @@ const SongItem = ({ song, artistName, index }: SongItemProps) => {
   const { toast } = useToast();
   
   const getYoutubeId = (url: string): string => {
-    // Extract YouTube ID from URL
     const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[7].length === 11) ? match[7] : url;
@@ -111,7 +109,7 @@ const ArtistCard = ({ artist }: { artist: Artist }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/AfrobeatsDAOMeta.png"; // Fallback image
+    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
   };
 
   return (
@@ -273,7 +271,7 @@ export function ArtistsSection() {
             </div>
             
             <TabsContent value="grid" className="mt-0">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredArtists.map((artist) => (
                   <ArtistCard key={artist.name} artist={artist} />
                 ))}
