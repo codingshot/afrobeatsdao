@@ -1,3 +1,4 @@
+
 import React, {
   createContext,
   useContext,
@@ -7,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Mic2, MicOff } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Mic2, MicOff, Maximize } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { useIsClient } from "@/hooks/use-client";
@@ -19,7 +20,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { maximize } from "lucide-react";
 
 interface Track {
   id: string;
@@ -142,6 +142,7 @@ export const GlobalAudioPlayerProvider = ({
     width: isMobile ? '300' : '640',
     playerVars: {
       autoplay: isPlaying ? 1 : 0,
+      playsinline: 1, // Mobile playback without fullscreen
     },
   };
 
@@ -282,7 +283,7 @@ export const GlobalAudioPlayerProvider = ({
                     size="icon"
                     className="text-white hover:bg-white/10"
                   >
-                    <maximize className="h-5 w-5" />
+                    <Maximize className="h-5 w-5" />
                     <span className="sr-only">Expand Queue</span>
                   </Button>
                 </DialogTrigger>

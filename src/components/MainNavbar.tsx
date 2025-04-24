@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { Menu } from 'lucide-react';
@@ -12,7 +13,9 @@ export function MainNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { getTotalProgress } = useDanceProgress();
   const danceMatch = useMatch("/dance/*");
-  const progress = danceMatch ? getTotalProgress().percentage : 0;
+  const progressData = danceMatch ? getTotalProgress() : { total: 0, started: 0, completed: 0 };
+  // Calculate percentage manually since it's not returned directly
+  const progress = danceMatch ? ((progressData.completed / progressData.total) * 100) || 0 : 0;
 
   useEffect(() => {
     const handleScroll = () => {

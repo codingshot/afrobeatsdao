@@ -11,13 +11,13 @@ import { useEffect, useState } from "react";
 import { HeroSection } from "@/components/HeroSection";
 
 const Index = () => {
-  const { playNow, currentSong } = useGlobalAudioPlayer();
+  const { playNow, currentTrack } = useGlobalAudioPlayer();
   const [isPlayerInitialized, setIsPlayerInitialized] = useState(false);
 
   // Only initialize player if no song is currently playing
   useEffect(() => {
     // Only initialize once and only if no song is currently playing
-    if (isPlayerInitialized || currentSong) {
+    if (isPlayerInitialized || currentTrack) {
       setIsPlayerInitialized(true); // Mark as initialized if there's a current song
       return;
     }
@@ -34,7 +34,8 @@ const Index = () => {
         // Create a song object from the Vibe of the Day
         const defaultSong = {
           id: `vibe-${vibeVideoId}`,
-          youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
+          youtube: vibeVideoId,
+          title: "Vibe of the Day" // Add required title property
         };
         
         // Play the Vibe of the Day video
@@ -46,7 +47,7 @@ const Index = () => {
     }, 1000); // 1 second delay to ensure player is ready
     
     return () => clearTimeout(timer);
-  }, [playNow, isPlayerInitialized, currentSong]);
+  }, [playNow, isPlayerInitialized, currentTrack]);
 
   return (
     <div className="min-h-screen font-sans pb-[100px]">
