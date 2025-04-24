@@ -26,7 +26,7 @@ export function HeroSection() {
           </h1>
         </div>
         <p className="text-black text-2xl md:text-3xl max-w-2xl mx-auto hero-subtitle">
-          Grassroots afrobeats culture, community, music and parties
+          the only hub for everything Afrobeats, grassroots afrobeats music, events, clubs, DJs, and dances.
         </p>
         <div className="space-x-6">
           <Button 
