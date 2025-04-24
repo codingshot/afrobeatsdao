@@ -30,7 +30,6 @@ export function MainNavbar() {
   const links = [
     { href: '/', label: 'Home' },
     { href: '/music', label: 'Music' },
-    { href: '/playlists', label: 'Playlists' },
     { href: '/dance', label: 'Dance' },
     { href: '/clubs', label: 'Clubs' },
     { href: '/events', label: 'Events' }
@@ -52,7 +51,7 @@ export function MainNavbar() {
               alt="Afrobeats DAO"
               className="h-12 mr-2"
             />
-            <span className="text-white font-heading font-bold text-xl hidden sm:block">
+            <span className="text-black font-heading font-bold text-xl hidden sm:block">
               Afrobeats DAO
             </span>
           </Link>
@@ -75,7 +74,7 @@ export function MainNavbar() {
             
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white">
+                <Button variant="ghost" size="icon" className="text-black">
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
@@ -102,7 +101,7 @@ export function MainNavbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-white hover:text-afro-yellow font-medium transition-colors"
+                className="text-black hover:text-afro-yellow font-medium transition-colors"
               >
                 {link.label}
               </Link>
