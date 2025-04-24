@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Filter, Play, ListMusic, MoveVertical } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 
 interface QueueDrawerProps {
   queue: Song[];
@@ -53,7 +54,7 @@ const QueueDrawer = ({
 
   return (
     <div className="fixed right-4 bottom-[80px] w-[350px] z-40">
-      <Card className="border bg-white">
+      <Card className="border bg-white shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">

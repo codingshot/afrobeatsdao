@@ -68,6 +68,10 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [showPlayedSongs, setShowPlayedSongs] = useState(false);
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
 
+  const toggleQueueVisibility = useCallback(() => {
+    setQueueVisible(prev => !prev);
+  }, []);
+
   useEffect(() => {
     if (youtubeApiLoaded && player && !currentSong) {
       const defaultVideo = getRandomVibeVideo();
@@ -226,7 +230,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
         console.error("Error loading video:", e, song);
         setIsLoading(false);
         if (previousVideoData) {
-          console.log("Reverting to previous video");
+          console.log("Error playing video, reverting to previous video");
           setCurrentSong(previousVideoData);
           player.loadVideoById(previousVideoData.youtube);
         }
@@ -426,8 +430,8 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setQueueVisible(!queueVisible)}
-                className="text-white hover:bg-white/10"
+                onClick={toggleQueueVisibility}
+                className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}
                 title={queueVisible ? "Hide queue" : "Show queue"}
               >
                 {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
@@ -498,7 +502,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
               {formatTime(duration)}
             </span>
           </div>
-        </div>
         ) : (
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
