@@ -1,6 +1,5 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { MainNavbar } from "./components/MainNavbar";
 import { GlobalAudioPlayerProvider } from "./components/GlobalAudioPlayer";
 import Index from "./pages/Index";
 import Music from "./pages/Music";
@@ -18,12 +17,11 @@ function App() {
     <Router>
       <GlobalAudioPlayerProvider>
         <div className="min-h-screen bg-background font-afro">
-          <MainNavbar />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/music" element={<Music />} />
             <Route path="/dance" element={<Dance />} />
-            <Route path="/dance/:id" element={<DanceDetails />} />
+            <Route path="/dance/:genre/:id" element={<DanceDetails />} />
             <Route path="/clubs" element={<Clubs />} />
             <Route path="/events" element={<Events />} />
             <Route path="*" element={<NotFound />} />

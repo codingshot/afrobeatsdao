@@ -1,11 +1,14 @@
 
 import { Link } from "react-router-dom";
 import { danceCurriculum } from "@/data/dance-curriculum";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const Dance = () => {
   return (
-    <div className="min-h-screen bg-black pt-24">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-black">
+      <Header />
+      <div className="container mx-auto px-4 pt-24">
         <h1 className="text-4xl sm:text-5xl font-bold text-white mb-8">
           Learn African Dance
         </h1>
@@ -29,6 +32,7 @@ const Dance = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
