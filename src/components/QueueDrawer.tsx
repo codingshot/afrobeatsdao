@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Filter, Play, ListMusic, MoveVertical } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface QueueDrawerProps {

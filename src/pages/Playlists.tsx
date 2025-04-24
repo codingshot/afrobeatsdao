@@ -30,7 +30,7 @@ const PLAYLISTS: Playlist[] = [{
   id: "spotify1",
   title: "Afrobeats Essentials",
   platform: "spotify",
-  image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b2737d2ca0bc0cc6c94710f13a51ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
+  image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
   url: "https://open.spotify.com/playlist/37i9dQZF1DX5lDwDtPVwBk",
   description: "The essential Afrobeats tracks you need to know."
 }, {
@@ -429,7 +429,7 @@ const Playlists = () => {
                     <ScrollArea className="h-[500px] pr-4">
                       {filteredQueue.length > 0 ? (
                         <DragDropContext onDragEnd={handleDragEnd}>
-                          <Droppable droppableId="queue">
+                          <Droppable droppableId="droppable-playlist-queue">
                             {provided => (
                               <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                                 {filteredQueue.map((song, index) => {
