@@ -14,6 +14,7 @@ import DanceDetails from "./pages/DanceDetails";
 import Clubs from "./pages/Clubs";
 import Events from "./pages/Events";
 import Playlists from "./pages/Playlists";
+import ArtistProfile from "./pages/ArtistProfile";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path="/clubs" element={<div className="page-clubs"><Clubs /></div>} />
                   <Route path="/events" element={<div className="page-events"><Events /></div>} />
                   <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
+                  <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
@@ -49,4 +51,3 @@ const App = () => {
 };
 
 export default App;
-
