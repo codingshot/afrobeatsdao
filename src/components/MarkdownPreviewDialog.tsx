@@ -41,16 +41,16 @@ const MarkdownPreviewDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl bg-white text-black">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-black">{title}</DialogTitle>
+          <DialogDescription className="text-gray-600">
             Preview your markdown content before downloading or copying
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-[400px] w-full rounded-md border p-4 my-4">
-          <pre className="whitespace-pre-wrap font-mono text-sm">
+        <ScrollArea className="h-[400px] w-full rounded-md border p-4 my-4 bg-white text-black">
+          <pre className="whitespace-pre-wrap font-mono text-sm text-black">
             {markdownContent}
           </pre>
         </ScrollArea>

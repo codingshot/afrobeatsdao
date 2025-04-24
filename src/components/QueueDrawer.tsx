@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +9,7 @@ import { Song } from './GlobalAudioPlayer';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import MarkdownPreviewDialog from "./MarkdownPreviewDialog";
+import { Minimize } from 'lucide-react';
 
 interface QueueDrawerProps {
   queue: Song[];
@@ -35,6 +35,7 @@ const QueueDrawer = ({
   const [activeTab, setActiveTab] = useState<TabType>("queue");
   const [markdownDialogOpen, setMarkdownDialogOpen] = useState(false);
   const [markdownContent, setMarkdownContent] = useState("");
+  const [isMinimized, setIsMinimized] = useState(false);
   const { toast } = useToast();
   
   const getVideoThumbnail = (videoId: string) => {
@@ -68,9 +69,9 @@ const QueueDrawer = ({
         content += "*Queue is empty*\n\n";
       } else {
         filteredQueue.forEach((song, index) => {
-          content += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
-          content += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
-          content += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+          const videoId = getVideoIdFromUrl(song.youtube);
+          content += `${index + 1}. **${song.title || "Title of video"}** - ${song.artist || "Unknown Artist"}\n`;
+          content += `   - [Watch Video](https://www.youtube.com/watch?v=${videoId})\n\n`;
         });
       }
     } else {
@@ -79,9 +80,9 @@ const QueueDrawer = ({
         content += "*No play history*\n\n";
       } else {
         playedSongsList.forEach((song, index) => {
-          content += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
-          content += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
-          content += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+          const videoId = getVideoIdFromUrl(song.youtube);
+          content += `${index + 1}. **${song.title || "Title of video"}** - ${song.artist || "Unknown Artist"}\n`;
+          content += `   - [Watch Video](https://www.youtube.com/watch?v=${videoId})\n\n`;
         });
       }
     }
@@ -124,22 +125,37 @@ const QueueDrawer = ({
   }).filter(Boolean) as Song[];
 
   return (
-    <div className="fixed right-4 bottom-[80px] w-[350px] z-40">
+    <div className={`fixed right-4 ${isMinimized ? 'h-[50px]' : 'bottom-[80px]'} w-[350px] z-40`}>
       <Card className="border bg-white shadow-lg">
-        <CardContent className="p-4">
-          <Tabs 
-            defaultValue="queue" 
-            value={activeTab} 
-            onValueChange={(value: TabType) => setActiveTab(value)}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <TabsList className="grid grid-cols-2 w-[200px]">
-                <TabsTrigger value="queue">Queue</TabsTrigger>
-                <TabsTrigger value="history">History</TabsTrigger>
-              </TabsList>
+        <CardContent className={`p-4 ${isMinimized ? 'p-2' : ''}`}>
+          {isMinimized ? (
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Queue ({filteredQueue.length})</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMinimized(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <Minimize className="h-4 w-4" />
+              </Button>
             </div>
-
-            <TabsContent value="queue" className="mt-0">
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-4">
+                <TabsList className="grid grid-cols-2 w-[200px]">
+                  <TabsTrigger value="queue">Queue</TabsTrigger>
+                  <TabsTrigger value="history">History</TabsTrigger>
+                </TabsList>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsMinimized(true)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <Minimize className="h-4 w-4" />
+                </Button>
+              </div>
               <ScrollArea className="h-[500px] pr-4">
                 {filteredQueue.length > 0 ? (
                   <DragDropContext onDragEnd={handleDragEnd}>
@@ -222,83 +238,8 @@ const QueueDrawer = ({
                   </div>
                 )}
               </ScrollArea>
-            </TabsContent>
-
-            <TabsContent value="history" className="mt-0">
-              <ScrollArea className="h-[500px] pr-4">
-                {playedSongsList.length > 0 ? (
-                  <div className="space-y-3">
-                    {playedSongsList.map((song, index) => {
-                      const videoId = getVideoIdFromUrl(song.youtube);
-                      return (
-                        <div 
-                          key={`history-${song.id}-${index}`}
-                          className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10 group"
-                        >
-                          <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">
-                            <img 
-                              src={getVideoThumbnail(videoId)}
-                              alt={song.title || "Video thumbnail"}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.src = "/AfrobeatsDAOMeta.png";
-                              }}
-                            />
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 text-white"
-                              onClick={() => playNow(song)}
-                            >
-                              <Play className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate text-black">
-                              {song.title || "Unknown Title"}
-                            </h4>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {song.artist || "Unknown Artist"}
-                            </p>
-                          </div>
-                          
-                          <Badge variant="outline" className="ml-auto">
-                            Played
-                          </Badge>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <ListMusic className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>No play history yet</p>
-                    <p className="text-sm mt-2">Play some songs to see history</p>
-                  </div>
-                )}
-              </ScrollArea>
-            </TabsContent>
-          </Tabs>
-          
-          <Button 
-            variant="outline" 
-            className="w-full mt-4 flex items-center gap-2 bg-white text-black"
-            onClick={handleExportClick}
-            disabled={activeTab === "queue" ? filteredQueue.length === 0 : playedSongsList.length === 0}
-          >
-            <Download className="h-4 w-4" />
-            Export {activeTab === "queue" ? "Queue" : "History"} as Markdown
-          </Button>
-
-          <MarkdownPreviewDialog 
-            open={markdownDialogOpen}
-            onOpenChange={setMarkdownDialogOpen}
-            markdownContent={markdownContent}
-            handleDownload={handleDownload}
-            title={`Export ${activeTab === "queue" ? "Queue" : "History"}`}
-          />
-
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
