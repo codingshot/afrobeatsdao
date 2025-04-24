@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link, useMatch, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
@@ -6,6 +7,14 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { useDanceProgress } from '@/hooks/use-dance-progress';
 import { useIsMobile } from '@/hooks/use-mobile';
+
+// Define the navigation links
+const links = [
+  { href: '/music', label: 'Music' },
+  { href: '/dance', label: 'Dance' },
+  { href: '/clubs', label: 'Clubs' },
+  { href: '/events', label: 'Events' }
+];
 
 export function MainNavbar() {
   const isMobile = useIsMobile();
