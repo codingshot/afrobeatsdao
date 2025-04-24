@@ -70,8 +70,9 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
 
   const toggleQueueVisibility = useCallback(() => {
+    console.log("Toggling queue visibility, current state:", queueVisible);
     setQueueVisible(prev => !prev);
-  }, []);
+  }, [queueVisible]);
 
   useEffect(() => {
     if (youtubeApiLoaded && player && !currentSong) {
@@ -426,7 +427,6 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 </Button>
               </div>
 
-            
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                 <Button
                   variant="ghost"
