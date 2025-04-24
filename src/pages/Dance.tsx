@@ -154,7 +154,7 @@ const DancePage = () => {
       >
         <div className="max-w-7xl mx-auto">
           <h1 
-            className="text-3xl sm:text-5xl font-bold text-center mb-2 text-white font-heading"
+            className="text-3xl sm:text-5xl font-bold text-center mb-2 text-white !text-white font-heading"
             role="heading"
             aria-level={1}
           >
