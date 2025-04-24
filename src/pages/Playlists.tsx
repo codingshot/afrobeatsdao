@@ -182,11 +182,13 @@ const Playlists = () => {
       return matchesSearch && matchesPlatform;
     });
     
-    if (sortMode === "asc") {
-      filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sortMode === "desc") {
-      filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
-    }
+    filtered = filtered.sort((a, b) => {
+      if (a.platform === 'youtube' && b.platform !== 'youtube') return -1;
+      if (a.platform !== 'youtube' && b.platform === 'youtube') return 1;
+      if (sortMode === "asc") return a.title.localeCompare(b.title);
+      if (sortMode === "desc") return b.title.localeCompare(a.title);
+      return 0;
+    });
     
     return filtered;
   }, [searchQuery, platformFilter, sortMode]);
@@ -299,13 +301,17 @@ const Playlists = () => {
             <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
               <Tabs defaultValue="artists" className="w-full">
                 <TabsList className="w-full grid grid-cols-2 mb-8 bg-white">
-                  <TabsTrigger value="playlists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
-                    Top Playlists
-                  </TabsTrigger>
                   <TabsTrigger value="artists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
                     Artists
                   </TabsTrigger>
+                  <TabsTrigger value="playlists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
+                    Top Playlists
+                  </TabsTrigger>
                 </TabsList>
+                
+                <TabsContent value="artists" className="mt-6">
+                  <ArtistsList searchQuery={searchQuery} />
+                </TabsContent>
                 
                 <TabsContent value="playlists" className="mt-6 space-y-4 w-full">
                   <AnimatePresence>
@@ -386,10 +392,6 @@ const Playlists = () => {
                       </div>
                     )}
                   </AnimatePresence>
-                </TabsContent>
-                
-                <TabsContent value="artists" className="mt-6">
-                  <ArtistsList searchQuery={searchQuery} />
                 </TabsContent>
               </Tabs>
             </div>
