@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import YouTube, { YouTubeProps } from "react-youtube";
+import YouTube from "react-youtube";
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Mic2, MicOff, Maximize } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ interface Track {
   artist?: string;
 }
 
-interface GlobalAudioPlayerContextProps {
+interface GlobalAudioPlayerContextType {
   currentTrack: Track | null;
   isPlaying: boolean;
   volume: number;
@@ -40,7 +40,7 @@ interface GlobalAudioPlayerContextProps {
   togglePlay: () => void;
   nextTrack: () => void;
   prevTrack: () => void;
-  setVolume: (volume: number) => void;
+  setVolume: React.Dispatch<React.SetStateAction<number>>;
   toggleMute: () => void;
   toggleCamera: () => void;
   toggleAudio: () => void;
@@ -49,27 +49,17 @@ interface GlobalAudioPlayerContextProps {
   removeFromQueue: (trackId: string) => void;
 }
 
-const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextProps | undefined>(
-  undefined
-);
+const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | undefined>(undefined);
 
 export const useGlobalAudioPlayer = () => {
   const context = useContext(GlobalAudioPlayerContext);
   if (!context) {
-    throw new Error(
-      "useGlobalAudioPlayer must be used within a GlobalAudioPlayerProvider"
-    );
+    throw new Error("useGlobalAudioPlayer must be used within a GlobalAudioPlayerProvider");
   }
   return context;
 };
 
-interface GlobalAudioPlayerProviderProps {
-  children: React.ReactNode;
-}
-
-export const GlobalAudioPlayerProvider = ({
-  children,
-}: GlobalAudioPlayerProviderProps) => {
+export const GlobalAudioPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
@@ -77,7 +67,8 @@ export const GlobalAudioPlayerProvider = ({
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [queue, setQueue] = useState<Track[]>([]);
-  const playerRef = useRef<YouTube | null>(null);
+
+  const playerRef = useRef<any>(null);
   const isClient = useIsClient();
   const isMobile = useIsMobile();
 
@@ -137,7 +128,7 @@ export const GlobalAudioPlayerProvider = ({
     setQueue((prevQueue) => prevQueue.filter((track) => track.id !== trackId));
   };
 
-  const youtubeOptions: YouTubeProps["opts"] = {
+  const youtubeOptions = {
     height: isMobile ? '200' : '390',
     width: isMobile ? '300' : '640',
     playerVars: {
@@ -184,19 +175,17 @@ export const GlobalAudioPlayerProvider = ({
         <div className="fixed bottom-0 left-0 right-0 bg-black/90 text-white p-4 backdrop-blur-lg border-t border-white/10">
           <div className="container mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              {currentTrack.artist && (
-                <div className="text-sm">{currentTrack.artist}</div>
-              )}
+              {currentTrack.artist && <div className="text-sm">{currentTrack.artist}</div>}
               <div className="font-bold">{currentTrack.title}</div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/10"
                 onClick={prevTrack}
-                disabled
+                disabled={true}
               >
                 <SkipBack className="h-5 w-5" />
                 <span className="sr-only">Previous</span>
@@ -207,11 +196,7 @@ export const GlobalAudioPlayerProvider = ({
                 className="text-white hover:bg-white/10"
                 onClick={togglePlay}
               >
-                {isPlaying ? (
-                  <Pause className="h-5 w-5" />
-                ) : (
-                  <Play className="h-5 w-5" />
-                )}
+                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                 <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
               </Button>
               <Button
@@ -224,7 +209,7 @@ export const GlobalAudioPlayerProvider = ({
                 <span className="sr-only">Next</span>
               </Button>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -232,13 +217,10 @@ export const GlobalAudioPlayerProvider = ({
                 className="text-white hover:bg-white/10"
                 onClick={toggleMute}
               >
-                {isMuted ? (
-                  <VolumeX className="h-5 w-5" />
-                ) : (
-                  <Volume2 className="h-5 w-5" />
-                )}
+                {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                 <span className="sr-only">Toggle Mute</span>
               </Button>
+
               <Slider
                 defaultValue={[volume]}
                 max={100}
@@ -247,39 +229,33 @@ export const GlobalAudioPlayerProvider = ({
                 aria-label="volume"
                 className="w-24 md:w-32"
               />
+
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/10"
                 onClick={toggleCamera}
-                disabled
+                disabled={true}
               >
-                {isCameraOn ? (
-                  <Mic2 className="h-5 w-5" />
-                ) : (
-                  <MicOff className="h-5 w-5" />
-                )}
+                {isCameraOn ? <Mic2 className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
                 <span className="sr-only">Toggle Camera</span>
               </Button>
+
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-white hover:bg-white/10"
                 onClick={toggleAudio}
-                disabled
+                disabled={true}
               >
-                {isAudioOn ? (
-                  <Mic2 className="h-5 w-5" />
-                ) : (
-                  <MicOff className="h-5 w-5" />
-                )}
+                {isAudioOn ? <Mic2 className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
                 <span className="sr-only">Toggle Audio</span>
               </Button>
-              
+
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="icon"
                     className="text-white hover:bg-white/10"
                   >
@@ -303,9 +279,7 @@ export const GlobalAudioPlayerProvider = ({
                           </div>
                           <div>
                             <h4 className="font-medium">{track.title}</h4>
-                            {track.artist && (
-                              <p className="text-sm text-gray-400">{track.artist}</p>
-                            )}
+                            {track.artist && <p className="text-sm text-gray-400">{track.artist}</p>}
                           </div>
                         </div>
                         <Button
@@ -319,11 +293,8 @@ export const GlobalAudioPlayerProvider = ({
                         </Button>
                       </div>
                     ))}
-                    
                     {queue.length === 0 && (
-                      <div className="text-center py-8 text-gray-400">
-                        No tracks in queue
-                      </div>
+                      <div className="text-center py-8 text-gray-400">No tracks in queue</div>
                     )}
                   </div>
                 </DialogContent>
@@ -347,9 +318,7 @@ export const GlobalAudioPlayerProvider = ({
                 nextTrack();
               }
             }}
-            onVolumeChange={(event) => {
-              setVolume(event.target.getVolume());
-            }}
+            // Remove the onVolumeChange prop since it's not supported by the YouTube component
           />
         </div>
       )}

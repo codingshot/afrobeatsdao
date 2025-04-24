@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MainNavbar } from "./components/MainNavbar";
 import { GlobalAudioPlayerProvider } from "./components/GlobalAudioPlayer";
 import Index from "./pages/Index";
-import Playlists from "./pages/Playlists";
 import Music from "./pages/Music";
 import Dance from "./pages/Dance";
 import DanceDetails from "./pages/DanceDetails";
@@ -23,7 +22,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/music" element={<Music />} />
-            <Route path="/playlists" element={<Playlists />} />
             <Route path="/dance" element={<Dance />} />
             <Route path="/dance/:id" element={<DanceDetails />} />
             <Route path="/clubs" element={<Clubs />} />
