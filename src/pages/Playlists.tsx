@@ -283,7 +283,7 @@ const Playlists = () => {
                   Top Playlists
                 </TabsTrigger>
                 <TabsTrigger value="artists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
-                  Afrobeats Artists
+                  Artists
                 </TabsTrigger>
               </TabsList>
               
@@ -369,7 +369,7 @@ const Playlists = () => {
               </TabsContent>
               
               <TabsContent value="artists" className="mt-6">
-                <ArtistsList />
+                <ArtistsList searchQuery={searchQuery} />
               </TabsContent>
             </Tabs>
           </div>
