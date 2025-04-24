@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Filter, Play, ListMusic, MoveVertical, Download } from 'lucide-react';
+import { Play, ListMusic, MoveVertical, Download } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -119,7 +120,7 @@ const QueueDrawer = ({
   const playedSongsList: Song[] = Array.from(playedSongs).map(id => {
     const song = queue.find(s => s.id === id);
     if (song) return song;
-    return { id, youtube: id.replace('vibe-', ''), title: 'Previously played song', artist: '' };
+    return { id, youtube: id.replace('vibe-', ''), title: 'Title of video', artist: '' };
   }).filter(Boolean) as Song[];
 
   return (
@@ -136,25 +137,13 @@ const QueueDrawer = ({
                 <TabsTrigger value="queue">Queue</TabsTrigger>
                 <TabsTrigger value="history">History</TabsTrigger>
               </TabsList>
-              
-              {activeTab === "queue" && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowPlayedSongs(!showPlayedSongs)}
-                  className={`${showPlayedSongs ? 'bg-primary/10' : ''} text-black`}
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  {showPlayedSongs ? 'Show All' : 'Hide Played'}
-                </Button>
-              )}
             </div>
 
             <TabsContent value="queue" className="mt-0">
               <ScrollArea className="h-[500px] pr-4">
                 {filteredQueue.length > 0 ? (
                   <DragDropContext onDragEnd={handleDragEnd}>
-                    <Droppable droppableId="droppable-queue-drawer">
+                    <Droppable droppableId="queue-drawer-droppable">
                       {(provided) => (
                         <div
                           {...provided.droppableProps}
@@ -165,8 +154,8 @@ const QueueDrawer = ({
                             const videoId = getVideoIdFromUrl(song.youtube);
                             return (
                               <Draggable 
-                                key={`queue-drawer-${song.id}-${index}`} 
-                                draggableId={`queue-drawer-${song.id}-${index}`} 
+                                key={`queue-item-${song.id}`} 
+                                draggableId={`queue-item-${song.id}`} 
                                 index={index}
                               >
                                 {(provided) => (

@@ -453,17 +453,6 @@ const Playlists = () => {
                           {filteredQueue.length}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => setShowPlayedSongs(!showPlayedSongs)} 
-                          className={`${showPlayedSongs ? 'bg-primary/10' : ''} text-black`}
-                        >
-                          <Filter className="h-4 w-4 mr-2" />
-                          {showPlayedSongs ? 'Show All' : 'Hide Played'}
-                        </Button>
-                      </div>
                     </div>
                     
                     <Separator className="mb-4" />
@@ -471,15 +460,15 @@ const Playlists = () => {
                     <ScrollArea className="h-[500px] pr-4">
                       {filteredQueue.length > 0 ? (
                         <DragDropContext onDragEnd={handleDragEnd}>
-                          <Droppable droppableId="droppable-playlist-queue">
+                          <Droppable droppableId="playlist-queue-droppable">
                             {provided => (
                               <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                                 {filteredQueue.map((song, index) => {
                                   const videoId = getVideoIdFromUrl(song.youtube);
                                   return (
                                     <Draggable 
-                                      key={`playlist-${song.id}-${index}`} 
-                                      draggableId={`playlist-${song.id}-${index}`} 
+                                      key={`playlist-${song.id}`} 
+                                      draggableId={`playlist-${song.id}`} 
                                       index={index}
                                     >
                                       {provided => (
