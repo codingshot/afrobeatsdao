@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Play, Plus, ExternalLink, ArrowLeft, Music } from 'lucide-react';
@@ -74,6 +73,36 @@ const ArtistProfile = () => {
     });
   };
   
+  const playAllSongs = () => {
+    if (!artist) return;
+    
+    const [firstSong, ...restSongs] = artist.top_songs;
+    if (firstSong) {
+      const videoId = getVideoId(firstSong.youtube);
+      playNow({
+        id: `${artist.id}-${firstSong.title}`,
+        youtube: videoId,
+        title: firstSong.title,
+        artist: artist.name
+      });
+      
+      restSongs.forEach(song => {
+        const videoId = getVideoId(song.youtube);
+        addToQueue({
+          id: `${artist.id}-${song.title}`,
+          youtube: videoId,
+          title: song.title,
+          artist: artist.name
+        });
+      });
+      
+      toast({
+        title: "Playing All Songs",
+        description: `Now playing ${artist.name}'s top songs`
+      });
+    }
+  };
+  
   if (!artist) {
     return (
       <div className="min-h-screen bg-background pt-4">
@@ -144,6 +173,13 @@ const ArtistProfile = () => {
                   <Music size={24} className="text-[#008751]" />
                   Top Songs
                 </h2>
+                <Button 
+                  onClick={playAllSongs}
+                  className="bg-[#008751] text-white hover:bg-[#008751]/90"
+                >
+                  <Play className="mr-2 h-4 w-4" />
+                  Play All
+                </Button>
               </div>
               
               <Separator className="mb-4" />
@@ -207,18 +243,22 @@ const ArtistProfile = () => {
                   .map((relatedArtist) => (
                     <div 
                       key={relatedArtist.id}
-                      className="cursor-pointer"
+                      className="cursor-pointer relative group"
                       onClick={() => navigate(`/music/artist/${relatedArtist.id}`)}
                     >
-                      <div className="rounded-lg overflow-hidden h-24 mb-2">
+                      <div className="rounded-lg overflow-hidden h-24 relative">
                         <img 
                           src={relatedArtist.image} 
                           alt={relatedArtist.name}
                           className="w-full h-full object-cover"
                           onError={handleImageError}
                         />
+                        <div className="absolute inset-0 bg-black/60 opacity-100">
+                          <p className="text-white font-medium text-center absolute inset-0 flex items-center justify-center p-2">
+                            {relatedArtist.name}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-sm font-medium text-center truncate">{relatedArtist.name}</p>
                     </div>
                   ))}
               </div>
