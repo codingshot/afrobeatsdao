@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown, CreativeCommons } from "lucide-react";
 import { FlippableAlbum } from "./FlippableAlbum";
