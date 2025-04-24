@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ListMusic, MoveVertical } from 'lucide-react';
+
 interface Playlist {
   id: string;
   title: string;
@@ -23,6 +24,7 @@ interface Playlist {
   url: string;
   description: string;
 }
+
 interface Artist {
   id: string;
   name: string;
@@ -32,6 +34,7 @@ interface Artist {
   spotify_url?: string;
   youtube_id?: string;
 }
+
 const PLAYLISTS: Playlist[] = [{
   id: "spotify1",
   title: "Afrobeats Essentials",
@@ -96,6 +99,7 @@ const PLAYLISTS: Playlist[] = [{
   url: "https://www.youtube.com/watch?v=WXgfbrxF8Bc",
   description: "Live DJ mix of the hottest Afrobeats tracks."
 }];
+
 const TRENDING_ARTISTS: Artist[] = [{
   id: "artist1",
   name: "Burna Boy",
@@ -145,6 +149,7 @@ const TRENDING_ARTISTS: Artist[] = [{
   spotify_url: "https://open.spotify.com/artist/2C7xu0MSn3WBY9XIT9CWol",
   youtube_id: "MtQdhe_EH6Q"
 }];
+
 const Playlists = () => {
   console.log("Playlists component rendering");
 
@@ -276,7 +281,7 @@ const Playlists = () => {
         <div className="flex flex-col items-center text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-black">Afrobeats Music</h1>
           <p className="text-xl max-w-2xl mx-auto text-black/90">
-            Discover the best curated Afrobeats playlists across major streaming platforms.
+            Listen to the top Afrobeats playlists, music, and artists
           </p>
         </div>
         
