@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import QueueDrawer from "./QueueDrawer";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, ListExpand, ListCollapse
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, List, ListCollapse
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -430,7 +430,7 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 className="text-white hover:bg-white/10"
                 title={queueVisible ? "Hide queue" : "Show queue"}
               >
-                {queueVisible ? <ListCollapse className="h-5 w-5" /> : <ListExpand className="h-5 w-5" />}
+                {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
               </Button>
               
               <Button
