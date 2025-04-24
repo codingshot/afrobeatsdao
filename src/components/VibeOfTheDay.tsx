@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Shuffle, Play } from "lucide-react";
+import { Shuffle, Play, Video, VideoOff } from "lucide-react";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 
 // Export the array of video IDs so it can be used in other components
@@ -84,9 +84,10 @@ export function VibeOfTheDay() {
             
             <Button 
               onClick={toggleVideoEmbed} 
-              className="bg-[#008751] hover:bg-green-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105"
+              className="bg-[#008751] hover:bg-green-700 text-white font-heading text-xl px-8 py-6 rounded-full shadow-lg transform transition hover:scale-105 flex items-center gap-3"
             >
-              {showVideoEmbed ? "Hide Video" : "Show Video"}
+              {showVideoEmbed ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
+              <span>{showVideoEmbed ? "Hide Video" : "Show Video"}</span>
             </Button>
           </div>
         </div>
