@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +8,7 @@ import { Filter, Play, ListMusic, MoveVertical, Download } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import MarkdownPreviewDialog from "./MarkdownPreviewDialog";
 
 interface QueueDrawerProps {
   queue: Song[];
@@ -30,6 +30,8 @@ const QueueDrawer = ({
   setShowPlayedSongs
 }: QueueDrawerProps) => {
   const [activeTab, setActiveTab] = useState<string>("queue");
+  const [markdownDialogOpen, setMarkdownDialogOpen] = useState(false);
+  const [markdownContent, setMarkdownContent] = useState("");
   const { toast } = useToast();
   
   const getVideoThumbnail = (videoId: string) => {
@@ -54,36 +56,45 @@ const QueueDrawer = ({
     reorderQueue(result.source.index, result.destination.index);
   };
 
-  const exportQueueAsMarkdown = () => {
-    let markdownContent = "# Afrobeats Music Queue\n\n";
+  const generateMarkdownContent = (tab: "queue" | "history") => {
+    let content = "# Afrobeats Music History\n\n";
     
-    if (activeTab === "queue") {
-      markdownContent += "## Current Queue\n\n";
+    if (tab === "queue") {
+      content += "## Current Queue\n\n";
       if (filteredQueue.length === 0) {
-        markdownContent += "*Queue is empty*\n\n";
+        content += "*Queue is empty*\n\n";
       } else {
         filteredQueue.forEach((song, index) => {
-          markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
-          markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
-          markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+          content += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+          content += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+          content += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
         });
       }
     } else {
-      markdownContent += "## Play History\n\n";
+      content += "## Play History\n\n";
       if (playedSongsList.length === 0) {
-        markdownContent += "*No play history*\n\n";
+        content += "*No play history*\n\n";
       } else {
         playedSongsList.forEach((song, index) => {
-          markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
-          markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
-          markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+          content += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+          content += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+          content += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
         });
       }
     }
     
-    markdownContent += "---\n";
-    markdownContent += `Exported on ${new Date().toLocaleString()}\n`;
-    
+    content += "---\n";
+    content += `Exported on ${new Date().toLocaleString()}\n`;
+    return content;
+  };
+
+  const handleExportClick = () => {
+    const content = generateMarkdownContent(activeTab);
+    setMarkdownContent(content);
+    setMarkdownDialogOpen(true);
+  };
+
+  const handleDownload = () => {
     const blob = new Blob([markdownContent], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -98,15 +109,14 @@ const QueueDrawer = ({
       title: "Export successful",
       description: activeTab === "queue" ? "Queue exported as markdown file" : "Play history exported as markdown file"
     });
+    setMarkdownDialogOpen(false);
   };
 
   if (!isVisible) return null;
 
-  // Convert playedSongs Set to an array of Song objects we can render
   const playedSongsList: Song[] = Array.from(playedSongs).map(id => {
     const song = queue.find(s => s.id === id);
     if (song) return song;
-    // If not in queue, create a placeholder object
     return { id, youtube: id.replace('vibe-', ''), title: 'Previously played song', artist: '' };
   }).filter(Boolean) as Song[];
 
@@ -279,11 +289,21 @@ const QueueDrawer = ({
           <Button 
             variant="outline" 
             className="w-full mt-4 flex items-center gap-2 bg-white text-black"
-            onClick={exportQueueAsMarkdown}
+            onClick={handleExportClick}
+            disabled={activeTab === "queue" ? filteredQueue.length === 0 : playedSongsList.length === 0}
           >
             <Download className="h-4 w-4" />
             Export {activeTab === "queue" ? "Queue" : "History"} as Markdown
           </Button>
+
+          <MarkdownPreviewDialog 
+            open={markdownDialogOpen}
+            onOpenChange={setMarkdownDialogOpen}
+            markdownContent={markdownContent}
+            handleDownload={handleDownload}
+            title={`Export ${activeTab === "queue" ? "Queue" : "History"}`}
+          />
+
         </CardContent>
       </Card>
     </div>
