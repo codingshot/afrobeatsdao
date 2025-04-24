@@ -67,4 +67,7 @@ const MarkdownPreviewDialog = ({
         </div>
       </DialogContent>
     </Dialog>
-  </DialogContent>;
+  );
+};
+
+export default MarkdownPreviewDialog;
