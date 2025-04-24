@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { ListMusic, MoveVertical } from 'lucide-react';
 
 interface Playlist {
   id: string;
@@ -184,7 +185,7 @@ const Playlists = () => {
     };
   }
   
-  const { playNow, addToQueue, queue } = audioPlayerContext;
+  const { playNow, addToQueue, queue, currentSong, reorderQueue } = audioPlayerContext;
   const { toast } = useToast();
   
   // Add an effect to log when the component mounts/unmounts
@@ -197,6 +198,14 @@ const Playlists = () => {
   const [platformFilter, setPlatformFilter] = useState("all");
   const [queueVisible, setQueueVisible] = useState(true);
   const [sortMode, setSortMode] = useState<"default" | "asc" | "desc">("default");
+  const [showPlayedSongs, setShowPlayedSongs] = useState(false);
+  const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (currentSong?.id) {
+      setPlayedSongs(prev => new Set([...prev, currentSong.id]));
+    }
+  }, [currentSong]);
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/AfrobeatsDAOMeta.png";
@@ -281,6 +290,33 @@ const Playlists = () => {
       artist.popular_song.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
+
+  const getVideoThumbnail = (videoId: string) => {
+    return `https://img.youtube.com/vi/${videoId}/default.jpg`;
+  };
+
+  const getVideoIdFromUrl = (url: string): string => {
+    if (url.includes('v=')) {
+      return url.split('v=')[1]?.split('&')[0] || '';
+    } else if (url.includes('youtu.be/')) {
+      return url.split('youtu.be/')[1]?.split('?')[0] || '';
+    }
+    return url;
+  };
+
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+    
+    const items = Array.from(queue);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    
+    reorderQueue(result.source.index, result.destination.index);
+  };
+
+  const filteredQueue = queue.filter(song => 
+    !showPlayedSongs || !playedSongs.has(song.id)
+  );
 
   return (
     <div className="min-h-screen bg-background pt-4">
@@ -518,45 +554,104 @@ const Playlists = () => {
               <Card className="h-full border bg-white">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-black">Up Next</h3>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => {
-                        const randomPlaylist = PLAYLISTS.filter(p => p.platform === "youtube")[
-                          Math.floor(Math.random() * PLAYLISTS.filter(p => p.platform === "youtube").length)
-                        ];
-                        if (randomPlaylist) handleAddToQueue(randomPlaylist);
-                      }}
-                      className="text-black hover:bg-black/10"
-                    >
-                      <Shuffle className="h-4 w-4 mr-2" />
-                      Shuffle
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-black">Up Next</h3>
+                      <Badge variant="outline" className="ml-2">
+                        {filteredQueue.length}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowPlayedSongs(!showPlayedSongs)}
+                        className={`${showPlayedSongs ? 'bg-primary/10' : ''} text-black`}
+                      >
+                        <Filter className="h-4 w-4 mr-2" />
+                        {showPlayedSongs ? 'Show All' : 'Hide Played'}
+                      </Button>
+                    </div>
                   </div>
                   
                   <Separator className="mb-4" />
                   
                   <ScrollArea className="h-[500px] pr-4">
-                    {queue.length > 0 ? (
-                      <div className="space-y-3">
-                        {queue.map((song, index) => (
-                          <div 
-                            key={`${song.id}-${index}`}
-                            className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10"
-                          >
-                            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-primary/10 rounded-md">
-                              {index + 1}
+                    {filteredQueue.length > 0 ? (
+                      <DragDropContext onDragEnd={handleDragEnd}>
+                        <Droppable droppableId="queue">
+                          {(provided) => (
+                            <div
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                              className="space-y-3"
+                            >
+                              {filteredQueue.map((song, index) => {
+                                const videoId = getVideoIdFromUrl(song.youtube);
+                                return (
+                                  <Draggable 
+                                    key={`${song.id}-${index}`} 
+                                    draggableId={`${song.id}-${index}`} 
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        className="flex items-center gap-3 p-2 rounded-md hover:bg-accent/10 group"
+                                      >
+                                        <div 
+                                          {...provided.dragHandleProps}
+                                          className="text-gray-400 hover:text-gray-600 cursor-grab"
+                                        >
+                                          <MoveVertical className="h-4 w-4" />
+                                        </div>
+                                        
+                                        <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">
+                                          <img 
+                                            src={getVideoThumbnail(videoId)}
+                                            alt={song.title || "Video thumbnail"}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                              e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+                                            }}
+                                          />
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 hover:bg-black/70 text-white"
+                                            onClick={() => playNow(song)}
+                                          >
+                                            <Play className="h-4 w-4" />
+                                          </Button>
+                                        </div>
+                                        
+                                        <div className="flex-1 min-w-0">
+                                          <h4 className="font-medium text-sm truncate">
+                                            {song.title || "Unknown Title"}
+                                          </h4>
+                                          <p className="text-xs text-muted-foreground truncate">
+                                            {song.artist || "Unknown Artist"}
+                                          </p>
+                                        </div>
+                                        
+                                        {playedSongs.has(song.id) && (
+                                          <Badge variant="outline" className="ml-auto">
+                                            Played
+                                          </Badge>
+                                        )}
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                );
+                              })}
+                              {provided.placeholder}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-sm truncate">{song.title || "Unknown Title"}</h4>
-                              <p className="text-xs text-muted-foreground truncate">{song.artist || "Unknown Artist"}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
                     ) : (
                       <div className="text-center py-8 text-muted-foreground">
+                        <ListMusic className="h-8 w-8 mx-auto mb-2 opacity-50" />
                         <p>Your queue is empty</p>
                         <p className="text-sm mt-2">Add songs from playlists</p>
                       </div>
