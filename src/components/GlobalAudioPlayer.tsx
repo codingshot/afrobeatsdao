@@ -2,9 +2,10 @@ import { createContext, useContext, useState, useEffect, useCallback, useRef } f
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
+import QueueDrawer from "./QueueDrawer";
 import { 
   Play, Pause, SkipForward, SkipBack, Volume2, VolumeX,
-  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff
+  Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, ListExpand, ListCollapse
 } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -63,6 +64,9 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
   const [isLoading, setIsLoading] = useState(false);
   const [loadingTitle, setLoadingTitle] = useState<string>("Loading...");
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
+  const [queueVisible, setQueueVisible] = useState(false);
+  const [showPlayedSongs, setShowPlayedSongs] = useState(false);
+  const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (youtubeApiLoaded && player && !currentSong) {
@@ -313,6 +317,12 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
     setExpandedView(prev => !prev);
   }, []);
 
+  useEffect(() => {
+    if (currentSong?.id) {
+      setPlayedSongs(prev => new Set([...prev, currentSong.id]));
+    }
+  }, [currentSong]);
+
   return (
     <GlobalAudioPlayerContext.Provider value={{
       currentSong,
@@ -344,6 +354,17 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
       >
         <div id="youtube-player"></div>
       </div>
+
+      <QueueDrawer 
+        queue={queue}
+        isVisible={queueVisible}
+        playNow={playNow}
+        reorderQueue={reorderQueue}
+        playedSongs={playedSongs}
+        showPlayedSongs={showPlayedSongs}
+        setShowPlayedSongs={setShowPlayedSongs}
+      />
+
       <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
         {currentSong || isLoading ? (
           <div className="max-w-7xl mx-auto flex flex-col gap-2">
@@ -400,73 +421,84 @@ export const GlobalAudioPlayerProvider = ({ children }: { children: React.ReactN
                 </Button>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleVideo}
-                  className="text-white hover:bg-white/10"
-                  title={videoVisible ? "Hide video" : "Show video"}
-                >
-                  {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setVolume(volume === 0 ? 100 : 0)}
-                  className="text-white hover:bg-white/10"
-                >
-                  {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                </Button>
-                
-                <div className="w-24">
-                  <Slider
-                    value={[volume]}
-                    min={0}
-                    max={100}
-                    step={1}
-                    onValueChange={([value]) => updateVolume(value)}
-                    className="cursor-pointer flex-1"
-                  />
-                </div>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleExpandedView}
-                  className="text-white hover:bg-white/10"
-                  title={expandedView ? "Collapse video" : "Show video"}
-                >
-                  {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-                </Button>
+            
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setQueueVisible(!queueVisible)}
+                className="text-white hover:bg-white/10"
+                title={queueVisible ? "Hide queue" : "Show queue"}
+              >
+                {queueVisible ? <ListCollapse className="h-5 w-5" /> : <ListExpand className="h-5 w-5" />}
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleVideo}
+                className="text-white hover:bg-white/10"
+                title={videoVisible ? "Hide video" : "Show video"}
+              >
+                {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setVolume(volume === 0 ? 100 : 0)}
+                className="text-white hover:bg-white/10"
+              >
+                {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+              </Button>
+              
+              <div className="w-24">
+                <Slider
+                  value={[volume]}
+                  min={0}
+                  max={100}
+                  step={1}
+                  onValueChange={([value]) => updateVolume(value)}
+                  className="cursor-pointer flex-1"
+                />
               </div>
-            </div>
-
-            <div className="flex items-center gap-2 w-full px-2">
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(currentTime)}
-              </span>
-              <Slider
-                value={[currentTime]}
-                min={0}
-                max={duration}
-                step={1}
-                onValueChange={([value]) => {
-                  setCurrentTime(value);
-                  setIsDragging(true);
-                }}
-                onValueCommit={([value]) => {
-                  handleTimeChange(value);
-                  setIsDragging(false);
-                }}
-                className="cursor-pointer flex-1"
-              />
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(duration)}
-              </span>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleExpandedView}
+                className="text-white hover:bg-white/10"
+                title={expandedView ? "Collapse video" : "Show video"}
+              >
+                {expandedView ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
+
+          <div className="flex items-center gap-2 w-full px-2">
+            <span className="text-xs text-gray-400 min-w-[40px]">
+              {formatTime(currentTime)}
+            </span>
+            <Slider
+              value={[currentTime]}
+              min={0}
+              max={duration}
+              step={1}
+              onValueChange={([value]) => {
+                setCurrentTime(value);
+                setIsDragging(true);
+              }}
+              onValueCommit={([value]) => {
+                handleTimeChange(value);
+                setIsDragging(false);
+              }}
+              className="cursor-pointer flex-1"
+            />
+            <span className="text-xs text-gray-400 min-w-[40px]">
+              {formatTime(duration)}
+            </span>
+          </div>
+        </div>
         ) : (
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
