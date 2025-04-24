@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Apple, Youtube, Headphones, ChevronDown } from "lucide-react";
@@ -37,19 +36,8 @@ export function MusicSection() {
             <span>Album</span>
             <span className="text-5xl" aria-label="Music emoji">🎵</span>
           </h2>
-          <p className="text-xl max-w-2xl mx-auto text-black flex items-center justify-center gap-2">
-            Afrobeats is a{" "}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <CreativeCommons className="w-6 h-6 text-black" />
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs text-center">
-                  CC0 is a Creative Commons license that allows creators to waive all copyright and related rights to their work, placing it in the public domain for free use without restrictions.
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>{" "}
-            <b>Public Good Album</b> 🆓 — our CC0 album available everywhere soon.
+          <p className="text-xl max-w-2xl mx-auto text-black flex flex-wrap items-center justify-center gap-2 px-4">
+            Afrobeats is a CC0 (Creative Commons Zero) Public Good Album 🆓 — our album available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
             Album drops June 6th, 2025!
