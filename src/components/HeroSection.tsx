@@ -21,7 +21,7 @@ export function HeroSection() {
         </div>
         <p className="text-black text-2xl md:text-3xl max-w-2xl mx-auto hero-subtitle">the only hub for everything Afrobeats - music, DJs, events, clubs, dance + more</p>
         <div className="space-x-6">
-          <Button size="lg" className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" onClick={() => window.open('https://discord.gg/afrobeats', '_blank')}>
+          <Button size="lg" className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
             Join the Movement
           </Button>
           <Button size="lg" variant="outline" className="bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" onClick={scrollToVibe}>

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, ExternalLink, Music2, Headphones, Youtube, Search, Filter, List, ArrowUp, ArrowDown, Shuffle } from "lucide-react";
+import { Play, ExternalLink, Music2, Headphones, Youtube, Search, Filter, List, ArrowUp, ArrowDown, Shuffle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ const PLAYLISTS: Playlist[] = [{
   id: "spotify1",
   title: "Afrobeats Essentials",
   platform: "spotify",
-  image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b2737d2ca0bc0cc6c94710f13a51ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
+  image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
   url: "https://open.spotify.com/playlist/37i9dQZF1DX5lDwDtPVwBk",
   description: "The essential Afrobeats tracks you need to know."
 }, {
@@ -182,11 +182,13 @@ const Playlists = () => {
       return matchesSearch && matchesPlatform;
     });
     
-    if (sortMode === "asc") {
-      filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sortMode === "desc") {
-      filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
-    }
+    filtered = filtered.sort((a, b) => {
+      if (a.platform === 'youtube' && b.platform !== 'youtube') return -1;
+      if (a.platform !== 'youtube' && b.platform === 'youtube') return 1;
+      if (sortMode === "asc") return a.title.localeCompare(b.title);
+      if (sortMode === "desc") return b.title.localeCompare(a.title);
+      return 0;
+    });
     
     return filtered;
   }, [searchQuery, platformFilter, sortMode]);
@@ -206,10 +208,52 @@ const Playlists = () => {
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
-    const items = Array.from(queue);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
     reorderQueue(result.source.index, result.destination.index);
+  };
+
+  const exportQueueAsMarkdown = () => {
+    let markdownContent = "# Afrobeats Music Queue\n\n";
+    
+    markdownContent += "## Current Queue\n\n";
+    if (filteredQueue.length === 0) {
+      markdownContent += "*Queue is empty*\n\n";
+    } else {
+      filteredQueue.forEach((song, index) => {
+        markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+        markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+        markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+      });
+    }
+    
+    markdownContent += "## Play History\n\n";
+    if (playedSongs.size === 0) {
+      markdownContent += "*No play history*\n\n";
+    } else {
+      Array.from(playedSongs).forEach((id, index) => {
+        const song = queue.find(s => s.id === id) || { id, youtube: id.replace('vibe-', ''), title: 'Previously played song', artist: '' };
+        markdownContent += `${index + 1}. **${song.title || "Unknown Title"}** - ${song.artist || "Unknown Artist"}\n`;
+        markdownContent += `   - Video ID: ${getVideoIdFromUrl(song.youtube)}\n`;
+        markdownContent += `   - URL: https://www.youtube.com/watch?v=${getVideoIdFromUrl(song.youtube)}\n\n`;
+      });
+    }
+    
+    markdownContent += "---\n";
+    markdownContent += `Exported on ${new Date().toLocaleString()}\n`;
+    
+    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "afrobeats-music-collection.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Export successful",
+      description: "Music collection exported as markdown file"
+    });
   };
 
   const filteredQueue = queue.filter(song => !showPlayedSongs || !playedSongs.has(song.id));
@@ -299,13 +343,17 @@ const Playlists = () => {
             <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
               <Tabs defaultValue="artists" className="w-full">
                 <TabsList className="w-full grid grid-cols-2 mb-8 bg-white">
-                  <TabsTrigger value="playlists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
-                    Top Playlists
-                  </TabsTrigger>
                   <TabsTrigger value="artists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
                     Artists
                   </TabsTrigger>
+                  <TabsTrigger value="playlists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
+                    Top Playlists
+                  </TabsTrigger>
                 </TabsList>
+                
+                <TabsContent value="artists" className="mt-6">
+                  <ArtistsList searchQuery={searchQuery} />
+                </TabsContent>
                 
                 <TabsContent value="playlists" className="mt-6 space-y-4 w-full">
                   <AnimatePresence>
@@ -387,10 +435,6 @@ const Playlists = () => {
                     )}
                   </AnimatePresence>
                 </TabsContent>
-                
-                <TabsContent value="artists" className="mt-6">
-                  <ArtistsList searchQuery={searchQuery} />
-                </TabsContent>
               </Tabs>
             </div>
             
@@ -409,17 +453,6 @@ const Playlists = () => {
                           {filteredQueue.length}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => setShowPlayedSongs(!showPlayedSongs)} 
-                          className={`${showPlayedSongs ? 'bg-primary/10' : ''} text-black`}
-                        >
-                          <Filter className="h-4 w-4 mr-2" />
-                          {showPlayedSongs ? 'Show All' : 'Hide Played'}
-                        </Button>
-                      </div>
                     </div>
                     
                     <Separator className="mb-4" />
@@ -427,13 +460,17 @@ const Playlists = () => {
                     <ScrollArea className="h-[500px] pr-4">
                       {filteredQueue.length > 0 ? (
                         <DragDropContext onDragEnd={handleDragEnd}>
-                          <Droppable droppableId="queue">
+                          <Droppable droppableId="playlist-queue-droppable">
                             {provided => (
                               <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                                 {filteredQueue.map((song, index) => {
                                   const videoId = getVideoIdFromUrl(song.youtube);
                                   return (
-                                    <Draggable key={`${song.id}-${index}`} draggableId={`${song.id}-${index}`} index={index}>
+                                    <Draggable 
+                                      key={`playlist-${song.id}`} 
+                                      draggableId={`playlist-${song.id}`} 
+                                      index={index}
+                                    >
                                       {provided => (
                                         <div 
                                           ref={provided.innerRef} 
@@ -495,6 +532,15 @@ const Playlists = () => {
                         </div>
                       )}
                     </ScrollArea>
+                    
+                    <Button 
+                      variant="outline" 
+                      className="w-full mt-4 flex items-center gap-2 bg-white text-black"
+                      onClick={exportQueueAsMarkdown}
+                    >
+                      <Download className="h-4 w-4" />
+                      Export Music Collection
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>
