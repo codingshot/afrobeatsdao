@@ -8,7 +8,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Music, Users, Calendar, Play, Search } from "lucide-react";
+import { Music, Users, Calendar, Play, Search, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
@@ -166,6 +166,21 @@ const MainNavbar = ({ className }: { className?: string }) => {
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+              
+              <NavigationMenuItem>
+                <Link to="/careers">
+                  <NavigationMenuLink
+                    className={cn(
+                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
+                      location.pathname.startsWith("/careers") &&
+                        "bg-black/10 text-black"
+                    )}
+                  >
+                    <Briefcase className="mr-2 h-4 w-4" />
+                    Careers
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -192,4 +207,3 @@ const MainNavbar = ({ className }: { className?: string }) => {
 };
 
 export default MainNavbar;
-

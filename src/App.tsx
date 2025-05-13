@@ -15,6 +15,8 @@ import Clubs from "./pages/Clubs";
 import Events from "./pages/Events";
 import Playlists from "./pages/Playlists";
 import ArtistProfile from "./pages/ArtistProfile";
+import Careers from "./pages/Careers";
+import JobDetails from "./pages/JobDetails";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 
 const App = () => {
@@ -39,6 +41,8 @@ const App = () => {
                   <Route path="/events" element={<div className="page-events"><Events /></div>} />
                   <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
                   <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
+                  <Route path="/careers" element={<div className="page-careers"><Careers /></div>} />
+                  <Route path="/careers/:slug" element={<div className="page-careers"><JobDetails /></div>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
