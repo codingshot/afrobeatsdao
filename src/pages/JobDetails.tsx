@@ -61,7 +61,7 @@ const JobDetails = () => {
 
   return (
     <div className="min-h-screen bg-black text-white pb-20">
-      <div className="container mx-auto py-12 px-4">
+      <div className="container mx-auto py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <Button 

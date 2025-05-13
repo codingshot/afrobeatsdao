@@ -11,7 +11,7 @@ import { jobListings } from "@/data/job-listings";
 const Careers = () => {
   return (
     <div className="min-h-screen bg-black text-white pb-20">
-      <div className="container mx-auto py-12 px-4">
+      <div className="container mx-auto py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[#FFD600]">Careers</h1>
           
