@@ -1,6 +1,5 @@
 
-import { Twitter } from "lucide-react";
-import { Telegram } from "lucide-react";
+import { Twitter, MessageCircle } from "lucide-react";
 
 export function Footer() {
   return (
@@ -33,7 +32,7 @@ export function Footer() {
               className="hover:text-[#FFD700] transition-colors" 
               aria-label="Telegram"
             >
-              <Telegram className="h-7 w-7" />
+              <MessageCircle className="h-7 w-7" />
             </a>
             <a 
               href="https://discord.gg/TNrWwSA955" 
