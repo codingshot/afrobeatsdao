@@ -74,7 +74,7 @@ const JobDetails = () => {
               Back to Careers
             </Button>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white" style={{ color: 'white !important' }}>
               {job.title}
             </h1>
             
