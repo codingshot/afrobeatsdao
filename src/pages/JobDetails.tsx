@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -74,7 +73,7 @@ const JobDetails = () => {
               Back to Careers
             </Button>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white" style={{ color: 'white !important' }}>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD600]" style={{ color: '#FFD600 !important' }}>
               {job.title}
             </h1>
             
