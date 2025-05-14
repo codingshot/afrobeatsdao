@@ -1,5 +1,5 @@
 
-import { Twitter, MessageCircle } from "lucide-react";
+import { Twitter, MessageCircle, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -33,6 +33,15 @@ export function Footer() {
               aria-label="Telegram"
             >
               <MessageCircle className="h-7 w-7" />
+            </a>
+            <a 
+              href="https://linkedin.com/company/afrobeats" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-[#FFD700] transition-colors" 
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="h-7 w-7" />
             </a>
             <a 
               href="https://discord.gg/TNrWwSA955" 
