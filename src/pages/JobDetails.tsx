@@ -74,7 +74,9 @@ const JobDetails = () => {
               Back to Careers
             </Button>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD600]">{job.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              {job.title}
+            </h1>
             
             <div className="flex flex-wrap gap-3 mb-6">
               <span className="bg-zinc-800 px-4 py-2 rounded-md text-zinc-300 flex items-center">
