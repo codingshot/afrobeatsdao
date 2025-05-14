@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import type { MapContainerProps } from 'react-leaflet';
@@ -7,7 +8,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { MapPin, ExternalLink, Music, Clock, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
-import 'leaflet/dist/leaflet.css';
+// The import below is handled by MapWrapper.tsx
+// import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Badge } from '@/components/ui/badge';
 import {
