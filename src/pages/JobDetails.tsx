@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,12 @@ import { JobListing } from "@/types/job";
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+
+// Add a custom style to ensure the job title text color is properly set
+const jobTitleStyle = {
+  color: '#FFD600',
+  textShadow: '0 0 1px rgba(255, 214, 0, 0.5)'
+};
 
 const JobDetails = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -73,7 +80,11 @@ const JobDetails = () => {
               Back to Careers
             </Button>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-[#FFD600]" style={{ color: '#FFD600 !important' }}>
+            {/* Using both inline style and className for maximum specificity */}
+            <h1 
+              className="text-3xl md:text-4xl font-bold mb-6" 
+              style={jobTitleStyle}
+            >
               {job.title}
             </h1>
             
