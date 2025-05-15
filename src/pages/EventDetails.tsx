@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deslugify, slugify } from '@/lib/slugUtils';
@@ -165,15 +164,15 @@ const EventDetails = () => {
         <meta name="twitter:image" content={bannerImage} />
       </Helmet>
       
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-black text-white">
         <Header />
         
         <main className="flex-1">
           {!event ? (
             <div className="container mx-auto px-4 py-24">
               <div className="flex flex-col items-center justify-center h-full">
-                <h1 className="text-3xl font-bold mb-4 text-slate-900">Event not found</h1>
-                <p className="text-lg mb-6 text-slate-800">Sorry, we couldn't find the event you're looking for.</p>
+                <h1 className="text-3xl font-bold mb-4 text-white">Event not found</h1>
+                <p className="text-lg mb-6 text-white">Sorry, we couldn't find the event you're looking for.</p>
                 <Button variant="default" className="bg-[#008751] text-white hover:bg-[#008751]/90" asChild>
                   <Link to="/events">
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -197,9 +196,9 @@ const EventDetails = () => {
                     }}
                   />
                 </AspectRatio>
-                {/* Back button positioned as overlay */}
-                <div className="absolute top-4 left-4 z-10">
-                  <Button variant="outline" className="bg-white/80 backdrop-blur-sm hover:bg-white/90" asChild>
+                {/* Back button positioned as overlay - with higher z-index and more visible styling */}
+                <div className="absolute top-4 left-4 z-20">
+                  <Button variant="outline" className="bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 border-white/30" asChild>
                     <Link to="/events">
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Back to Events
@@ -211,14 +210,14 @@ const EventDetails = () => {
               <div className="container mx-auto px-4 py-8">
                 {/* Event title - positioned below the banner */}
                 <div className="mb-8">
-                  <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-950">{event.name}</h1>
+                  <h1 className="text-4xl md:text-5xl font-heading font-bold text-white">{event.name}</h1>
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2">
                     {/* Event info row: date, location, organizer */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                      <div className="flex flex-wrap gap-6 md:gap-8 text-slate-800">
+                    <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                      <div className="flex flex-wrap gap-6 md:gap-8 text-white">
                         <div className="flex items-center gap-2">
                           <CalendarDays className="h-5 w-5 text-[#008751]" />
                           <div>
@@ -249,15 +248,15 @@ const EventDetails = () => {
                     </div>
                     
                     {/* Event description */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                      <h2 className="text-2xl font-heading font-bold mb-4 text-slate-900">About This Event</h2>
-                      <p className="text-slate-800 whitespace-pre-line">{event.details.event_description}</p>
+                    <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                      <h2 className="text-2xl font-heading font-bold mb-4 text-white">About This Event</h2>
+                      <p className="text-white whitespace-pre-line">{event.details.event_description}</p>
                     </div>
                     
                     {/* Ticket information */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                      <h2 className="text-2xl font-heading font-bold mb-4 text-slate-900">Ticket Information</h2>
-                      <p className="text-slate-800 mb-4 whitespace-pre-line">{event.details.ticket_info}</p>
+                    <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                      <h2 className="text-2xl font-heading font-bold mb-4 text-white">Ticket Information</h2>
+                      <p className="text-white mb-4 whitespace-pre-line">{event.details.ticket_info}</p>
                       
                       {event.details.website && (
                         <Button variant="accent" className="bg-[#008751] text-white hover:bg-[#008751]/90" asChild>
@@ -272,8 +271,8 @@ const EventDetails = () => {
                   
                   <div className="lg:col-span-1">
                     {/* Map */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                      <h2 className="text-xl font-heading font-bold mb-4 text-slate-900">Location</h2>
+                    <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                      <h2 className="text-xl font-heading font-bold mb-4 text-white">Location</h2>
                       <div className="rounded-lg overflow-hidden">
                         {mapUrl && (
                           <iframe
@@ -288,14 +287,14 @@ const EventDetails = () => {
                           ></iframe>
                         )}
                       </div>
-                      <p className="mt-2 text-sm text-slate-600">{event.details.location}</p>
+                      <p className="mt-2 text-sm text-gray-300">{event.details.location}</p>
                     </div>
                     
                     {/* Website */}
                     {event.details.website && (
-                      <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                        <h2 className="text-xl font-heading font-bold mb-4 text-slate-900">Official Website</h2>
-                        <Button variant="outline" className="w-full" asChild>
+                      <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                        <h2 className="text-xl font-heading font-bold mb-4 text-white">Official Website</h2>
+                        <Button variant="outline" className="w-full border-gray-700 text-white hover:bg-gray-800" asChild>
                           <a href={event.details.website} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="mr-2 h-4 w-4" />
                             Visit Website
@@ -309,11 +308,11 @@ const EventDetails = () => {
                 {/* Related events */}
                 {relatedEvents.length > 0 && (
                   <div className="mt-12">
-                    <h2 className="text-3xl font-heading font-bold mb-6 text-slate-900">Related Events</h2>
+                    <h2 className="text-3xl font-heading font-bold mb-6 text-white">Related Events</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {relatedEvents.map(({ name, details }) => (
                         <Link key={name} to={`/event/${slugify(name)}`}>
-                          <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                          <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-gray-900 border-gray-800">
                             <div className="h-48 relative">
                               <img 
                                 src={getImageUrl(details.image_url)} 
@@ -326,12 +325,12 @@ const EventDetails = () => {
                               />
                             </div>
                             <CardContent className="p-4">
-                              <h3 className="font-bold text-lg mb-2 text-slate-900">{name}</h3>
-                              <div className="flex items-center text-sm text-slate-600 mb-2">
+                              <h3 className="font-bold text-lg mb-2 text-white">{name}</h3>
+                              <div className="flex items-center text-sm text-gray-300 mb-2">
                                 <CalendarDays className="h-4 w-4 mr-1" />
                                 <span>{formatDate(details.start_date)}</span>
                               </div>
-                              <div className="flex items-center text-sm text-slate-600">
+                              <div className="flex items-center text-sm text-gray-300">
                                 <MapPin className="h-4 w-4 mr-1" />
                                 <span className="truncate">{details.location}</span>
                               </div>
