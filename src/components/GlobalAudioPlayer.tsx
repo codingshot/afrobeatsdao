@@ -40,6 +40,16 @@ interface GlobalAudioPlayerContextType {
   isDragging: boolean;
 }
 
+// Local storage keys
+const STORAGE_KEYS = {
+  CURRENT_SONG: 'afrobeats_current_song',
+  QUEUE: 'afrobeats_queue',
+  VOLUME: 'afrobeats_volume',
+  REPEAT: 'afrobeats_repeat',
+  PLAYED_SONGS: 'afrobeats_played_songs',
+  VIDEO_VISIBLE: 'afrobeats_video_visible'
+};
+
 const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | null>(null);
 
 export const GlobalAudioPlayerProvider = ({
@@ -69,7 +79,77 @@ export const GlobalAudioPlayerProvider = ({
   const [queueVisible, setQueueVisible] = useState(false);
   const [showPlayedSongs, setShowPlayedSongs] = useState(false);
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { toast } = useToast();
+
+  // Load saved state from local storage on initial render
+  useEffect(() => {
+    try {
+      // Load volume
+      const savedVolume = localStorage.getItem(STORAGE_KEYS.VOLUME);
+      if (savedVolume) {
+        setVolume(parseInt(savedVolume, 10));
+      }
+      
+      // Load repeat setting
+      const savedRepeat = localStorage.getItem(STORAGE_KEYS.REPEAT);
+      if (savedRepeat) {
+        setRepeat(savedRepeat === 'true');
+      }
+      
+      // Load video visibility
+      const savedVideoVisible = localStorage.getItem(STORAGE_KEYS.VIDEO_VISIBLE);
+      if (savedVideoVisible) {
+        setVideoVisible(savedVideoVisible === 'true');
+      }
+
+      // Load queue
+      const savedQueue = localStorage.getItem(STORAGE_KEYS.QUEUE);
+      if (savedQueue) {
+        setQueue(JSON.parse(savedQueue));
+      }
+      
+      // Load played songs
+      const savedPlayedSongs = localStorage.getItem(STORAGE_KEYS.PLAYED_SONGS);
+      if (savedPlayedSongs) {
+        setPlayedSongs(new Set(JSON.parse(savedPlayedSongs)));
+      }
+      
+      // Load current song
+      const savedCurrentSong = localStorage.getItem(STORAGE_KEYS.CURRENT_SONG);
+      if (savedCurrentSong) {
+        const parsedSong = JSON.parse(savedCurrentSong);
+        setCurrentSong(parsedSong);
+        setLoadingTitle(parsedSong.title || "Loading...");
+      }
+    } catch (e) {
+      console.error("Error loading saved player state:", e);
+    }
+  }, []);
+
+  // Save state to local storage whenever it changes
+  useEffect(() => {
+    if (isInitialLoad) return; // Skip on initial load
+    
+    try {
+      if (currentSong) {
+        localStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(currentSong));
+      }
+      
+      localStorage.setItem(STORAGE_KEYS.QUEUE, JSON.stringify(queue));
+      localStorage.setItem(STORAGE_KEYS.VOLUME, volume.toString());
+      localStorage.setItem(STORAGE_KEYS.REPEAT, repeat.toString());
+      localStorage.setItem(STORAGE_KEYS.VIDEO_VISIBLE, videoVisible.toString());
+      
+      // Convert Set to Array before saving
+      localStorage.setItem(
+        STORAGE_KEYS.PLAYED_SONGS, 
+        JSON.stringify(Array.from(playedSongs))
+      );
+    } catch (e) {
+      console.error("Error saving player state:", e);
+    }
+  }, [currentSong, queue, volume, repeat, videoVisible, playedSongs, isInitialLoad]);
 
   const toggleQueueVisibility = useCallback(() => {
     console.log("Toggling queue visibility, current state:", queueVisible);
@@ -142,6 +222,11 @@ export const GlobalAudioPlayerProvider = ({
                   setChannelTitle(videoData.author || "Unknown Channel");
                 }
                 setDuration(event.target.getDuration());
+                
+                // After first successful play, mark initial load as complete
+                if (isInitialLoad) {
+                  setIsInitialLoad(false);
+                }
               } else if (event.data === window.YT.PlayerState.PAUSED) {
                 setIsLoading(false);
                 setIsPlaying(false);
@@ -175,6 +260,16 @@ export const GlobalAudioPlayerProvider = ({
             onReady: (event: any) => {
               event.target.setVolume(volume);
               console.log("YouTube player ready");
+              
+              // If we have a saved current song, load it
+              if (currentSong && !isPlaying) {
+                try {
+                  event.target.loadVideoById(currentSong.youtube);
+                  event.target.playVideo();
+                } catch (e) {
+                  console.error("Error loading saved video:", e);
+                }
+              }
             }
           }
         });
@@ -318,6 +413,24 @@ export const GlobalAudioPlayerProvider = ({
   const toggleExpandedView = useCallback(() => {
     setExpandedView(prev => !prev);
   }, []);
+
+  // Add this effect to update time tracking continuously
+  useEffect(() => {
+    if (!player || !isPlaying || isDragging) return;
+    
+    const interval = setInterval(() => {
+      if (player.getCurrentTime) {
+        try {
+          const currentTime = player.getCurrentTime();
+          setCurrentTime(currentTime);
+        } catch (e) {
+          console.error("Error getting current time:", e);
+        }
+      }
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [player, isPlaying, isDragging]);
 
   useEffect(() => {
     if (currentSong?.id) {
