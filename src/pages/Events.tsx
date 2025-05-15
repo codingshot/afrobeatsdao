@@ -1,12 +1,15 @@
+
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Calendar, Filter, Search, MapPin, ExternalLink } from "lucide-react";
+import { Calendar, Filter, Search, MapPin, ExternalLink, CalendarX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
+import { slugify } from "@/lib/slugUtils";
 
 // Define event types to match the events in EventsSection 
 // Renamed from Event to MusicEvent to avoid conflict with DOM Event
@@ -144,26 +147,39 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
 // Derive filter options from events
 const EVENT_TYPES = ["All Types", ...Array.from(new Set(EVENTS.map(event => event.type)))];
 const LOCATIONS = ["All Locations", ...Array.from(new Set(EVENTS.map(event => event.location)))];
+
 const Events = () => {
   // State for filters
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [locationFilter, setLocationFilter] = useState("All Locations");
+  const [showPastEvents, setShowPastEvents] = useState(false);
+
+  // Current date for filtering past/upcoming events
+  const today = new Date();
 
   // Filter events based on search query and filters
   const filteredEvents = useMemo(() => {
     return EVENTS.filter(event => {
       // Apply text search
-      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.description.toLowerCase().includes(searchQuery.toLowerCase()) || event.location.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            event.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            event.location.toLowerCase().includes(searchQuery.toLowerCase());
 
       // Apply type filter
       const matchesType = typeFilter === "All Types" || event.type === typeFilter;
 
       // Apply location filter
       const matchesLocation = locationFilter === "All Locations" || event.location === locationFilter;
-      return matchesSearch && matchesType && matchesLocation;
+      
+      // Apply past/upcoming filter
+      const eventDate = new Date(event.date);
+      const isPastEvent = eventDate < today;
+      const matchesPastFilter = showPastEvents ? isPastEvent : !isPastEvent;
+
+      return matchesSearch && matchesType && matchesLocation && matchesPastFilter;
     });
-  }, [searchQuery, typeFilter, locationFilter]);
+  }, [searchQuery, typeFilter, locationFilter, showPastEvents]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -180,7 +196,9 @@ const Events = () => {
     const imgElement = e.target as HTMLImageElement;
     imgElement.src = '/AfrobeatsDAOMeta.png';
   };
-  return <div className="min-h-screen bg-background">
+
+  return (
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="container mx-auto px-4 py-24">
@@ -208,9 +226,11 @@ const Events = () => {
                   <SelectValue placeholder="Event Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {EVENT_TYPES.map(type => <SelectItem key={type} value={type}>
+                  {EVENT_TYPES.map(type => (
+                    <SelectItem key={type} value={type}>
                       {type}
-                    </SelectItem>)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -222,20 +242,40 @@ const Events = () => {
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {LOCATIONS.map(location => <SelectItem key={location} value={location}>
+                  {LOCATIONS.map(location => (
+                    <SelectItem key={location} value={location}>
                       {location}
-                    </SelectItem>)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+            </div>
+            
+            <div className="flex-1 md:flex-initial w-full md:w-48">
+              <Button
+                variant={showPastEvents ? "default" : "outline"}
+                onClick={() => setShowPastEvents(!showPastEvents)}
+                className={`w-full ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}`}
+              >
+                <CalendarX className="mr-2 h-4 w-4" />
+                {showPastEvents ? "Past Events" : "Upcoming Events"}
+              </Button>
             </div>
           </div>
         </div>
         
         {/* Events grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredEvents.length > 0 ? filteredEvents.map(event => <Card key={event.id} className="overflow-hidden flex flex-col h-full">
+          {filteredEvents.length > 0 ? filteredEvents.map(event => (
+            <Link to={`/event/${slugify(event.title)}`} key={event.id}>
+              <Card className="overflow-hidden flex flex-col h-full transition-transform hover:scale-[1.02] duration-300">
                 <div className="relative h-48 overflow-hidden">
-                  <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform hover:scale-105 duration-300" onError={handleImageError} />
+                  <img 
+                    src={event.image} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover"
+                    onError={handleImageError} 
+                  />
                   <Badge className="absolute top-2 right-2 bg-[#008751] hover:bg-[#008751]/90">
                     {event.type}
                   </Badge>
@@ -258,27 +298,37 @@ const Events = () => {
                 </CardContent>
                 
                 <CardFooter className="flex justify-between border-t pt-4">
-                  {event.ticketLink && <Button variant="accent" asChild>
-                      <a href={event.ticketLink} target="_blank" rel="noopener noreferrer">
+                  {event.ticketLink && (
+                    <Button variant="accent" asChild>
+                      <a href={event.ticketLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                         Get Tickets
                       </a>
-                    </Button>}
+                    </Button>
+                  )}
                   
-                  {event.website && <Button variant="outline" asChild>
-                      <a href={event.website} target="_blank" rel="noopener noreferrer">
+                  {event.website && (
+                    <Button variant="outline" asChild>
+                      <a href={event.website} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                         <ExternalLink className="mr-2 h-4 w-4" />
                         Website
                       </a>
-                    </Button>}
+                    </Button>
+                  )}
                 </CardFooter>
-              </Card>) : <div className="col-span-full text-center py-12">
+              </Card>
+            </Link>
+          )) : (
+            <div className="col-span-full text-center py-12">
               <h3 className="text-xl font-medium mb-2">No events found</h3>
               <p>Try adjusting your search filters</p>
-            </div>}
+            </div>
+          )}
         </div>
       </main>
       
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Events;

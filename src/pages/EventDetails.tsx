@@ -1,11 +1,15 @@
-import { CalendarDays, MapPin } from "lucide-react";
-import { formatDate } from "@/lib/utils";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { slugify } from "@/lib/slugUtils";
 
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { CalendarDays, MapPin, ExternalLink, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { deslugify } from "@/lib/slugUtils";
+import { formatDate } from "@/lib/utils";
+
+// Using the same Event type from EventsSection.tsx
 type Event = {
   image_url: string;
   website: string;
@@ -140,10 +144,26 @@ const EVENTS: Record<string, Event> = {
   }
 };
 
-export function EventsSection() {
-  const [showPastEvents, setShowPastEvents] = useState(false);
-  const today = new Date();
-  const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
+const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
+
+function EventDetails() {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  
+  // Find the event by slugified name
+  const eventName = deslugify(slug || '');
+  const event = EVENTS[eventName];
+  
+  // Handle case where event is not found
+  useEffect(() => {
+    if (!event) {
+      navigate('/events', { replace: true });
+    }
+  }, [event, navigate]);
+  
+  if (!event) {
+    return null;
+  }
   
   const getImageUrl = (imageUrl: string) => {
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
@@ -155,102 +175,140 @@ export function EventsSection() {
     return `/${imageUrl}`;
   };
   
-  const filteredEvents = Object.entries(EVENTS).filter(([, event]) => {
-    const endDate = new Date(event.end_date);
-    if (showPastEvents) {
-      return endDate < today;
-    }
-    return endDate >= today;
-  }).sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-  
-  const isEventActive = (startDate: string, endDate: string) => {
-    const now = today.getTime();
-    const start = new Date(startDate).getTime();
-    const end = new Date(endDate).getTime();
+  const isEventActive = () => {
+    const now = new Date().getTime();
+    const start = new Date(event.start_date).getTime();
+    const end = new Date(event.end_date).getTime();
     return now >= start && now <= end;
+  };
+  
+  const isUpcoming = () => {
+    return new Date(event.start_date).getTime() > new Date().getTime();
   };
 
   return (
-    <section id="events" className="py-16 font-afro bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2 text-black">
-            <span>Events</span>
-            <span className="text-4xl">🎊</span>
-          </h2>
-          <div className="flex justify-center gap-4 mb-8">
-            <Button 
-              variant={!showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(false)} 
-              className="bg-[#008751] text-white hover:bg-[#008751]/90"
-            >
-              Upcoming Events
-            </Button>
-            <Button 
-              variant={showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(true)} 
-              className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}
-            >
-              Past Events
-            </Button>
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <main>
+        {/* Hero Banner */}
+        <div className="relative w-full h-80 sm:h-96 md:h-[500px]">
+          <img
+            src={getImageUrl(event.image_url)}
+            alt={`${eventName} banner`}
+            onError={(e) => {
+              const imgElement = e.target as HTMLImageElement;
+              imgElement.src = DEFAULT_IMAGE;
+            }}
+            className="w-full h-full object-cover"
+          />
+          
+          <div className="absolute inset-0 bg-black/30"></div>
+          
+          <div className="absolute inset-0 flex items-center">
+            <div className="container mx-auto px-4">
+              <div className="max-w-3xl text-white">
+                {isEventActive() && (
+                  <span className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    Happening Now
+                  </span>
+                )}
+                
+                {!isEventActive() && isUpcoming() && (
+                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    Upcoming
+                  </span>
+                )}
+                
+                {!isEventActive() && !isUpcoming() && (
+                  <span className="bg-gray-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
+                    Past Event
+                  </span>
+                )}
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-2 drop-shadow-md">
+                  {eventName}
+                </h1>
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <MapPin className="shrink-0" />
+                  <span className="text-lg drop-shadow-md">{event.location}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         
-        {filteredEvents.length > 0 ? (
-          <Carousel opts={{ align: "start", loop: true }} className="w-full">
-            <CarouselContent>
-              {filteredEvents.map(([name, event]) => (
-                <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
-                  <Link to={`/event/${slugify(name)}`} className="block">
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]">
-                      <div className="relative aspect-[16/9]">
-                        <img 
-                          src={getImageUrl(event.image_url)} 
-                          onError={(e) => {
-                            const imgElement = e.target as HTMLImageElement;
-                            imgElement.src = DEFAULT_IMAGE;
-                          }}
-                          alt={`${name} poster`} 
-                          className="absolute inset-0 w-full h-full object-cover" 
-                        />
-                        {isEventActive(event.start_date, event.end_date) && (
-                          <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                            Active
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-6 space-y-4">
-                        <h3 className="text-2xl font-heading font-bold text-slate-950">{name}</h3>
-                        
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <MapPin className="shrink-0" />
-                          <span>{event.location}</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <CalendarDays className="shrink-0" />
-                          <span>
-                            {formatDate(event.start_date)}
-                            {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                          </span>
-                        </div>
-                        
-                        <p className="text-gray-600 line-clamp-2">
-                          {event.event_description}
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h2 className="text-3xl font-heading font-bold mb-6 text-slate-950">About the Event</h2>
+                <p className="text-lg text-gray-700 mb-8">{event.event_description}</p>
+                
+                <div className="border-t pt-6">
+                  <h3 className="text-xl font-bold mb-4 text-slate-950">Event Details</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CalendarDays className="shrink-0 mt-1 text-[#008751]" />
+                      <div>
+                        <h4 className="font-semibold text-slate-950">Date</h4>
+                        <p>
+                          {formatDate(event.start_date)}
+                          {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
                         </p>
                       </div>
                     </div>
-                  </Link>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        ) : (
-          <div className="text-center text-gray-500">
-            {showPastEvents ? "No past events to display." : "No upcoming events to display."}
+                    
+                    <div className="flex items-start gap-3">
+                      <MapPin className="shrink-0 mt-1 text-[#008751]" />
+                      <div>
+                        <h4 className="font-semibold text-slate-950">Location</h4>
+                        <p>{event.location}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <Users className="shrink-0 mt-1 text-[#008751]" />
+                      <div>
+                        <h4 className="font-semibold text-slate-950">Organizer</h4>
+                        <p>{event.organizer}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <div className="bg-white rounded-lg shadow-lg p-8 sticky top-32">
+                <h3 className="text-2xl font-heading font-bold mb-6 text-slate-950">Ticket Information</h3>
+                <p className="text-gray-700 mb-6">{event.ticket_info}</p>
+                
+                <div className="space-y-4">
+                  <Button asChild className="w-full bg-[#008751] hover:bg-[#008751]/90">
+                    <a href={event.website} target="_blank" rel="noopener noreferrer">
+                      Get Tickets
+                    </a>
+                  </Button>
+                  
+                  <Button variant="outline" asChild className="w-full">
+                    <a href={event.website} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Visit Website
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-    </section>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
   );
 }
+
+export default EventDetails;
