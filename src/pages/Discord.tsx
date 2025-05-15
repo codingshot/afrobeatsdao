@@ -7,7 +7,7 @@ const Discord = () => {
   return (
     <div className="min-h-screen bg-[#1e1f22] text-white pt-20 pb-10">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl md:text-5xl font-heading text-center mb-8 text-[#FFD600]">Join Our Discord Community</h1>
+        <h1 className="text-4xl md:text-5xl font-heading text-center mb-8 text-white">Join Our Discord Community</h1>
         
         <div className="flex flex-col items-center mb-16">
           <p className="text-lg mb-8 text-center max-w-xl">
@@ -19,7 +19,7 @@ const Discord = () => {
               src="https://discord.com/widget?id=1293855849151725588&theme=dark" 
               width="350" 
               height="500" 
-              allowTransparency={true} 
+              allowtransparency="true" 
               frameBorder="0" 
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
               className="mx-auto"
@@ -29,7 +29,7 @@ const Discord = () => {
         </div>
         
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-heading text-center mb-6 text-[#FFD600]">Follow Us On Social Media</h2>
+          <h2 className="text-2xl font-heading text-center mb-6 text-white">Follow Us On Social Media</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <a 
