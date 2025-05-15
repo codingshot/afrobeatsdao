@@ -1,13 +1,16 @@
 
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { CalendarDays, MapPin, ExternalLink, Users } from "lucide-react";
+import { CalendarDays, MapPin, ExternalLink, Users, Clock, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { deslugify } from "@/lib/slugUtils";
+import { deslugify, slugify } from "@/lib/slugUtils";
 import { formatDate } from "@/lib/utils";
+import { MapPreview } from '@/components/MapPreview';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
 
 // Using the same Event type from EventsSection.tsx
 type Event = {
@@ -149,6 +152,7 @@ const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
 function EventDetails() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [relatedEvents, setRelatedEvents] = useState<Array<{ name: string; event: Event }>>([]);
   
   // Find the event by slugified name
   const eventName = deslugify(slug || '');
@@ -160,6 +164,52 @@ function EventDetails() {
       navigate('/events', { replace: true });
     }
   }, [event, navigate]);
+  
+  // Find related events
+  useEffect(() => {
+    if (!event) return;
+
+    // Get all events except current one
+    const allEvents = Object.entries(EVENTS)
+      .filter(([name]) => name !== eventName)
+      .map(([name, event]) => ({ name, event }));
+    
+    // Calculate scores for each event based on relation factors
+    const currentDate = new Date();
+    const scoredEvents = allEvents.map(eventItem => {
+      let score = 0;
+      
+      // Score for upcoming events (higher score for upcoming)
+      const eventEndDate = new Date(eventItem.event.end_date);
+      if (eventEndDate >= currentDate) {
+        score += 5;
+        
+        // Closer events get higher score
+        const daysUntilEvent = Math.ceil((eventEndDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+        if (daysUntilEvent < 30) score += 3;
+        else if (daysUntilEvent < 90) score += 2;
+      }
+      
+      // Score for location similarity
+      if (eventItem.event.location.includes(event.location.split(',').pop()?.trim() || '')) {
+        score += 4;
+      }
+      
+      // Score for similar organizer
+      if (eventItem.event.organizer.includes(event.organizer.split(',')[0].trim())) {
+        score += 3;
+      }
+      
+      return { ...eventItem, score };
+    });
+    
+    // Sort by score and take top 3
+    const topRelatedEvents = scoredEvents
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+    
+    setRelatedEvents(topRelatedEvents);
+  }, [event, eventName]);
   
   if (!event) {
     return null;
@@ -191,7 +241,7 @@ function EventDetails() {
       <Header />
       
       <main>
-        {/* Hero Banner */}
+        {/* Hero Banner with improved contrast */}
         <div className="relative w-full h-80 sm:h-96 md:h-[500px]">
           <img
             src={getImageUrl(event.image_url)}
@@ -203,7 +253,8 @@ function EventDetails() {
             className="w-full h-full object-cover"
           />
           
-          <div className="absolute inset-0 bg-black/30"></div>
+          {/* Darker overlay for better contrast */}
+          <div className="absolute inset-0 bg-black/60"></div>
           
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
@@ -226,13 +277,21 @@ function EventDetails() {
                   </span>
                 )}
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-2 drop-shadow-md">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-4 drop-shadow-md">
                   {eventName}
                 </h1>
                 
                 <div className="flex items-center gap-2 mb-4">
                   <MapPin className="shrink-0" />
                   <span className="text-lg drop-shadow-md">{event.location}</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Calendar className="shrink-0" />
+                  <span className="text-lg drop-shadow-md">
+                    {formatDate(event.start_date)}
+                    {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -278,7 +337,54 @@ function EventDetails() {
                     </div>
                   </div>
                 </div>
+                
+                {/* Map preview section */}
+                <div className="mt-8 border-t pt-6">
+                  <h3 className="text-xl font-bold mb-4 text-slate-950">Location</h3>
+                  <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+                    <MapPreview location={event.location} />
+                  </div>
+                </div>
               </div>
+              
+              {/* Related Events Section */}
+              {relatedEvents.length > 0 && (
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  <h3 className="text-2xl font-heading font-bold mb-6 text-slate-950">Related Events</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {relatedEvents.map(({ name, event: relatedEvent }) => (
+                      <Link to={`/event/${slugify(name)}`} key={name} className="block">
+                        <Card className="h-full transition-transform hover:scale-105">
+                          <div className="w-full h-40 overflow-hidden">
+                            <img
+                              src={getImageUrl(relatedEvent.image_url)}
+                              alt={name}
+                              onError={(e) => {
+                                const imgElement = e.target as HTMLImageElement;
+                                imgElement.src = DEFAULT_IMAGE;
+                              }}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base">{name}</CardTitle>
+                            <CardDescription className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              <span className="truncate">{relatedEvent.location}</span>
+                            </CardDescription>
+                          </CardHeader>
+                          <CardFooter className="pt-0">
+                            <div className="flex items-center gap-1 text-xs">
+                              <Clock className="h-3 w-3" />
+                              <span>{formatDate(relatedEvent.start_date)}</span>
+                            </div>
+                          </CardFooter>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             
             <div>
