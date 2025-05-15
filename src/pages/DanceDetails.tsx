@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useState, useRef } from "react";
+import { Helmet } from "react-helmet";
 
 const DanceDetails = () => {
   const { genre, id } = useParams();
@@ -101,7 +102,28 @@ const DanceDetails = () => {
     );
   }
 
-  return <DanceDetailsComponent dance={dance} />;
+  // SEO meta information
+  const danceTitle = dance?.name || 'Dance Details';
+  const danceDescription = dance?.description || 'Learn about this dance style on Afrobeats.party';
+  const danceThumbnail = dance?.thumbnail || '/AfrobeatsDAOMeta.png';
+
+  return (
+    <>
+      <Helmet>
+        <title>{`${danceTitle} | Afrobeats.party`}</title>
+        <meta name="description" content={danceDescription} />
+        <meta property="og:title" content={`${danceTitle} | Afrobeats.party`} />
+        <meta property="og:description" content={danceDescription} />
+        <meta property="og:image" content={danceThumbnail} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${danceTitle} | Afrobeats.party`} />
+        <meta name="twitter:description" content={danceDescription} />
+        <meta name="twitter:image" content={danceThumbnail} />
+      </Helmet>
+      <DanceDetailsComponent dance={dance} />
+    </>
+  );
 };
 
 export default DanceDetails;
