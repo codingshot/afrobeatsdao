@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -264,7 +263,7 @@ const Events = () => {
           </div>
         </div>
         
-        {/* Events grid */}
+        {/* Events grid with correct links */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredEvents.length > 0 ? filteredEvents.map(event => (
             <Link to={`/event/${slugify(event.title)}`} key={event.id}>

@@ -253,8 +253,8 @@ function EventDetails() {
             className="w-full h-full object-cover"
           />
           
-          {/* Darker overlay for better contrast */}
-          <div className="absolute inset-0 bg-black/60"></div>
+          {/* Darker overlay for better text contrast */}
+          <div className="absolute inset-0 bg-black/70"></div>
           
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
@@ -277,18 +277,18 @@ function EventDetails() {
                   </span>
                 )}
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-4 drop-shadow-md">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-4 drop-shadow-lg">
                   {eventName}
                 </h1>
                 
                 <div className="flex items-center gap-2 mb-4">
                   <MapPin className="shrink-0" />
-                  <span className="text-lg drop-shadow-md">{event.location}</span>
+                  <span className="text-lg drop-shadow-lg">{event.location}</span>
                 </div>
                 
                 <div className="flex items-center gap-2">
                   <Calendar className="shrink-0" />
-                  <span className="text-lg drop-shadow-md">
+                  <span className="text-lg drop-shadow-lg">
                     {formatDate(event.start_date)}
                     {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
                   </span>
@@ -338,7 +338,7 @@ function EventDetails() {
                   </div>
                 </div>
                 
-                {/* Map preview section */}
+                {/* Map preview section with fixed height */}
                 <div className="mt-8 border-t pt-6">
                   <h3 className="text-xl font-bold mb-4 text-slate-950">Location</h3>
                   <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
@@ -347,7 +347,7 @@ function EventDetails() {
                 </div>
               </div>
               
-              {/* Related Events Section */}
+              {/* Related Events Section with proper links */}
               {relatedEvents.length > 0 && (
                 <div className="bg-white rounded-lg shadow-lg p-8">
                   <h3 className="text-2xl font-heading font-bold mb-6 text-slate-950">Related Events</h3>
