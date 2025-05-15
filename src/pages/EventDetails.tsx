@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { deslugify } from '@/lib/slugUtils';
+import { useParams, useNavigate } from 'react-router-dom';
+import { deslugify, slugify } from '@/lib/slugUtils';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CalendarDays, MapPin, Users, ExternalLink, ArrowLeft } from "lucide-react";
@@ -11,11 +10,10 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { slugify } from "@/lib/slugUtils";
 import { Helmet } from "react-helmet";
 
-// Import the events data
-import { EventsSection } from "@/components/EventsSection";
+// Import directly from EventsSection without using require
+import { EVENTS } from "@/components/EventsSection";
 
 interface Event {
   image_url: string;
@@ -27,18 +25,6 @@ interface Event {
   end_date: string;
   ticket_info: string;
 }
-
-// Get the events data from EventsSection component
-const getEventsData = () => {
-  // This is a reference to the EVENTS object in EventsSection
-  const eventsModule = require('../components/EventsSection');
-  if (eventsModule && eventsModule.EVENTS) {
-    return eventsModule.EVENTS;
-  }
-  return {};
-};
-
-const EVENTS: Record<string, Event> = getEventsData();
 
 const EventDetails = () => {
   const { slug } = useParams<{ slug: string }>();

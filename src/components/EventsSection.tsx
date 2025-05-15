@@ -17,7 +17,7 @@ type Event = {
   ticket_info: string;
 };
 
-const EVENTS: Record<string, Event> = {
+export const EVENTS: Record<string, Event> = {
   "Afro Nation Portugal": {
     image_url: "/afornationportugal.jpg",
     website: "https://www.afronation.com",
