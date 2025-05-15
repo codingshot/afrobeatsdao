@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deslugify, slugify } from '@/lib/slugUtils';
@@ -270,6 +271,19 @@ const EventDetails = () => {
                   </div>
                   
                   <div className="lg:col-span-1">
+                    {/* Website - MOVED ABOVE LOCATION */}
+                    {event.details.website && (
+                      <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
+                        <h2 className="text-xl font-heading font-bold mb-4 text-white">Official Website</h2>
+                        <Button variant="accent" className="w-full bg-[#FFD600] text-black hover:bg-[#FFD600]/90 font-medium" asChild>
+                          <a href={event.details.website} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Visit Website
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                    
                     {/* Map */}
                     <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
                       <h2 className="text-xl font-heading font-bold mb-4 text-white">Location</h2>
@@ -289,19 +303,6 @@ const EventDetails = () => {
                       </div>
                       <p className="mt-2 text-sm text-gray-300">{event.details.location}</p>
                     </div>
-                    
-                    {/* Website */}
-                    {event.details.website && (
-                      <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
-                        <h2 className="text-xl font-heading font-bold mb-4 text-white">Official Website</h2>
-                        <Button variant="accent" className="w-full bg-[#FFD600] text-black hover:bg-[#FFD600]/90 font-medium" asChild>
-                          <a href={event.details.website} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Visit Website
-                          </a>
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 </div>
                 
