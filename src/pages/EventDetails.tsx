@@ -1,18 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { CalendarDays, MapPin, ExternalLink, Users, Clock, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { deslugify, slugify } from "@/lib/slugUtils";
-import { formatDate } from "@/lib/utils";
+import { useParams, Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Calendar, MapPin, User, ExternalLink } from 'lucide-react';
+import { formatDate } from '@/lib/utils';
+import { slugify } from '@/lib/slugUtils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Card, CardContent } from '@/components/ui/card';
 import { MapPreview } from '@/components/MapPreview';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from '@/components/ui/badge';
 
-// Using the same Event type from EventsSection.tsx
 type Event = {
   image_url: string;
   website: string;
@@ -24,6 +20,7 @@ type Event = {
   ticket_info: string;
 };
 
+// Reuse the EVENTS data from EventsSection
 const EVENTS: Record<string, Event> = {
   "Afro Nation Portugal": {
     image_url: "/afornationportugal.jpg",
@@ -149,72 +146,78 @@ const EVENTS: Record<string, Event> = {
 
 const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
 
-function EventDetails() {
+const EventDetails = () => {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const [relatedEvents, setRelatedEvents] = useState<Array<{ name: string; event: Event }>>([]);
-  
-  // Find the event by slugified name
-  const eventName = deslugify(slug || '');
-  const event = EVENTS[eventName];
-  
-  // Handle case where event is not found
-  useEffect(() => {
-    if (!event) {
-      navigate('/events', { replace: true });
-    }
-  }, [event, navigate]);
-  
-  // Find related events
-  useEffect(() => {
-    if (!event) return;
+  const [event, setEvent] = useState<Event | null>(null);
+  const [eventName, setEventName] = useState<string>('');
+  const [relatedEvents, setRelatedEvents] = useState<Array<{ name: string, event: Event }>>([]);
 
-    // Get all events except current one
-    const allEvents = Object.entries(EVENTS)
-      .filter(([name]) => name !== eventName)
-      .map(([name, event]) => ({ name, event }));
+  useEffect(() => {
+    if (!slug) return;
+
+    // Find the event based on the slug
+    let foundEvent: Event | null = null;
+    let foundEventName = '';
     
-    // Calculate scores for each event based on relation factors
-    const currentDate = new Date();
-    const scoredEvents = allEvents.map(eventItem => {
-      let score = 0;
-      
-      // Score for upcoming events (higher score for upcoming)
-      const eventEndDate = new Date(eventItem.event.end_date);
-      if (eventEndDate >= currentDate) {
-        score += 5;
-        
-        // Closer events get higher score
-        const daysUntilEvent = Math.ceil((eventEndDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-        if (daysUntilEvent < 30) score += 3;
-        else if (daysUntilEvent < 90) score += 2;
+    for (const [name, eventData] of Object.entries(EVENTS)) {
+      if (slugify(name) === slug) {
+        foundEvent = eventData;
+        foundEventName = name;
+        break;
       }
+    }
+
+    setEvent(foundEvent);
+    setEventName(foundEventName);
+
+    // Find related events - prioritize upcoming, nearby, or similar events
+    if (foundEvent) {
+      const today = new Date();
+      const foundEventLocation = foundEvent.location.split(',')[foundEvent.location.split(',').length - 1].trim();
       
-      // Score for location similarity
-      if (eventItem.event.location.includes(event.location.split(',').pop()?.trim() || '')) {
-        score += 4;
-      }
+      const related = Object.entries(EVENTS)
+        .filter(([name]) => name !== foundEventName)
+        .map(([name, event]) => {
+          const endDate = new Date(event.end_date);
+          const isUpcoming = endDate >= today;
+          const locationMatch = event.location.includes(foundEventLocation);
+          const similarType = name.toLowerCase().includes(foundEventName.toLowerCase().split(' ')[0]) || 
+                              foundEventName.toLowerCase().includes(name.toLowerCase().split(' ')[0]);
+          
+          // Calculate a relevance score
+          let score = 0;
+          if (isUpcoming) score += 3;
+          if (locationMatch) score += 2;
+          if (similarType) score += 1;
+          
+          return { name, event, score };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
+        .map(({ name, event }) => ({ name, event }));
       
-      // Score for similar organizer
-      if (eventItem.event.organizer.includes(event.organizer.split(',')[0].trim())) {
-        score += 3;
-      }
-      
-      return { ...eventItem, score };
-    });
-    
-    // Sort by score and take top 3
-    const topRelatedEvents = scoredEvents
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
-    
-    setRelatedEvents(topRelatedEvents);
-  }, [event, eventName]);
-  
-  if (!event) {
-    return null;
+      setRelatedEvents(related);
+    }
+  }, [slug]);
+
+  if (!event || !eventName) {
+    return (
+      <div className="min-h-screen py-16 bg-gradient-to-b from-[#1A1F2C] to-[#000000] text-white px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center">
+            <h1 className="text-2xl text-white mb-4">Event not found</h1>
+            <Button asChild>
+              <Link to="/events" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Events
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
-  
+
   const getImageUrl = (imageUrl: string) => {
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl;
@@ -224,197 +227,147 @@ function EventDetails() {
     }
     return `/${imageUrl}`;
   };
-  
-  const isEventActive = () => {
-    const now = new Date().getTime();
-    const start = new Date(event.start_date).getTime();
-    const end = new Date(event.end_date).getTime();
-    return now >= start && now <= end;
-  };
-  
-  const isUpcoming = () => {
-    return new Date(event.start_date).getTime() > new Date().getTime();
-  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main>
-        {/* Hero Banner with improved contrast */}
-        <div className="relative w-full h-80 sm:h-96 md:h-[500px]">
+    <div className="bg-white min-h-screen">
+      {/* Banner with overlay for better text visibility */}
+      <div className="relative">
+        <div className="w-full h-64 sm:h-80 md:h-96 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#000000cc] to-transparent z-10"></div>
           <img
             src={getImageUrl(event.image_url)}
-            alt={`${eventName} banner`}
             onError={(e) => {
               const imgElement = e.target as HTMLImageElement;
               imgElement.src = DEFAULT_IMAGE;
             }}
-            className="w-full h-full object-cover"
+            alt={`${eventName} banner`}
+            className="absolute inset-0 w-full h-full object-cover"
           />
-          
-          {/* Darker overlay for better text contrast */}
-          <div className="absolute inset-0 bg-black/70"></div>
-          
-          <div className="absolute inset-0 flex items-center">
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl text-white">
-                {isEventActive() && (
-                  <span className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
-                    Happening Now
-                  </span>
-                )}
-                
-                {!isEventActive() && isUpcoming() && (
-                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
-                    Upcoming
-                  </span>
-                )}
-                
-                {!isEventActive() && !isUpcoming() && (
-                  <span className="bg-gray-500 text-white px-4 py-1 rounded-full text-sm font-medium inline-block mb-4">
-                    Past Event
-                  </span>
-                )}
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-4 drop-shadow-lg">
-                  {eventName}
-                </h1>
-                
-                <div className="flex items-center gap-2 mb-4">
-                  <MapPin className="shrink-0" />
-                  <span className="text-lg drop-shadow-lg">{event.location}</span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Calendar className="shrink-0" />
-                  <span className="text-lg drop-shadow-lg">
-                    {formatDate(event.start_date)}
-                    {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h2 className="text-3xl font-heading font-bold mb-6 text-slate-950">About the Event</h2>
-                <p className="text-lg text-gray-700 mb-8">{event.event_description}</p>
-                
-                <div className="border-t pt-6">
-                  <h3 className="text-xl font-bold mb-4 text-slate-950">Event Details</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <CalendarDays className="shrink-0 mt-1 text-[#008751]" />
-                      <div>
-                        <h4 className="font-semibold text-slate-950">Date</h4>
-                        <p>
-                          {formatDate(event.start_date)}
-                          {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <MapPin className="shrink-0 mt-1 text-[#008751]" />
-                      <div>
-                        <h4 className="font-semibold text-slate-950">Location</h4>
-                        <p>{event.location}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <Users className="shrink-0 mt-1 text-[#008751]" />
-                      <div>
-                        <h4 className="font-semibold text-slate-950">Organizer</h4>
-                        <p>{event.organizer}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Map preview section with fixed height */}
-                <div className="mt-8 border-t pt-6">
-                  <h3 className="text-xl font-bold mb-4 text-slate-950">Location</h3>
-                  <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                    <MapPreview location={event.location} />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Related Events Section with proper links */}
-              {relatedEvents.length > 0 && (
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <h3 className="text-2xl font-heading font-bold mb-6 text-slate-950">Related Events</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {relatedEvents.map(({ name, event: relatedEvent }) => (
-                      <Link to={`/event/${slugify(name)}`} key={name} className="block">
-                        <Card className="h-full transition-transform hover:scale-105">
-                          <div className="w-full h-40 overflow-hidden">
-                            <img
-                              src={getImageUrl(relatedEvent.image_url)}
-                              alt={name}
-                              onError={(e) => {
-                                const imgElement = e.target as HTMLImageElement;
-                                imgElement.src = DEFAULT_IMAGE;
-                              }}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-base">{name}</CardTitle>
-                            <CardDescription className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3" />
-                              <span className="truncate">{relatedEvent.location}</span>
-                            </CardDescription>
-                          </CardHeader>
-                          <CardFooter className="pt-0">
-                            <div className="flex items-center gap-1 text-xs">
-                              <Clock className="h-3 w-3" />
-                              <span>{formatDate(relatedEvent.start_date)}</span>
-                            </div>
-                          </CardFooter>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <div>
-              <div className="bg-white rounded-lg shadow-lg p-8 sticky top-32">
-                <h3 className="text-2xl font-heading font-bold mb-6 text-slate-950">Ticket Information</h3>
-                <p className="text-gray-700 mb-6">{event.ticket_info}</p>
-                
-                <div className="space-y-4">
-                  <Button asChild className="w-full bg-[#008751] hover:bg-[#008751]/90">
-                    <a href={event.website} target="_blank" rel="noopener noreferrer">
-                      Get Tickets
-                    </a>
-                  </Button>
-                  
-                  <Button variant="outline" asChild className="w-full">
-                    <a href={event.website} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Visit Website
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </div>
+        {/* Title positioned at bottom of banner with good contrast */}
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="relative -mt-32 z-20">
+            <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4 drop-shadow-lg">
+              {eventName}
+            </h1>
           </div>
         </div>
-      </main>
+      </div>
       
-      <Footer />
+      {/* Main content */}
+      <div className="container mx-auto max-w-4xl px-4 py-6">
+        <div className="bg-white rounded-lg shadow-lg p-6 -mt-6">
+          {/* Info section with date, location and organizer in one row */}
+          <div className="flex flex-wrap items-center gap-6 mb-6 text-gray-800 border-b border-gray-200 pb-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-gray-600" />
+              <span className="font-medium">
+                {formatDate(event.start_date)}
+                {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-gray-600" />
+              <span className="font-medium">{event.location}</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <User className="h-5 w-5 text-gray-600" />
+              <span className="font-medium">{event.organizer}</span>
+            </div>
+          </div>
+          
+          {/* Action button */}
+          <div className="mb-6">
+            <Button 
+              asChild
+              className="bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-bold text-lg px-6 py-6 h-auto"
+            >
+              <a href={event.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                Visit Official Website
+                <ExternalLink className="h-5 w-5" />
+              </a>
+            </Button>
+          </div>
+          
+          {/* Description */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">About the Event</h2>
+            <p className="text-gray-700 leading-relaxed">{event.event_description}</p>
+          </div>
+          
+          {/* Ticket information */}
+          <div className="mb-8 bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-2xl font-bold mb-2 text-gray-900">Ticket Information</h2>
+            <p className="text-gray-700">{event.ticket_info}</p>
+          </div>
+          
+          {/* Map section */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Location</h2>
+            <div className="rounded-lg overflow-hidden border border-gray-200 bg-white shadow-sm">
+              <AspectRatio ratio={16/9} className="w-full">
+                <MapPreview location={event.location} />
+              </AspectRatio>
+            </div>
+          </div>
+          
+          {/* Related events */}
+          {relatedEvents.length > 0 && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold mb-6 text-gray-900">Related Events</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedEvents.map(({ name, event }) => (
+                  <Link key={name} to={`/event/${slugify(name)}`} className="block">
+                    <Card className="h-full hover:shadow-lg transition-shadow">
+                      <div className="relative aspect-[16/9]">
+                        <img 
+                          src={getImageUrl(event.image_url)} 
+                          onError={(e) => {
+                            const imgElement = e.target as HTMLImageElement;
+                            imgElement.src = DEFAULT_IMAGE;
+                          }}
+                          alt={`${name} poster`} 
+                          className="absolute inset-0 w-full h-full object-cover rounded-t-lg" 
+                        />
+                      </div>
+                      <CardContent className="py-4">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">{name}</h3>
+                        <div className="flex items-center gap-2 text-gray-600 text-sm">
+                          <Calendar className="h-4 w-4" />
+                          <span>{formatDate(event.start_date)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600 text-sm mt-1">
+                          <MapPin className="h-4 w-4" />
+                          <span className="truncate">{event.location}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Back button */}
+          <div className="mt-12">
+            <Button 
+              asChild
+              variant="outline" 
+              className="flex items-center gap-2"
+            >
+              <Link to="/events">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Events
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default EventDetails;
