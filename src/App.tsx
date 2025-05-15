@@ -13,6 +13,7 @@ import Dance from "./pages/Dance";
 import DanceDetails from "./pages/DanceDetails";
 import Clubs from "./pages/Clubs";
 import Events from "./pages/Events";
+import EventDetails from "./pages/EventDetails";
 import Playlists from "./pages/Playlists";
 import ArtistProfile from "./pages/ArtistProfile";
 import Careers from "./pages/Careers";
@@ -39,6 +40,7 @@ const App = () => {
                   <Route path="/dance/:id" element={<div className="page-dance"><DanceDetails /></div>} />
                   <Route path="/clubs" element={<div className="page-clubs"><Clubs /></div>} />
                   <Route path="/events" element={<div className="page-events"><Events /></div>} />
+                  <Route path="/event/:slug" element={<div className="page-events"><EventDetails /></div>} />
                   <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
                   <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
                   <Route path="/careers" element={<div className="page-careers"><Careers /></div>} />
