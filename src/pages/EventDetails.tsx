@@ -294,7 +294,7 @@ const EventDetails = () => {
                     {event.details.website && (
                       <div className="bg-gray-900 p-6 rounded-lg shadow-sm mb-8">
                         <h2 className="text-xl font-heading font-bold mb-4 text-white">Official Website</h2>
-                        <Button variant="outline" className="w-full border-gray-700 text-white hover:bg-gray-800" asChild>
+                        <Button variant="accent" className="w-full bg-[#FFD600] text-black hover:bg-[#FFD600]/90 font-medium" asChild>
                           <a href={event.details.website} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="mr-2 h-4 w-4" />
                             Visit Website
