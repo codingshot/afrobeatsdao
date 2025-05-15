@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { DanceContent } from "./DanceContent";
 import { useCountryFlags } from "@/hooks/use-country-flags";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export interface Dance {
   id: string;
@@ -66,6 +67,19 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dances
         </Button>
+        
+        {/* Banner image above the dance details */}
+        {dance.image && (
+          <div className="w-full mb-4 sm:mb-6">
+            <AspectRatio ratio={21/9} className="bg-muted rounded-lg overflow-hidden">
+              <img
+                src={dance.image}
+                alt={dance.name}
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
+          </div>
+        )}
         
         <div className="mb-4 sm:mb-6 bg-[#FFD600] rounded-lg p-3 sm:p-6 shadow-lg">
           <div className="flex items-center justify-between flex-wrap gap-2">

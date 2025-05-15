@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deslugify, slugify } from '@/lib/slugUtils';
@@ -194,7 +195,7 @@ const EventDetails = () => {
               </Button>
             </div>
             
-            {/* Event title */}
+            {/* Event title - now positioned below the banner */}
             <div className="mb-8">
               <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-950">{event.name}</h1>
             </div>
