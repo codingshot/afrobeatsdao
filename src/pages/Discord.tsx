@@ -3,6 +3,7 @@ import React from "react";
 import { Footer } from "@/components/Footer";
 import { Separator } from "@/components/ui/separator";
 import { Facebook, Github, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 const Discord = () => {
   const socialLinks = [
@@ -16,6 +17,15 @@ const Discord = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <Helmet>
+        <title>Join Our Discord Community | AfrobeatsDAO</title>
+        <meta name="description" content="Connect with Afrobeats fans from around the world, learn about upcoming events, and participate in discussions about Afrobeats culture on our Discord server." />
+        <meta property="og:title" content="Join Our Discord Community | AfrobeatsDAO" />
+        <meta property="og:description" content="Connect with Afrobeats fans from around the world on our Discord server." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="afrobeats discord, african music community, afrobeats community, music discord server" />
+      </Helmet>
+      
       <div className="container mx-auto py-24 px-4">
         <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center text-[#FFD600]">Join Our Discord Community</h1>
         

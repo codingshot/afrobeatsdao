@@ -7,6 +7,7 @@ import ClubsFilterBar from '@/components/clubs/ClubsFilterBar';
 import { Club, ClubFilters, ClubViewMode, SortOption } from '@/types/club';
 import { CLUBS, getCities, getMusicTypes, getClubTypes } from '@/data/clubs';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Helmet } from "react-helmet";
 
 const Clubs = () => {
   const isMobile = useIsMobile();
@@ -93,6 +94,34 @@ const Clubs = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Helmet>
+        <title>Afrobeats Clubs Directory | Find African Music Venues Worldwide</title>
+        <meta name="description" content={`Discover ${CLUBS.length}+ Afrobeats and African music clubs and venues worldwide. Filter by city, music type, and more to find your next night out.`} />
+        <meta property="og:title" content="Afrobeats Clubs Directory" />
+        <meta property="og:description" content="Find African music venues around the world" />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content={`afrobeats clubs, african music venues, ${cities.join(', ')}, nightlife, dance clubs`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": CLUBS.slice(0, 10).map((club, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "NightClub",
+                "name": club.name,
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": club.city,
+                  "streetAddress": club.address
+                }
+              }
+            }))
+          })}
+        </script>
+      </Helmet>
+
       <main className="flex-1 container mx-auto px-4 py-4">
         <ClubsFilterBar 
           viewMode={viewMode}
