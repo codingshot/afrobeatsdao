@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,10 +6,20 @@ import { Briefcase } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import JobListingCard from "@/components/careers/JobListingCard";
 import { jobListings } from "@/data/job-listings";
+import { Helmet } from "react-helmet";
 
 const Careers = () => {
   return (
     <div className="min-h-screen bg-black text-white pb-20">
+      <Helmet>
+        <title>Careers at AfrobeatsDAO | Join Our Team</title>
+        <meta name="description" content="Join the AfrobeatsDAO team and help us build the ultimate destination for Afrobeats culture. View our current job openings and opportunities." />
+        <meta property="og:title" content="Careers at AfrobeatsDAO" />
+        <meta property="og:description" content="Join the AfrobeatsDAO team and help us build the ultimate destination for Afrobeats culture." />
+        <meta property="og:type" content="website" />
+        <meta name="keywords" content="afrobeats careers, music industry jobs, african music careers, cultural jobs" />
+      </Helmet>
+
       <div className="container mx-auto py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[#FFD600]">Careers</h1>
