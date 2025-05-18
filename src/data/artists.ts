@@ -24,7 +24,7 @@ export const ARTISTS: Artist[] = [
     id: "burna-boy",
     name: "Burna Boy",
     website: "http://www.onaspaceship.com",
-    image: "/images/artists/burnaboy.jpg",
+    image: "/artists/burnaboy.jpg",
     instagram: "https://www.instagram.com/burnaboygram/",
     twitter: "https://x.com/burnaboy",
     spotify: null,
@@ -56,7 +56,7 @@ export const ARTISTS: Artist[] = [
     id: "asake",
     name: "Asake",
     website: null,
-    image: "https://guardian.ng/wp-content/uploads/2023/06/Asake-1.jpg",
+    image: "/artists/asake.jpg",
     top_songs: [
       {
         title: "Sungba",
@@ -88,7 +88,7 @@ export const ARTISTS: Artist[] = [
     id: "davido",
     name: "Davido",
     website: "https://www.iamdavido.com",
-    image: "https://notcommon.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fnotcommon%2Fimage%2Fupload%2Fv1703779727%2Fprofiles%2Fdavido.jpg&w=384&q=75",
+    image: "/artists/davido.jpg",
     top_songs: [
       {
         title: "Fall",
@@ -104,7 +104,7 @@ export const ARTISTS: Artist[] = [
     id: "wizkid",
     name: "Wizkid",
     website: null,
-    image: "https://media.gettyimages.com/id/1687572456/photo/ayodeji-ibrahim-balogun-aka-wizkid-is-seen-at-gucci-ancora-during-milan-fashion-week-on.jpg?s=612x612&w=0&k=20&c=Q3ZQv9F2V7y2Q6K1Tn3i8pK8iZb5l7Q5Yy9K7K7h9qg1U=",
+    image: "/artists/wizkid.jpg",
     top_songs: [
       {
         title: "Essence (feat. Tems)",
@@ -337,6 +337,286 @@ export const ARTISTS: Artist[] = [
       {
         title: "Hat-trick",
         youtube: "https://www.youtube.com/watch?v=7F4Qw8v8-1k"
+      }
+    ]
+  },
+  {
+    id: "rema",
+    name: "Rema",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: "https://open.spotify.com/artist/5yOvAmpIR7hVxiS6Ls5DPO?si=coCiyq1wTLKus5oJBclqxA",
+    youtube: "https://www.youtube.com/channel/UCHGF6zfD2gwLuke95X3CKFQ",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Calm Down",
+        youtube: null
+      },
+      {
+        title: "Dumebi",
+        youtube: null
+      }
+    ]
+  },
+  {
+    id: "ayra-starr",
+    name: "Ayra Starr",
+    website: null,
+    image: null,
+    instagram: "https://www.instagram.com/ayrastarr/",
+    twitter: "https://twitter.com/ayrastarr",
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=NoZi3O6-7Ig",
+    soundcloud: null,
+    tiktok: "https://www.tiktok.com/@ayrastarr",
+    facebook: "https://www.facebook.com/starrayra",
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Rush",
+        youtube: null
+      },
+      {
+        title: "All The Love",
+        youtube: "https://www.youtube.com/watch?v=NoZi3O6-7Ig"
+      }
+    ]
+  },
+  {
+    id: "tems",
+    name: "Tems",
+    website: "https://www.leadingvibe.com/",
+    image: null,
+    instagram: "https://www.instagram.com/temsbaby/",
+    twitter: "https://twitter.com/temsbaby",
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=9KtU6f_ZPjU",
+    soundcloud: null,
+    tiktok: "https://www.tiktok.com/@temsbaby",
+    facebook: "https://www.facebook.com/temsbaby",
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Free Mind",
+        youtube: null
+      },
+      {
+        title: "Not An Angel",
+        youtube: "https://www.youtube.com/watch?v=9KtU6f_ZPjU"
+      }
+    ]
+  },
+  {
+    id: "tiwa-savage",
+    name: "Tiwa Savage",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/tiwasavage",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "All Over",
+        youtube: null
+      },
+      {
+        title: "One Heart (Can Change The World)",
+        youtube: "https://www.youtube.com/watch?v=0B8r8wU9rP4"
+      }
+    ]
+  },
+  {
+    id: "omah-lay",
+    name: "Omah Lay",
+    website: null,
+    image: null,
+    instagram: "https://www.instagram.com/omah_lay/",
+    twitter: "https://twitter.com/Omah_Lay",
+    spotify: "https://open.spotify.com/artist/5yOvAmpIR7hVxiS6Ls5DPO?si=coCiyq1wTLKus5oJBclqxA",
+    youtube: "https://www.youtube.com/watch?v=1oBATitnUsA",
+    soundcloud: null,
+    tiktok: "https://www.tiktok.com/@omah_lay",
+    facebook: "https://www.facebook.com/OfficialOmahLay",
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Holy Ghost",
+        youtube: "https://www.youtube.com/watch?v=1oBATitnUsA"
+      }
+    ]
+  },
+  {
+    id: "fireboy-dml",
+    name: "Fireboy DML",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=J7CHVcjwpAg",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "YAWA",
+        youtube: "https://www.youtube.com/watch?v=J7CHVcjwpAg"
+      }
+    ]
+  },
+  {
+    id: "victony",
+    name: "Victony",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Stubborn (with Asake)",
+        youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM"
+      }
+    ]
+  },
+  {
+    id: "ruger",
+    name: "Ruger",
+    website: null,
+    image: null,
+    instagram: "https://www.instagram.com/rugerofficial/",
+    twitter: "https://twitter.com/rugerofficial",
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=7M2Gps9xR8g",
+    soundcloud: null,
+    tiktok: "https://www.tiktok.com/@rugerofficial",
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Girlfriend",
+        youtube: "https://www.youtube.com/watch?v=7M2Gps9xR8g"
+      }
+    ]
+  },
+  {
+    id: "mr-eazi",
+    name: "Mr Eazi",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=q6Mp0u5Y1wA",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Legalize",
+        youtube: "https://www.youtube.com/watch?v=q6Mp0u5Y1wA"
+      }
+    ]
+  },
+  {
+    id: "tekno",
+    name: "Tekno",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/channel/UCRlrYo_vSr5OvfvrxliE3Pg",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Pana",
+        youtube: null
+      },
+      {
+        title: "Duro",
+        youtube: null
+      }
+    ]
+  },
+  {
+    id: "cruel-santino",
+    name: "Cruel Santino",
+    website: "https://www.subaruboysworldwide.com",
+    image: null,
+    instagram: "https://www.instagram.com/cruelsantino",
+    twitter: "https://twitter.com/cruelsantino",
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=v4ul6zYmS_I",
+    soundcloud: null,
+    tiktok: "https://www.tiktok.com/@subaruwwworld",
+    facebook: "https://www.facebook.com/cruelsantino",
+    linkedin: null,
+    top_songs: [
+      {
+        title: "TAPENGA",
+        youtube: "https://www.youtube.com/watch?v=v4ul6zYmS_I"
+      }
+    ]
+  },
+  {
+    id: "lojay",
+    name: "Lojay",
+    website: null,
+    image: null,
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=kfuQOuZyyO0",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Leader",
+        youtube: "https://www.youtube.com/watch?v=kfuQOuZyyO0"
+      }
+    ]
+  },
+  {
+    id: "black-sherif",
+    name: "Black Sherif",
+    website: null,
+    image: null,
+    instagram: "https://www.instagram.com/blacksherif_?igsh=MWY1aXh6dXZ5ejVqcg==",
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/watch?v=zz_Q49_RecY",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Lord I'm Amazed",
+        youtube: "https://www.youtube.com/watch?v=zz_Q49_RecY"
       }
     ]
   }
