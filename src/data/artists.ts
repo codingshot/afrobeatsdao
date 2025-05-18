@@ -129,10 +129,6 @@ export const ARTISTS: Artist[] = [
       {
         title: "FIA",
         youtube: "https://www.youtube.com/watch?v=YvjHNrgT_4w"
-      },
-      {
-        title: "Unavailable",
-        youtube: "https://www.youtube.com/watch?v=xDgDXUot_aA"
       }
     ]
   },
@@ -444,7 +440,7 @@ export const ARTISTS: Artist[] = [
     id: "tems",
     name: "Tems",
     website: "https://www.leadingvibe.com/",
-    image: "/artists/tems.webp",
+    image: "/artists/tems.jpeg",
     instagram: "https://www.instagram.com/temsbaby/",
     twitter: "https://twitter.com/temsbaby",
     spotify: null,
@@ -581,10 +577,6 @@ export const ARTISTS: Artist[] = [
       {
         title: "Stubborn (with Asake)",
         youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM"
-      },
-      {
-        title: "Soweto",
-        youtube: "https://www.youtube.com/watch?v=79XbB2XWU6Y"
       },
       {
         title: "Mufasa",
@@ -778,7 +770,7 @@ export const ARTISTS: Artist[] = [
     id: "king-promise",
     name: "King Promise",
     website: null,
-    image: "/artists/king-promise.jpg",
+    image: "/artists/kingpromise.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
