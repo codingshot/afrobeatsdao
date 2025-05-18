@@ -49,6 +49,18 @@ export const ARTISTS: Artist[] = [
       {
         title: "On the Low",
         youtube: "https://www.youtube.com/watch?v=Ecl8Aod0Tl0"
+      },
+      {
+        title: "Gbona",
+        youtube: "https://www.youtube.com/watch?v=XzMAoQrXOMk"
+      },
+      {
+        title: "It's Plenty",
+        youtube: "https://www.youtube.com/watch?v=M6eA4K3lJ_Y"
+      },
+      {
+        title: "Last Last",
+        youtube: "https://www.youtube.com/watch?v=XzMA5ZT8S64"
       }
     ]
   },
@@ -69,6 +81,14 @@ export const ARTISTS: Artist[] = [
       {
         title: "Peace Be Unto You (PBUY)",
         youtube: "https://www.youtube.com/watch?v=MefXQvGTYtE"
+      },
+      {
+        title: "Amapiano",
+        youtube: "https://www.youtube.com/watch?v=Ocd1dkX8pUA"
+      },
+      {
+        title: "Sungba",
+        youtube: "https://www.youtube.com/watch?v=p9F5IOVqJCQ"
       }
     ]
   },
@@ -101,6 +121,18 @@ export const ARTISTS: Artist[] = [
       {
         title: "Unavailable",
         youtube: "https://www.youtube.com/watch?v=OSBan_sH_b8"
+      },
+      {
+        title: "FEEL",
+        youtube: "https://www.youtube.com/watch?v=-Xd1VSwCi2o"
+      },
+      {
+        title: "FIA",
+        youtube: "https://www.youtube.com/watch?v=YvjHNrgT_4w"
+      },
+      {
+        title: "Unavailable",
+        youtube: "https://www.youtube.com/watch?v=xDgDXUot_aA"
       }
     ]
   },
@@ -117,6 +149,14 @@ export const ARTISTS: Artist[] = [
       {
         title: "Ojuelegba",
         youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+      },
+      {
+        title: "KANTE",
+        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+      },
+      {
+        title: "COUGH",
+        youtube: "https://www.youtube.com/watch?v=m7YxwHm21TQ"
       }
     ]
   },
@@ -389,6 +429,14 @@ export const ARTISTS: Artist[] = [
       {
         title: "All The Love",
         youtube: "https://www.youtube.com/watch?v=Lighfnq-1SM"
+      },
+      {
+        title: "Rush",
+        youtube: "https://www.youtube.com/watch?v=4UFiBRHtxyQ"
+      },
+      {
+        title: "Sability",
+        youtube: "https://www.youtube.com/watch?v=aJsNOBcEvck"
       }
     ]
   },
@@ -437,6 +485,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "One Heart (Can Change The World)",
         youtube: "https://www.youtube.com/watch?v=k0aPh2zoeiE"
+      },
+      {
+        title: "Who Is Your Guy?",
+        youtube: "https://www.youtube.com/watch?v=loxACEBahMM"
       }
     ]
   },
@@ -469,6 +521,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Holy Ghost",
         youtube: "https://www.youtube.com/watch?v=E3E8qQmP4t8"
+      },
+      {
+        title: "Lo Lo",
+        youtube: "https://www.youtube.com/watch?v=AQQifhyTPEs"
       }
     ]
   },
@@ -525,6 +581,14 @@ export const ARTISTS: Artist[] = [
       {
         title: "Stubborn (with Asake)",
         youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM"
+      },
+      {
+        title: "Soweto",
+        youtube: "https://www.youtube.com/watch?v=79XbB2XWU6Y"
+      },
+      {
+        title: "Mufasa",
+        youtube: "https://www.youtube.com/watch?v=lBfGkQLBLQQ"
       }
     ]
   },
@@ -641,6 +705,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Arizona",
         youtube: "https://www.youtube.com/watch?v=p2USH3lAJ88"
+      },
+      {
+        title: "Monalisa",
+        youtube: "https://www.youtube.com/watch?v=3TR9qML2L-M"
       }
     ]
   },
@@ -661,6 +729,252 @@ export const ARTISTS: Artist[] = [
       {
         title: "Lord I'm Amazed",
         youtube: "http://youtube.com/watch?v=zz_Q49_RecY"
+      }
+    ]
+  },
+  
+  // New artists from AfroBEATS dataset
+  {
+    id: "young-jonn",
+    name: "Young Jonn",
+    website: null,
+    image: "/artists/youngjonn.webp",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Tesinapot",
+        youtube: "https://www.youtube.com/watch?v=hMYTBLOsApo"
+      }
+    ]
+  },
+  {
+    id: "spinall",
+    name: "SPINALL",
+    website: null,
+    image: "/artists/spinall.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Elemu (feat. SPINALL)",
+        youtube: "https://www.youtube.com/watch?v=hHzdNPGRN-M"
+      }
+    ]
+  },
+  {
+    id: "king-promise",
+    name: "King Promise",
+    website: null,
+    image: "/artists/king-promise.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Terminator",
+        youtube: "https://www.youtube.com/watch?v=rw0fwjR3DWo"
+      }
+    ]
+  },
+  {
+    id: "ckay",
+    name: "CKay",
+    website: null,
+    image: "/artists/ckay.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Love Nwantiti (ah ah ah)",
+        youtube: "https://www.youtube.com/watch?v=mFb2cJf_ekM"
+      }
+    ]
+  },
+  {
+    id: "skiibii",
+    name: "Skiibii",
+    website: null,
+    image: "/artists/skiibii.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Baddest Boy",
+        youtube: "https://www.youtube.com/watch?v=7X0YM-a_oCY"
+      }
+    ]
+  },
+  {
+    id: "dj-tunez",
+    name: "DJ Tunez",
+    website: null,
+    image: "/artists/djtunez.webp",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "KANTE",
+        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+      }
+    ]
+  },
+  {
+    id: "tempoe",
+    name: "Tempoe",
+    website: null,
+    image: "/artists/tempoe.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Soweto",
+        youtube: "https://www.youtube.com/watch?v=79XbB2XWU6Y"
+      }
+    ]
+  },
+  {
+    id: "azanti",
+    name: "Azanti",
+    website: null,
+    image: "/artists/azanti.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Elemu (feat. SPINALL)",
+        youtube: "https://www.youtube.com/watch?v=hHzdNPGRN-M"
+      }
+    ]
+  },
+  {
+    id: "spyro",
+    name: "Spyro",
+    website: null,
+    image: "/artists/spyro.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Who Is Your Guy?",
+        youtube: "https://www.youtube.com/watch?v=loxACEBahMM"
+      }
+    ]
+  },
+  {
+    id: "adekunle-gold",
+    name: "Adekunle Gold",
+    website: null,
+    image: "/artists/adekunlegold.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "KANTE",
+        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+      }
+    ]
+  },
+  {
+    id: "odeal",
+    name: "Odeal",
+    website: null,
+    image: "/artists/odeal.jpeg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Soh-Soh",
+        youtube: "https://www.youtube.com/watch?v=HsLieYE4ZTY"
+      }
+    ]
+  },
+  {
+    id: "olamide",
+    name: "Olamide",
+    website: null,
+    image: "/artists/olamide.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Amapiano",
+        youtube: "https://www.youtube.com/watch?v=Ocd1dkX8pUA"
+      },
+      {
+        title: "Tesinapot",
+        youtube: "https://www.youtube.com/watch?v=hMYTBLOsApo"
       }
     ]
   }
