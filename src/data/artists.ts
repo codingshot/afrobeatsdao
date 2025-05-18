@@ -72,7 +72,7 @@ export const ARTISTS: Artist[] = [
     id: "focalistic",
     name: "Focalistic",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-6t7w5fM9y5vK-0-t500x500.jpg",
+    image: "/artists/focalistic.jpg",
     top_songs: [
       {
         title: "Ke Star",
@@ -120,7 +120,7 @@ export const ARTISTS: Artist[] = [
     id: "j-hus",
     name: "J Hus",
     website: null,
-    image: "https://upload.wikimedia.org/wikipedia/commons/8/8a/J_Hus_%28cropped%29.jpg",
+    image: "/artists/jhus.jpg",
     top_songs: [
       {
         title: "Did You See",
@@ -136,7 +136,7 @@ export const ARTISTS: Artist[] = [
     id: "nsg",
     name: "NSG",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000487292324-2v4k0e-t500x500.jpg",
+    image: "/artists/nsg.jpg",
     top_songs: [
       {
         title: "Options (feat. Tion Wayne)",
@@ -152,7 +152,7 @@ export const ARTISTS: Artist[] = [
     id: "yxng-bane",
     name: "Yxng Bane",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000271593962-1d6w3g-t500x500.jpg",
+    image: "/artists/yxngbane.jpg",
     top_songs: [
       {
         title: "Rihanna",
@@ -168,7 +168,7 @@ export const ARTISTS: Artist[] = [
     id: "b-young",
     name: "B Young",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000353889944-1w3wq0-t500x500.jpg",
+    image: "/artists/byoung.jpg",
     top_songs: [
       {
         title: "Jumanji",
@@ -184,7 +184,7 @@ export const ARTISTS: Artist[] = [
     id: "ziezie",
     name: "ZieZie",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000401934743-7x4w5g-t500x500.jpg",
+    image: "/artists/ziezie.jpg",
     top_songs: [
       {
         title: "Fine Girl",
@@ -200,7 +200,7 @@ export const ARTISTS: Artist[] = [
     id: "young-t-bugsey",
     name: "Young T & Bugsey",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000653139149-6o5k7w-t500x500.jpg",
+    image: "/artists/youngtbugsey.jpg",
     top_songs: [
       {
         title: "Don't Rush (feat. Headie One)",
@@ -216,7 +216,7 @@ export const ARTISTS: Artist[] = [
     id: "not3s",
     name: "Not3s",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000274448081-2nq8e8-t500x500.jpg",
+    image: "/artists/not3s.jpg",
     top_songs: [
       {
         title: "My Lover",
@@ -232,7 +232,7 @@ export const ARTISTS: Artist[] = [
     id: "darkoo",
     name: "Darkoo",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000626253203-8k1g2w-t500x500.jpg",
+    image: "/artists/darkoo.jpg",
     top_songs: [
       {
         title: "Gangsta",
@@ -248,7 +248,7 @@ export const ARTISTS: Artist[] = [
     id: "kojo-funds",
     name: "Kojo Funds",
     website: null,
-    image: "https://i1.sndcdn.com/artworks-000239836211-4j3k2q-t500x500.jpg",
+    image: "/artists/kojofunds.jpg",
     top_songs: [
       {
         title: "Dun Talkin",
@@ -264,7 +264,7 @@ export const ARTISTS: Artist[] = [
     id: "ayo-maff",
     name: "Ayo Maff",
     website: null,
-    image: "https://static.turntablecharts.com/images/artists/ayo-maff.jpg",
+    image: "/artists/ayomaff.jpg",
     top_songs: [
       {
         title: "Dealer (feat. Fireboy DML)",
@@ -280,7 +280,7 @@ export const ARTISTS: Artist[] = [
     id: "qing-madi",
     name: "Qing Madi",
     website: null,
-    image: "https://static.turntablecharts.com/images/artists/qing-madi.jpg",
+    image: "/artists/qingmadi.jpg",
     top_songs: [
       {
         title: "See Finish",
@@ -296,7 +296,7 @@ export const ARTISTS: Artist[] = [
     id: "llona",
     name: "Llona",
     website: null,
-    image: "https://static.turntablecharts.com/images/artists/llona.jpg",
+    image: "/artists/llona.jpg",
     top_songs: [
       {
         title: "HBP",
@@ -312,7 +312,7 @@ export const ARTISTS: Artist[] = [
     id: "bnxn",
     name: "BNXN (fka Buju)",
     website: "https://www.instagram.com/toyourears",
-    image: "https://pbs.twimg.com/profile_images/1705191361895102464/9n3v1rVw_400x400.jpg",
+    image: "/artists/bnxn.jpg",
     top_songs: [
       {
         title: "Finesse (with Pheelz)",
@@ -328,7 +328,7 @@ export const ARTISTS: Artist[] = [
     id: "seyi-vibez",
     name: "Seyi Vibez",
     website: "https://www.instagram.com/seyi_vibez",
-    image: "https://pbs.twimg.com/profile_images/1720457235248576512/4Q5v5Qxk_400x400.jpg",
+    image: "/artists/seyivibez.jpg",
     top_songs: [
       {
         title: "Chance (Na Ham)",
@@ -344,7 +344,7 @@ export const ARTISTS: Artist[] = [
     id: "rema",
     name: "Rema",
     website: null,
-    image: null,
+    image: "/artists/rema.jpg",
     instagram: null,
     twitter: null,
     spotify: "https://open.spotify.com/artist/5yOvAmpIR7hVxiS6Ls5DPO?si=coCiyq1wTLKus5oJBclqxA",
@@ -368,7 +368,7 @@ export const ARTISTS: Artist[] = [
     id: "ayra-starr",
     name: "Ayra Starr",
     website: null,
-    image: null,
+    image: "/artists/ayrastarr.jpg",
     instagram: "https://www.instagram.com/ayrastarr/",
     twitter: "https://twitter.com/ayrastarr",
     spotify: null,
@@ -392,7 +392,7 @@ export const ARTISTS: Artist[] = [
     id: "tems",
     name: "Tems",
     website: "https://www.leadingvibe.com/",
-    image: null,
+    image: "/artists/tems.jpg",
     instagram: "https://www.instagram.com/temsbaby/",
     twitter: "https://twitter.com/temsbaby",
     spotify: null,
@@ -416,7 +416,7 @@ export const ARTISTS: Artist[] = [
     id: "tiwa-savage",
     name: "Tiwa Savage",
     website: null,
-    image: null,
+    image: "/artists/tiwasavage.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -440,7 +440,7 @@ export const ARTISTS: Artist[] = [
     id: "omah-lay",
     name: "Omah Lay",
     website: null,
-    image: null,
+    image: "/artists/omahlay.jpg",
     instagram: "https://www.instagram.com/omah_lay/",
     twitter: "https://twitter.com/Omah_Lay",
     spotify: "https://open.spotify.com/artist/5yOvAmpIR7hVxiS6Ls5DPO?si=coCiyq1wTLKus5oJBclqxA",
@@ -460,7 +460,7 @@ export const ARTISTS: Artist[] = [
     id: "fireboy-dml",
     name: "Fireboy DML",
     website: null,
-    image: null,
+    image: "/artists/fireboydml.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -480,7 +480,7 @@ export const ARTISTS: Artist[] = [
     id: "victony",
     name: "Victony",
     website: null,
-    image: null,
+    image: "/artists/victony.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -500,7 +500,7 @@ export const ARTISTS: Artist[] = [
     id: "ruger",
     name: "Ruger",
     website: null,
-    image: null,
+    image: "/artists/ruger.jpg",
     instagram: "https://www.instagram.com/rugerofficial/",
     twitter: "https://twitter.com/rugerofficial",
     spotify: null,
@@ -520,7 +520,7 @@ export const ARTISTS: Artist[] = [
     id: "mr-eazi",
     name: "Mr Eazi",
     website: null,
-    image: null,
+    image: "/artists/mreazi.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -540,7 +540,7 @@ export const ARTISTS: Artist[] = [
     id: "tekno",
     name: "Tekno",
     website: null,
-    image: null,
+    image: "/artists/tekno.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -564,7 +564,7 @@ export const ARTISTS: Artist[] = [
     id: "cruel-santino",
     name: "Cruel Santino",
     website: "https://www.subaruboysworldwide.com",
-    image: null,
+    image: "/artists/cruelsantino.jpg",
     instagram: "https://www.instagram.com/cruelsantino",
     twitter: "https://twitter.com/cruelsantino",
     spotify: null,
@@ -584,7 +584,7 @@ export const ARTISTS: Artist[] = [
     id: "lojay",
     name: "Lojay",
     website: null,
-    image: null,
+    image: "/artists/lojay.jpg",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -604,7 +604,7 @@ export const ARTISTS: Artist[] = [
     id: "black-sherif",
     name: "Black Sherif",
     website: null,
-    image: null,
+    image: "/artists/blacksherif.jpg",
     instagram: "https://www.instagram.com/blacksherif_?igsh=MWY1aXh6dXZ5ejVqcg==",
     twitter: null,
     spotify: null,
