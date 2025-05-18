@@ -52,15 +52,11 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "Gbona",
-        youtube: "https://www.youtube.com/watch?v=XzMAoQrXOMk"
+        youtube: "https://www.youtube.com/watch?v=h7WfPHHXCAY"
       },
       {
         title: "It's Plenty",
-        youtube: "https://www.youtube.com/watch?v=M6eA4K3lJ_Y"
-      },
-      {
-        title: "Last Last",
-        youtube: "https://www.youtube.com/watch?v=XzMA5ZT8S64"
+        youtube: "https://www.youtube.com/watch?v=F8bZVnynDdc"
       }
     ]
   },
@@ -84,11 +80,7 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "Amapiano",
-        youtube: "https://www.youtube.com/watch?v=Ocd1dkX8pUA"
-      },
-      {
-        title: "Sungba",
-        youtube: "https://www.youtube.com/watch?v=p9F5IOVqJCQ"
+        youtube: "https://www.youtube.com/watch?v=l_-v1fNdSHs"
       }
     ]
   },
@@ -124,11 +116,11 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "FEEL",
-        youtube: "https://www.youtube.com/watch?v=-Xd1VSwCi2o"
+        youtube: "https://www.youtube.com/watch?v=GoWGGiWDsac"
       },
       {
         title: "FIA",
-        youtube: "https://www.youtube.com/watch?v=YvjHNrgT_4w"
+        youtube: "https://www.youtube.com/watch?v=8ORvJcpe2Oc"
       }
     ]
   },
@@ -147,12 +139,12 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
       },
       {
-        title: "KANTE",
-        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+        title: "Ginger ft Burna Boy",
+        youtube: "https://www.youtube.com/watch?v=YSy2lBZ1QrA"
       },
       {
-        title: "COUGH",
-        youtube: "https://www.youtube.com/watch?v=m7YxwHm21TQ"
+        title: "KANTE",
+        youtube: "https://www.youtube.com/watch?v=3bFPDfWReN0"
       }
     ]
   },
@@ -349,6 +341,18 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "kizz-daniel",
+    name: "Kizz Daniel",
+    website: null,
+    image: "/artists/kizzdaniel.jpg",
+    top_songs: [
+      {
+        title: "Cough",
+        youtube: "https://www.youtube.com/watch?v=4j7Fa2PCMow"
+      }
+    ]
+  },
+  {
     id: "bnxn",
     name: "BNXN (fka Buju)",
     website: "https://www.instagram.com/toyourears",
@@ -426,13 +430,10 @@ export const ARTISTS: Artist[] = [
         title: "All The Love",
         youtube: "https://www.youtube.com/watch?v=Lighfnq-1SM"
       },
-      {
-        title: "Rush",
-        youtube: "https://www.youtube.com/watch?v=4UFiBRHtxyQ"
-      },
+
       {
         title: "Sability",
-        youtube: "https://www.youtube.com/watch?v=aJsNOBcEvck"
+        youtube: "https://www.youtube.com/watch?v=KYn3k8dpRJI"
       }
     ]
   },
@@ -484,7 +485,7 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "Who Is Your Guy?",
-        youtube: "https://www.youtube.com/watch?v=loxACEBahMM"
+        youtube: "https://www.youtube.com/watch?v=OHnXY9F7m9c"
       }
     ]
   },
@@ -517,10 +518,6 @@ export const ARTISTS: Artist[] = [
       {
         title: "Holy Ghost",
         youtube: "https://www.youtube.com/watch?v=E3E8qQmP4t8"
-      },
-      {
-        title: "Lo Lo",
-        youtube: "https://www.youtube.com/watch?v=AQQifhyTPEs"
       }
     ]
   },
@@ -577,10 +574,6 @@ export const ARTISTS: Artist[] = [
       {
         title: "Stubborn (with Asake)",
         youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM"
-      },
-      {
-        title: "Mufasa",
-        youtube: "https://www.youtube.com/watch?v=lBfGkQLBLQQ"
       }
     ]
   },
@@ -697,10 +690,6 @@ export const ARTISTS: Artist[] = [
       {
         title: "Arizona",
         youtube: "https://www.youtube.com/watch?v=p2USH3lAJ88"
-      },
-      {
-        title: "Monalisa",
-        youtube: "https://www.youtube.com/watch?v=3TR9qML2L-M"
       }
     ]
   },
@@ -741,8 +730,8 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "Tesinapot",
-        youtube: "https://www.youtube.com/watch?v=hMYTBLOsApo"
+        title: "Xtra Cool",
+        youtube: "https://www.youtube.com/watch?v=LWWCj-EbevI"
       }
     ]
   },
@@ -761,8 +750,20 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "Elemu (feat. SPINALL)",
-        youtube: "https://www.youtube.com/watch?v=hHzdNPGRN-M"
+        title: "Sere",
+        youtube: "https://www.youtube.com/watch?v=udtsQ3weRz0"
+      },
+      {
+        title: "Nowo",
+        youtube: "https://www.youtube.com/watch?v=ES8XuZBafz0"
+      },
+      {
+        title: "One Call ft Tyla Omah Lay",
+        youtube: "https://www.youtube.com/watch?v=zB4tnXnUFKs"
+      },
+      {
+        title: "Dis Love",
+        youtube: "https://www.youtube.com/watch?v=EAcXCdMiuEo"
       }
     ]
   },
@@ -782,7 +783,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Terminator",
-        youtube: "https://www.youtube.com/watch?v=rw0fwjR3DWo"
+        youtube: "https://www.youtube.com/watch?v=NPCC02SaJVg"
+      },
+      {
+        title: "Perfect Combi",
+        youtube: "https://www.youtube.com/watch?v=jUsE4hcoS2c"
       }
     ]
   },
@@ -801,8 +806,16 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "Love Nwantiti (ah ah ah)",
-        youtube: "https://www.youtube.com/watch?v=mFb2cJf_ekM"
+        title: "Love Nwantiti (ah ah ah) - Remix",
+        youtube: "https://www.youtube.com/watch?v=D-YDEyuDxWU"
+      },
+      {
+        title: "Emiliana",
+        youtube: "https://www.youtube.com/watch?v=Ypr5QN7Xn_M"
+      },
+      {
+        title: "Walhala",
+        youtube: "https://www.youtube.com/watch?v=7bjIixyVEjE"
       }
     ]
   },
@@ -822,7 +835,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Baddest Boy",
-        youtube: "https://www.youtube.com/watch?v=7X0YM-a_oCY"
+        youtube: "https://www.youtube.com/watch?v=IW9NtE2TN10"
+      },
+      {
+        title: "Sensima",
+        youtube: "https://www.youtube.com/watch?v=zqkDioXLTO8"
       }
     ]
   },
@@ -841,8 +858,8 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "KANTE",
-        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+        title: "Blessings",
+        youtube: "https://www.youtube.com/watch?v=ut4uAVjRxns&t=2s"
       }
     ]
   },
@@ -862,7 +879,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Soweto",
-        youtube: "https://www.youtube.com/watch?v=79XbB2XWU6Y"
+        youtube: "https://www.youtube.com/watch?v=DPBRGWUgQsA"
       }
     ]
   },
@@ -881,8 +898,8 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "Elemu (feat. SPINALL)",
-        youtube: "https://www.youtube.com/watch?v=hHzdNPGRN-M"
+        title: "Naija Funk",
+        youtube: "https://www.youtube.com/watch?v=fAgE823FyJs"
       }
     ]
   },
@@ -902,7 +919,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Who Is Your Guy?",
-        youtube: "https://www.youtube.com/watch?v=loxACEBahMM"
+        youtube: "https://www.youtube.com/watch?v=wyKccbQm1f0"
       }
     ]
   },
@@ -921,8 +938,12 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "KANTE",
-        youtube: "https://www.youtube.com/watch?v=DMSPf7BVK4s"
+        title: "Party No Dey Stop",
+        youtube: "https://www.youtube.com/watch?v=VnXq06m9P4g"
+      },
+      {
+        title: "High ft Davido",
+        youtube: "https://www.youtube.com/watch?v=juBnNBm0cPw"
       }
     ]
   },
@@ -934,7 +955,7 @@ export const ARTISTS: Artist[] = [
     instagram: null,
     twitter: null,
     spotify: null,
-    youtube: null,
+    youtube: "https://www.youtube.com/@iamodeal/",
     soundcloud: null,
     tiktok: null,
     facebook: null,
@@ -942,7 +963,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Soh-Soh",
-        youtube: "https://www.youtube.com/watch?v=HsLieYE4ZTY"
+        youtube: "https://www.youtube.com/watch?v=ks48Gb5JeYM"
       }
     ]
   },
@@ -962,12 +983,40 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Amapiano",
-        youtube: "https://www.youtube.com/watch?v=Ocd1dkX8pUA"
+        youtube: "https://www.youtube.com/watch?v=l_-v1fNdSHs"
+      },
+      {
+        title: "Jinja",
+        youtube: "https://www.youtube.com/watch?v=5FYvvWl1Frw"
       },
       {
         title: "Tesinapot",
-        youtube: "https://www.youtube.com/watch?v=hMYTBLOsApo"
+        youtube: "https://www.youtube.com/watch?v=cIjkFCCLdcA"
       }
     ]
-  }
-];
+  }, 
+  {
+    id: "shallipopi",
+    name: "Shallipopi",
+    website: null,
+    image: "/artists/shallipopi.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title:  "Elon Musk",
+        youtube: "https://www.youtube.com/watch?v=546V71zODtk",
+      },
+      {
+        title: "Laho",
+        youtube: "https://www.youtube.com/watch?v=qARrn7G067w"
+      }
+
+    ]
+  }]
