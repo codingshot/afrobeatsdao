@@ -47,8 +47,8 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=lPe09eE6Xio"
       },
       {
-        title: "Sittin' On Top Of The World",
-        youtube: "https://www.youtube.com/watch?v=QzP6YlS9Q6E"
+        title: "On the Low",
+        youtube: "https://www.youtube.com/watch?v=Ecl8Aod0Tl0"
       }
     ]
   },
@@ -60,11 +60,15 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Sungba",
-        youtube: "https://www.youtube.com/watch?v=5OeR5XBEahU"
+        youtube: "https://www.youtube.com/watch?v=5A-CjKOQWvg"
+      },
+      {
+        title: "MMS",
+        youtube: "https://www.youtube.com/watch?v=iiOHqmmjdGk"
       },
       {
         title: "Peace Be Unto You (PBUY)",
-        youtube: "https://www.youtube.com/watch?v=K2vW3J1Q2wQ"
+        youtube: "https://www.youtube.com/watch?v=MefXQvGTYtE"
       }
     ]
   },
@@ -76,11 +80,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Ke Star",
-        youtube: "https://www.youtube.com/watch?v=Q3h9gIDeB9A"
+        youtube: "https://www.youtube.com/watch?v=a9_da2P5JjQ"
       },
       {
         title: "Champion Sound (with Davido)",
-        youtube: "https://www.youtube.com/watch?v=1VtQ7r1eC9A"
+        youtube: "https://www.youtube.com/watch?v=i-J0Fdze42M"
       }
     ]
   },
@@ -92,11 +96,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Fall",
-        youtube: "https://www.youtube.com/watch?v=84RxK4N1wfE"
+        youtube: "https://www.youtube.com/watch?v=3Iyuym-Gci0"
       },
       {
         title: "Unavailable",
-        youtube: "https://www.youtube.com/watch?v=J8wB3Y4h5Qk"
+        youtube: "https://www.youtube.com/watch?v=OSBan_sH_b8"
       }
     ]
   },
@@ -108,7 +112,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Essence (feat. Tems)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=jipQpjUA_o8"
       },
       {
         title: "Ojuelegba",
@@ -124,11 +128,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Did You See",
-        youtube: "https://www.youtube.com/watch?v=6r8pZL0H3zI"
+        youtube: "https://www.youtube.com/watch?v=3rk6_Ax0mQo"
       },
       {
         title: "Spirit",
-        youtube: "https://www.youtube.com/watch?v=6r8pZL0H3zI"
+        youtube: "https://www.youtube.com/watch?v=hBgF6JrWaO8"
       }
     ]
   },
@@ -140,11 +144,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Options (feat. Tion Wayne)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=E34REPgVpXk"
       },
       {
         title: "OT Bop",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=BkoX45IEuOk"
       }
     ]
   },
@@ -156,11 +160,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Rihanna",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=1ruitsqQ34c"
       },
       {
         title: "Fine Wine",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=pkk9oRfhIxs"
       }
     ]
   },
@@ -172,11 +176,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Jumanji",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=JFlrNP6_I28"
       },
       {
         title: "079ME",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=oQu5hOkzJDs"
       }
     ]
   },
@@ -188,11 +192,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Fine Girl",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=As1pRzoKmJ8"
       },
       {
         title: "Sensei",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=8vlC73glsWI"
       }
     ]
   },
@@ -204,11 +208,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Don't Rush (feat. Headie One)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=ouCuyQI9pXc"
       },
       {
         title: "Strike a Pose",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=ng83tmoQ3yU"
       }
     ]
   },
@@ -220,11 +224,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "My Lover",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=X9RnnZf6zHQ"
       },
       {
         title: "Addison Lee",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=ICPp_1SDueM"
       }
     ]
   },
@@ -236,11 +240,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Gangsta",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=hRrMo8DzvW4"
       },
       {
         title: "Juicy (feat. Hardy Caprio)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=yralWiuWWec"
       }
     ]
   },
@@ -252,11 +256,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Dun Talkin",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=CyfwmoGJzNE"
       },
       {
         title: "Check",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=ncu3eYkmTxk"
       }
     ]
   },
@@ -268,11 +272,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Dealer (feat. Fireboy DML)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=JUWxpWD71VA"
       },
       {
         title: "Are You There?",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=Fcxh3DbGgR8"
       }
     ]
   },
@@ -284,11 +288,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "See Finish",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=UGGL375aau8"
       },
       {
         title: "Ole (feat. BNXN)",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=wBNKFH7Xj70"
       }
     ]
   },
@@ -299,12 +303,12 @@ export const ARTISTS: Artist[] = [
     image: "/artists/llona.png",
     top_songs: [
       { 
-        title: "HBP",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        title: "Cant Breathe",
+        youtube: "https://www.youtube.com/watch?v=f1j7vcdpg4w"
       },
       {
         title: "HBP (Remix) feat. Bella Shmurda",
-        youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+        youtube: "https://www.youtube.com/watch?v=7q1oljdE_JU"
       }
     ]
   },
@@ -316,11 +320,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Finesse (with Pheelz)",
-        youtube: "https://www.youtube.com/watch?v=J-2pQnKtmKQ"
+        youtube: "https://www.youtube.com/watch?v=Vcwhe0pY4Bg"
       },
       {
         title: "Gwagwalada (feat. Kizz Daniel & Seyi Vibez)",
-        youtube: "https://www.youtube.com/watch?v=QpKfS7z3Z5o"
+        youtube: "https://www.youtube.com/watch?v=7fhtbd5NxW0"
       }
     ]
   },
@@ -332,11 +336,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Chance (Na Ham)",
-        youtube: "https://www.youtube.com/watch?v=8wFQ5r4p8x0"
+        youtube: "https://www.youtube.com/watch?v=BfIUgmQG9c4"
       },
       {
         title: "Hat-trick",
-        youtube: "https://www.youtube.com/watch?v=7F4Qw8v8-1k"
+        youtube: "https://www.youtube.com/watch?v=zmd69R6n4Sg"
       }
     ]
   },
@@ -356,11 +360,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Calm Down",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=CQLsdm1ZYAw"
       },
       {
         title: "Dumebi",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=zUU1bIWpH5c"
       }
     ]
   },
@@ -380,11 +384,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Rush",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=crtQSTYWtqE"
       },
       {
         title: "All The Love",
-        youtube: "https://www.youtube.com/watch?v=NoZi3O6-7Ig"
+        youtube: "https://www.youtube.com/watch?v=Lighfnq-1SM"
       }
     ]
   },
@@ -404,7 +408,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Free Mind",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=e8GzTXRAJ30"
       },
       {
         title: "Not An Angel",
@@ -428,11 +432,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "All Over",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=dFBQzRNsMK0"
       },
       {
         title: "One Heart (Can Change The World)",
-        youtube: "https://www.youtube.com/watch?v=0B8r8wU9rP4"
+        youtube: "https://www.youtube.com/watch?v=k0aPh2zoeiE"
       }
     ]
   },
@@ -451,8 +455,20 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
+        title: "Understand",
+        youtube: "https://www.youtube.com/watch?v=X3Ai6osw3Mk"
+      },
+      {
+        title: "Godly",
+        youtube: "https://www.youtube.com/watch?v=DqUd72pK15Y"
+      },
+      {
+        title: "Lo Lo",
+        youtube: "https://www.youtube.com/watch?v=xYD2SQljwJo"
+      },
+      {
         title: "Holy Ghost",
-        youtube: "https://www.youtube.com/watch?v=1oBATitnUsA"
+        youtube: "https://www.youtube.com/watch?v=E3E8qQmP4t8"
       }
     ]
   },
@@ -470,6 +486,18 @@ export const ARTISTS: Artist[] = [
     facebook: null,
     linkedin: null,
     top_songs: [
+      {
+        title: "Everyday",
+        youtube: "https://www.youtube.com/watch?v=77YFPhgt8P0"
+      },
+      {
+        title: "Vibration",
+        youtube: "https://www.youtube.com/watch?v=YRhBfL3GEjQ"
+      },
+      {
+        title: "Peru",
+        youtube: "https://www.youtube.com/watch?v=pekzpzNCNDQ"
+      },
       {
         title: "YAWA",
         youtube: "https://www.youtube.com/watch?v=J7CHVcjwpAg"
@@ -491,6 +519,10 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
+        title: "Soweto",
+        youtube: "https://www.youtube.com/watch?v=DPBRGWUgQsA"
+      },
+      {
         title: "Stubborn (with Asake)",
         youtube: "https://www.youtube.com/watch?v=vp0b_fqPvkM"
       }
@@ -510,6 +542,10 @@ export const ARTISTS: Artist[] = [
     facebook: null,
     linkedin: null,
     top_songs: [
+      {
+        title: "Asiwaju",
+        youtube: "https://www.youtube.com/watch?v=MqqBH9Fa4NQ"
+      },
       {
         title: "Girlfriend",
         youtube: "https://www.youtube.com/watch?v=7M2Gps9xR8g"
@@ -552,11 +588,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Pana",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=8YhAFBOSk1U"
       },
       {
         title: "Duro",
-        youtube: null
+        youtube: "https://www.youtube.com/watch?v=TlJ33-6tPTE"
       }
     ]
   },
@@ -574,6 +610,10 @@ export const ARTISTS: Artist[] = [
     facebook: "https://www.facebook.com/cruelsantino",
     linkedin: null,
     top_songs: [
+      {
+        title: "Rapid Fire",
+        youtube: "https://www.youtube.com/watch?v=hMuFO9nhtfA"
+      },
       {
         title: "TAPENGA",
         youtube: "https://www.youtube.com/watch?v=v4ul6zYmS_I"
@@ -595,8 +635,12 @@ export const ARTISTS: Artist[] = [
     linkedin: null,
     top_songs: [
       {
-        title: "Leader",
-        youtube: "https://www.youtube.com/watch?v=kfuQOuZyyO0"
+        title: "Monalisa",
+        youtube: "https://www.youtube.com/watch?v=to8nQNGarRw"
+      },
+      {
+        title: "Arizona",
+        youtube: "https://www.youtube.com/watch?v=p2USH3lAJ88"
       }
     ]
   },
@@ -616,7 +660,7 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title: "Lord I'm Amazed",
-        youtube: "https://www.youtube.com/watch?v=zz_Q49_RecY"
+        youtube: "http://youtube.com/watch?v=zz_Q49_RecY"
       }
     ]
   }
