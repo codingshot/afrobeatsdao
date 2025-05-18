@@ -17,7 +17,7 @@ export const ARTISTS: Artist[] = [
     id: "burna-boy",
     name: "Burna Boy",
     website: "http://www.onaspaceship.com",
-    image: "https://notcommon.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fnotcommon%2Fimage%2Fupload%2Fv1703779727%2Fprofiles%2Fburna-boy.jpg&w=384&q=75",
+    image: "/images/artists/burnaboy.jpg",
     top_songs: [
       {
         title: "Last Last",
