@@ -56,7 +56,7 @@ export const ARTISTS: Artist[] = [
     id: "asake",
     name: "Asake",
     website: null,
-    image: "/artists/asake.jpg",
+    image: "/artists/asake.jpeg",
     top_songs: [
       {
         title: "Sungba",
@@ -152,7 +152,7 @@ export const ARTISTS: Artist[] = [
     id: "yxng-bane",
     name: "Yxng Bane",
     website: null,
-    image: "/artists/yxngbane.jpg",
+    image: "/artists/yxngbane.jpeg",
     top_songs: [
       {
         title: "Rihanna",
@@ -184,7 +184,7 @@ export const ARTISTS: Artist[] = [
     id: "ziezie",
     name: "ZieZie",
     website: null,
-    image: "/artists/ziezie.jpg",
+    image: "/artists/ziezie.jpeg",
     top_songs: [
       {
         title: "Fine Girl",
@@ -280,7 +280,7 @@ export const ARTISTS: Artist[] = [
     id: "qing-madi",
     name: "Qing Madi",
     website: null,
-    image: "/artists/qingmadi.jpg",
+    image: "/artists/qingmadi.webp",
     top_songs: [
       {
         title: "See Finish",
@@ -296,9 +296,9 @@ export const ARTISTS: Artist[] = [
     id: "llona",
     name: "Llona",
     website: null,
-    image: "/artists/llona.jpg",
+    image: "/artists/llona.png",
     top_songs: [
-      {
+      { 
         title: "HBP",
         youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
       },
@@ -312,7 +312,7 @@ export const ARTISTS: Artist[] = [
     id: "bnxn",
     name: "BNXN (fka Buju)",
     website: "https://www.instagram.com/toyourears",
-    image: "/artists/bnxn.jpg",
+    image: "/artists/bnxn.jpeg",
     top_songs: [
       {
         title: "Finesse (with Pheelz)",
@@ -328,7 +328,7 @@ export const ARTISTS: Artist[] = [
     id: "seyi-vibez",
     name: "Seyi Vibez",
     website: "https://www.instagram.com/seyi_vibez",
-    image: "/artists/seyivibez.jpg",
+    image: "/artists/seyivibez.jpeg",
     top_songs: [
       {
         title: "Chance (Na Ham)",
@@ -500,7 +500,7 @@ export const ARTISTS: Artist[] = [
     id: "ruger",
     name: "Ruger",
     website: null,
-    image: "/artists/ruger.jpg",
+    image: "/artists/ruger.webp",
     instagram: "https://www.instagram.com/rugerofficial/",
     twitter: "https://twitter.com/rugerofficial",
     spotify: null,
