@@ -1,4 +1,3 @@
-
 export interface Song {
   title: string;
   youtube: string;
@@ -9,6 +8,14 @@ export interface Artist {
   name: string;
   website: string | null;
   image: string;
+  instagram?: string | null;
+  twitter?: string | null;
+  spotify?: string | null;
+  youtube?: string | null;
+  soundcloud?: string | null;
+  tiktok?: string | null;
+  facebook?: string | null;
+  linkedin?: string | null;
   top_songs: Song[];
 }
 
@@ -18,10 +25,26 @@ export const ARTISTS: Artist[] = [
     name: "Burna Boy",
     website: "http://www.onaspaceship.com",
     image: "/images/artists/burnaboy.jpg",
+    instagram: "https://www.instagram.com/burnaboygram/",
+    twitter: "https://x.com/burnaboy",
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
     top_songs: [
       {
         title: "Last Last",
         youtube: "https://www.youtube.com/watch?v=421w1j87fEM"
+      },
+      {
+        title: "City Boys",
+        youtube: "https://www.youtube.com/watch?v=hLDQ88vAhIs"
+      },
+      {
+        title: "Ye",
+        youtube: "https://www.youtube.com/watch?v=lPe09eE6Xio"
       },
       {
         title: "Sittin' On Top Of The World",
