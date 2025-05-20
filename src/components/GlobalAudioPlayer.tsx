@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -220,7 +219,7 @@ export const GlobalAudioPlayerProvider = ({
   useEffect(() => {
     if ('mediaSession' in navigator && currentSong) {
       try {
-        navigator.mediaSession!.metadata = new MediaMetadata({
+        navigator.mediaSession!.metadata = new window.MediaMetadata({
           title: videoTitle || 'Unknown Title',
           artist: channelTitle || 'Unknown Artist',
           album: 'Afrobeats Player',
