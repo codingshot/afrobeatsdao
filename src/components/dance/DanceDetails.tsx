@@ -83,7 +83,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         
         <div className="mb-4 sm:mb-6 bg-[#FFD600] rounded-lg p-3 sm:p-6 shadow-lg">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h1 className="text-xl sm:text-4xl font-bold text-black font-heading" style={{ color: '#000 !important' }}>
+            <h1 className="text-xl sm:text-4xl font-bold font-heading text-black">
               {dance.name}
             </h1>
             {dance.origin && getFlag(dance.origin) && (
