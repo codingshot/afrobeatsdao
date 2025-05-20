@@ -395,6 +395,18 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "moliy",
+    name: "MOLIY",
+    website: null,
+    image: "/artists/moliy.jpg",
+    top_songs: [
+      {
+        title: "Shake it to the Max)",
+        youtube: "https://youtu.be/9Jf8rfvjRbQ?si=v1Ux_FcK0BHEk4Bh"
+      }
+    ]
+  },
+  {
     id: "seyi-vibez",
     name: "Seyi Vibez",
     website: "https://www.instagram.com/seyi_vibez",
