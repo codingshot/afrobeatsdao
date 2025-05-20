@@ -59,13 +59,13 @@ export const danceCurriculum = {
           title: "Zanku Dance Tutorial by Poco Lee",
           platform: "YouTube",
           creator: "Poco Lee",
-          link: "https://www.youtube.com/watch?v=LVw9YdkKhWo"
+          link: "https://www.youtube.com/watch?app=desktop&v=Kk-9XsRni7g"
         },
         {
-          title: "15-Second Zanku Breakdown",
+          title: "https://www.tiktok.com/@thomaspereira.g",
           platform: "TikTok",
-          creator: "@dancegodlloyd",
-          link: "https://www.tiktok.com/@dancegodlloyd/video/6759342559655527686"
+          creator: "https://www.tiktok.com/@thomaspereira.g",
+          link: "https://www.tiktok.com/@thomaspereira.g/video/7290287461329063201?q=zanku%20breakdown%20dance&t=1747739865356"
         }
       ],
       culturalContext: "Zanku embodies Nigerian youth culture, blending street swagger with communal joy. It's a storytelling medium, expressing resilience and has become a symbol of Nigeria's global Afrobeats influence."
@@ -126,8 +126,8 @@ export const danceCurriculum = {
         {
           title: "Azonto Dance Tutorial",
           platform: "YouTube",
-          creator: "DWP Academy",
-          link: "https://www.youtube.com/watch?v=LxF1RO-MlPs"
+          creator: "La Luisa",
+          link: "https://www.youtube.com/watch?v=eCuMsVOENJw"
         },
         {
           title: "Azonto Basics",
@@ -196,8 +196,8 @@ export const danceCurriculum = {
         {
           title: "Shaku Shaku Dance Tutorial",
           platform: "YouTube",
-          creator: "Kemi OG",
-          link: "https://www.youtube.com/watch?v=afSrJG3Gf7o"
+          creator: "Chop Daily",
+          link: "https://www.youtube.com/watch?v=cbVMLvbskfg"
         },
         {
           title: "Learn Shaku Shaku Basics",
@@ -271,7 +271,7 @@ export const danceCurriculum = {
           title: "Galala Dance Tutorial",
           platform: "YouTube",
           creator: "Various Artists",
-          link: "https://www.youtube.com/watch?v=ZYVH5PePh2g"
+          link: "https://www.youtube.com/watch?v=Jg7oHW4JCHE"
         },
         {
           title: "Galala Basics",
