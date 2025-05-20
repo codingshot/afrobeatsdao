@@ -3,6 +3,7 @@ import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
 import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
+import { DanceCarousel } from "@/components/DanceCarousel";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
 import { ClubsSection } from "@/components/ClubsSection";
@@ -44,6 +45,7 @@ const Index = () => {
         <EventsSection />
         <ClubsSection />
         <VibeOfTheDay />
+        <DanceCarousel />
         <MusicSection />
         <FutureSection />
         <TeamSection />
