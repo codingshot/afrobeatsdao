@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { useDanceProgress } from "@/hooks/use-dance-progress";
 import { Dance } from "./DanceDetails";
 import { danceCurriculum } from "@/data/dance-curriculum";
 import { Helmet } from "react-helmet";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface DanceContentProps {
   dance: Dance;
@@ -158,6 +160,17 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
 
   const isTutorialAvailable = (tutorial: any) => {
     return tutorial && tutorial.link && (tutorial.link.includes('youtube.com') || tutorial.link.includes('youtu.be'));
+  };
+
+  // Extract YouTube video ID from link
+  const getYoutubeVideoId = (link: string) => {
+    if (!link) return null;
+    if (link.includes('youtu.be/')) {
+      return link.split('/').pop();
+    }
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = link.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
   };
 
   return (
@@ -329,13 +342,32 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                 {isTutorialAvailable(dance.tutorials[0]) ? (
                   <>
                     <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                      <iframe
-                        className="w-full h-full"
-                        src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}`}
-                        title={dance.tutorials[0].title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                      {getYoutubeVideoId(dance.tutorials[0].link) ? (
+                        <iframe
+                          className="w-full h-full"
+                          src={`https://www.youtube.com/embed/${getYoutubeVideoId(dance.tutorials[0].link)}`}
+                          title={dance.tutorials[0].title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        // Fallback to dance image when YouTube video is unavailable
+                        <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
+                          <div className="h-full w-full flex flex-col items-center justify-center">
+                            {dance.image ? (
+                              <img
+                                src={dance.image}
+                                alt={`${dance.name} preview`}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="text-gray-400 flex flex-col items-center justify-center h-full w-full bg-gray-900/70">
+                                <p>Preview not available</p>
+                              </div>
+                            )}
+                          </div>
+                        </AspectRatio>
+                      )}
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
@@ -356,8 +388,21 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                     </div>
                   </>
                 ) : (
-                  <div className="aspect-video bg-gray-900/50 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-400">Tutorial not available</p>
+                  // Show dance image when tutorial is not available
+                  <div className="aspect-video bg-gray-900/50 rounded-lg overflow-hidden">
+                    {dance.image ? (
+                      <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
+                        <img 
+                          src={dance.image} 
+                          alt={`${dance.name} preview`} 
+                          className="w-full h-full object-cover"
+                        />
+                      </AspectRatio>
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p className="text-gray-400">Tutorial not available</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -390,13 +435,32 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                   {dance.songs.map((song, idx) => (
                     <Card key={idx} className="overflow-hidden bg-gray-900 border-gray-800">
                       <div className="aspect-video">
-                        <iframe
-                          className="w-full h-full"
-                          src={`https://www.youtube.com/embed/${song.youtube.split('=')[1] || song.youtube.split('/').pop()}`}
-                          title={song.title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
+                        {getYoutubeVideoId(song.youtube) ? (
+                          <iframe
+                            className="w-full h-full"
+                            src={`https://www.youtube.com/embed/${getYoutubeVideoId(song.youtube)}`}
+                            title={song.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        ) : (
+                          // Fallback to dance image when YouTube video is unavailable
+                          <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
+                            <div className="h-full w-full flex flex-col items-center justify-center">
+                              {dance.image ? (
+                                <img
+                                  src={dance.image}
+                                  alt={`${dance.name} - ${song.title} preview`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="text-gray-400 flex flex-col items-center justify-center h-full w-full bg-gray-900/70">
+                                  <p>Preview not available</p>
+                                </div>
+                              )}
+                            </div>
+                          </AspectRatio>
+                        )}
                       </div>
                       <CardContent className="p-4">
                         <h4 className="font-medium text-sm md:text-base text-white">{song.title}</h4>
