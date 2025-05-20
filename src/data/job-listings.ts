@@ -163,7 +163,7 @@ export const jobListings: JobListing[] = [
       "Include your Web3 experience, relevant portfolio/projects, and why you're passionate about Afrobeats culture",
       "Successful candidates will be contacted for an interview"
     ],
-    applyLink: "https://staging.alpha.potlock.org/campaign/5/leaderboard",
+    applyLink: "https://staging.alpha.potlock.org/campaign/6/leaderboard",
     brand: [
       {
         name: "x.com/afrobeatsdao",
