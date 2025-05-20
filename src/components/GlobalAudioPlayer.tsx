@@ -14,12 +14,26 @@ declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
     YT: any;
-    navigator: {
-      mediaSession: {
-        metadata: any;
-        setActionHandler: (action: string, handler: () => void) => void;
-      };
-    };
+  }
+  
+  interface MediaMetadata {
+    title: string;
+    artist: string;
+    album: string;
+    artwork: {
+      src: string;
+      sizes: string;
+      type: string;
+    }[];
+  }
+  
+  interface MediaSession {
+    metadata: MediaMetadata | null;
+    setActionHandler: (action: string, handler: (() => void) | null) => void;
+  }
+  
+  interface Navigator {
+    mediaSession?: MediaSession;
   }
 }
 
@@ -206,7 +220,7 @@ export const GlobalAudioPlayerProvider = ({
   useEffect(() => {
     if ('mediaSession' in navigator && currentSong) {
       try {
-        navigator.mediaSession.metadata = new MediaMetadata({
+        navigator.mediaSession!.metadata = new MediaMetadata({
           title: videoTitle || 'Unknown Title',
           artist: channelTitle || 'Unknown Artist',
           album: 'Afrobeats Player',
@@ -220,10 +234,10 @@ export const GlobalAudioPlayerProvider = ({
         });
         
         // Set action handlers
-        navigator.mediaSession.setActionHandler('play', togglePlay);
-        navigator.mediaSession.setActionHandler('pause', togglePlay);
-        navigator.mediaSession.setActionHandler('previoustrack', previousSong);
-        navigator.mediaSession.setActionHandler('nexttrack', nextSong);
+        navigator.mediaSession!.setActionHandler('play', togglePlay);
+        navigator.mediaSession!.setActionHandler('pause', togglePlay);
+        navigator.mediaSession!.setActionHandler('previoustrack', previousSong);
+        navigator.mediaSession!.setActionHandler('nexttrack', nextSong);
       } catch (error) {
         console.error("Error setting up Media Session:", error);
       }
