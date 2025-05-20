@@ -104,6 +104,7 @@ export const ARTISTS: Artist[] = [
     id: "davido",
     name: "Davido",
     website: "https://www.iamdavido.com",
+    youtube: "https://www.youtube.com/channel/UCkBV3nBa0iRdxEGc4DUS3xA",
     image: "/artists/davido.jpg",
     top_songs: [
       {
@@ -117,6 +118,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "FEEL",
         youtube: "https://www.youtube.com/watch?v=GoWGGiWDsac"
+      },
+      {
+        title: "If",
+        youtube: "https://www.youtube.com/watch?v=helEv0kGHd4"
       },
       {
         title: "FIA",
@@ -135,8 +140,16 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=jipQpjUA_o8"
       },
       {
+        title: "2 Sugar (feat. Ayra Starr)",
+        youtube: "https://youtu.be/o_oenl2Be-w?si=a-sJhfe7ED9gl5cV"
+      },
+      {
         title: "Ojuelegba",
         youtube: "https://www.youtube.com/watch?v=Q7QiLceJSLQ"
+      },
+      {
+        title: "Bad to Me",
+        youtube: "https://youtu.be/2mkhevOXVNk?si=qC1s7JYl2E1J8zu5"
       },
       {
         title: "Ginger ft Burna Boy",
@@ -293,6 +306,19 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "joeboy",
+    name: "Joeboy",
+    website: null,
+    youtube: "https://www.youtube.com/channel/UCv3EFZRGITcQwdyCE_ap0UA",
+    image: "/artists/joeboy.webp",
+    top_songs: [
+      {
+        title: "Sip (Alcohol)",
+        youtube: "https://youtu.be/UEcAPvoSe_8?si=zs2_pRdEE5AfaWDg"
+      }
+    ]
+  },
+  {
     id: "ayo-maff",
     name: "Ayo Maff",
     website: null,
@@ -369,6 +395,18 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "moliy",
+    name: "MOLIY",
+    website: null,
+    image: "/artists/moliy.jpg",
+    top_songs: [
+      {
+        title: "Shake it to the Max)",
+        youtube: "https://youtu.be/9Jf8rfvjRbQ?si=v1Ux_FcK0BHEk4Bh"
+      }
+    ]
+  },
+  {
     id: "seyi-vibez",
     name: "Seyi Vibez",
     website: "https://www.instagram.com/seyi_vibez",
@@ -381,6 +419,19 @@ export const ARTISTS: Artist[] = [
       {
         title: "Hat-trick",
         youtube: "https://www.youtube.com/watch?v=zmd69R6n4Sg"
+      }
+    ]
+  },
+  {
+    id: "1da-ban",
+    name: "1da Banton",
+    website: null,
+    youtube: "https://www.youtube.com/channel/UCDZN6-FTxmc3lmW-tNShEeQ",
+    image: "/artists/1daban.jpg",
+    top_songs: [
+      {
+        title: "No Wahala (Remix) feat. Kizz Daniel & Tiwa Savage",
+        youtube: "https://youtu.be/D7wqi1HZFq8?si=XMX1dlCz-xCkqj49"
       }
     ]
   },
@@ -403,8 +454,20 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=CQLsdm1ZYAw"
       },
       {
+        title: "Charm",
+        youtube: "https://youtu.be/dNt1QR1ecuM?si=Zs4mVJBo9k7CYuLZ"
+      },
+      {
         title: "Dumebi",
         youtube: "https://www.youtube.com/watch?v=zUU1bIWpH5c"
+      },
+      {
+        title: "Ozeba",
+        youtube: "https://youtu.be/LIhDklvBUyg?si=hZsmOPm4s4fq7k1p"
+      },
+      {
+        title: "AZAMAN",
+        youtube: "https://www.youtube.com/watch?v=Z2L51xr45As"
       }
     ]
   },
@@ -425,6 +488,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Rush",
         youtube: "https://www.youtube.com/watch?v=crtQSTYWtqE"
+      },
+      {
+        title: "Commas",
+        youtube: "https://www.youtube.com/watch?v=EhyzYPSHRQU&list=PL7-PoJCUqjFzfiwCE8_1N4RORb3_LPDxL&index=9"
       },
       {
         title: "All The Love",
@@ -458,6 +525,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Not An Angel",
         youtube: "https://www.youtube.com/watch?v=9KtU6f_ZPjU"
+      },
+      {
+        title: "Replay",
+        youtube: "https://youtu.be/_dJvxxOZVX0?si=cMg4hzmRGDYQzOXx"
       }
     ]
   },
@@ -542,6 +613,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Vibration",
         youtube: "https://www.youtube.com/watch?v=YRhBfL3GEjQ"
+      },
+      {
+        title: "Bandana",
+        youtube: "https://youtu.be/gCLUIzOsgGg?si=OfDjfMPBiPsM2iId"
       },
       {
         title: "Peru",
@@ -736,6 +811,30 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "tyla",
+    name: "Tyla",
+    website: null,
+    image: "/artists/tyla.jpeg",
+    instagram: "https://www.instagram.com/tyla/",
+    twitter: "https://x.com/tyllaaaaaaa",
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Truth or Dare",
+        youtube: "https://youtu.be/UKpz-I9EV84?si=nivjaTyCbbXC8iI6"
+      },
+      {
+        title: "Water",
+        youtube: "https://www.youtube.com/watch?v=XoiOOiuH8iI"
+      }
+    ]
+  },
+  {
     id: "spinall",
     name: "SPINALL",
     website: null,
@@ -864,6 +963,31 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "oxlade",
+    name: "Oxlade",
+    website: null,
+    image: "/artists/oxlade.jpg",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Away",
+        youtube: "https://www.youtube.com/watch?v=9410qCyQuJ4"
+      },
+      {
+        title: "Ku Lo Sa",
+        youtube: "https://www.youtube.com/watch?v=R4qud199tQk"
+      }
+    ]
+  },
+  
+  {
     id: "tempoe",
     name: "Tempoe",
     website: null,
@@ -920,6 +1044,26 @@ export const ARTISTS: Artist[] = [
       {
         title: "Who Is Your Guy?",
         youtube: "https://www.youtube.com/watch?v=wyKccbQm1f0"
+      }
+    ]
+  },
+  {
+    id: "kcee",
+    name: "Kcee",
+    website: null,
+    image: "/artists/kcee.webp",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: "https://www.youtube.com/channel/UC5IWg-ltJXPyCOgCUjnh2Uw",
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Ojapiano",
+        youtube: "https://youtu.be/WsMwhD0SmHU?si=rNoAzcbbb_kwZNVL"
       }
     ]
   },
@@ -1011,7 +1155,11 @@ export const ARTISTS: Artist[] = [
     top_songs: [
       {
         title:  "Elon Musk",
-        youtube: "https://www.youtube.com/watch?v=546V71zODtk",
+        youtube: "https://www.youtube.com/watch?v=546V71zODtk"
+      },
+      {
+        title: "Cast ft ODUMODUBLVCK",
+        youtube: "https://www.youtube.com/watch?v=g2j40WZ08Vw"
       },
       {
         title: "Laho",
