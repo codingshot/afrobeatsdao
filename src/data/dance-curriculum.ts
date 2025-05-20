@@ -59,7 +59,7 @@ export const danceCurriculum = {
           title: "Zanku Dance Tutorial by Poco Lee",
           platform: "YouTube",
           creator: "Poco Lee",
-          link: "https://www.youtube.com/watch?app=desktop&v=Kk-9XsRni7g"
+          link: "https://www.youtube.com/watch?v=guT32EbS9A0"
         },
         {
           title: "https://www.tiktok.com/@thomaspereira.g",
@@ -345,7 +345,7 @@ export const danceCurriculum = {
           title: "Gbese Dance Tutorial",
           platform: "YouTube",
           creator: "Isa Welly",
-          link: "https://www.youtube.com/watch?v=FKK9JBnJATA"
+          link: "https://www.youtube.com/watch?v=14oyBfS6bYE"
         },
         {
           title: "Gbese Basics",
@@ -419,7 +419,7 @@ export const danceCurriculum = {
           title: "Gwara Gwara Tutorial",
           platform: "YouTube",
           creator: "Hope Ramafalo",
-          link: "https://www.youtube.com/watch?v=sBEWQpnyNrM"
+          link: "https://www.youtube.com/watch?v=KfL7Y6u6Dcw"
         },
         {
           title: "Learn Gwara Gwara",
@@ -496,7 +496,7 @@ export const danceCurriculum = {
           title: "Tshwala Bam Tutorial",
           platform: "YouTube",
           creator: "Limpopo Boy",
-          link: "https://www.youtube.com/watch?v=OsRwVGbQRPo"
+          link: "https://www.youtube.com/watch?v=c5w-ExP2GRU"
         },
         {
           title: "Tshwala Bam Basics",
@@ -599,7 +599,7 @@ export const danceCurriculum = {
           title: "Vosho Tutorial",
           platform: "YouTube",
           creator: "Bontle Modiselle",
-          link: "https://www.youtube.com/watch?v=nvDhv3agXsA"
+          link: "https://www.youtube.com/watch?v=o2gkbrUVsMk"
         },
         {
           title: "Vosho Basics",
@@ -672,8 +672,8 @@ export const danceCurriculum = {
         {
           title: "Pouncing Cat Tutorial",
           platform: "YouTube",
-          creator: "African Dance Dictionary",
-          link: "https://www.youtube.com/watch?v=n-HXohovPXs"
+          creator: "Champion Rolle",
+          link: "https://www.youtube.com/watch?v=81ro7if1hdE"
         },
         {
           title: "Learn Pouncing Cat",
@@ -747,7 +747,7 @@ export const danceCurriculum = {
           title: "Zekethe Dance Tutorial",
           platform: "YouTube",
           creator: "African Dance Dictionary",
-          link: "https://www.youtube.com/watch?v=eWr-EXDXHpA"
+          link: "https://www.youtube.com/shorts/LRIOUwlsqTg"
         },
         {
           title: "Zekethe Basics",
