@@ -14,26 +14,6 @@ declare global {
     onYouTubeIframeAPIReady: () => void;
     YT: any;
   }
-  
-  interface MediaMetadata {
-    title: string;
-    artist: string;
-    album: string;
-    artwork: {
-      src: string;
-      sizes: string;
-      type: string;
-    }[];
-  }
-  
-  interface MediaSession {
-    metadata: MediaMetadata | null;
-    setActionHandler: (action: string, handler: (() => void) | null) => void;
-  }
-  
-  interface Navigator {
-    mediaSession?: MediaSession;
-  }
 }
 
 export interface Song {
@@ -107,7 +87,6 @@ export const GlobalAudioPlayerProvider = ({
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const { toast } = useToast();
 
-  // Load saved state from local storage on initial render
   useEffect(() => {
     try {
       // Load volume
@@ -160,7 +139,6 @@ export const GlobalAudioPlayerProvider = ({
     }
   }, []);
 
-  // Save state to local storage whenever it changes
   useEffect(() => {
     if (isInitialLoad) return; // Skip on initial load
     
@@ -219,7 +197,7 @@ export const GlobalAudioPlayerProvider = ({
   useEffect(() => {
     if ('mediaSession' in navigator && currentSong) {
       try {
-        navigator.mediaSession!.metadata = new window.MediaMetadata({
+        navigator.mediaSession.metadata = new MediaMetadata({
           title: videoTitle || 'Unknown Title',
           artist: channelTitle || 'Unknown Artist',
           album: 'Afrobeats Player',
@@ -233,10 +211,10 @@ export const GlobalAudioPlayerProvider = ({
         });
         
         // Set action handlers
-        navigator.mediaSession!.setActionHandler('play', togglePlay);
-        navigator.mediaSession!.setActionHandler('pause', togglePlay);
-        navigator.mediaSession!.setActionHandler('previoustrack', previousSong);
-        navigator.mediaSession!.setActionHandler('nexttrack', nextSong);
+        navigator.mediaSession.setActionHandler('play', togglePlay);
+        navigator.mediaSession.setActionHandler('pause', togglePlay);
+        navigator.mediaSession.setActionHandler('previoustrack', previousSong);
+        navigator.mediaSession.setActionHandler('nexttrack', nextSong);
       } catch (error) {
         console.error("Error setting up Media Session:", error);
       }
@@ -518,7 +496,6 @@ export const GlobalAudioPlayerProvider = ({
     setExpandedView(prev => !prev);
   }, []);
 
-  // Add this effect to update time tracking continuously
   useEffect(() => {
     if (!player || !isPlaying || isDragging) return;
     
