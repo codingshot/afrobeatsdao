@@ -7,7 +7,7 @@ export const danceCurriculum = {
       origin: "Nigeria",
       description: "A popular dance move that involves intricate legwork and arm movements. Popularized by Nigerian artist Zlatan Ibile in 2018.",
       difficulty: "Medium",
-      image: "https://placehold.co/600x400/7d4aff/ffffff?text=Zanku",
+      image: "/dances/zanku.gif",
       modules: [
         "Basic Legwork Technique",
         "Arm Swing Coordination",
@@ -44,8 +44,8 @@ export const danceCurriculum = {
         {
           title: "Zanku (Legwork)",
           artist: "Zlatan Ibile",
-          youtube: "https://www.youtube.com/watch?v=9GbHKI_Hy60",
-          spotify: "https://open.spotify.com/track/2iVEsyq3nOvsn6yY2fK8y8"
+          youtube: "https://www.youtube.com/watch?v=tupb4xV-15w",
+          spotify: "https://open.spotify.com/track/4PLg115uBfyhmMvRr6OWJS"
         },
         {
           title: "Soapy",
@@ -76,7 +76,7 @@ export const danceCurriculum = {
       origin: "Ghana",
       description: "A dance that originated in Ghana, characterized by complex hand and leg movements that often mimic everyday activities.",
       difficulty: "Medium-Hard",
-      image: "https://placehold.co/600x400/f97316/ffffff?text=Azonto",
+      image: "/dances/azonto.gif",
       modules: [
         "Hip Sway Fundamentals",
         "Mime Action Techniques",
@@ -144,7 +144,7 @@ export const danceCurriculum = {
       origin: "Nigeria",
       description: "A street dance that originated from the streets of Lagos, involving crossed arms and specific leg movements.",
       difficulty: "Easy-Medium",
-      image: "https://placehold.co/600x400/008751/ffffff?text=Shaku+Shaku",
+      image: "/dances/shaku.gif",
       modules: [
         "Cross-Step Basics",
         "Arm Movement Technique",
@@ -218,7 +218,7 @@ export const danceCurriculum = {
       origin: "Nigeria",
       description: "A dance style that emerged from the streets of Lagos in the 1990s, characterized by bent posture and energetic movements.",
       difficulty: "Medium",
-      image: "https://placehold.co/600x400/7d4aff/ffffff?text=Galala",
+      image: "/dances/galala.gif",
       modules: [
         "Bent Posture Technique",
         "Back-and-Forth Steps",
@@ -292,7 +292,7 @@ export const danceCurriculum = {
       origin: "Nigeria",
       description: "A dance characterized by quick steps, shoulder shrugs and expressive arm movements that originated from Lagos street culture.",
       difficulty: "Medium",
-      image: "https://placehold.co/600x400/f97316/ffffff?text=Gbese",
+      image: "/dances/gbese.gif",
       modules: [
         "Quick Steps Technique",
         "Shoulder Shrug Basics",
@@ -368,7 +368,7 @@ export const danceCurriculum = {
       origin: "South Africa",
       description: "A popular dance move that involves a rolling hand movement while stepping side to side. Made globally famous after being featured in several music videos.",
       difficulty: "Medium",
-      image: "https://placehold.co/600x400/FFD600/000000?text=Gwara+Gwara",
+      image: "/dances/gwara.gif",
       modules: [
         "Leg Wind Technique",
         "Arm Swing Coordination",
@@ -545,7 +545,7 @@ export const danceCurriculum = {
       origin: "South Africa",
       description: "A dance characterized by rapid squatting movements while maintaining rhythm. Requires strong leg muscles and balance.",
       difficulty: "Hard",
-      image: "https://placehold.co/600x400/008751/ffffff?text=Vosho",
+      image: "/dances/vosho.gif",
       modules: [
         "Deep Stomp Technique",
         "Arm Swing Coordination",
@@ -620,7 +620,7 @@ export const danceCurriculum = {
       origin: "South Africa",
       description: "An Amapiano dance characterized by a crouched stance, quick footwork and cat-like arm movements that gained popularity on TikTok.",
       difficulty: "Medium-Hard",
-      image: "https://placehold.co/600x400/FFD600/000000?text=Pouncing+Cat",
+      image: "/dances/pouncing-cat.gif",
       modules: [
         "Crouched Stance Basics",
         "Quick Footwork Patterns",
@@ -694,7 +694,7 @@ export const danceCurriculum = {
       origin: "South Africa",
       description: "An energetic Amapiano dance characterized by fast footwork, sharp isolations and punchy arm movements.",
       difficulty: "Hard",
-      image: "https://placehold.co/600x400/008751/ffffff?text=Zekethe",
+      image: "/dances/zekethe.gif",
       modules: [
         "Fast Footwork Fundamentals",
         "Sharp Isolation Technique",
