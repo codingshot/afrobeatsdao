@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import JobListingCard from "@/components/careers/JobListingCard";
 import { jobListings } from "@/data/job-listings";
 import { Helmet } from "react-helmet";
+import { formatDate } from "@/lib/utils";
 
 const Careers = () => {
   return (
@@ -17,7 +19,45 @@ const Careers = () => {
         <meta property="og:title" content="Careers at AfrobeatsDAO" />
         <meta property="og:description" content="Join the AfrobeatsDAO team and help us build the ultimate destination for Afrobeats culture." />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content="afrobeats careers, music industry jobs, african music careers, cultural jobs" />
+        <meta property="og:url" content="https://afrobeats.com/careers" />
+        <meta name="keywords" content="afrobeats careers, music industry jobs, african music careers, cultural jobs, web3 jobs, crypto jobs" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Careers at AfrobeatsDAO" />
+        <meta name="twitter:description" content="Join the AfrobeatsDAO team and help us build the ultimate destination for Afrobeats culture." />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "JobPosting",
+              "datePosted": "2025-05-20",
+              "validThrough": "2025-08-20",
+              "employmentType": "PART_TIME",
+              "hiringOrganization": {
+                "@type": "Organization",
+                "name": "AfrobeatsDAO",
+                "sameAs": "https://afrobeats.party"
+              },
+              "jobLocation": {
+                "@type": "Place",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Remote"
+                }
+              },
+              "title": "Web3 Lead",
+              "description": "Drive Afrobeats DAO's integration with Web3 ecosystems, focusing on partnerships, event exposure, and innovative technologies.",
+              "baseSalary": {
+                "@type": "MonetaryAmount",
+                "currency": "USD",
+                "value": {
+                  "@type": "QuantitativeValue",
+                  "value": "200",
+                  "unitText": "MONTH"
+                }
+              }
+            }
+          `}
+        </script>
       </Helmet>
 
       <div className="container mx-auto py-20 px-4">
@@ -45,7 +85,7 @@ const Careers = () => {
 
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Briefcase className="mr-2 h-6 w-6 text-[#FFD600]" /> 
-            Open Positions
+            Open Positions ({jobListings.length})
           </h2>
 
           <div className="space-y-4">

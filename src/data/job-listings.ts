@@ -99,5 +99,81 @@ export const jobListings: JobListing[] = [
       }
     ],
     postedDate: "2025-05-12"
+  },
+  {
+    id: "2",
+    title: "Web3 Lead",
+    slug: "web3-lead",
+    type: "Part-time",
+    location: "Remote",
+    summary: "Drive Afrobeats DAO's integration with Web3 ecosystems, focusing on partnerships, event exposure, and innovative technologies.",
+    compensation: "$200 USD Monthly",
+    about: "Afrobeats DAO is the premier decentralized community dedicated to celebrating and advancing Afrobeats culture worldwide. From music and dance to events and news, we connect artists, fans, and innovators through a vibrant online platform afrobeats.party. By integrating Web3 technologies, Afrobeats DAO aims to empower creators, streamline payments, and build a tokenized ecosystem that amplifies the global reach of Afrobeats.",
+    description: "The Web3 Lead will drive Afrobeats DAO's integration with Web3 ecosystems over a 3-month term, focusing on partnerships, event exposure, and innovative technologies.",
+    responsibilities: [
+      {
+        title: "Partnership Development",
+        items: [
+          "Establish strategic alliances with crypto organizations (e.g., blockchain platforms, NFT marketplaces) to enhance Afrobeats DAO's visibility",
+          "Reach out to ally organizations, such as music DAOs and cultural collectives, to co-create initiatives"
+        ]
+      },
+      {
+        title: "Event Exposure",
+        items: [
+          "Secure speaking slots, performances, or booths for Afrobeats DAO at major crypto conferences (e.g., ETHDenver, Consensus)",
+          "Organize virtual or in-person Afrobeats events with Web3 integrations (e.g., NFT ticketing)"
+        ]
+      },
+      {
+        title: "Web3 Integration",
+        items: [
+          "Research and scope the feasibility of a $AFRO token to incentivize community participation and reward creators (scoping only, no launch required)",
+          "Explore on-chain processes, such as decentralized governance or royalty distribution for Afrobeats artists",
+          "Identify Web3 fundraising sources, payment systems, and integrations (e.g., crypto wallets, DeFi platforms)"
+        ]
+      },
+      {
+        title: "Community Engagement",
+        items: [
+          "Create tailored content and messaging for crypto Twitter, Discord, and other Web3 platforms to attract supporters",
+          "Provide product feedback to Afrobeats DAO's tech team to improve user experience on afrobeats.party"
+        ]
+      }
+    ],
+    requirements: [
+      "Experience in Web3, blockchain, or crypto ecosystem",
+      "Strong understanding of DAOs, NFTs, and decentralized applications",
+      "Excellent networking and partnership-building skills",
+      "Ability to explain complex Web3 concepts to non-technical audiences",
+      "Passion for music, especially Afrobeats culture",
+      "Self-motivated with ability to work independently",
+      "Strong written and verbal communication skills"
+    ],
+    kpis: [
+      "Secure at least 5 strategic partnerships with crypto or cultural organizations",
+      "Confirm Afrobeats DAO's presence at 3 major crypto conferences or host 1 Web3-integrated event",
+      "Deliver a detailed report on $AFRO token feasibility and Web3 integration options",
+      "Increase Afrobeats DAO's Twitter and Discord followers to over 300 through Web3-focused content",
+      "Provide weekly updates to donors via POTLOCK and Twitter on progress and milestones"
+    ],
+    compensationDetails: "$200 USD Monthly for a 3-month term\nFunding provided through POTLOCK campaign (June 1, 2025 – June 30, 2025)",
+    howToApply: [
+      "Apply directly through our POTLOCK campaign page",
+      "Include your Web3 experience, relevant portfolio/projects, and why you're passionate about Afrobeats culture",
+      "Successful candidates will be contacted for an interview"
+    ],
+    applyLink: "https://staging.alpha.potlock.org/campaign/5/leaderboard",
+    brand: [
+      {
+        name: "x.com/afrobeatsdao",
+        url: "https://x.com/afrobeatsdao"
+      },
+      {
+        name: "afrobeats.party",
+        url: "https://afrobeats.party"
+      }
+    ],
+    postedDate: "2025-05-20"
   }
 ];
