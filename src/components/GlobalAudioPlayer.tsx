@@ -7,6 +7,7 @@ import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Repeat, Repeat1, 
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar } from "@/components/ui/avatar";
 
 declare global {
   interface Window {
@@ -50,6 +51,9 @@ const STORAGE_KEYS = {
   VIDEO_VISIBLE: 'afrobeats_video_visible'
 };
 
+// How many songs to remember as "recently played"
+const RECENTLY_PLAYED_LIMIT = 10;
+
 const GlobalAudioPlayerContext = createContext<GlobalAudioPlayerContextType | null>(null);
 
 export const GlobalAudioPlayerProvider = ({
@@ -80,9 +84,9 @@ export const GlobalAudioPlayerProvider = ({
   const [showPlayedSongs, setShowPlayedSongs] = useState(false);
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const { toast } = useToast();
 
-  // Load saved state from local storage on initial render
   useEffect(() => {
     try {
       // Load volume
@@ -121,13 +125,20 @@ export const GlobalAudioPlayerProvider = ({
         const parsedSong = JSON.parse(savedCurrentSong);
         setCurrentSong(parsedSong);
         setLoadingTitle(parsedSong.title || "Loading...");
+        
+        // Set thumbnail URL for the saved song
+        if (parsedSong.youtube) {
+          const videoId = getVideoId(parsedSong.youtube);
+          if (videoId) {
+            setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+          }
+        }
       }
     } catch (e) {
       console.error("Error loading saved player state:", e);
     }
   }, []);
 
-  // Save state to local storage whenever it changes
   useEffect(() => {
     if (isInitialLoad) return; // Skip on initial load
     
@@ -151,6 +162,16 @@ export const GlobalAudioPlayerProvider = ({
     }
   }, [currentSong, queue, volume, repeat, videoVisible, playedSongs, isInitialLoad]);
 
+  // Helper function to extract video ID from YouTube URL or ID string
+  const getVideoId = useCallback((youtube: string): string => {
+    if (youtube.includes('v=')) {
+      return youtube.split('v=')[1].split('&')[0];
+    } else if (youtube.includes('youtu.be/')) {
+      return youtube.split('youtu.be/')[1].split('?')[0];
+    }
+    return youtube;
+  }, []);
+
   const toggleQueueVisibility = useCallback(() => {
     console.log("Toggling queue visibility, current state:", queueVisible);
     setQueueVisible(prev => !prev);
@@ -171,6 +192,34 @@ export const GlobalAudioPlayerProvider = ({
     const randomIndex = Math.floor(Math.random() * availableVideos.length);
     return availableVideos[randomIndex];
   }, []);
+
+  // Setup Media Session API for background playback control
+  useEffect(() => {
+    if ('mediaSession' in navigator && currentSong) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: videoTitle || 'Unknown Title',
+          artist: channelTitle || 'Unknown Artist',
+          album: 'Afrobeats Player',
+          artwork: [
+            { 
+              src: thumbnailUrl || '/AfrobeatsDAOMeta.png', 
+              sizes: '128x128', 
+              type: 'image/png' 
+            }
+          ]
+        });
+        
+        // Set action handlers
+        navigator.mediaSession.setActionHandler('play', togglePlay);
+        navigator.mediaSession.setActionHandler('pause', togglePlay);
+        navigator.mediaSession.setActionHandler('previoustrack', previousSong);
+        navigator.mediaSession.setActionHandler('nexttrack', nextSong);
+      } catch (error) {
+        console.error("Error setting up Media Session:", error);
+      }
+    }
+  }, [currentSong, videoTitle, channelTitle, thumbnailUrl]);
 
   useEffect(() => {
     if (!window.YT && !document.getElementById('youtube-iframe-api')) {
@@ -222,6 +271,12 @@ export const GlobalAudioPlayerProvider = ({
                   setChannelTitle(videoData.author || "Unknown Channel");
                 }
                 setDuration(event.target.getDuration());
+                
+                // Set thumbnail URL
+                const videoId = getVideoId(currentSong?.youtube || "");
+                if (videoId) {
+                  setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+                }
                 
                 // After first successful play, mark initial load as complete
                 if (isInitialLoad) {
@@ -312,16 +367,12 @@ export const GlobalAudioPlayerProvider = ({
     setIsPlaying(true);
     if (player && player.loadVideoById) {
       try {
-        let videoId;
-        if (song.youtube.includes('v=')) {
-          videoId = song.youtube.split('v=')[1].split('&')[0];
-        } else if (song.youtube.includes('youtu.be/')) {
-          videoId = song.youtube.split('youtu.be/')[1].split('?')[0];
-        } else {
-          videoId = song.youtube;
-        }
+        let videoId = getVideoId(song.youtube);
         console.log("Loading video ID:", videoId);
         player.loadVideoById(videoId);
+        
+        // Update thumbnail
+        setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
       } catch (e) {
         console.error("Error loading video:", e, song);
         setIsLoading(false);
@@ -332,7 +383,7 @@ export const GlobalAudioPlayerProvider = ({
         nextSong();
       }
     }
-  }, [player, currentSong, previousVideoData]);
+  }, [player, currentSong, previousVideoData, getVideoId]);
 
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
@@ -357,20 +408,51 @@ export const GlobalAudioPlayerProvider = ({
     }
   }, [isPlaying, player]);
 
+  const findUnplayedSong = useCallback((currentId: string | undefined) => {
+    // First try to find a song from queue that hasn't been played recently
+    const unplayedQueueSong = queue.find(song => !playedSongs.has(song.id));
+    if (unplayedQueueSong) {
+      setQueue(prev => prev.filter(song => song.id !== unplayedQueueSong.id));
+      return unplayedQueueSong;
+    }
+    
+    // If no unplayed queue songs, get a random vibe video that hasn't been played
+    const currentVideoId = currentId || 
+                          currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
+                          currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
+                          currentSong?.youtube;
+    
+    // Find videos that haven't been played recently
+    const recentlyPlayedIds = Array.from(playedSongs).slice(-RECENTLY_PLAYED_LIMIT);
+    let vibeVideo = getRandomVibeVideo(currentVideoId);
+    let attempts = 0;
+    
+    // Try to find a vibe video that hasn't been played recently
+    while (recentlyPlayedIds.includes(`vibe-${vibeVideo}`) && attempts < 5) {
+      vibeVideo = getRandomVibeVideo(currentVideoId);
+      attempts++;
+    }
+    
+    return {
+      id: `vibe-${vibeVideo}`,
+      youtube: vibeVideo
+    };
+  }, [queue, playedSongs, currentSong, getRandomVibeVideo]);
+
   const nextSong = useCallback(() => {
     if (queue.length > 0) {
       const nextSong = queue[0];
       setQueue(prev => prev.slice(1));
       playNow(nextSong);
     } else {
-      const currentVideoId = currentSong?.youtube.split('v=')[1]?.split('&')[0] || currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || currentSong?.youtube;
-      const newVibeVideo = getRandomVibeVideo(currentVideoId);
-      playNow({
-        id: `vibe-${newVibeVideo}`,
-        youtube: newVibeVideo
-      });
+      const nextSong = findUnplayedSong(
+        currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
+        currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
+        currentSong?.youtube
+      );
+      playNow(nextSong);
     }
-  }, [queue, playNow, currentSong, getRandomVibeVideo]);
+  }, [queue, playNow, findUnplayedSong, currentSong]);
 
   const previousSong = useCallback(() => {
     if (player) {
@@ -414,7 +496,6 @@ export const GlobalAudioPlayerProvider = ({
     setExpandedView(prev => !prev);
   }, []);
 
-  // Add this effect to update time tracking continuously
   useEffect(() => {
     if (!player || !isPlaying || isDragging) return;
     
@@ -434,7 +515,19 @@ export const GlobalAudioPlayerProvider = ({
 
   useEffect(() => {
     if (currentSong?.id) {
-      setPlayedSongs(prev => new Set([...prev, currentSong.id]));
+      // Add current song to played songs
+      setPlayedSongs(prev => {
+        const newSet = new Set([...prev, currentSong.id]);
+        
+        // If we have too many played songs, remove the oldest ones
+        if (newSet.size > RECENTLY_PLAYED_LIMIT * 2) {
+          const array = Array.from(newSet);
+          const newArray = array.slice(-RECENTLY_PLAYED_LIMIT);
+          return new Set(newArray);
+        }
+        
+        return newSet;
+      });
     }
   }, [currentSong]);
 
@@ -476,7 +569,13 @@ export const GlobalAudioPlayerProvider = ({
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                 <div className="flex-shrink-0">
-                  <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
+                  {thumbnailUrl ? (
+                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                      <img src={thumbnailUrl} alt="Thumbnail" className="object-cover w-full h-full" />
+                    </Avatar>
+                  ) : (
+                    <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm font-medium truncate">
