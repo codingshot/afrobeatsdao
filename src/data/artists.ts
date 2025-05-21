@@ -401,7 +401,7 @@ export const ARTISTS: Artist[] = [
     image: "/artists/moliy.jpg",
     top_songs: [
       {
-        title: "Shake it to the Max)",
+        title: "Shake it to the Max",
         youtube: "https://youtu.be/9Jf8rfvjRbQ?si=v1Ux_FcK0BHEk4Bh"
       }
     ]
