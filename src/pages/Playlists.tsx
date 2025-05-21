@@ -47,7 +47,32 @@ const PLAYLISTS: Playlist[] = [{
   image: "https://i.ytimg.com/vi/hvf_K273XIY/maxresdefault.jpg",
   url: "https://www.youtube.com/watch?v=hvf_K273XIY",
   description: "The ultimate Afrobeats party mix to get you dancing."
-}, {
+}, 
+{
+  id: "homealone-dj-mix",
+  title: "HOME ALONE LIVE SET | DJ DID | AMAPIANO | DANCEHALL | AFROHOUSE | AFROBEATS | BASHMENT EDITION",
+  platform: "youtube",
+  image: "https://i.ytimg.com/vi/UXsaFLWJml8/maxresdefault.jpg",
+  url: "https://www.youtube.com/watch?v=UXsaFLWJml8",
+  description: "Home Alone Bashment Edtion w DJ DID, May 2025."
+},
+{
+  id: "priyanka-soulful-amapiano",
+  title: "Soulful Amapiano Mix | Cape Town, South Africa | Kelvin Momo, Kabza De Small, DJ Maphorisa",
+  platform: "youtube",
+  image: "https://i.ytimg.com/vi/Pfu1dK05GYo/maxresdefault.jpg",
+  url: "https://www.youtube.com/watch?v=Pfu1dK05GYo&t=2499s",
+  description: "Cape Town, South Africa, April 2025."
+},
+{
+  id: "culturfm-nsg",
+  title: "032 CULTUR FM x NSG (2025 Live Afrobeats Mix by OGD b2b DJ Suukz)",
+  platform: "youtube",
+  image: "https://i.ytimg.com/vi/63BAHuxfOAo/maxresdefault.jpg",
+  url: "https://www.youtube.com/watch?v=63BAHuxfOAo",
+  description: "NSG - UK, March 2025."
+},
+{
   id: "spotify2",
   title: "Amapiano Groove",
   platform: "spotify",
