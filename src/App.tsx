@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import './App.css';
@@ -19,6 +18,7 @@ import ArtistProfile from "./pages/ArtistProfile";
 import Careers from "./pages/Careers";
 import JobDetails from "./pages/JobDetails";
 import Discord from "./pages/Discord";
+import News from "./pages/News";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 
 const App = () => {
@@ -46,6 +46,7 @@ const App = () => {
                   <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
                   <Route path="/careers" element={<div className="page-careers"><Careers /></div>} />
                   <Route path="/careers/:slug" element={<div className="page-careers"><JobDetails /></div>} />
+                  <Route path="/news" element={<div className="page-news"><News /></div>} />
                   <Route path="/discord" element={<div className="page-discord"><Discord /></div>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
