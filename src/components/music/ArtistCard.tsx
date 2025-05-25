@@ -69,11 +69,11 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300 bg-white">
       <CardContent className="p-0 flex flex-col flex-1">
         <Link to={`/music/artist/${artist.id}`} className="block overflow-hidden">
-          <div className="relative h-48 overflow-hidden group">
+          <div className="relative aspect-square overflow-hidden group">
             <img 
               src={artist.image} 
               alt={artist.name} 
-              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               onError={handleImageError} 
             />
             <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
