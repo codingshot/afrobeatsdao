@@ -69,23 +69,14 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300 bg-white">
       <CardContent className="p-0 flex flex-col flex-1">
         <Link to={`/music/artist/${artist.id}`} className="block overflow-hidden">
-          <div className="relative h-48 overflow-hidden group">
+          <div className="relative aspect-square overflow-hidden group">
             <img 
               src={artist.image} 
               alt={artist.name} 
-              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               onError={handleImageError} 
             />
             <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              {/* Center-aligned play button */}
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/50 hover:bg-white/70 rounded-full w-12 h-12 flex items-center justify-center"
-                onClick={() => playSong(artist.top_songs[0])}
-              >
-                <Play size={24} className="text-black" />
-              </Button>
               <Badge className="bg-[#008751]/80 text-white px-3 py-1">View Profile</Badge>
             </div>
           </div>

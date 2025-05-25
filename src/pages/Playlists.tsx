@@ -16,6 +16,8 @@ import { useToast } from "@/hooks/use-toast";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { ListMusic, MoveVertical } from 'lucide-react';
 import ArtistsList from "@/components/music/ArtistsList";
+import SongsList from "@/components/music/SongsList";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 interface Playlist {
   id: string;
@@ -134,6 +136,10 @@ const PLAYLISTS: Playlist[] = [{
 
 const Playlists = () => {
   console.log("Playlists component rendering");
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const currentTab = searchParams.get('tab') || 'artists';
 
   let audioPlayerContext;
   try {
@@ -175,6 +181,10 @@ const Playlists = () => {
       setPlayedSongs(prev => new Set([...prev, currentSong.id]));
     }
   }, [currentSong]);
+
+  const handleTabChange = (value: string) => {
+    setSearchParams({ tab: value });
+  };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/AfrobeatsDAOMeta.png";
@@ -335,7 +345,7 @@ const Playlists = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
               <Input 
-                placeholder="Search playlists or artists..." 
+                placeholder="Search playlists, artists, or songs..." 
                 value={searchQuery} 
                 onChange={e => setSearchQuery(e.target.value)} 
                 className="pl-10 bg-white text-black w-full" 
@@ -343,17 +353,19 @@ const Playlists = () => {
             </div>
             
             <div className="flex gap-2">
-              <Select value={platformFilter} onValueChange={setPlatformFilter}>
-                <SelectTrigger className="w-[150px] bg-white text-black">
-                  <SelectValue placeholder="Platform" />
-                </SelectTrigger>
-                <SelectContent className="bg-white text-black">
-                  <SelectItem value="all">All Platforms</SelectItem>
-                  <SelectItem value="spotify">Spotify</SelectItem>
-                  <SelectItem value="apple">Apple Music</SelectItem>
-                  <SelectItem value="youtube">YouTube</SelectItem>
-                </SelectContent>
-              </Select>
+              {currentTab === 'playlists' && (
+                <Select value={platformFilter} onValueChange={setPlatformFilter}>
+                  <SelectTrigger className="w-[150px] bg-white text-black">
+                    <SelectValue placeholder="Platform" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-black">
+                    <SelectItem value="all">All Platforms</SelectItem>
+                    <SelectItem value="spotify">Spotify</SelectItem>
+                    <SelectItem value="apple">Apple Music</SelectItem>
+                    <SelectItem value="youtube">YouTube</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
               
               <Button variant="outline" onClick={handleSort} className="flex items-center gap-1 min-w-[130px] bg-white text-black">
                 {sortMode === "default" ? (
@@ -381,19 +393,26 @@ const Playlists = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
-              <Tabs defaultValue="artists" className="w-full">
-                <TabsList className="w-full grid grid-cols-2 mb-8 bg-white">
+            <div className={`col-span-1 md:col-span-2 lg:col-span-3 ${queueVisible ? 'lg:col-span-2' : 'lg:col-span-4'}`}>
+              <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
+                <TabsList className="w-full grid grid-cols-3 mb-8 bg-white">
                   <TabsTrigger value="artists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
                     Artists
                   </TabsTrigger>
+                  <TabsTrigger value="songs" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
+                    Songs
+                  </TabsTrigger>
                   <TabsTrigger value="playlists" className="text-black data-[state=active]:bg-[#008751] data-[state=active]:text-white">
-                    Top Playlists
+                    Playlists
                   </TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="artists" className="mt-6">
-                  <ArtistsList searchQuery={searchQuery} />
+                  <ArtistsList searchQuery={searchQuery} sortMode={sortMode} />
+                </TabsContent>
+                
+                <TabsContent value="songs" className="mt-6">
+                  <SongsList searchQuery={searchQuery} sortMode={sortMode} />
                 </TabsContent>
                 
                 <TabsContent value="playlists" className="mt-6 space-y-4 w-full">
