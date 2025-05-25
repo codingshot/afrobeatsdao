@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
-import { Play, Plus, ExternalLink, ArrowLeft, Music } from 'lucide-react';
+import { Play, Plus, ExternalLink, ArrowLeft, Music, Globe, Instagram, Twitter, Youtube, Music2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useGlobalAudioPlayer } from '@/components/GlobalAudioPlayer';
 import { useToast } from '@/hooks/use-toast';
@@ -9,12 +9,15 @@ import { ARTISTS, Artist, Song } from '@/data/artists';
 import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Link } from 'react-router-dom';
+import { slugify } from '@/lib/slugUtils';
 
 const ArtistProfile = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { playNow, addToQueue } = useGlobalAudioPlayer();
   const { toast } = useToast();
+  const [isHovering, setIsHovering] = useState(false);
   
   const artist = ARTISTS.find(artist => artist.id === id);
   
@@ -103,6 +106,79 @@ const ArtistProfile = () => {
       });
     }
   };
+
+  const playAllSongsRandomly = () => {
+    if (!artist) return;
+    
+    // Shuffle the songs array
+    const shuffledSongs = [...artist.top_songs].sort(() => Math.random() - 0.5);
+    const [firstSong, ...restSongs] = shuffledSongs;
+    
+    if (firstSong) {
+      const videoId = getVideoId(firstSong.youtube);
+      playNow({
+        id: `${artist.id}-${firstSong.title}`,
+        youtube: videoId,
+        title: firstSong.title,
+        artist: artist.name
+      });
+      
+      restSongs.forEach(song => {
+        const videoId = getVideoId(song.youtube);
+        addToQueue({
+          id: `${artist.id}-${song.title}`,
+          youtube: videoId,
+          title: song.title,
+          artist: artist.name
+        });
+      });
+      
+      toast({
+        title: "Shuffling & Playing",
+        description: `Playing ${artist.name}'s songs randomly`
+      });
+    }
+  };
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'instagram':
+        return Instagram;
+      case 'twitter':
+        return Twitter;
+      case 'youtube':
+        return Youtube;
+      case 'spotify':
+        return Music2;
+      case 'soundcloud':
+        return Music;
+      case 'tiktok':
+        return Music;
+      case 'facebook':
+        return ExternalLink;
+      case 'linkedin':
+        return ExternalLink;
+      default:
+        return ExternalLink;
+    }
+  };
+
+  const getSocialLinks = () => {
+    if (!artist) return [];
+    
+    const socialPlatforms = [
+      { key: 'instagram', url: artist.instagram, label: 'Instagram' },
+      { key: 'twitter', url: artist.twitter, label: 'Twitter' },
+      { key: 'youtube', url: artist.youtube, label: 'YouTube' },
+      { key: 'spotify', url: artist.spotify, label: 'Spotify' },
+      { key: 'soundcloud', url: artist.soundcloud, label: 'SoundCloud' },
+      { key: 'tiktok', url: artist.tiktok, label: 'TikTok' },
+      { key: 'facebook', url: artist.facebook, label: 'Facebook' },
+      { key: 'linkedin', url: artist.linkedin, label: 'LinkedIn' },
+    ];
+    
+    return socialPlatforms.filter(platform => platform.url);
+  };
   
   if (!artist) {
     return (
@@ -134,6 +210,8 @@ const ArtistProfile = () => {
         <meta property="og:description" content={`Explore ${artist.name}'s music collection, including ${artist.top_songs.length} popular songs.`} />
         <meta property="og:type" content="profile" />
         <meta property="og:image" content={artist.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={artist.image} />
         <meta name="keywords" content={`${artist.name}, african music, afrobeats artist, ${artist.top_songs.map(song => song.title.toLowerCase()).join(', ')}`} />
         <script type="application/ld+json">
           {JSON.stringify({
@@ -165,13 +243,23 @@ const ArtistProfile = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="md:col-span-1">
-              <div className="rounded-xl overflow-hidden shadow-lg mb-4 relative">
+              <div 
+                className="rounded-xl overflow-hidden shadow-lg mb-4 relative cursor-pointer group"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                onClick={playAllSongsRandomly}
+              >
                 <img 
                   src={artist.image} 
                   alt={artist.name} 
-                  className="w-full aspect-square object-cover"
+                  className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={handleImageError} 
                 />
+                <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-300 ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="bg-white rounded-full p-4 shadow-lg">
+                    <Play className="w-8 h-8 text-[#008751] fill-current" />
+                  </div>
+                </div>
               </div>
               
               <div className="bg-white p-6 rounded-xl shadow-md">
@@ -179,17 +267,34 @@ const ArtistProfile = () => {
                 
                 <div className="flex items-center justify-between mb-4 mt-3">
                   <Badge className="bg-[#008751] px-3 py-1">Afrobeats Artist</Badge>
-                  {artist.website && (
-                    <a 
-                      href={artist.website} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[#008751] hover:underline"
-                    >
-                      <ExternalLink size={16} />
-                      <span>Website</span>
-                    </a>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {artist.website && (
+                      <a 
+                        href={artist.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-8 h-8 text-[#008751] hover:bg-[#008751]/10 rounded-full transition-colors"
+                        title="Website"
+                      >
+                        <Globe size={18} />
+                      </a>
+                    )}
+                    {getSocialLinks().map((social, index) => {
+                      const Icon = getSocialIcon(social.key);
+                      return (
+                        <a
+                          key={index}
+                          href={social.url!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center w-8 h-8 text-[#008751] hover:bg-[#008751]/10 rounded-full transition-colors"
+                          title={social.label}
+                        >
+                          <Icon size={18} />
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
                 
                 <p className="text-gray-600 mt-3 text-sm">
@@ -218,51 +323,63 @@ const ArtistProfile = () => {
                 <Separator className="mb-4" />
                 
                 <div className="space-y-4">
-                  {artist.top_songs.map((song, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-md hover:bg-gray-50"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="flex-shrink-0 h-12 w-12 rounded bg-gray-100 flex items-center justify-center">
-                          <Music size={20} className="text-gray-500" />
+                  {artist.top_songs.map((song, index) => {
+                    const videoId = getVideoId(song.youtube);
+                    return (
+                      <div 
+                        key={index}
+                        className="flex items-center justify-between p-3 rounded-md hover:bg-gray-50"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="flex-shrink-0 h-6 w-10 rounded bg-gray-100 overflow-hidden">
+                            <img 
+                              src={`https://img.youtube.com/vi/${videoId}/default.jpg`}
+                              alt={song.title}
+                              className="w-full h-full object-cover"
+                              onError={handleImageError}
+                            />
+                          </div>
+                          <div>
+                            <Link 
+                              to={`/music/artist/${artist.id}/${slugify(song.title)}`}
+                              className="font-medium text-black hover:text-[#008751] transition-colors"
+                            >
+                              {song.title}
+                            </Link>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-medium text-black">{song.title}</h3>
-                          <p className="text-sm text-gray-500">{artist.name}</p>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            onClick={() => playSong(song)}
+                            title="Play Now"
+                          >
+                            <Play size={18} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            onClick={() => addSongToQueue(song)}
+                            title="Add to Queue"
+                          >
+                            <Plus size={18} />
+                          </Button>
+                          <a
+                            href={song.youtube}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10 flex items-center justify-center"
+                            title="Open on YouTube"
+                          >
+                            <ExternalLink size={18} />
+                          </a>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => playSong(song)}
-                          title="Play Now"
-                        >
-                          <Play size={18} />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => addSongToQueue(song)}
-                          title="Add to Queue"
-                        >
-                          <Plus size={18} />
-                        </Button>
-                        <a
-                          href={song.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10 flex items-center justify-center"
-                          title="Open on YouTube"
-                        >
-                          <ExternalLink size={18} />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               

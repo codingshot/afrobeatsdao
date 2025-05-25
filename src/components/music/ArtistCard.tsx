@@ -8,6 +8,7 @@ import { Artist, Song } from '@/data/artists';
 import { useGlobalAudioPlayer } from '@/components/GlobalAudioPlayer';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { slugify } from '@/lib/slugUtils';
 
 interface ArtistCardProps {
   artist: Artist;
@@ -98,7 +99,12 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
           <div className="space-y-2 mt-2 flex-1">
             {artist.top_songs.map((song, index) => (
               <div key={index} className="flex items-center justify-between border-b pb-2 last:border-0">
-                <span className="text-sm text-black font-medium truncate max-w-[150px]">{song.title}</span>
+                <Link 
+                  to={`/music/artist/${artist.id}/${slugify(song.title)}`}
+                  className="text-sm text-black font-medium truncate max-w-[150px] hover:text-[#008751] transition-colors"
+                >
+                  {song.title}
+                </Link>
                 <div className="flex items-center space-x-1">
                   <Button 
                     variant="ghost" 

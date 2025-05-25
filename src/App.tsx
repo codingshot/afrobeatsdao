@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import './App.css';
@@ -15,6 +16,7 @@ import Events from "./pages/Events";
 import EventDetails from "./pages/EventDetails";
 import Playlists from "./pages/Playlists";
 import ArtistProfile from "./pages/ArtistProfile";
+import Song from "./pages/Song";
 import Careers from "./pages/Careers";
 import JobDetails from "./pages/JobDetails";
 import Discord from "./pages/Discord";
@@ -44,6 +46,7 @@ const App = () => {
                   <Route path="/event/:slug" element={<div className="page-events"><EventDetails /></div>} />
                   <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
                   <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
+                  <Route path="/music/artist/:artistId/:songSlug" element={<div className="page-music"><Song /></div>} />
                   <Route path="/careers" element={<div className="page-careers"><Careers /></div>} />
                   <Route path="/careers/:slug" element={<div className="page-careers"><JobDetails /></div>} />
                   <Route path="/news" element={<div className="page-news"><News /></div>} />

@@ -69,10 +69,14 @@ const NewsTicker = () => {
         <div 
           className="whitespace-nowrap text-black font-semibold flex"
           style={{
-            animation: 'scroll 60s linear infinite'
+            animation: 'scroll 30s linear infinite'
           }}
         >
           {/* Repeat segments for seamless loop */}
+          <div className="flex">
+            {createTickerSegments()}
+            {newsItems.length > 0 && ' 🪘 '}
+          </div>
           <div className="flex">
             {createTickerSegments()}
             {newsItems.length > 0 && ' 🪘 '}
