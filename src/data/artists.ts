@@ -43,6 +43,10 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=hLDQ88vAhIs"
       },
       {
+        title: "Tested, Approved & Trusted",
+        youtube: "https://youtu.be/QnaL31BTjdU?si=V0w09f6WHOvffilk"
+      },
+      {
         title: "Ye",
         youtube: "https://www.youtube.com/watch?v=lPe09eE6Xio"
       },
@@ -57,6 +61,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "It's Plenty",
         youtube: "https://www.youtube.com/watch?v=F8bZVnynDdc"
+      },
+      {
+        title: "Jagele",
+        youtube: "https://youtu.be/-UfEhUTxct0?si=wkNkTgs5T2iOEMWQ",
       }
     ]
   },
@@ -465,6 +473,25 @@ export const ARTISTS: Artist[] = [
       {
         title: "Shayi Mpempe",
         youtube: "https://www.youtube.com/watch?v=Hfxra_LxMoc"
+      },
+      {
+        title: "Izulu",
+        youtube: "https://www.youtube.com/watch?v=MsOntAbV024"
+      }
+    ]
+  },
+  {
+    id: "phyno",
+    name: "Phyno",
+    website: null,
+    youtube: "https://www.youtube.com/@officialphyno",
+    instagram: "instagram.com/phynofino",
+    twitter: "twitter.com/phynofino",
+    image: "/artists/phyno.jpg",
+    top_songs: [
+      {
+        title: "Do I",
+        youtube: "https://www.youtube.com/watch?v=oeP_8Wm9PQQ"
       }
     ]
   },
@@ -1178,6 +1205,10 @@ export const ARTISTS: Artist[] = [
         title: "Jinja",
         youtube: "https://www.youtube.com/watch?v=5FYvvWl1Frw"
       },
+      {
+        title: "Tumpet ft Ckay",
+        youtube: "https://youtu.be/FcjOlcWaaU8?si=JHGYSJ07HeMKJ97z"
+      }
       {
         title: "Tesinapot",
         youtube: "https://www.youtube.com/watch?v=cIjkFCCLdcA"
