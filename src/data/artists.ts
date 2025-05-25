@@ -1224,7 +1224,7 @@ export const ARTISTS: Artist[] = [
       {
         title: "Tumpet ft Ckay",
         youtube: "https://youtu.be/FcjOlcWaaU8?si=JHGYSJ07HeMKJ97z"
-      }
+      },
       {
         title: "Tesinapot",
         youtube: "https://www.youtube.com/watch?v=cIjkFCCLdcA"
