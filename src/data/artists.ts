@@ -623,6 +623,10 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=k0aPh2zoeiE"
       },
       {
+        title: "Ma Lo",
+        youtube: "https://youtu.be/VdCjMGeMhaM?si=lvoNP_6m3Jmf1Pr4"
+      },
+      {
         title: "Who Is Your Guy?",
         youtube: "https://www.youtube.com/watch?v=OHnXY9F7m9c"
       }
