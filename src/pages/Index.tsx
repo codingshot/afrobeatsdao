@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection";
 import NewsTicker from "@/components/NewsTicker";
 import MusicCarousel from "@/components/MusicCarousel";
+import ArtistsCarousel from "@/components/ArtistsCarousel";
 
 const Index = () => {
   const { playNow, currentSong } = useGlobalAudioPlayer();
@@ -49,8 +50,9 @@ const Index = () => {
         <EventsSection />
         <ClubsSection />
         <VibeOfTheDay />
-        <DanceCarousel />
         <MusicSection />
+        <ArtistsCarousel />
+        <DanceCarousel />
         <FutureSection />
         <TeamSection />
       </main>
