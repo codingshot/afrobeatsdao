@@ -9,6 +9,8 @@ import { ARTISTS, Artist, Song } from '@/data/artists';
 import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Link } from 'react-router-dom';
+import { slugify } from '@/utils/slugify';
 
 const ArtistProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -218,51 +220,64 @@ const ArtistProfile = () => {
                 <Separator className="mb-4" />
                 
                 <div className="space-y-4">
-                  {artist.top_songs.map((song, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-md hover:bg-gray-50"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="flex-shrink-0 h-12 w-12 rounded bg-gray-100 flex items-center justify-center">
-                          <Music size={20} className="text-gray-500" />
+                  {artist.top_songs.map((song, index) => {
+                    const videoId = getVideoId(song.youtube);
+                    return (
+                      <div 
+                        key={index}
+                        className="flex items-center justify-between p-3 rounded-md hover:bg-gray-50"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="flex-shrink-0 h-16 w-28 rounded bg-gray-100 overflow-hidden">
+                            <img 
+                              src={`https://img.youtube.com/vi/${videoId}/default.jpg`}
+                              alt={song.title}
+                              className="w-full h-full object-cover"
+                              onError={handleImageError}
+                            />
+                          </div>
+                          <div>
+                            <Link 
+                              to={`/music/artist/${artist.id}/${slugify(song.title)}`}
+                              className="font-medium text-black hover:text-[#008751] transition-colors"
+                            >
+                              {song.title}
+                            </Link>
+                            <p className="text-sm text-gray-500">{artist.name}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-medium text-black">{song.title}</h3>
-                          <p className="text-sm text-gray-500">{artist.name}</p>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            onClick={() => playSong(song)}
+                            title="Play Now"
+                          >
+                            <Play size={18} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            onClick={() => addSongToQueue(song)}
+                            title="Add to Queue"
+                          >
+                            <Plus size={18} />
+                          </Button>
+                          <a
+                            href={song.youtube}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10 flex items-center justify-center"
+                            title="Open on YouTube"
+                          >
+                            <ExternalLink size={18} />
+                          </a>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => playSong(song)}
-                          title="Play Now"
-                        >
-                          <Play size={18} />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => addSongToQueue(song)}
-                          title="Add to Queue"
-                        >
-                          <Plus size={18} />
-                        </Button>
-                        <a
-                          href={song.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="h-9 w-9 rounded-full text-[#008751] hover:bg-[#008751]/10 flex items-center justify-center"
-                          title="Open on YouTube"
-                        >
-                          <ExternalLink size={18} />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               

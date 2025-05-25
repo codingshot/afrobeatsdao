@@ -174,7 +174,7 @@ const MusicCarousel: React.FC = () => {
             >
               {/* Song thumbnail */}
               <Link 
-                to={`/music/artist/${song.artistId}/${slugify(song.title.split(' ')[0])}`}
+                to={`/music/artist/${song.artistId}/${slugify(song.title)}`}
                 className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md hover:opacity-80 transition-opacity"
                 onClick={(e) => isDragging && e.preventDefault()}
               >
@@ -189,7 +189,7 @@ const MusicCarousel: React.FC = () => {
               {/* Song info next to thumbnail */}
               <div className="flex-1 min-w-0 h-12 flex flex-col justify-center">
                 <Link 
-                  to={`/music/artist/${song.artistId}/${slugify(song.title.split(' ')[0])}`}
+                  to={`/music/artist/${song.artistId}/${slugify(song.title)}`}
                   className="font-semibold text-sm text-black truncate leading-tight hover:text-[#008751] transition-colors" 
                   title={song.title}
                   onClick={(e) => isDragging && e.preventDefault()}

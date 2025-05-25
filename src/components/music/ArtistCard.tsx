@@ -100,7 +100,7 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
             {artist.top_songs.map((song, index) => (
               <div key={index} className="flex items-center justify-between border-b pb-2 last:border-0">
                 <Link 
-                  to={`/music/artist/${artist.id}/${slugify(song.title.split(' ')[0])}`}
+                  to={`/music/artist/${artist.id}/${slugify(song.title)}`}
                   className="text-sm text-black font-medium truncate max-w-[150px] hover:text-[#008751] transition-colors"
                 >
                   {song.title}

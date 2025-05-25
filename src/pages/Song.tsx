@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ const Song = () => {
 
   // Find the artist and song
   const artist = ARTISTS.find(a => a.id === artistId);
-  const song = artist?.top_songs.find(s => slugify(s.title.split(' ')[0]) === songSlug);
+  const song = artist?.top_songs.find(s => slugify(s.title) === songSlug);
 
   if (!artist || !song) {
     return (
