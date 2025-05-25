@@ -1,4 +1,5 @@
-import React, { useMemo, useRef, useState } from 'react';
+
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
@@ -23,6 +24,8 @@ const MusicCarousel: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [currentTranslateX, setCurrentTranslateX] = useState(0);
+  const animationRef = useRef<number>();
 
   // Get all songs from artists data and randomize them
   const allSongs = useMemo(() => {
@@ -56,6 +59,32 @@ const MusicCarousel: React.FC = () => {
     
     return shuffled.slice(0, 20); // Show first 20 songs after randomization
   }, []);
+
+  // Smooth continuous scrolling animation
+  useEffect(() => {
+    if (!isPaused && !isDragging && containerRef.current) {
+      const animate = () => {
+        setCurrentTranslateX(prev => {
+          const newValue = prev - 0.5; // Adjust speed here
+          const containerWidth = (allSongs.length * 324); // 300px width + 24px gap
+          
+          // Reset when we've scrolled past the first set
+          if (Math.abs(newValue) >= containerWidth) {
+            return 0;
+          }
+          return newValue;
+        });
+        animationRef.current = requestAnimationFrame(animate);
+      };
+      animationRef.current = requestAnimationFrame(animate);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPaused, isDragging, allSongs.length]);
 
   const handlePlay = (song: Song) => {
     playNow({
@@ -98,7 +127,11 @@ const MusicCarousel: React.FC = () => {
     e.preventDefault();
     const x = e.pageX - (containerRef.current.offsetLeft || 0);
     const walk = (x - startX) * 2;
-    containerRef.current.scrollLeft = scrollLeft - walk;
+    const newScrollLeft = scrollLeft - walk;
+    containerRef.current.scrollLeft = newScrollLeft;
+    
+    // Update the translate position based on manual scroll
+    setCurrentTranslateX(-newScrollLeft);
   };
 
   const handleMouseUp = () => {
@@ -115,7 +148,7 @@ const MusicCarousel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative">
+    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative px-6">
       <div 
         className="relative"
         onMouseEnter={handleMouseEnter}
@@ -123,20 +156,22 @@ const MusicCarousel: React.FC = () => {
       >
         <div 
           ref={containerRef}
-          className={`flex gap-6 ${!isPaused && !isDragging ? 'animate-[scroll_30s_linear_infinite]' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} scrollbar-hide`}
+          className={`flex gap-6 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} overflow-x-hidden`}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           style={{ 
             userSelect: 'none',
-            overflowX: isPaused ? 'auto' : 'hidden',
+            transform: `translateX(${currentTranslateX}px)`,
+            transition: isDragging ? 'none' : 'transform 0.1s linear',
+            width: 'fit-content'
           }}
         >
           {/* Duplicate songs for seamless loop */}
           {[...allSongs, ...allSongs].map((song, index) => (
             <div 
               key={`${song.id}-${index}`}
-              className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3"
+              className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3 flex-shrink-0"
             >
               {/* Song thumbnail */}
               <Link 
@@ -202,12 +237,12 @@ const MusicCarousel: React.FC = () => {
         </div>
       </div>
       
-      {/* See Songs Button positioned at bottom center, overlapping the border */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-10">
+      {/* See Songs Button positioned at bottom center, overlapping the border with higher z-index */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-50">
         <Link to="/music?tab=songs">
           <Button 
             variant="default"
-            className="bg-black text-white hover:bg-gray-800 px-6 py-2 font-semibold border-2 border-black"
+            className="bg-black text-white hover:bg-gray-800 px-6 py-2 font-semibold border-2 border-black shadow-lg"
           >
             See Songs
           </Button>
