@@ -1,8 +1,8 @@
 
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { ARTISTS } from '@/data/artists';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArtistCard } from './ArtistCard';
 
 interface ArtistsListProps {
   searchQuery: string;
@@ -27,7 +27,7 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ searchQuery, sortMode = "defa
   }, [searchQuery, sortMode]);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <AnimatePresence>
         {filteredArtists.map((artist, index) => (
           <motion.div
@@ -37,28 +37,7 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ searchQuery, sortMode = "defa
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
-            <Link
-              to={`/music/artist/${artist.id}`}
-              className="block group hover:scale-105 transition-transform duration-200"
-            >
-              <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="aspect-square mb-3 overflow-hidden rounded-lg">
-                  <img
-                    src={artist.image}
-                    alt={artist.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    onError={(e) => {
-                      e.currentTarget.src = "/AfrobeatsDAOMeta.png";
-                    }}
-                  />
-                </div>
-                <h3 className="font-semibold text-black group-hover:text-[#008751] transition-colors">
-                  {artist.name}
-                </h3>
-                <p className="text-sm text-black/70">{artist.genre || 'Afrobeats'}</p>
-                <p className="text-xs text-black/50">{artist.country || 'Nigeria'}</p>
-              </div>
-            </Link>
+            <ArtistCard artist={artist} />
           </motion.div>
         ))}
       </AnimatePresence>
