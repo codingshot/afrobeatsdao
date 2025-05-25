@@ -18,7 +18,7 @@ const MusicCarousel: React.FC = () => {
   const { playNow, addToQueue } = useGlobalAudioPlayer();
   const { toast } = useToast();
 
-  // Get all songs from artists data
+  // Get all songs from artists data and randomize them
   const allSongs = useMemo(() => {
     const songs: Song[] = [];
     ARTISTS.forEach(artist => {
@@ -40,7 +40,15 @@ const MusicCarousel: React.FC = () => {
         });
       });
     });
-    return songs.slice(0, 20); // Show first 20 songs
+    
+    // Randomize the array using Fisher-Yates shuffle
+    const shuffled = [...songs];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled.slice(0, 20); // Show first 20 songs after randomization
   }, []);
 
   const handlePlay = (song: Song) => {
