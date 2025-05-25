@@ -149,7 +149,7 @@ const MusicCarousel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative px-6 z-10">
+    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative px-6 z-[50]">
       <div 
         className="relative"
         onMouseEnter={handleMouseEnter}
@@ -241,7 +241,7 @@ const MusicCarousel: React.FC = () => {
       </div>
       
       {/* See Songs Button positioned at bottom center, overlapping the border with very high z-index */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-[999]">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-[9999]">
         <Link to="/music?tab=songs">
           <Button 
             variant="default"
