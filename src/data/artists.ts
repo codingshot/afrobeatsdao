@@ -379,6 +379,18 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "teejay",
+    name: "Teejay",
+    website: null,
+    image: "/artists/teejay.jpg",
+    top_songs: [
+      { 
+        title: "Drift",
+        youtube: "https://www.youtube.com/watch?v=-UG2F5G1Qk0"
+      }
+    ]
+  },
+  {
     id: "llona",
     name: "Llona",
     website: null,
