@@ -10,6 +10,7 @@ import { ClubsSection } from "@/components/ClubsSection";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection";
+import NewsTicker from "@/components/NewsTicker";
 
 const Index = () => {
   const { playNow, currentSong } = useGlobalAudioPlayer();
@@ -42,6 +43,7 @@ const Index = () => {
     <div className="min-h-screen font-sans pb-[100px]">
       <main>
         <HeroSection />
+        <NewsTicker />
         <EventsSection />
         <ClubsSection />
         <VibeOfTheDay />
