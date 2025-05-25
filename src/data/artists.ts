@@ -8,6 +8,8 @@ export interface Artist {
   name: string;
   website: string | null;
   image: string;
+  genre?: string;
+  country?: string;
   instagram?: string | null;
   twitter?: string | null;
   spotify?: string | null;
@@ -25,6 +27,8 @@ export const ARTISTS: Artist[] = [
     name: "Burna Boy",
     website: "http://www.onaspaceship.com",
     image: "/artists/burnaboy.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: "https://www.instagram.com/burnaboygram/",
     twitter: "https://x.com/burnaboy",
     spotify: null,
@@ -73,6 +77,8 @@ export const ARTISTS: Artist[] = [
     name: "Asake",
     website: null,
     image: "/artists/asake.jpeg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Sungba",
@@ -97,6 +103,8 @@ export const ARTISTS: Artist[] = [
     name: "Focalistic",
     website: null,
     image: "/artists/focalistic.jpg",
+    genre: "Amapiano",
+    country: "South Africa",
     top_songs: [
       {
         title: "Ke Star",
@@ -114,6 +122,8 @@ export const ARTISTS: Artist[] = [
     website: "https://www.iamdavido.com",
     youtube: "https://www.youtube.com/channel/UCkBV3nBa0iRdxEGc4DUS3xA",
     image: "/artists/davido.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Fall",
@@ -142,6 +152,8 @@ export const ARTISTS: Artist[] = [
     name: "Wizkid",
     website: null,
     image: "/artists/wizkid.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Essence (feat. Tems)",
@@ -174,6 +186,8 @@ export const ARTISTS: Artist[] = [
     name: "J Hus",
     website: null,
     image: "/artists/jhus.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Did You See",
@@ -190,6 +204,8 @@ export const ARTISTS: Artist[] = [
     name: "NSG",
     website: null,
     image: "/artists/nsg.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Options (feat. Tion Wayne)",
@@ -206,6 +222,8 @@ export const ARTISTS: Artist[] = [
     name: "Yxng Bane",
     website: null,
     image: "/artists/yxngbane.jpeg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Rihanna",
@@ -222,6 +240,8 @@ export const ARTISTS: Artist[] = [
     name: "B Young",
     website: null,
     image: "/artists/byoung.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Jumanji",
@@ -238,6 +258,8 @@ export const ARTISTS: Artist[] = [
     name: "ZieZie",
     website: null,
     image: "/artists/ziezie.jpeg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Fine Girl",
@@ -254,6 +276,8 @@ export const ARTISTS: Artist[] = [
     name: "Young T & Bugsey",
     website: null,
     image: "/artists/youngtbugsey.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Don't Rush (feat. Headie One)",
@@ -270,6 +294,8 @@ export const ARTISTS: Artist[] = [
     name: "Not3s",
     website: null,
     image: "/artists/not3s.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "My Lover",
@@ -286,6 +312,8 @@ export const ARTISTS: Artist[] = [
     name: "Darkoo",
     website: null,
     image: "/artists/darkoo.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Gangsta",
@@ -302,6 +330,8 @@ export const ARTISTS: Artist[] = [
     name: "Kojo Funds",
     website: null,
     image: "/artists/kojofunds.jpg",
+    genre: "Afrobeats",
+    country: "UK",
     top_songs: [
       {
         title: "Dun Talkin",
@@ -319,6 +349,8 @@ export const ARTISTS: Artist[] = [
     website: null,
     youtube: "https://www.youtube.com/channel/UCv3EFZRGITcQwdyCE_ap0UA",
     image: "/artists/joeboy.webp",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Sip (Alcohol)",
@@ -331,6 +363,8 @@ export const ARTISTS: Artist[] = [
     name: "Ayo Maff",
     website: null,
     image: "/artists/ayomaff.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Dealer (feat. Fireboy DML)",
@@ -347,6 +381,8 @@ export const ARTISTS: Artist[] = [
     name: "Costa Titch",
     website: null,
     image: "/artists/costatitch.jpg",
+    genre: "Amapiano",
+    country: "South Africa",
     top_songs: [
       {
         title: "Big Flexa",
@@ -367,6 +403,8 @@ export const ARTISTS: Artist[] = [
     name: "Qing Madi",
     website: null,
     image: "/artists/qingmadi.webp",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "See Finish",
@@ -383,6 +421,8 @@ export const ARTISTS: Artist[] = [
     name: "Teejay",
     website: null,
     image: "/artists/teejay.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       { 
         title: "Drift",
@@ -395,6 +435,8 @@ export const ARTISTS: Artist[] = [
     name: "Llona",
     website: null,
     image: "/artists/llona.png",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       { 
         title: "Cant Breathe",
@@ -411,6 +453,8 @@ export const ARTISTS: Artist[] = [
     name: "Kizz Daniel",
     website: null,
     image: "/artists/kizzdaniel.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Cough",
@@ -423,6 +467,8 @@ export const ARTISTS: Artist[] = [
     name: "BNXN (fka Buju)",
     website: "https://www.instagram.com/toyourears",
     image: "/artists/bnxn.jpeg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Finesse (with Pheelz)",
@@ -439,6 +485,8 @@ export const ARTISTS: Artist[] = [
     name: "MOLIY",
     website: null,
     image: "/artists/moliy.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Shake it to the Max",
@@ -451,6 +499,8 @@ export const ARTISTS: Artist[] = [
     name: "Seyi Vibez",
     website: "https://www.instagram.com/seyi_vibez",
     image: "/artists/seyivibez.jpeg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Chance (Na Ham)",
@@ -468,6 +518,8 @@ export const ARTISTS: Artist[] = [
     website: null,
     youtube: "https://www.youtube.com/channel/UCDZN6-FTxmc3lmW-tNShEeQ",
     image: "/artists/1daban.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "No Wahala (Remix) feat. Kizz Daniel & Tiwa Savage",
@@ -481,6 +533,8 @@ export const ARTISTS: Artist[] = [
     website: null,
     youtube: "https://www.youtube.com/@swizzpanache",
     image: "/artists/swizzpanache.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Shayi Mpempe",
@@ -500,6 +554,8 @@ export const ARTISTS: Artist[] = [
     instagram: "instagram.com/phynofino",
     twitter: "twitter.com/phynofino",
     image: "/artists/phyno.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Do I",
@@ -520,6 +576,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Calm Down",
@@ -564,6 +622,8 @@ export const ARTISTS: Artist[] = [
     tiktok: "https://www.tiktok.com/@ayrastarr",
     facebook: "https://www.facebook.com/starrayra",
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Rush",
@@ -597,6 +657,8 @@ export const ARTISTS: Artist[] = [
     tiktok: "https://www.tiktok.com/@temsbaby",
     facebook: "https://www.facebook.com/temsbaby",
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Free Mind",
@@ -625,6 +687,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "All Over",
@@ -657,6 +721,8 @@ export const ARTISTS: Artist[] = [
     tiktok: "https://www.tiktok.com/@omah_lay",
     facebook: "https://www.facebook.com/OfficialOmahLay",
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Understand",
@@ -689,6 +755,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Everyday",
@@ -725,6 +793,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Soweto",
@@ -749,6 +819,8 @@ export const ARTISTS: Artist[] = [
     tiktok: "https://www.tiktok.com/@rugerofficial",
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Asiwaju",
@@ -773,6 +845,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Legalize",
@@ -793,6 +867,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Pana",
@@ -817,6 +893,8 @@ export const ARTISTS: Artist[] = [
     tiktok: "https://www.tiktok.com/@subaruwwworld",
     facebook: "https://www.facebook.com/cruelsantino",
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Nigeria",
     top_songs: [
       {
         title: "Rapid Fire",
@@ -833,6 +911,8 @@ export const ARTISTS: Artist[] = [
     name: "Lojay",
     website: null,
     image: "/artists/lojay.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -865,6 +945,8 @@ export const ARTISTS: Artist[] = [
     tiktok: null,
     facebook: null,
     linkedin: null,
+    genre: "Afrobeats",
+    country: "Ghana",
     top_songs: [
       {
         title: "Lord I'm Amazed",
@@ -879,6 +961,8 @@ export const ARTISTS: Artist[] = [
     name: "Young Jonn",
     website: null,
     image: "/artists/youngjonn.webp",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -899,6 +983,8 @@ export const ARTISTS: Artist[] = [
     name: "Tyla",
     website: null,
     image: "/artists/tyla.jpeg",
+    genre: "Afrobeats",
+    country: "South Africa",
     instagram: "https://www.instagram.com/tyla/",
     twitter: "https://x.com/tyllaaaaaaa",
     spotify: null,
@@ -927,6 +1013,8 @@ export const ARTISTS: Artist[] = [
     name: "SPINALL",
     website: null,
     image: "/artists/spinall.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -959,6 +1047,8 @@ export const ARTISTS: Artist[] = [
     name: "King Promise",
     website: null,
     image: "/artists/kingpromise.jpg",
+    genre: "Afrobeats",
+    country: "Ghana",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -983,6 +1073,8 @@ export const ARTISTS: Artist[] = [
     name: "CKay",
     website: null,
     image: "/artists/ckay.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1011,6 +1103,8 @@ export const ARTISTS: Artist[] = [
     name: "Skiibii",
     website: null,
     image: "/artists/skiibii.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1035,6 +1129,8 @@ export const ARTISTS: Artist[] = [
     name: "DJ Tunez",
     website: null,
     image: "/artists/djtunez.webp",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1055,6 +1151,8 @@ export const ARTISTS: Artist[] = [
     name: "Oxlade",
     website: null,
     image: "/artists/oxlade.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1080,6 +1178,8 @@ export const ARTISTS: Artist[] = [
     name: "Tempoe",
     website: null,
     image: "/artists/tempoe.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1100,6 +1200,8 @@ export const ARTISTS: Artist[] = [
     name: "Azanti",
     website: null,
     image: "/artists/azanti.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1120,6 +1222,8 @@ export const ARTISTS: Artist[] = [
     name: "Spyro",
     website: null,
     image: "/artists/spyro.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1140,6 +1244,8 @@ export const ARTISTS: Artist[] = [
     name: "Kcee",
     website: null,
     image: "/artists/kcee.webp",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1160,6 +1266,8 @@ export const ARTISTS: Artist[] = [
     name: "Adekunle Gold",
     website: null,
     image: "/artists/adekunlegold.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1184,6 +1292,8 @@ export const ARTISTS: Artist[] = [
     name: "Odeal",
     website: null,
     image: "/artists/odeal.jpeg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1204,6 +1314,8 @@ export const ARTISTS: Artist[] = [
     name: "Olamide",
     website: null,
     image: "/artists/olamide.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1236,6 +1348,8 @@ export const ARTISTS: Artist[] = [
     name: "Shallipopi",
     website: null,
     image: "/artists/shallipopi.jpg",
+    genre: "Afrobeats",
+    country: "Nigeria",
     instagram: null,
     twitter: null,
     spotify: null,
@@ -1259,4 +1373,5 @@ export const ARTISTS: Artist[] = [
       }
 
     ]
-  }]
+  }
+]
