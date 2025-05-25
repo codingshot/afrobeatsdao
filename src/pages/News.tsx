@@ -127,7 +127,12 @@ const News = () => {
             
             {/* Ticker container */}
             <div className="bg-[#FFD600] py-3 overflow-hidden relative">
-              <div className="animate-[scroll_30s_linear_infinite] whitespace-nowrap text-black font-semibold">
+              <div 
+                className="whitespace-nowrap text-black font-semibold"
+                style={{
+                  animation: 'scroll 30s linear infinite'
+                }}
+              >
                 {tickerText.repeat(3)}
               </div>
             </div>
@@ -234,7 +239,7 @@ const News = () => {
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes scroll {
           0% {
             transform: translateX(100%);
