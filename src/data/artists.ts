@@ -335,6 +335,26 @@ export const ARTISTS: Artist[] = [
     ]
   },
   {
+    id: "costatitch",
+    name: "Costa Titch",
+    website: null,
+    image: "/artists/costatitch.jpg",
+    top_songs: [
+      {
+        title: "Big Flexa",
+        youtube: "https://www.youtube.com/watch?v=8g0v2SDe6MU"
+      },
+      {
+        title: "Just Do It",
+        youtube: "https://youtu.be/h2cYMEK5v-Y?si=xnOUshItL7d1PUS4"
+      },
+      {
+        title: "Superstar ft Ma Gang",
+        youtube: "https://youtu.be/YNzLp2OChBU?si=gr7xiQsvOaRIIr_H"
+      }
+    ]
+  },
+  {
     id: "qing-madi",
     name: "Qing Madi",
     website: null,
@@ -435,6 +455,19 @@ export const ARTISTS: Artist[] = [
       }
     ]
   },
+    {
+    id: "swizz-panache",
+    name: "Swizz Panache",
+    website: null,
+    youtube: "https://www.youtube.com/@swizzpanache",
+    image: "/artists/swizzpanache.jpg",
+    top_songs: [
+      {
+        title: "Shayi Mpempe",
+        youtube: "https://www.youtube.com/watch?v=Hfxra_LxMoc"
+      }
+    ]
+  },
   {
     id: "rema",
     name: "Rema",
@@ -460,6 +493,14 @@ export const ARTISTS: Artist[] = [
       {
         title: "Dumebi",
         youtube: "https://www.youtube.com/watch?v=zUU1bIWpH5c"
+      },
+      {
+        title: "Soundgasm",
+        youtube: "https://www.youtube.com/watch?v=nrTkERuwdCc"
+      },
+      {
+        title: "BENIN BOYS ft Shallipop",
+        youtube: "https://www.youtube.com/watch?v=eYsldLTYyrM"
       },
       {
         title: "Ozeba",
@@ -827,6 +868,10 @@ export const ARTISTS: Artist[] = [
       {
         title: "Truth or Dare",
         youtube: "https://youtu.be/UKpz-I9EV84?si=nivjaTyCbbXC8iI6"
+      },
+      {
+        title: "Push 2 Start",
+        youtube: "https://www.youtube.com/watch?v=uLK2r3sG4lE"
       },
       {
         title: "Water",

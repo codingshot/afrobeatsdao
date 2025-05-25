@@ -57,12 +57,28 @@ const PLAYLISTS: Playlist[] = [{
   description: "Home Alone Bashment Edtion w DJ DID, May 2025."
 },
 {
+  id: "dj-six-seven-in-808s-kitchen",
+  title: "003 DJ Six Seven IN 808's Kitchen ( 2025 Afrobeats, House & Amapiano Mix )",
+  platform: "youtube",
+  image: "https://i.ytimg.com/vi/OXlq7aHVtgA/maxresdefault.jpg",
+  url: "https://www.youtube.com/watch?v=OXlq7aHVtgA",
+  description: "Location: 808's Kitchen, Lagos featuring DJ Six Seven, May 2025."
+},
+{
   id: "priyanka-soulful-amapiano",
   title: "Soulful Amapiano Mix | Cape Town, South Africa | Kelvin Momo, Kabza De Small, DJ Maphorisa",
   platform: "youtube",
   image: "https://i.ytimg.com/vi/Pfu1dK05GYo/maxresdefault.jpg",
   url: "https://www.youtube.com/watch?v=Pfu1dK05GYo&t=2499s",
   description: "Cape Town, South Africa, April 2025."
+},
+{
+  id: "culturfm-nas",
+  title: "029 CULTUR FM Paris (2025 Live Afrobeats/Francophone Mix by N.A.S)",
+  platform: "youtube",
+  image: "https://i.ytimg.com/vi/zrtRkWsUUMA/maxresdefault.jpg",
+  url: "https://www.youtube.com/watch?v=zrtRkWsUUMA",
+  description: "2/3 CULTUR FM Paris. This release we have N.A.S on the decks. Afrobeats x Francophone... Expect a lot of old school tracks you probably have not heard in a while. Jan 2025."
 },
 {
   id: "culturfm-nsg",
