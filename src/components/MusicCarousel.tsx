@@ -1,4 +1,3 @@
-
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
@@ -241,8 +240,8 @@ const MusicCarousel: React.FC = () => {
         </div>
       </div>
       
-      {/* See Songs Button positioned at bottom center, overlapping the border with z-index above other sections but behind audio player */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-[60]">
+      {/* See Songs Button positioned at bottom center, overlapping the border with very high z-index */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-[999]">
         <Link to="/music?tab=songs">
           <Button 
             variant="default"
