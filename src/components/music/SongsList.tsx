@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ARTISTS } from "@/data/artists";
 
 interface Song {
   id: string;
@@ -17,90 +18,6 @@ interface Song {
   youtube: string;
   genre?: string;
 }
-
-// Sample songs data - in a real app this would come from an API
-const SONGS: Song[] = [
-  {
-    id: "burna-1",
-    title: "Last Last",
-    artist: "Burna Boy",
-    artistId: "burna-boy",
-    youtube: "6pOqqtLrOEg",
-    genre: "Afrobeats"
-  },
-  {
-    id: "wizkid-1",
-    title: "Essence (feat. Tems)",
-    artist: "Wizkid",
-    artistId: "wizkid",
-    youtube: "oKD-MVtOoMQ",
-    genre: "Afrobeats"
-  },
-  {
-    id: "davido-1",
-    title: "FEM",
-    artist: "Davido",
-    artistId: "davido",
-    youtube: "5VmfgZPTwTs",
-    genre: "Afrobeats"
-  },
-  {
-    id: "rema-1",
-    title: "Calm Down",
-    artist: "Rema",
-    artistId: "rema",
-    youtube: "WcIcVapfqXw",
-    genre: "Afrobeats"
-  },
-  {
-    id: "tems-1",
-    title: "Free Mind",
-    artist: "Tems",
-    artistId: "tems",
-    youtube: "8lJO_VcbWgM",
-    genre: "Afrobeats"
-  },
-  {
-    id: "asake-1",
-    title: "Sungba",
-    artist: "Asake",
-    artistId: "asake",
-    youtube: "1XxlMPaXsWU",
-    genre: "Afrobeats"
-  },
-  {
-    id: "omahlay-1",
-    title: "Attention",
-    artist: "Omah Lay",
-    artistId: "omah-lay",
-    youtube: "B86WDZNox2Q",
-    genre: "Afrobeats"
-  },
-  {
-    id: "victony-1",
-    title: "Holy Father",
-    artist: "Victony",
-    artistId: "victony",
-    youtube: "PNEXFz1DKUk",
-    genre: "Afrobeats"
-  },
-  {
-    id: "focalistic-1",
-    title: "Ke Star",
-    artist: "Focalistic",
-    artistId: "focalistic",
-    youtube: "qjbz_7nONj8",
-    genre: "Amapiano"
-  },
-  {
-    id: "tyla-1",
-    title: "Water",
-    artist: "Tyla",
-    artistId: "tyla",
-    youtube: "o8CvTp0mI4Q",
-    genre: "Amapiano"
-  }
-];
 
 interface SongsListProps {
   searchQuery: string;
@@ -112,13 +29,39 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
   const { toast } = useToast();
   const [artistFilter, setArtistFilter] = useState("all");
 
-  const uniqueArtists = useMemo(() => {
-    const artists = Array.from(new Set(SONGS.map(song => song.artist))).sort();
-    return artists;
+  // Map songs from artists data
+  const allSongs = useMemo(() => {
+    const songs: Song[] = [];
+    ARTISTS.forEach(artist => {
+      artist.top_songs.forEach((song, index) => {
+        // Extract YouTube video ID from URL
+        let youtubeId = song.youtube;
+        if (song.youtube.includes('youtube.com/watch?v=')) {
+          youtubeId = song.youtube.split('v=')[1]?.split('&')[0] || '';
+        } else if (song.youtube.includes('youtu.be/')) {
+          youtubeId = song.youtube.split('youtu.be/')[1]?.split('?')[0] || '';
+        }
+        
+        songs.push({
+          id: `${artist.id}-${index}`,
+          title: song.title,
+          artist: artist.name,
+          artistId: artist.id,
+          youtube: youtubeId,
+          genre: artist.genre
+        });
+      });
+    });
+    return songs;
   }, []);
 
+  const uniqueArtists = useMemo(() => {
+    const artists = Array.from(new Set(allSongs.map(song => song.artist))).sort();
+    return artists;
+  }, [allSongs]);
+
   const filteredSongs = useMemo(() => {
-    let filtered = SONGS.filter(song => {
+    let filtered = allSongs.filter(song => {
       const matchesSearch = song.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           song.artist.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesArtist = artistFilter === "all" || song.artist === artistFilter;
@@ -132,7 +75,7 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
     }
 
     return filtered;
-  }, [searchQuery, sortMode, artistFilter]);
+  }, [allSongs, searchQuery, sortMode, artistFilter]);
 
   const handlePlay = (song: Song) => {
     playNow({
@@ -186,7 +129,7 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
             transition={{ duration: 0.3 }} 
             className="flex items-center gap-4 p-4 bg-white rounded-lg border hover:bg-accent/5 transition-colors w-full"
           >
-            <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+            <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
               <img 
                 src={getVideoThumbnail(song.youtube)} 
                 alt={song.title} 
@@ -198,15 +141,18 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
             </div>
             
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-black">{song.title}</h3>
-              <Link 
-                to={`/music/artist/${song.artistId}`}
-                className="text-sm text-[#008751] hover:text-[#008751]/90 hover:underline"
-              >
-                {song.artist}
-              </Link>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-semibold text-black">{song.title}</h3>
+                <span className="text-gray-400">•</span>
+                <Link 
+                  to={`/music/artist/${song.artistId}`}
+                  className="text-lg text-[#008751] hover:text-[#008751]/90 hover:underline"
+                >
+                  {song.artist}
+                </Link>
+              </div>
               {song.genre && (
-                <Badge variant="outline" className="mt-1 bg-white text-black">
+                <Badge variant="outline" className="bg-white text-black">
                   {song.genre}
                 </Badge>
               )}
