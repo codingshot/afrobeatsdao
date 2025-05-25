@@ -87,8 +87,20 @@ const News = () => {
     setDateFilter(undefined);
   };
 
-  // Create ticker text from all news items
-  const tickerText = newsItems.map(item => item.title).join(' 🪘 ') + (newsItems.length > 0 ? ' 🪘 ' : '');
+  // Create ticker segments with clickable headlines
+  const createTickerSegments = () => {
+    return newsItems.map((item, index) => (
+      <span key={index}>
+        <button 
+          onClick={() => window.open(item.link, '_blank')}
+          className="hover:underline cursor-pointer bg-transparent border-none text-black font-semibold"
+        >
+          {item.title}
+        </button>
+        {index < newsItems.length - 1 && ' 🪘 '}
+      </span>
+    ));
+  };
 
   if (loading) {
     return (
@@ -119,26 +131,44 @@ const News = () => {
           </Button>
         </div>
 
-        {/* Scrolling News Ticker */}
-        {tickerText && (
-          <div className="mb-8 relative overflow-hidden">
-            {/* Top stroke */}
-            <div className="w-full h-0.5 bg-black"></div>
-            
-            {/* Ticker container */}
-            <div className="bg-[#FFD600] py-3 overflow-hidden relative">
-              <div 
-                className="whitespace-nowrap text-black font-semibold"
-                style={{
-                  animation: 'scroll 30s linear infinite'
-                }}
-              >
-                {tickerText.repeat(3)}
+        {/* Scrolling News Ticker - Full Width */}
+        {newsItems.length > 0 && (
+          <div className="mb-8 relative">
+            {/* Break out of container to full width */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-screen">
+              {/* Top stroke */}
+              <div className="w-full h-0.5 bg-black"></div>
+              
+              {/* Ticker container */}
+              <div className="bg-[#FFD600] py-3 overflow-hidden relative">
+                <div 
+                  className="whitespace-nowrap text-black font-semibold flex"
+                  style={{
+                    animation: 'scroll 60s linear infinite'
+                  }}
+                >
+                  {/* Repeat segments for seamless loop */}
+                  <div className="flex">
+                    {createTickerSegments()}
+                    {newsItems.length > 0 && ' 🪘 '}
+                  </div>
+                  <div className="flex">
+                    {createTickerSegments()}
+                    {newsItems.length > 0 && ' 🪘 '}
+                  </div>
+                  <div className="flex">
+                    {createTickerSegments()}
+                    {newsItems.length > 0 && ' 🪘 '}
+                  </div>
+                </div>
               </div>
+              
+              {/* Bottom stroke */}
+              <div className="w-full h-0.5 bg-black"></div>
             </div>
             
-            {/* Bottom stroke */}
-            <div className="w-full h-0.5 bg-black"></div>
+            {/* Spacer to maintain layout */}
+            <div className="h-16"></div>
           </div>
         )}
 
