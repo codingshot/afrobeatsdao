@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -14,15 +15,33 @@ const Song = () => {
   const { playNow, addToQueue } = useGlobalAudioPlayer();
   const { toast } = useToast();
 
-  // Find the artist and song
+  // Find the artist and song with more flexible matching
   const artist = ARTISTS.find(a => a.id === artistId);
-  const song = artist?.top_songs.find(s => slugify(s.title) === songSlug);
+  let song = artist?.top_songs.find(s => slugify(s.title) === songSlug);
+  
+  // If exact match fails, try partial matching
+  if (!song && artist && songSlug) {
+    song = artist.top_songs.find(s => 
+      slugify(s.title).includes(songSlug) || 
+      songSlug.includes(slugify(s.title)) ||
+      s.title.toLowerCase().includes(songSlug.replace(/-/g, ' '))
+    );
+  }
 
   if (!artist || !song) {
+    console.log('Debug: Artist found:', !!artist);
+    console.log('Debug: Song found:', !!song);
+    console.log('Debug: Artist ID:', artistId);
+    console.log('Debug: Song slug:', songSlug);
+    if (artist) {
+      console.log('Debug: Available songs:', artist.top_songs.map(s => ({ title: s.title, slug: slugify(s.title) })));
+    }
+    
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Song Not Found</h1>
+          <p className="mb-4">Could not find the requested song.</p>
           <Link to="/music" className="text-[#008751] hover:underline">
             Back to Music
           </Link>
