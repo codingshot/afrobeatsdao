@@ -46,6 +46,7 @@ const App = () => {
                   <Route path="/event/:slug" element={<div className="page-events"><EventDetails /></div>} />
                   <Route path="/music" element={<div className="page-music"><Playlists /></div>} />
                   <Route path="/music/artist/:id" element={<div className="page-music"><ArtistProfile /></div>} />
+                  <Route path="/music/artist/:artistId/:songSlug" element={<div className="page-music"><Song /></div>} />
                   <Route path="/careers" element={<div className="page-careers"><Careers /></div>} />
                   <Route path="/careers/:slug" element={<div className="page-careers"><JobDetails /></div>} />
                   <Route path="/news" element={<div className="page-news"><News /></div>} />
