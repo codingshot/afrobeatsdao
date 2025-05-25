@@ -10,7 +10,7 @@ import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
-import { slugify } from '@/utils/slugify';
+import { slugify } from '@/lib/slugUtils';
 
 const ArtistProfile = () => {
   const { id } = useParams<{ id: string }>();
