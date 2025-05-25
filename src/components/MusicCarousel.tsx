@@ -1,3 +1,4 @@
+
 import React, { useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
@@ -73,7 +74,7 @@ const MusicCarousel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-6 overflow-hidden border-b border-black">
+    <div className="bg-white py-6 overflow-hidden border-b-2 border-black">
       <div className="relative">
         <div className="flex animate-[scroll_30s_linear_infinite] gap-6">
           {/* Duplicate songs for seamless loop */}
@@ -82,25 +83,26 @@ const MusicCarousel: React.FC = () => {
               key={`${song.id}-${index}`}
               className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3"
             >
-              {/* Song thumbnail with text overlay */}
-              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md relative">
+              {/* Song thumbnail without text overlay */}
+              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
                 <img 
                   src={getVideoThumbnail(song.youtube)} 
                   alt={song.title} 
                   className="h-full w-full object-cover" 
                   onError={handleImageError} 
                 />
-                {/* Text overlay on thumbnail */}
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-xs p-1">
-                  <div 
-                    className="font-semibold text-center leading-tight truncate w-full" 
-                    title={song.title}
-                  >
-                    {song.title}
-                  </div>
-                  <div className="text-[10px] text-center truncate w-full mt-0.5">
-                    {song.artist}
-                  </div>
+              </div>
+
+              {/* Song info next to thumbnail */}
+              <div className="flex-1 min-w-0 h-12 flex flex-col justify-center">
+                <div 
+                  className="font-semibold text-sm text-black truncate leading-tight" 
+                  title={song.title}
+                >
+                  {song.title}
+                </div>
+                <div className="text-xs text-gray-600 truncate leading-tight">
+                  {song.artist}
                 </div>
               </div>
 
