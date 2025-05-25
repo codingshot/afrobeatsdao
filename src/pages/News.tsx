@@ -87,6 +87,9 @@ const News = () => {
     setDateFilter(undefined);
   };
 
+  // Create ticker text from all news items
+  const tickerText = newsItems.map(item => item.title).join(' 🪘 ') + (newsItems.length > 0 ? ' 🪘 ' : '');
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FEF7CD] pt-20">
@@ -115,6 +118,24 @@ const News = () => {
             Subscribe to Updates
           </Button>
         </div>
+
+        {/* Scrolling News Ticker */}
+        {tickerText && (
+          <div className="mb-8 relative overflow-hidden">
+            {/* Top stroke */}
+            <div className="w-full h-0.5 bg-black"></div>
+            
+            {/* Ticker container */}
+            <div className="bg-[#FFD600] py-3 overflow-hidden relative">
+              <div className="animate-[scroll_30s_linear_infinite] whitespace-nowrap text-black font-semibold">
+                {tickerText.repeat(3)}
+              </div>
+            </div>
+            
+            {/* Bottom stroke */}
+            <div className="w-full h-0.5 bg-black"></div>
+          </div>
+        )}
 
         {/* Search and Filter Bar */}
         <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
@@ -212,6 +233,17 @@ const News = () => {
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+      `}</style>
     </div>
   );
 };
