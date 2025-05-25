@@ -240,8 +240,8 @@ const MusicCarousel: React.FC = () => {
         </div>
       </div>
       
-      {/* See Songs Button positioned at bottom right, overlapping the border */}
-      <div className="absolute bottom-0 right-6 transform translate-y-1/2 z-[9999]">
+      {/* See Songs Button positioned outside the container, below the border */}
+      <div className="absolute -bottom-4 right-6 z-[9999]">
         <Link to="/music?tab=songs">
           <Button 
             variant="default"
