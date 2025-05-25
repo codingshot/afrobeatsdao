@@ -1,167 +1,127 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee:wght@400&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 20, 20, 20;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-/* Add default styling for h1 elements */
-h1 {
-  color: #000000 !important;
-}
-
-/* Override for job title specifically */
-.job-title, 
-.min-h-screen.bg-black h1,
-[style*="color: #FFD600"] {
-  color: #FFD600 !important;
-}
-
-/* 3D transform styles */
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
-/* Custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-/* Font for section headings */
+/* Font setup */
 .font-heading {
-  font-family: 'Bungee', sans-serif;
+  font-family: 'Bungee', cursive;
 }
 
-/* Custom dropdown styling */
-.selectContent,
-.popoverContent,
-.menuContent,
-.menubarContent,
-.dropdownMenuContent {
-  background-color: white !important;
-  color: black !important;
-  z-index: 50 !important;
+.font-sans {
+  font-family: 'Montserrat', sans-serif;
 }
 
-/* General text color fixes */
-.bg-background {
-  background-color: #FEF7CD;
-}
-
-.title-text,
-.section-title,
-.artist-name,
-.playlist-title,
-.hero-subtitle,
-.team-title,
-.team-subtitle,
-.event-title {
-  color: black !important;
-}
-
-.hero-title {
-  color: black !important;
-}
-
-.white-text,
-.player-text {
-  color: white !important;
-}
-
-/* Dropdown and select styles */
-.select-content,
-.dropdown-content {
-  background-color: white !important;
-  color: black !important;
-}
-
-/* Fix top spacing for routes */
-.pt-reduced {
-  padding-top: 1rem !important;
-}
-
-/* Player text color fixes */
-.player-title,
-.player-artist {
-  color: white !important;
-}
-
-/* Search results and tabs fixes */
-.search-results,
-.tabs-container {
-  width: 100% !important;
-}
-
-/* Text color fixes for specific backgrounds */
-.on-yellow-bg {
-  color: black !important;
-}
-
-.on-dark-bg {
-  color: white !important;
-}
-
-/* Queue integration styles */
-.queue-container {
-  position: fixed;
-  bottom: 80px;
-  right: 0;
-  width: 300px;
-  background: white;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  z-index: 49;
-}
-
-@media (max-width: 768px) {
-  .queue-container {
-    width: 100%;
-    border-left: none;
+/* Custom animations */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-/* Ensure all music/playlist items have proper text color */
-.playlist-item-title,
-.playlist-item-artist {
-  color: black !important;
+/* Hero section specific styles */
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
 }
 
-.dark-mode-text {
-  color: white !important;
+/* Ensure accordion content is properly styled */
+[data-radix-accordion-content] {
+  overflow: hidden;
 }
 
-/* Ensure tabs are full width */
-.full-width-tabs {
-  width: 100% !important;
+[data-radix-accordion-content][data-state="open"] {
+  animation: accordion-down 0.2s ease-out;
+}
+
+[data-radix-accordion-content][data-state="closed"] {
+  animation: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
 }

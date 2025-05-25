@@ -11,6 +11,7 @@ import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection";
 import NewsTicker from "@/components/NewsTicker";
+import MusicCarousel from "@/components/MusicCarousel";
 
 const Index = () => {
   const { playNow, currentSong } = useGlobalAudioPlayer();
@@ -44,6 +45,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <NewsTicker />
+        <MusicCarousel />
         <EventsSection />
         <ClubsSection />
         <VibeOfTheDay />
