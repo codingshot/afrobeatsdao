@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
@@ -69,84 +68,61 @@ const MusicCarousel: React.FC = () => {
     return `https://img.youtube.com/vi/${videoId}/default.jpg`;
   };
 
-  const getArtistImage = (artistId: string) => {
-    const artist = ARTISTS.find(a => a.id === artistId);
-    return artist?.image || "/AfrobeatsDAOMeta.png";
-  };
-
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/AfrobeatsDAOMeta.png";
   };
 
   return (
-    <div className="bg-white py-6 overflow-hidden">
+    <div className="bg-white py-6 overflow-hidden border-b border-black">
       <div className="relative">
         <div className="flex animate-[scroll_30s_linear_infinite] gap-6">
           {/* Duplicate songs for seamless loop */}
           {[...allSongs, ...allSongs].map((song, index) => (
             <div 
               key={`${song.id}-${index}`}
-              className="flex flex-col bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors"
+              className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3"
             >
-              {/* Top row: Song thumbnail, title and controls */}
-              <div className="flex items-center gap-3 mb-2">
-                {/* Song thumbnail */}
-                <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
-                  <img 
-                    src={getVideoThumbnail(song.youtube)} 
-                    alt={song.title} 
-                    className="h-full w-full object-cover" 
-                    onError={(e) => {
-                      e.currentTarget.src = "/AfrobeatsDAOMeta.png";
-                    }} 
-                  />
-                </div>
-                
-                {/* Song title with hover tooltip */}
-                <div className="flex-1 min-w-0">
-                  <h4 
-                    className="text-sm font-semibold text-black truncate cursor-default" 
+              {/* Song thumbnail with text overlay */}
+              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md relative">
+                <img 
+                  src={getVideoThumbnail(song.youtube)} 
+                  alt={song.title} 
+                  className="h-full w-full object-cover" 
+                  onError={handleImageError} 
+                />
+                {/* Text overlay on thumbnail */}
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-xs p-1">
+                  <div 
+                    className="font-semibold text-center leading-tight truncate w-full" 
                     title={song.title}
                   >
                     {song.title}
-                  </h4>
-                </div>
-
-                {/* Controls */}
-                <div className="flex items-center gap-1">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => handlePlay(song)} 
-                    className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
-                  >
-                    <Play className="h-4 w-4" />
-                  </Button>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => handleAddToQueue(song)} 
-                    className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
+                  </div>
+                  <div className="text-[10px] text-center truncate w-full mt-0.5">
+                    {song.artist}
+                  </div>
                 </div>
               </div>
 
-              {/* Bottom row: Artist info */}
-              <div className="flex items-center gap-2 ml-[60px]">
-                <div className="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
-                  <img 
-                    src={getArtistImage(song.artistId)} 
-                    alt={song.artist} 
-                    className="h-full w-full object-cover" 
-                    onError={handleImageError} 
-                  />
-                </div>
-                <span className="text-xs text-[#008751] font-medium truncate">
-                  {song.artist}
-                </span>
+              {/* Controls */}
+              <div className="flex items-center gap-1 ml-auto">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => handlePlay(song)} 
+                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                >
+                  <Play className="h-4 w-4" />
+                </Button>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => handleAddToQueue(song)} 
+                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
               </div>
             </div>
           ))}
