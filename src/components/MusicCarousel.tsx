@@ -124,15 +124,13 @@ const MusicCarousel: React.FC = () => {
       >
         <div 
           ref={containerRef}
-          className={`flex gap-6 ${!isPaused && !isDragging ? 'animate-[scroll_30s_linear_infinite]' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          className={`flex gap-6 ${!isPaused && !isDragging ? 'animate-[scroll_30s_linear_infinite]' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} scrollbar-hide`}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           style={{ 
             userSelect: 'none',
             overflowX: isPaused ? 'auto' : 'hidden',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none'
           }}
         >
           {/* Duplicate songs for seamless loop */}
@@ -203,13 +201,6 @@ const MusicCarousel: React.FC = () => {
             </div>
           ))}
         </div>
-        
-        {/* Hidden scrollbar styles */}
-        <style jsx>{`
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
       </div>
     </div>
   );
