@@ -1,4 +1,3 @@
-
 import React, { useMemo, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
@@ -116,7 +115,7 @@ const MusicCarousel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-6 overflow-hidden border-b-2 border-black">
+    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative">
       <div 
         className="relative"
         onMouseEnter={handleMouseEnter}
@@ -201,6 +200,18 @@ const MusicCarousel: React.FC = () => {
             </div>
           ))}
         </div>
+      </div>
+      
+      {/* See Songs Button positioned at bottom center, overlapping the border */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 z-10">
+        <Link to="/music?tab=songs">
+          <Button 
+            variant="default"
+            className="bg-black text-white hover:bg-gray-800 px-6 py-2 font-semibold border-2 border-black"
+          >
+            See Songs
+          </Button>
+        </Link>
       </div>
     </div>
   );
