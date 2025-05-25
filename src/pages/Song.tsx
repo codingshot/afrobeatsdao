@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,15 +39,21 @@ const Song = () => {
     }
     
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Song Not Found</h1>
-          <p className="mb-4">Could not find the requested song.</p>
-          <Link to="/music" className="text-[#008751] hover:underline">
-            Back to Music
-          </Link>
+      <>
+        <Helmet>
+          <title>Song Not Found - afrobeats.party</title>
+          <meta name="description" content="Song not found on afrobeats.party - Discover the best African music, artists, and Afrobeats culture." />
+        </Helmet>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Song Not Found</h1>
+            <p className="mb-4">Could not find the requested song.</p>
+            <Link to="/music" className="text-[#008751] hover:underline">
+              Back to Music
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -63,6 +70,13 @@ const Song = () => {
   };
 
   const videoId = getVideoId(song.youtube);
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  const standardThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  
+  // SEO optimized meta data
+  const metaTitle = `${song.title} by ${artist.name} - Afrobeats Music | afrobeats.party`;
+  const metaDescription = `Listen to "${song.title}" by ${artist.name} on afrobeats.party. Stream the best Afrobeats music, discover African artists, and join the global Afrobeats community. ${artist.country ? `From ${artist.country}` : ''} ${artist.genre ? `- ${artist.genre}` : ''}.`;
+  const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
   
   const handlePlay = () => {
     playNow({
@@ -117,238 +131,189 @@ const Song = () => {
     .slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-gray-600">
-          <Link to="/music" className="hover:text-[#008751]">Music</Link>
-          <span className="mx-2">/</span>
-          <Link to={`/music/artist/${artist.id}`} className="hover:text-[#008751]">{artist.name}</Link>
-          <span className="mx-2">/</span>
-          <span className="text-black">{song.title}</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* YouTube Video */}
-            <div className="mb-6">
-              <div className="aspect-video w-full">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${videoId}`}
-                  title={song.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="rounded-lg shadow-lg"
-                ></iframe>
-              </div>
-            </div>
-
-            {/* Song Info */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-2xl mb-2">{song.title}</CardTitle>
-                    <Link 
-                      to={`/music/artist/${artist.id}`}
-                      className="text-lg text-[#008751] hover:underline font-semibold"
-                    >
-                      {artist.name}
-                    </Link>
-                    {artist.genre && (
-                      <Badge variant="secondary" className="ml-2">
-                        {artist.genre}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button onClick={handlePlay} className="bg-[#008751] hover:bg-[#008751]/90">
-                      <Play className="mr-2 h-4 w-4" />
-                      Play
-                    </Button>
-                    <Button onClick={handleAddToQueue} variant="outline">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Queue
-                    </Button>
-                    <Button onClick={handleShare} variant="outline" size="icon">
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-
-            {/* Related Songs from Other Artists */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle>You Might Also Like</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {otherArtistsSongs.map((relatedSong, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
-                      <img 
-                        src={`https://img.youtube.com/vi/${getVideoId(relatedSong.youtube)}/default.jpg`}
-                        alt={relatedSong.title}
-                        className="w-12 h-8 object-cover rounded"
-                        onError={handleImageError}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <Link 
-                          to={`/music/artist/${relatedSong.artistId}/${slugify(relatedSong.title)}`}
-                          className="font-medium text-sm text-black hover:text-[#008751] transition-colors block truncate"
-                        >
-                          {relatedSong.title}
-                        </Link>
-                        <Link 
-                          to={`/music/artist/${relatedSong.artistId}`}
-                          className="text-xs text-gray-600 hover:text-[#008751] transition-colors"
-                        >
-                          {relatedSong.artistName}
-                        </Link>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => {
-                            const relatedVideoId = getVideoId(relatedSong.youtube);
-                            playNow({
-                              id: `${relatedSong.artistId}-${relatedSong.title}`,
-                              youtube: relatedVideoId,
-                              title: relatedSong.title,
-                              artist: relatedSong.artistName
-                            });
-                          }}
-                        >
-                          <Play size={14} />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
-                          onClick={() => {
-                            const relatedVideoId = getVideoId(relatedSong.youtube);
-                            addToQueue({
-                              id: `${relatedSong.artistId}-${relatedSong.title}`,
-                              youtube: relatedVideoId,
-                              title: relatedSong.title,
-                              artist: relatedSong.artistName
-                            });
-                          }}
-                        >
-                          <Plus size={14} />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+    <>
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="music.song" />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={thumbnailUrl} />
+        <meta property="og:image:alt" content={`${song.title} by ${artist.name} - Afrobeats Music Video`} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="afrobeats.party" />
+        
+        {/* Music specific Open Graph */}
+        <meta property="music:song" content={canonicalUrl} />
+        <meta property="music:musician" content={`https://afrobeats.party/music/artist/${artist.id}`} />
+        <meta property="music:duration" content="180" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@afrobeatsdao" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={thumbnailUrl} />
+        <meta name="twitter:image:alt" content={`${song.title} by ${artist.name} - Afrobeats Music Video`} />
+        
+        {/* Additional SEO */}
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="keywords" content={`${song.title}, ${artist.name}, Afrobeats, African music, ${artist.country || ''}, ${artist.genre || ''}, afrobeats party, music streaming, African artists, Afrobeats DAO`} />
+        <meta name="author" content="afrobeats.party" />
+        
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicRecording",
+            "name": song.title,
+            "byArtist": {
+              "@type": "MusicGroup",
+              "name": artist.name,
+              ...(artist.country && { "foundingLocation": artist.country }),
+              "url": `https://afrobeats.party/music/artist/${artist.id}`
+            },
+            "genre": artist.genre || "Afrobeats",
+            "url": canonicalUrl,
+            "image": thumbnailUrl,
+            "description": metaDescription,
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "afrobeats.party",
+              "url": "https://afrobeats.party"
+            }
+          })}
+        </script>
+      </Helmet>
+      
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Breadcrumb */}
+          <div className="mb-6 text-sm text-gray-600">
+            <Link to="/music" className="hover:text-[#008751]">Music</Link>
+            <span className="mx-2">/</span>
+            <Link to={`/music/artist/${artist.id}`} className="hover:text-[#008751]">{artist.name}</Link>
+            <span className="mx-2">/</span>
+            <span className="text-black">{song.title}</span>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Artist Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Artist</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-4 mb-4">
-                  <img 
-                    src={artist.image} 
-                    alt={artist.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                    onError={handleImageError}
-                  />
-                  <div>
-                    <Link 
-                      to={`/music/artist/${artist.id}`}
-                      className="font-semibold text-lg hover:text-[#008751]"
-                    >
-                      {artist.name}
-                    </Link>
-                    {artist.country && (
-                      <p className="text-sm text-gray-600">{artist.country}</p>
-                    )}
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              {/* YouTube Video */}
+              <div className="mb-6">
+                <div className="aspect-video w-full">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${videoId}`}
+                    title={song.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg shadow-lg"
+                  ></iframe>
                 </div>
-                
-                <Link 
-                  to={`/music/artist/${artist.id}`}
-                  className="w-full block text-center py-2 bg-[#008751] text-white rounded-md hover:bg-[#008751]/90 transition-colors text-sm"
-                >
-                  View Artist Profile
-                </Link>
+              </div>
 
-                {artist.website && (
-                  <a 
-                    href={artist.website} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full block text-center py-2 mt-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm"
-                  >
-                    <ExternalLink className="inline mr-2 h-4 w-4" />
-                    Website
-                  </a>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* More by Artist */}
-            {relatedSongs.length > 0 && (
+              {/* Song Info */}
               <Card>
                 <CardHeader>
-                  <CardTitle>More by {artist.name}</CardTitle>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <CardTitle className="text-2xl mb-2">{song.title}</CardTitle>
+                      <Link 
+                        to={`/music/artist/${artist.id}`}
+                        className="text-lg text-[#008751] hover:underline font-semibold"
+                      >
+                        {artist.name}
+                      </Link>
+                      {artist.genre && (
+                        <Badge variant="secondary" className="ml-2">
+                          {artist.genre}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button onClick={handlePlay} className="bg-[#008751] hover:bg-[#008751]/90">
+                        <Play className="mr-2 h-4 w-4" />
+                        Play
+                      </Button>
+                      <Button onClick={handleAddToQueue} variant="outline">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Queue
+                      </Button>
+                      <Button onClick={handleShare} variant="outline" size="icon">
+                        <Share2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+
+              {/* Related Songs from Other Artists */}
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle>You Might Also Like</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    {relatedSongs.slice(0, 5).map((relatedSong, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <Link 
-                          to={`/music/artist/${artist.id}/${slugify(relatedSong.title)}`}
-                          className="flex-1 truncate hover:text-[#008751] text-sm"
-                        >
-                          {relatedSong.title}
-                        </Link>
-                        <div className="flex items-center space-x-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {otherArtistsSongs.map((relatedSong, index) => (
+                      <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
+                        <img 
+                          src={`https://img.youtube.com/vi/${getVideoId(relatedSong.youtube)}/default.jpg`}
+                          alt={relatedSong.title}
+                          className="w-12 h-8 object-cover rounded"
+                          onError={handleImageError}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <Link 
+                            to={`/music/artist/${relatedSong.artistId}/${slugify(relatedSong.title)}`}
+                            className="font-medium text-sm text-black hover:text-[#008751] transition-colors block truncate"
+                          >
+                            {relatedSong.title}
+                          </Link>
+                          <Link 
+                            to={`/music/artist/${relatedSong.artistId}`}
+                            className="text-xs text-gray-600 hover:text-[#008751] transition-colors"
+                          >
+                            {relatedSong.artistName}
+                          </Link>
+                        </div>
+                        <div className="flex items-center gap-1">
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-7 w-7 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
                             onClick={() => {
                               const relatedVideoId = getVideoId(relatedSong.youtube);
                               playNow({
-                                id: `${artist.id}-${relatedSong.title}`,
+                                id: `${relatedSong.artistId}-${relatedSong.title}`,
                                 youtube: relatedVideoId,
                                 title: relatedSong.title,
-                                artist: artist.name
+                                artist: relatedSong.artistName
                               });
                             }}
                           >
-                            <Play size={12} />
+                            <Play size={14} />
                           </Button>
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-7 w-7 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                            className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
                             onClick={() => {
                               const relatedVideoId = getVideoId(relatedSong.youtube);
                               addToQueue({
-                                id: `${artist.id}-${relatedSong.title}`,
+                                id: `${relatedSong.artistId}-${relatedSong.title}`,
                                 youtube: relatedVideoId,
                                 title: relatedSong.title,
-                                artist: artist.name
+                                artist: relatedSong.artistName
                               });
                             }}
                           >
-                            <Plus size={12} />
+                            <Plus size={14} />
                           </Button>
                         </div>
                       </div>
@@ -356,11 +321,118 @@ const Song = () => {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Artist Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Artist</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center space-x-4 mb-4">
+                    <img 
+                      src={artist.image} 
+                      alt={artist.name}
+                      className="w-16 h-16 rounded-full object-cover"
+                      onError={handleImageError}
+                    />
+                    <div>
+                      <Link 
+                        to={`/music/artist/${artist.id}`}
+                        className="font-semibold text-lg hover:text-[#008751]"
+                      >
+                        {artist.name}
+                      </Link>
+                      {artist.country && (
+                        <p className="text-sm text-gray-600">{artist.country}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <Link 
+                    to={`/music/artist/${artist.id}`}
+                    className="w-full block text-center py-2 bg-[#008751] text-white rounded-md hover:bg-[#008751]/90 transition-colors text-sm"
+                  >
+                    View Artist Profile
+                  </Link>
+
+                  {artist.website && (
+                    <a 
+                      href={artist.website} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full block text-center py-2 mt-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm"
+                    >
+                      <ExternalLink className="inline mr-2 h-4 w-4" />
+                      Website
+                    </a>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* More by Artist */}
+              {relatedSongs.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>More by {artist.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {relatedSongs.slice(0, 5).map((relatedSong, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <Link 
+                            to={`/music/artist/${artist.id}/${slugify(relatedSong.title)}`}
+                            className="flex-1 truncate hover:text-[#008751] text-sm"
+                          >
+                            {relatedSong.title}
+                          </Link>
+                          <div className="flex items-center space-x-1">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-7 w-7 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                              onClick={() => {
+                                const relatedVideoId = getVideoId(relatedSong.youtube);
+                                playNow({
+                                  id: `${artist.id}-${relatedSong.title}`,
+                                  youtube: relatedVideoId,
+                                  title: relatedSong.title,
+                                  artist: artist.name
+                                });
+                              }}
+                            >
+                              <Play size={12} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-7 w-7 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                              onClick={() => {
+                                const relatedVideoId = getVideoId(relatedSong.youtube);
+                                addToQueue({
+                                  id: `${artist.id}-${relatedSong.title}`,
+                                  youtube: relatedVideoId,
+                                  title: relatedSong.title,
+                                  artist: artist.name
+                                });
+                              }}
+                            >
+                              <Plus size={12} />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
