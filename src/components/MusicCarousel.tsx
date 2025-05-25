@@ -1,10 +1,12 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useToast } from "@/hooks/use-toast";
 import { ARTISTS } from "@/data/artists";
+import { Link } from "react-router-dom";
+import { slugify } from "@/lib/slugUtils";
 
 interface Song {
   id: string;
@@ -17,6 +19,11 @@ interface Song {
 const MusicCarousel: React.FC = () => {
   const { playNow, addToQueue } = useGlobalAudioPlayer();
   const { toast } = useToast();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   // Get all songs from artists data and randomize them
   const allSongs = useMemo(() => {
@@ -81,37 +88,90 @@ const MusicCarousel: React.FC = () => {
     e.currentTarget.src = "/AfrobeatsDAOMeta.png";
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (containerRef.current?.offsetLeft || 0));
+    setScrollLeft(containerRef.current?.scrollLeft || 0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - (containerRef.current.offsetLeft || 0);
+    const walk = (x - startX) * 2;
+    containerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+    setIsDragging(false);
+  };
+
   return (
     <div className="bg-white py-6 overflow-hidden border-b-2 border-black">
-      <div className="relative">
-        <div className="flex animate-[scroll_30s_linear_infinite] gap-6">
+      <div 
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div 
+          ref={containerRef}
+          className={`flex gap-6 ${!isPaused && !isDragging ? 'animate-[scroll_30s_linear_infinite]' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          style={{ 
+            userSelect: 'none',
+            overflowX: isPaused ? 'auto' : 'hidden',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
+        >
           {/* Duplicate songs for seamless loop */}
           {[...allSongs, ...allSongs].map((song, index) => (
             <div 
               key={`${song.id}-${index}`}
               className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3"
             >
-              {/* Song thumbnail without text overlay */}
-              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
+              {/* Song thumbnail */}
+              <Link 
+                to={`/music/artist/${song.artistId}/${slugify(song.title.split(' ')[0])}`}
+                className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md hover:opacity-80 transition-opacity"
+                onClick={(e) => isDragging && e.preventDefault()}
+              >
                 <img 
                   src={getVideoThumbnail(song.youtube)} 
                   alt={song.title} 
                   className="h-full w-full object-cover" 
                   onError={handleImageError} 
                 />
-              </div>
+              </Link>
 
               {/* Song info next to thumbnail */}
               <div className="flex-1 min-w-0 h-12 flex flex-col justify-center">
-                <div 
-                  className="font-semibold text-sm text-black truncate leading-tight" 
+                <Link 
+                  to={`/music/artist/${song.artistId}/${slugify(song.title.split(' ')[0])}`}
+                  className="font-semibold text-sm text-black truncate leading-tight hover:text-[#008751] transition-colors" 
                   title={song.title}
+                  onClick={(e) => isDragging && e.preventDefault()}
                 >
                   {song.title}
-                </div>
-                <div className="text-xs text-gray-600 truncate leading-tight">
+                </Link>
+                <Link 
+                  to={`/music/artist/${song.artistId}`}
+                  className="text-xs text-gray-600 truncate leading-tight hover:text-[#008751] transition-colors"
+                  onClick={(e) => isDragging && e.preventDefault()}
+                >
                   {song.artist}
-                </div>
+                </Link>
               </div>
 
               {/* Controls */}
@@ -119,7 +179,10 @@ const MusicCarousel: React.FC = () => {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  onClick={() => handlePlay(song)} 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePlay(song);
+                  }} 
                   className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
                 >
                   <Play className="h-4 w-4" />
@@ -128,7 +191,10 @@ const MusicCarousel: React.FC = () => {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  onClick={() => handleAddToQueue(song)} 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToQueue(song);
+                  }} 
                   className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
                 >
                   <List className="h-4 w-4" />
@@ -137,6 +203,13 @@ const MusicCarousel: React.FC = () => {
             </div>
           ))}
         </div>
+        
+        {/* Hidden scrollbar styles */}
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
       </div>
     </div>
   );

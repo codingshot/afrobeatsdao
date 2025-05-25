@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import './App.css';
@@ -15,6 +16,7 @@ import Events from "./pages/Events";
 import EventDetails from "./pages/EventDetails";
 import Playlists from "./pages/Playlists";
 import ArtistProfile from "./pages/ArtistProfile";
+import Song from "./pages/Song";
 import Careers from "./pages/Careers";
 import JobDetails from "./pages/JobDetails";
 import Discord from "./pages/Discord";
