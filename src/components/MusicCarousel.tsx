@@ -86,28 +86,57 @@ const MusicCarousel: React.FC = () => {
           {[...allSongs, ...allSongs].map((song, index) => (
             <div 
               key={`${song.id}-${index}`}
-              className="flex items-center gap-3 bg-gray-50 rounded-lg p-3 min-w-[350px] border hover:bg-gray-100 transition-colors"
+              className="flex flex-col bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors"
             >
-              {/* Song thumbnail */}
-              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
-                <img 
-                  src={getVideoThumbnail(song.youtube)} 
-                  alt={song.title} 
-                  className="h-full w-full object-cover" 
-                  onError={(e) => {
-                    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
-                  }} 
-                />
-              </div>
-              
-              {/* Song title */}
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-black truncate">{song.title}</h4>
+              {/* Top row: Song thumbnail, title and controls */}
+              <div className="flex items-center gap-3 mb-2">
+                {/* Song thumbnail */}
+                <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
+                  <img 
+                    src={getVideoThumbnail(song.youtube)} 
+                    alt={song.title} 
+                    className="h-full w-full object-cover" 
+                    onError={(e) => {
+                      e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+                    }} 
+                  />
+                </div>
+                
+                {/* Song title with hover tooltip */}
+                <div className="flex-1 min-w-0">
+                  <h4 
+                    className="text-sm font-semibold text-black truncate cursor-default" 
+                    title={song.title}
+                  >
+                    {song.title}
+                  </h4>
+                </div>
+
+                {/* Controls */}
+                <div className="flex items-center gap-1">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => handlePlay(song)} 
+                    className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                  >
+                    <Play className="h-4 w-4" />
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => handleAddToQueue(song)} 
+                    className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
-              {/* Artist info */}
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
+              {/* Bottom row: Artist info */}
+              <div className="flex items-center gap-2 ml-[60px]">
+                <div className="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
                   <img 
                     src={getArtistImage(song.artistId)} 
                     alt={song.artist} 
@@ -115,30 +144,9 @@ const MusicCarousel: React.FC = () => {
                     onError={handleImageError} 
                   />
                 </div>
-                <span className="text-sm text-[#008751] font-medium truncate max-w-[100px]">
+                <span className="text-xs text-[#008751] font-medium truncate">
                   {song.artist}
                 </span>
-              </div>
-
-              {/* Controls */}
-              <div className="flex items-center gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => handlePlay(song)} 
-                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
-                >
-                  <Play className="h-4 w-4" />
-                </Button>
-                
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => handleAddToQueue(song)} 
-                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
-                >
-                  <List className="h-4 w-4" />
-                </Button>
               </div>
             </div>
           ))}

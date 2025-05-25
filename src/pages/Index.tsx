@@ -44,8 +44,8 @@ const Index = () => {
     <div className="min-h-screen font-sans pb-[100px]">
       <main>
         <HeroSection />
-        <MusicCarousel />
         <NewsTicker />
+        <MusicCarousel />
         <EventsSection />
         <ClubsSection />
         <VibeOfTheDay />
