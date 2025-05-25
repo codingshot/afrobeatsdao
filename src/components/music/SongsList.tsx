@@ -103,6 +103,15 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
     return `https://img.youtube.com/vi/${videoId}/default.jpg`;
   };
 
+  const getArtistImage = (artistId: string) => {
+    const artist = ARTISTS.find(a => a.id === artistId);
+    return artist?.image || "/AfrobeatsDAOMeta.png";
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2 mb-4">
@@ -141,21 +150,28 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-lg font-semibold text-black">{song.title}</h3>
-                <span className="text-gray-400">•</span>
+              <h3 className="text-lg font-semibold text-black mb-2">{song.title}</h3>
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
+                  <img 
+                    src={getArtistImage(song.artistId)} 
+                    alt={song.artist} 
+                    className="h-full w-full object-cover" 
+                    onError={handleImageError} 
+                  />
+                </div>
                 <Link 
                   to={`/music/artist/${song.artistId}`}
-                  className="text-lg text-[#008751] hover:text-[#008751]/90 hover:underline"
+                  className="text-lg text-[#008751] hover:text-[#008751]/90 hover:underline flex-shrink-0"
                 >
                   {song.artist}
                 </Link>
+                {song.genre && (
+                  <Badge variant="outline" className="bg-white text-black flex-shrink-0">
+                    {song.genre}
+                  </Badge>
+                )}
               </div>
-              {song.genre && (
-                <Badge variant="outline" className="bg-white text-black">
-                  {song.genre}
-                </Badge>
-              )}
             </div>
 
             <div className="flex items-center gap-2">
