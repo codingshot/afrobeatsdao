@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { artists } from '@/data/artists';
+import { ARTISTS } from '@/data/artists';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ArtistsListProps {
@@ -11,10 +11,10 @@ interface ArtistsListProps {
 
 const ArtistsList: React.FC<ArtistsListProps> = ({ searchQuery, sortMode = "default" }) => {
   const filteredArtists = useMemo(() => {
-    let filtered = artists.filter(artist =>
+    let filtered = ARTISTS.filter(artist =>
       artist.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      artist.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      artist.country.toLowerCase().includes(searchQuery.toLowerCase())
+      (artist.genre && artist.genre.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (artist.country && artist.country.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     if (sortMode === "asc") {
@@ -55,8 +55,8 @@ const ArtistsList: React.FC<ArtistsListProps> = ({ searchQuery, sortMode = "defa
                 <h3 className="font-semibold text-black group-hover:text-[#008751] transition-colors">
                   {artist.name}
                 </h3>
-                <p className="text-sm text-black/70">{artist.genre}</p>
-                <p className="text-xs text-black/50">{artist.country}</p>
+                <p className="text-sm text-black/70">{artist.genre || 'Afrobeats'}</p>
+                <p className="text-xs text-black/50">{artist.country || 'Nigeria'}</p>
               </div>
             </Link>
           </motion.div>
