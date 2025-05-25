@@ -1,3 +1,4 @@
+
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
@@ -56,19 +57,21 @@ const MusicCarousel: React.FC = () => {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     
-    return shuffled.slice(0, 20); // Show first 20 songs after randomization
+    return shuffled.slice(0, 20);
   }, []);
 
-  // Smooth continuous scrolling animation
+  // Smooth continuous scrolling animation with proper wrapping
   useEffect(() => {
     if (!isPaused && !isDragging && containerRef.current) {
       const animate = () => {
         setCurrentTranslateX(prev => {
-          const newValue = prev - 0.5; // Adjust speed here
-          const containerWidth = (allSongs.length * 324); // 300px width + 24px gap
+          const itemWidth = 324; // 300px width + 24px gap
+          const totalWidth = allSongs.length * itemWidth;
           
-          // Reset when we've scrolled past the first set
-          if (Math.abs(newValue) >= containerWidth) {
+          const newValue = prev - 0.5; // Adjust speed here
+          
+          // When we've scrolled past the first set completely, reset to 0
+          if (Math.abs(newValue) >= totalWidth) {
             return 0;
           }
           return newValue;
@@ -161,16 +164,18 @@ const MusicCarousel: React.FC = () => {
           onMouseUp={handleMouseUp}
           style={{ 
             userSelect: 'none',
-            transform: `translateX(${currentTranslateX}px)`,
-            transition: isDragging ? 'none' : 'transform 0.1s linear',
             width: 'fit-content'
           }}
         >
-          {/* Duplicate songs for seamless loop */}
-          {[...allSongs, ...allSongs].map((song, index) => (
+          {/* Create seamless loop by tripling the songs */}
+          {[...allSongs, ...allSongs, ...allSongs].map((song, index) => (
             <div 
               key={`${song.id}-${index}`}
               className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3 flex-shrink-0"
+              style={{
+                transform: `translateX(${currentTranslateX}px)`,
+                transition: isDragging ? 'none' : 'transform 0.1s linear'
+              }}
             >
               {/* Song thumbnail */}
               <Link 

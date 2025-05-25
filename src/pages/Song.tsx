@@ -109,6 +109,13 @@ const Song = () => {
   // Get related songs from the same artist (excluding current song)
   const relatedSongs = artist.top_songs.filter(s => s.title !== song.title);
 
+  // Get random songs from other artists
+  const otherArtistsSongs = ARTISTS
+    .filter(a => a.id !== artist.id)
+    .flatMap(a => a.top_songs.map(s => ({ ...s, artistName: a.name, artistId: a.id })))
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 6);
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -174,6 +181,75 @@ const Song = () => {
                 </div>
               </CardHeader>
             </Card>
+
+            {/* Related Songs from Other Artists */}
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>You Might Also Like</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {otherArtistsSongs.map((relatedSong, index) => (
+                    <div key={index} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
+                      <img 
+                        src={`https://img.youtube.com/vi/${getVideoId(relatedSong.youtube)}/default.jpg`}
+                        alt={relatedSong.title}
+                        className="w-12 h-8 object-cover rounded"
+                        onError={handleImageError}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <Link 
+                          to={`/music/artist/${relatedSong.artistId}/${slugify(relatedSong.title)}`}
+                          className="font-medium text-sm text-black hover:text-[#008751] transition-colors block truncate"
+                        >
+                          {relatedSong.title}
+                        </Link>
+                        <Link 
+                          to={`/music/artist/${relatedSong.artistId}`}
+                          className="text-xs text-gray-600 hover:text-[#008751] transition-colors"
+                        >
+                          {relatedSong.artistName}
+                        </Link>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                          onClick={() => {
+                            const relatedVideoId = getVideoId(relatedSong.youtube);
+                            playNow({
+                              id: `${relatedSong.artistId}-${relatedSong.title}`,
+                              youtube: relatedVideoId,
+                              title: relatedSong.title,
+                              artist: relatedSong.artistName
+                            });
+                          }}
+                        >
+                          <Play size={14} />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 rounded-full text-[#008751] hover:bg-[#008751]/10"
+                          onClick={() => {
+                            const relatedVideoId = getVideoId(relatedSong.youtube);
+                            addToQueue({
+                              id: `${relatedSong.artistId}-${relatedSong.title}`,
+                              youtube: relatedVideoId,
+                              title: relatedSong.title,
+                              artist: relatedSong.artistName
+                            });
+                          }}
+                        >
+                          <Plus size={14} />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
@@ -225,7 +301,7 @@ const Song = () => {
               </CardContent>
             </Card>
 
-            {/* Related Songs */}
+            {/* More by Artist */}
             {relatedSongs.length > 0 && (
               <Card>
                 <CardHeader>
@@ -236,7 +312,7 @@ const Song = () => {
                     {relatedSongs.slice(0, 5).map((relatedSong, index) => (
                       <div key={index} className="flex items-center justify-between">
                         <Link 
-                          to={`/music/artist/${artist.id}/${slugify(relatedSong.title.split(' ')[0])}`}
+                          to={`/music/artist/${artist.id}/${slugify(relatedSong.title)}`}
                           className="flex-1 truncate hover:text-[#008751] text-sm"
                         >
                           {relatedSong.title}
