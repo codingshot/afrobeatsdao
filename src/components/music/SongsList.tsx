@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from "@/components/ui/button";
 import { Play, List, ExternalLink } from "lucide-react";
@@ -150,28 +149,24 @@ const SongsList: React.FC<SongsListProps> = ({ searchQuery, sortMode }) => {
             </div>
             
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-black mb-2">{song.title}</h3>
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
-                  <img 
-                    src={getArtistImage(song.artistId)} 
-                    alt={song.artist} 
-                    className="h-full w-full object-cover" 
-                    onError={handleImageError} 
-                  />
-                </div>
-                <Link 
-                  to={`/music/artist/${song.artistId}`}
-                  className="text-lg text-[#008751] hover:text-[#008751]/90 hover:underline flex-shrink-0"
-                >
-                  {song.artist}
-                </Link>
-                {song.genre && (
-                  <Badge variant="outline" className="bg-white text-black flex-shrink-0">
-                    {song.genre}
-                  </Badge>
-                )}
+              <h3 className="text-lg font-semibold text-black truncate">{song.title}</h3>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full">
+                <img 
+                  src={getArtistImage(song.artistId)} 
+                  alt={song.artist} 
+                  className="h-full w-full object-cover" 
+                  onError={handleImageError} 
+                />
               </div>
+              <Link 
+                to={`/music/artist/${song.artistId}`}
+                className="text-lg text-[#008751] hover:text-[#008751]/90 hover:underline flex-shrink-0"
+              >
+                {song.artist}
+              </Link>
             </div>
 
             <div className="flex items-center gap-2">
