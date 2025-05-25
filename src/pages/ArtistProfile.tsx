@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -332,7 +331,7 @@ const ArtistProfile = () => {
                         className="flex items-center justify-between p-3 rounded-md hover:bg-gray-50"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0 h-16 w-28 rounded bg-gray-100 overflow-hidden">
+                          <div className="flex-shrink-0 h-6 w-10 rounded bg-gray-100 overflow-hidden">
                             <img 
                               src={`https://img.youtube.com/vi/${videoId}/default.jpg`}
                               alt={song.title}
@@ -347,7 +346,6 @@ const ArtistProfile = () => {
                             >
                               {song.title}
                             </Link>
-                            <p className="text-sm text-gray-500">{artist.name}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
