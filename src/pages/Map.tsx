@@ -90,7 +90,7 @@ const Map = () => {
                 <div className="text-black text-sm md:text-base">Loading map data...</div>
               </div>
             ) : (
-              <GlobalMapView items={filteredItems} />
+              <GlobalMapView items={filteredItems} filters={filters} onFiltersChange={setFilters} />
             )}
           </div>
         </div>

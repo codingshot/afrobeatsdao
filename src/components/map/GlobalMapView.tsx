@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { MapItem, MapItemType } from '@/types/map';
+import { MapItem, MapItemType, MapFilters } from '@/types/map';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,8 @@ import 'leaflet/dist/leaflet.css';
 
 interface GlobalMapViewProps {
   items: MapItem[];
+  filters: MapFilters;
+  onFiltersChange: (filters: MapFilters) => void;
 }
 
 const MapController = ({ items }: { items: MapItem[] }) => {
@@ -74,7 +76,8 @@ const getCountryFlag = (countryName: string): string => {
     'Netherlands': '🇳🇱',
     'Thailand': '🇹🇭',
     'Ireland': '🇮🇪',
-    'Portugal': '🇵🇹'
+    'Portugal': '🇵🇹',
+    'Morocco': '🇲🇦'
   };
   return flagMap[countryName] || '🏳️';
 };
@@ -106,7 +109,12 @@ const createCustomIcon = (type: MapItemType) => {
   });
 };
 
-export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
+const COUNTRIES = [
+  'Nigeria', 'Ghana', 'South Africa', 'United Kingdom', 'United States',
+  'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal', 'Morocco'
+];
+
+export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, onFiltersChange }) => {
   const isMobile = useIsMobile();
   const defaultCenter = [20, 0] as [number, number];
   const defaultZoom = isMobile ? 1 : 2;
@@ -128,26 +136,16 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
     });
   };
 
-  return (
-    <div className="flex flex-col gap-2 md:gap-4">
-      {/* Stats */}
-      <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2 mb-2 md:mb-4">
-        {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'user'].map(type => {
-          const count = items.filter(item => item.type === type).length;
-          return (
-            <Card key={type} className="p-1 md:p-2">
-              <div className="text-center">
-                <div className="text-sm md:text-lg font-bold text-black">{count}</div>
-                <div className="text-xs text-black/70 capitalize flex items-center justify-center gap-1">
-                  <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
-                  <span className="hidden sm:inline">{type}s</span>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+  const toggleCountry = (country: string) => {
+    const newCountries = filters.countries.includes(country)
+      ? filters.countries.filter(c => c !== country)
+      : [...filters.countries, country];
+    
+    onFiltersChange({ ...filters, countries: newCountries });
+  };
 
+  return (
+    <div className="relative">
       {/* Map */}
       <div className="rounded-lg overflow-hidden border border-[#008751] h-[70vh] md:h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative">
         <MapContainer 
@@ -291,6 +289,53 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
             ) : null
           ))}
         </MapContainer>
+
+        {/* Overlaid Stats - Bottom */}
+        <div className="absolute bottom-4 left-4 right-4 z-[1000]">
+          <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
+            <CardContent className="p-2 md:p-3">
+              <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2">
+                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'user'].map(type => {
+                  const count = items.filter(item => item.type === type).length;
+                  return (
+                    <div key={type} className="text-center">
+                      <div className="text-sm md:text-lg font-bold text-black">{count}</div>
+                      <div className="text-xs text-black/70 capitalize flex items-center justify-center gap-1">
+                        <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
+                        <span className="hidden sm:inline">{type}s</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Overlaid Country Filters - Top */}
+        <div className="absolute top-4 left-4 right-4 z-[1000]">
+          <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
+            <CardContent className="p-2 md:p-3">
+              <div className="flex flex-wrap gap-1 md:gap-2">
+                {COUNTRIES.map((country) => (
+                  <Badge
+                    key={country}
+                    variant={filters.countries.includes(country) ? "default" : "outline"}
+                    className={`cursor-pointer transition-colors text-xs ${
+                      filters.countries.includes(country)
+                        ? "bg-[#F97316] text-white hover:bg-[#F97316]/90"
+                        : "text-black border-[#F97316] hover:bg-[#F97316]/10"
+                    }`}
+                    onClick={() => toggleCountry(country)}
+                  >
+                    <span className="mr-1">{getCountryFlag(country)}</span>
+                    <span className="hidden sm:inline">{country}</span>
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
