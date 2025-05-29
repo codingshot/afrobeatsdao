@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { MapPin, ExternalLink, Calendar, Users, Music, Instagram, Twitter, Youtube } from 'lucide-react';
+import { MapPin, ExternalLink, Calendar, Users, Music, Instagram, Twitter, Youtube, Globe } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -191,138 +191,166 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
                 position={[item.coordinates[1], item.coordinates[0]] as L.LatLngExpression}
                 icon={createCustomIcon(item.type)}
               >
-                <Popup maxWidth={isMobile ? 250 : 350}>
-                  <Card className="border-0 shadow-none max-w-full">
-                    <CardContent className="p-2 md:p-3">
-                      {/* Image if available */}
-                      {item.image && (
-                        <div className="mb-2">
-                          <img 
-                            src={item.image} 
-                            alt={item.name}
-                            className="w-full h-24 md:h-32 object-cover rounded-md"
-                          />
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">{getCountryFlag(item.country)}</span>
-                        <h3 className="text-sm md:text-lg font-bold text-black flex-1">{item.name}</h3>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <Badge 
-                          className="text-xs"
-                          style={{ backgroundColor: getMarkerColor(item.type), color: 'white' }}
-                        >
-                          {getTypeIcon(item.type)} {item.type}
-                        </Badge>
-                        {item.city && (
-                          <span className="text-xs md:text-sm text-muted-foreground">
-                            {item.city}, {item.country}
-                          </span>
+                <Popup maxWidth={isMobile ? 300 : 400} className="custom-popup">
+                  <div className="p-0">
+                    <Card className="border-0 shadow-lg max-w-full bg-white rounded-lg overflow-hidden">
+                      <CardContent className="p-0">
+                        {/* Image header if available */}
+                        {item.image && (
+                          <div className="relative">
+                            <img 
+                              src={item.image} 
+                              alt={item.name}
+                              className="w-full h-32 md:h-40 object-cover"
+                            />
+                            <div className="absolute top-2 right-2">
+                              <Badge 
+                                className="text-xs shadow-md"
+                                style={{ backgroundColor: getMarkerColor(item.type), color: 'white' }}
+                              >
+                                {getTypeIcon(item.type)} {item.type}
+                              </Badge>
+                            </div>
+                          </div>
                         )}
-                      </div>
+                        
+                        <div className="p-4">
+                          {/* Header with flag and name */}
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="text-2xl">{getCountryFlag(item.country)}</span>
+                            <div className="flex-1">
+                              <h3 className="text-lg md:text-xl font-bold text-black leading-tight">{item.name}</h3>
+                              {item.city && (
+                                <p className="text-sm text-muted-foreground">
+                                  {item.city}, {item.country}
+                                </p>
+                              )}
+                            </div>
+                          </div>
 
-                      {item.description && (
-                        <p className="text-xs md:text-sm text-black mb-2 md:mb-3 line-clamp-2">{item.description}</p>
-                      )}
-
-                      {/* Event specific info */}
-                      {item.type === 'event' && item.eventDate && (
-                        <div className="flex items-center gap-1 mb-2 text-xs md:text-sm text-black">
-                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
-                          <span>{formatDate(item.eventDate)}</span>
-                          {item.eventEndDate && (
-                            <span> - {formatDate(item.eventEndDate)}</span>
+                          {/* Type badge if no image */}
+                          {!item.image && (
+                            <div className="mb-3">
+                              <Badge 
+                                className="text-xs"
+                                style={{ backgroundColor: getMarkerColor(item.type), color: 'white' }}
+                              >
+                                {getTypeIcon(item.type)} {item.type}
+                              </Badge>
+                            </div>
                           )}
-                        </div>
-                      )}
 
-                      {/* Club specific info */}
-                      {item.type === 'club' && item.openingHours && (
-                        <div className="text-xs md:text-sm text-black mb-2">
-                          <strong>Hours:</strong> {item.openingHours}
-                        </div>
-                      )}
+                          {/* Description */}
+                          {item.description && (
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-3">{item.description}</p>
+                          )}
 
-                      {/* Music style for clubs */}
-                      {item.musicStyle && (
-                        <div className="flex items-center gap-1 mb-2 text-xs md:text-sm text-black">
-                          <Music className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
-                          <span className="truncate">{item.musicStyle}</span>
-                        </div>
-                      )}
+                          {/* Event specific info */}
+                          {item.type === 'event' && item.eventDate && (
+                            <div className="flex items-center gap-2 mb-3 p-2 bg-purple-50 rounded-md">
+                              <Calendar className="h-4 w-4 text-purple-600" />
+                              <div className="text-sm">
+                                <span className="font-medium text-purple-900">{formatDate(item.eventDate)}</span>
+                                {item.eventEndDate && (
+                                  <span className="text-purple-700"> - {formatDate(item.eventEndDate)}</span>
+                                )}
+                              </div>
+                            </div>
+                          )}
 
-                      {/* Social links */}
-                      {item.socialLinks && (
-                        <div className="flex gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
-                          {item.socialLinks.instagram && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="p-1 h-6 w-6 md:h-8 md:w-8"
-                              onClick={() => window.open(`https://instagram.com/${item.socialLinks!.instagram}`, '_blank')}
+                          {/* Club specific info */}
+                          {item.type === 'club' && (
+                            <div className="space-y-2 mb-3">
+                              {item.openingHours && (
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Clock className="h-4 w-4 text-green-600" />
+                                  <span className="text-gray-700">{item.openingHours}</span>
+                                </div>
+                              )}
+                              {item.musicStyle && (
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Music className="h-4 w-4 text-green-600" />
+                                  <span className="text-gray-700">{item.musicStyle}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Artist specific info */}
+                          {item.type === 'artist' && item.genre && (
+                            <div className="flex items-center gap-2 mb-3 text-sm">
+                              <Music className="h-4 w-4 text-orange-600" />
+                              <span className="text-gray-700">{item.genre}</span>
+                            </div>
+                          )}
+
+                          {/* Social links */}
+                          {item.socialLinks && (
+                            <div className="flex gap-2 mb-4 flex-wrap">
+                              {item.socialLinks.instagram && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-8 w-8 p-0 border-pink-200 hover:bg-pink-50 hover:border-pink-300"
+                                  onClick={() => window.open(`https://instagram.com/${item.socialLinks!.instagram}`, '_blank')}
+                                >
+                                  <Instagram className="h-4 w-4 text-pink-600" />
+                                </Button>
+                              )}
+                              {item.socialLinks.twitter && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-8 w-8 p-0 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                                  onClick={() => window.open(`https://twitter.com/${item.socialLinks!.twitter}`, '_blank')}
+                                >
+                                  <Twitter className="h-4 w-4 text-blue-600" />
+                                </Button>
+                              )}
+                              {item.socialLinks.youtube && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-8 w-8 p-0 border-red-200 hover:bg-red-50 hover:border-red-300"
+                                  onClick={() => window.open(formatYouTubeUrl(item.socialLinks!.youtube), '_blank')}
+                                >
+                                  <Youtube className="h-4 w-4 text-red-600" />
+                                </Button>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Website button */}
+                          {item.website && (
+                            <Button 
+                              className="w-full bg-[#008751] hover:bg-[#008751]/90 text-white shadow-md"
+                              onClick={() => window.open(item.website, '_blank')}
                             >
-                              <Instagram className="h-3 w-3 md:h-4 md:w-4" />
+                              <Globe className="mr-2 h-4 w-4" />
+                              Visit Website
                             </Button>
                           )}
-                          {item.socialLinks.twitter && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="p-1 h-6 w-6 md:h-8 md:w-8"
-                              onClick={() => window.open(`https://twitter.com/${item.socialLinks!.twitter}`, '_blank')}
-                            >
-                              <Twitter className="h-3 w-3 md:h-4 md:w-4" />
-                            </Button>
-                          )}
-                          {item.socialLinks.youtube && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="p-1 h-6 w-6 md:h-8 md:w-8"
-                              onClick={() => window.open(formatYouTubeUrl(item.socialLinks!.youtube), '_blank')}
-                            >
-                              <Youtube className="h-3 w-3 md:h-4 md:w-4" />
-                            </Button>
-                          )}
                         </div>
-                      )}
-
-                      {/* Action buttons */}
-                      <div className="flex gap-2">
-                        {item.website && (
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="flex-1 bg-[#F97316] text-white hover:bg-[#F97316]/90 text-xs"
-                            onClick={() => window.open(item.website, '_blank')}
-                          >
-                            <ExternalLink className="mr-1 h-3 w-3 md:h-4 md:w-4" />
-                            Website
-                          </Button>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </Popup>
               </Marker>
             ) : null
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Mid Left as single column with lower z-index */}
+        {/* Overlaid Stats - Mid Left as single column with proper z-index */}
         <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-[500]">
-          <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
-            <CardContent className="p-1.5 md:p-2">
-              <div className="space-y-1">
+          <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
+            <CardContent className="p-2">
+              <div className="space-y-1.5">
                 {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group'].map(type => {
                   const count = items.filter(item => item.type === type).length;
                   return (
-                    <div key={type} className="flex items-center gap-1.5">
+                    <div key={type} className="flex items-center gap-2">
                       <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
-                      <span className="text-xs font-bold text-black">{count}</span>
+                      <span className="text-xs font-bold text-black min-w-[16px]">{count}</span>
                       <span className="text-xs text-black/70 capitalize">{type}s</span>
                     </div>
                   );
@@ -334,22 +362,23 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
 
         {/* Overlaid Country Filters - Top Right */}
         <div className="absolute top-4 right-4 z-[1000] w-48">
-          <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
-            <CardContent className="p-2">
+          <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
+            <CardContent className="p-3">
+              <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>
               <div className="max-h-32 overflow-y-auto space-y-1">
                 {COUNTRIES.map((country) => (
                   <Badge
                     key={country}
                     variant={filters.countries.includes(country) ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors text-xs w-full justify-start ${
+                    className={`cursor-pointer transition-colors text-xs w-full justify-start hover:shadow-sm ${
                       filters.countries.includes(country)
-                        ? "bg-[#F97316] text-white hover:bg-[#F97316]/90"
-                        : "text-black border-[#F97316] hover:bg-[#F97316]/10"
+                        ? "bg-[#008751] text-white hover:bg-[#008751]/90 shadow-sm"
+                        : "text-black border-[#008751]/30 hover:bg-[#008751]/10 hover:border-[#008751]/50"
                     }`}
                     onClick={() => toggleCountry(country)}
                   >
                     <span className="mr-2">{getCountryFlag(country)}</span>
-                    <span>{country}</span>
+                    <span className="truncate">{country}</span>
                   </Badge>
                 ))}
               </div>
