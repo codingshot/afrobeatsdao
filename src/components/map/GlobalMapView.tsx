@@ -108,6 +108,29 @@ const createCustomIcon = (type: MapItemType) => {
   });
 };
 
+// Helper function to properly format YouTube URLs
+const formatYouTubeUrl = (url: string): string => {
+  if (!url) return '';
+  
+  // If it already starts with http/https, use as is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // If it already contains youtube.com, just add https://
+  if (url.includes('youtube.com')) {
+    return `https://${url}`;
+  }
+  
+  // If it's just a username or channel path, build the full URL
+  if (url.startsWith('@') || url.startsWith('/')) {
+    return `https://youtube.com${url.startsWith('@') ? '/' + url : url}`;
+  }
+  
+  // Otherwise, assume it's a username and build the URL
+  return `https://youtube.com/${url}`;
+};
+
 const COUNTRIES = [
   'Nigeria', 'Ghana', 'South Africa', 'United Kingdom', 'United States',
   'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal', 'Morocco'
@@ -259,7 +282,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
                               size="sm"
                               variant="outline"
                               className="p-1 h-6 w-6 md:h-8 md:w-8"
-                              onClick={() => window.open(`https://youtube.com/${item.socialLinks!.youtube}`, '_blank')}
+                              onClick={() => window.open(formatYouTubeUrl(item.socialLinks!.youtube), '_blank')}
                             >
                               <Youtube className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>

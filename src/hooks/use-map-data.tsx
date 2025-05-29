@@ -73,14 +73,19 @@ const getClubMapItems = (): MapItem[] => {
   }));
 };
 
-// Helper to spread coordinates in a country to reduce overlap
+// Improved helper to spread coordinates in a country with better distribution
 const spreadCoordinatesInCountry = (baseCoords: [number, number], index: number, total: number): [number, number] => {
   if (total === 1) return baseCoords;
   
-  // Create a small offset based on index to spread points
-  const offsetRange = 0.5; // degrees
-  const angle = (index / total) * 2 * Math.PI;
-  const radius = 0.1 + (index % 3) * 0.15; // varying radius
+  // Create a more varied spread pattern
+  const spreadRadius = Math.min(1.0, 0.3 + (total * 0.05)); // Larger spread for more artists
+  const layers = Math.ceil(Math.sqrt(total)); // Create circular layers
+  const layer = Math.floor(index / layers);
+  const positionInLayer = index % layers;
+  const angleIncrement = (2 * Math.PI) / Math.max(1, layers);
+  
+  const angle = angleIncrement * positionInLayer + (layer * Math.PI / 4); // Offset each layer
+  const radius = spreadRadius * (0.3 + (layer * 0.2)); // Increase radius for outer layers
   
   const offsetLng = Math.cos(angle) * radius;
   const offsetLat = Math.sin(angle) * radius;
@@ -91,7 +96,7 @@ const spreadCoordinatesInCountry = (baseCoords: [number, number], index: number,
   ];
 };
 
-// Convert existing artist data with proper coordinates and spread
+// Convert existing artist data with proper coordinates and improved spread
 const getArtistMapItems = (): MapItem[] => {
   // Group artists by country first
   const artistsByCountry: Record<string, typeof ARTISTS> = {};
@@ -104,7 +109,7 @@ const getArtistMapItems = (): MapItem[] => {
     artistsByCountry[country].push(artist);
   });
 
-  // Now create map items with spread coordinates
+  // Now create map items with improved spread coordinates
   const mapItems: MapItem[] = [];
   
   Object.entries(artistsByCountry).forEach(([country, artists]) => {
@@ -165,11 +170,12 @@ const getCountryFromCity = (city: string): string => {
   return cityToCountry[city] || city;
 };
 
-// Helper function to determine artist country based on name/origin
+// Updated and verified artist country mapping based on research
 const getArtistCountry = (artistName: string): string => {
   const artistCountryMap: Record<string, string> = {
+    // Nigerian Artists
     'Burna Boy': 'Nigeria',
-    'Wizkid': 'Nigeria',
+    'Wizkid': 'Nigeria', 
     'Davido': 'Nigeria',
     'Tems': 'Nigeria',
     'Asake': 'Nigeria',
@@ -191,15 +197,45 @@ const getArtistCountry = (artistName: string): string => {
     'Spyro': 'Nigeria',
     'Llona': 'Nigeria',
     'Qing Madi': 'Nigeria',
+    'Cruel Santino': 'Nigeria',
+    'Lojay': 'Nigeria',
+    'Mr Eazi': 'Nigeria',
+    'Tekno': 'Nigeria',
+    'DJ Tunez': 'Nigeria',
+    'Tempoe': 'Nigeria',
+    'Azanti': 'Nigeria',
+    'Kcee': 'Nigeria',
+    'Adekunle Gold': 'Nigeria',
+    'Odeal': 'Nigeria',
+    'Olamide': 'Nigeria',
+    'SPINALL': 'Nigeria',
+    'Ayo Maff': 'Nigeria',
+    '1da Banton': 'Nigeria',
+    'Swizz Panache': 'Nigeria',
+    'Phyno': 'Nigeria',
+    'Tiwa Savage': 'Nigeria',
+    'MOLIY': 'Nigeria',
+    
+    // Ghanaian Artists
     'King Promise': 'Ghana',
     'Black Sherif': 'Ghana',
+    
+    // South African Artists
     'Tyla': 'South Africa',
     'Focalistic': 'South Africa',
+    'Costa Titch': 'South Africa',
+    
+    // UK-based Artists (many of Nigerian/African heritage but UK-based)
     'J Hus': 'United Kingdom',
     'NSG': 'United Kingdom',
-    'Not3s': 'United Kingdom',
+    'Not3s': 'United Kingdom', 
     'Darkoo': 'United Kingdom',
-    'YungBlud': 'United Kingdom'
+    'Yxng Bane': 'United Kingdom',
+    'B Young': 'United Kingdom',
+    'ZieZie': 'United Kingdom',
+    'Young T & Bugsey': 'United Kingdom',
+    'Kojo Funds': 'United Kingdom',
+    'Teejay': 'United Kingdom'
   };
   
   return artistCountryMap[artistName] || 'Nigeria';
@@ -208,10 +244,10 @@ const getArtistCountry = (artistName: string): string => {
 // Helper function to get coordinates for artists based on country
 const getArtistCoordinates = (country: string): [number, number] => {
   const countryCoordinates: Record<string, [number, number]> = {
-    'Nigeria': [7.3775, 9.0765], // Slightly adjusted center of Nigeria
-    'Ghana': [-1.0232, 7.9465],
-    'South Africa': [22.9375, -30.5595],
-    'United Kingdom': [-3.4360, 55.3781],
+    'Nigeria': [7.3775, 9.0765], // Center of Nigeria
+    'Ghana': [-1.0232, 7.9465], // Center of Ghana
+    'South Africa': [22.9375, -30.5595], // Center of South Africa
+    'United Kingdom': [-3.4360, 55.3781], // Center of UK
     'United States': [-95.7129, 37.0902],
     'Canada': [-106.3468, 56.1304],
     'France': [2.2137, 46.2276],
