@@ -312,24 +312,24 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           </Card>
         </div>
 
-        {/* Overlaid Country Filters - Top */}
-        <div className="absolute top-4 left-4 right-4 z-[1000]">
+        {/* Overlaid Country Filters - Top Left in single column with scroll */}
+        <div className="absolute top-4 left-4 z-[1000] w-48">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
-            <CardContent className="p-2 md:p-3">
-              <div className="flex flex-wrap gap-1 md:gap-2">
+            <CardContent className="p-2">
+              <div className="max-h-32 overflow-y-auto space-y-1">
                 {COUNTRIES.map((country) => (
                   <Badge
                     key={country}
                     variant={filters.countries.includes(country) ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors text-xs ${
+                    className={`cursor-pointer transition-colors text-xs w-full justify-start ${
                       filters.countries.includes(country)
                         ? "bg-[#F97316] text-white hover:bg-[#F97316]/90"
                         : "text-black border-[#F97316] hover:bg-[#F97316]/10"
                     }`}
                     onClick={() => toggleCountry(country)}
                   >
-                    <span className="mr-1">{getCountryFlag(country)}</span>
-                    <span className="hidden sm:inline">{country}</span>
+                    <span className="mr-2">{getCountryFlag(country)}</span>
+                    <span>{country}</span>
                   </Badge>
                 ))}
               </div>

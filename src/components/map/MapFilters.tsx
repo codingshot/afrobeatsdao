@@ -8,7 +8,7 @@ import { MapItemType, MapFilters as MapFiltersType } from '@/types/map';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { CalendarIcon, Search, Filter, X, ChevronDown, Settings } from 'lucide-react';
+import { CalendarIcon, Search, X, ChevronDown, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
@@ -78,29 +78,12 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
 
   return (
     <Card className="w-full">
-      <CardContent className="p-3 md:p-6">
-        <div className="space-y-4 md:space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 md:h-5 md:w-5 text-[#008751]" />
-              <h3 className="text-base md:text-lg font-semibold text-black">Filters</h3>
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={clearFilters}
-              className="text-black border-[#008751] text-xs md:text-sm"
-            >
-              <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
-              Clear
-            </Button>
-          </div>
-
-          {/* Search, Advanced Settings, and Event Date Range in one row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-            {/* Search */}
-            <div className="relative">
+      <CardContent className="p-3 md:p-4">
+        <div className="space-y-3 md:space-y-4">
+          {/* Search, Clear, Advanced Settings, and Event Date Range in one row */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+            {/* Search - bigger */}
+            <div className="relative md:col-span-5">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search..."
@@ -110,28 +93,43 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
               />
             </div>
 
-            {/* Advanced Settings */}
-            <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-              <CollapsibleTrigger asChild>
-                <Button variant="outline" className="w-full justify-between text-xs md:text-sm">
-                  <div className="flex items-center gap-2">
-                    <Settings className="h-3 w-3 md:h-4 md:w-4" />
-                    Advanced
-                  </div>
-                  <ChevronDown className={cn("h-3 w-3 md:h-4 md:w-4 transition-transform", showAdvanced && "rotate-180")} />
-                </Button>
-              </CollapsibleTrigger>
-            </Collapsible>
+            {/* Clear Filter Button */}
+            <div className="md:col-span-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={clearFilters}
+                className="w-full text-black border-[#008751] text-xs md:text-sm h-10"
+              >
+                <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                Clear
+              </Button>
+            </div>
 
-            {/* Event Date Range - Only show if events are selected */}
+            {/* Advanced Settings - smaller */}
+            <div className="md:col-span-2">
+              <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+                <CollapsibleTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between text-xs md:text-sm h-10">
+                    <div className="flex items-center gap-2">
+                      <Settings className="h-3 w-3 md:h-4 md:w-4" />
+                      Advanced
+                    </div>
+                    <ChevronDown className={cn("h-3 w-3 md:h-4 md:w-4 transition-transform", showAdvanced && "rotate-180")} />
+                  </Button>
+                </CollapsibleTrigger>
+              </Collapsible>
+            </div>
+
+            {/* Event Date Range - smaller, only show if events are selected */}
             {eventsSelected && (
-              <div className="flex gap-2">
+              <div className="md:col-span-3 flex gap-2">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "justify-start text-left font-normal text-xs md:text-sm w-full",
+                        "justify-start text-left font-normal text-xs md:text-sm w-full h-10",
                         !filters.dateRange?.from && "text-muted-foreground"
                       )}
                     >
@@ -139,11 +137,10 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
                       {filters.dateRange?.from ? (
                         filters.dateRange.to ? (
                           <span className="hidden sm:inline">
-                            {format(filters.dateRange.from, "LLL dd, y")} -{" "}
-                            {format(filters.dateRange.to, "LLL dd, y")}
+                            {format(filters.dateRange.from, "MMM dd")} - {format(filters.dateRange.to, "MMM dd")}
                           </span>
                         ) : (
-                          format(filters.dateRange.from, "LLL dd, y")
+                          format(filters.dateRange.from, "MMM dd")
                         )
                       ) : (
                         <span>Event dates</span>
@@ -168,7 +165,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
                     variant="outline"
                     size="icon"
                     onClick={() => onFiltersChange({ ...filters, dateRange: undefined })}
-                    className="h-8 w-8 md:h-10 md:w-10 flex-shrink-0"
+                    className="h-10 w-10 flex-shrink-0"
                   >
                     <X className="h-3 w-3 md:h-4 md:w-4" />
                   </Button>
@@ -204,9 +201,8 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
             </CollapsibleContent>
           </Collapsible>
 
-          {/* Types */}
+          {/* Types - removed "Content Types" label */}
           <div>
-            <h4 className="text-xs md:text-sm font-medium text-black mb-2 md:mb-3">Content Types</h4>
             <div className="flex flex-wrap gap-1 md:gap-2">
               {MAP_TYPES.map((type) => (
                 <Badge
