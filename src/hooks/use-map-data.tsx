@@ -4,9 +4,8 @@ import { MapItem } from '@/types/map';
 import { CLUBS } from '@/data/clubs';
 import { ARTISTS } from '@/data/artists';
 
-// Get events data
+// Get events data from the events page data
 const getEventsData = () => {
-  // Sample events data - you can expand this with real events from your database
   return [
     {
       id: 'event-afronation-2024',
@@ -36,6 +35,24 @@ const getEventsData = () => {
       endDate: '2024-08-25',
       venue: 'Hart Plaza',
       image: '/afrofuture detroit.jpeg'
+    },
+    {
+      id: 'event-mawazine-morocco',
+      name: 'Mawazine Festival',
+      location: 'Rabat, Morocco',
+      coordinates: [-6.8326, 34.0209] as [number, number],
+      date: '2024-06-21',
+      endDate: '2024-06-29',
+      venue: 'Multiple Venues',
+      image: '/mawazine.webp'
+    },
+    {
+      id: 'event-afrobeats-london',
+      name: 'Afrobeats in the Park London',
+      location: 'London, United Kingdom',
+      coordinates: [-0.1276, 51.5074] as [number, number],
+      date: '2024-09-15',
+      venue: 'Hyde Park'
     }
   ];
 };
@@ -56,29 +73,66 @@ const getClubMapItems = (): MapItem[] => {
   }));
 };
 
-// Convert existing artist data with proper coordinates
+// Helper to spread coordinates in a country to reduce overlap
+const spreadCoordinatesInCountry = (baseCoords: [number, number], index: number, total: number): [number, number] => {
+  if (total === 1) return baseCoords;
+  
+  // Create a small offset based on index to spread points
+  const offsetRange = 0.5; // degrees
+  const angle = (index / total) * 2 * Math.PI;
+  const radius = 0.1 + (index % 3) * 0.15; // varying radius
+  
+  const offsetLng = Math.cos(angle) * radius;
+  const offsetLat = Math.sin(angle) * radius;
+  
+  return [
+    baseCoords[0] + offsetLng,
+    baseCoords[1] + offsetLat
+  ];
+};
+
+// Convert existing artist data with proper coordinates and spread
 const getArtistMapItems = (): MapItem[] => {
-  return ARTISTS.map(artist => {
-    // Get country from artist name or default to Nigeria
+  // Group artists by country first
+  const artistsByCountry: Record<string, typeof ARTISTS> = {};
+  
+  ARTISTS.forEach(artist => {
     const country = getArtistCountry(artist.name);
-    
-    return {
-      id: `artist-${artist.id}`,
-      name: artist.name,
-      type: 'artist' as const,
-      coordinates: getArtistCoordinates(country),
-      country: country,
-      description: `${artist.name} - Afrobeats Artist`,
-      image: artist.image,
-      socialLinks: {
-        spotify: artist.spotify,
-        instagram: artist.instagram,
-        twitter: artist.twitter,
-        youtube: artist.youtube
-      },
-      genre: 'Afrobeats'
-    };
+    if (!artistsByCountry[country]) {
+      artistsByCountry[country] = [];
+    }
+    artistsByCountry[country].push(artist);
   });
+
+  // Now create map items with spread coordinates
+  const mapItems: MapItem[] = [];
+  
+  Object.entries(artistsByCountry).forEach(([country, artists]) => {
+    const baseCoords = getArtistCoordinates(country);
+    
+    artists.forEach((artist, index) => {
+      const spreadCoords = spreadCoordinatesInCountry(baseCoords, index, artists.length);
+      
+      mapItems.push({
+        id: `artist-${artist.id}`,
+        name: artist.name,
+        type: 'artist' as const,
+        coordinates: spreadCoords,
+        country: country,
+        description: `${artist.name} - Afrobeats Artist`,
+        image: artist.image,
+        socialLinks: {
+          spotify: artist.spotify,
+          instagram: artist.instagram,
+          twitter: artist.twitter,
+          youtube: artist.youtube
+        },
+        genre: 'Afrobeats'
+      });
+    });
+  });
+
+  return mapItems;
 };
 
 // Convert events data
@@ -113,7 +167,6 @@ const getCountryFromCity = (city: string): string => {
 
 // Helper function to determine artist country based on name/origin
 const getArtistCountry = (artistName: string): string => {
-  // Map some artists to their known countries
   const artistCountryMap: Record<string, string> = {
     'Burna Boy': 'Nigeria',
     'Wizkid': 'Nigeria',
@@ -125,6 +178,19 @@ const getArtistCountry = (artistName: string): string => {
     'Omah Lay': 'Nigeria',
     'Fireboy DML': 'Nigeria',
     'Joeboy': 'Nigeria',
+    'Ruger': 'Nigeria',
+    'BNXN': 'Nigeria',
+    'Oxlade': 'Nigeria',
+    'CKay': 'Nigeria',
+    'Kizz Daniel': 'Nigeria',
+    'Victony': 'Nigeria',
+    'Seyi Vibez': 'Nigeria',
+    'Shallipopi': 'Nigeria',
+    'Young Jonn': 'Nigeria',
+    'Skiibii': 'Nigeria',
+    'Spyro': 'Nigeria',
+    'Llona': 'Nigeria',
+    'Qing Madi': 'Nigeria',
     'King Promise': 'Ghana',
     'Black Sherif': 'Ghana',
     'Tyla': 'South Africa',
@@ -132,16 +198,17 @@ const getArtistCountry = (artistName: string): string => {
     'J Hus': 'United Kingdom',
     'NSG': 'United Kingdom',
     'Not3s': 'United Kingdom',
-    'Darkoo': 'United Kingdom'
+    'Darkoo': 'United Kingdom',
+    'YungBlud': 'United Kingdom'
   };
   
-  return artistCountryMap[artistName] || 'Nigeria'; // Default to Nigeria
+  return artistCountryMap[artistName] || 'Nigeria';
 };
 
 // Helper function to get coordinates for artists based on country
 const getArtistCoordinates = (country: string): [number, number] => {
   const countryCoordinates: Record<string, [number, number]> = {
-    'Nigeria': [8.6753, 9.0820],
+    'Nigeria': [7.3775, 9.0765], // Slightly adjusted center of Nigeria
     'Ghana': [-1.0232, 7.9465],
     'South Africa': [22.9375, -30.5595],
     'United Kingdom': [-3.4360, 55.3781],
@@ -150,7 +217,7 @@ const getArtistCoordinates = (country: string): [number, number] => {
     'France': [2.2137, 46.2276],
     'Germany': [10.4515, 51.1657]
   };
-  return countryCoordinates[country] || [8.6753, 9.0820]; // Default to Nigeria
+  return countryCoordinates[country] || [7.3775, 9.0765];
 };
 
 // Sample additional data for other types
@@ -215,6 +282,13 @@ export const useMapData = () => {
       const artists = getArtistMapItems();
       const events = getEventMapItems();
       const additional = getAdditionalMapItems();
+      
+      console.log('Map data loaded:', {
+        clubs: clubs.length,
+        artists: artists.length,
+        events: events.length,
+        additional: additional.length
+      });
       
       return [...clubs, ...artists, ...events, ...additional];
     }
