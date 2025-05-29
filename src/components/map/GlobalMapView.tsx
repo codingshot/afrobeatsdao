@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem, MapItemType, MapFilters } from '@/types/map';
@@ -290,20 +289,18 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Mid Left as single column */}
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-[1000]">
+        {/* Overlaid Stats - Mid Left as single column with lower z-index */}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-[500]">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
-            <CardContent className="p-2 md:p-3">
-              <div className="space-y-2">
+            <CardContent className="p-1.5 md:p-2">
+              <div className="space-y-1">
                 {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group'].map(type => {
                   const count = items.filter(item => item.type === type).length;
                   return (
-                    <div key={type} className="flex items-center gap-2">
-                      <span className="text-sm">{getTypeIcon(type as MapItemType)}</span>
-                      <div className="flex-1">
-                        <div className="text-sm font-bold text-black">{count}</div>
-                        <div className="text-xs text-black/70 capitalize">{type}s</div>
-                      </div>
+                    <div key={type} className="flex items-center gap-1.5">
+                      <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
+                      <span className="text-xs font-bold text-black">{count}</span>
+                      <span className="text-xs text-black/70 capitalize">{type}s</span>
                     </div>
                   );
                 })}
