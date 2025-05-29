@@ -57,7 +57,7 @@ main {
 }
 
 /* Add padding to inner pages to prevent navbar overlap */
-.page-clubs, .page-music, .page-dance {
+.page-clubs, .page-music, .page-dance, .page-partner {
   padding-top: 5rem;
   background-color: #FEF7CD; /* Soft yellow background to match content */
 }
@@ -71,4 +71,3 @@ main {
 h1 {
   color: #000 !important;
 }
-
