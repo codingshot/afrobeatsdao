@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -305,8 +304,8 @@ const Partner = () => {
         </div>
       </section>
 
-      {/* Case Studies */}
-      <section className="py-16 bg-white">
+      {/* Case Studies - COMMENTED OUT */}
+      {/* <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-heading font-bold text-black mb-4">
@@ -350,7 +349,7 @@ const Partner = () => {
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Web3 Organizations */}
       <section className="py-16 bg-afro-teal text-white">
