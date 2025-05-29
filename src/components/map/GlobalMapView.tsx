@@ -290,19 +290,19 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Bottom Center to avoid player */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] max-w-[calc(100%-2rem)]">
+        {/* Overlaid Stats - Mid Left as single column */}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-[1000]">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
             <CardContent className="p-2 md:p-3">
-              <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2">
-                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'user'].map(type => {
+              <div className="space-y-2">
+                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group'].map(type => {
                   const count = items.filter(item => item.type === type).length;
                   return (
-                    <div key={type} className="text-center">
-                      <div className="text-sm md:text-lg font-bold text-black">{count}</div>
-                      <div className="text-xs text-black/70 capitalize flex items-center justify-center gap-1">
-                        <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
-                        <span className="hidden sm:inline">{type}s</span>
+                    <div key={type} className="flex items-center gap-2">
+                      <span className="text-sm">{getTypeIcon(type as MapItemType)}</span>
+                      <div className="flex-1">
+                        <div className="text-sm font-bold text-black">{count}</div>
+                        <div className="text-xs text-black/70 capitalize">{type}s</div>
                       </div>
                     </div>
                   );
@@ -312,7 +312,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           </Card>
         </div>
 
-        {/* Overlaid Country Filters - Top Right to avoid zoom controls */}
+        {/* Overlaid Country Filters - Top Right */}
         <div className="absolute top-4 right-4 z-[1000] w-48">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
             <CardContent className="p-2">
