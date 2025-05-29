@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem } from '@/types/map';
@@ -353,8 +352,8 @@ export const MiniGlobalMap = () => {
               ))}
             </MapContainer>
 
-            {/* Stats overlay - compact version */}
-            <div className="absolute left-2 top-4 z-[500]">
+            {/* Stats overlay - moved to bottom right */}
+            <div className="absolute right-2 bottom-16 z-[500]">
               <Card className="bg-white/90 backdrop-blur-sm border-afro-teal shadow-lg">
                 <CardContent className="p-2">
                   <div className="grid grid-cols-2 gap-1 text-xs">
