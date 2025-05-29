@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, Search, Filter, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 
 interface MapFiltersProps {
   filters: MapFiltersType;
@@ -32,6 +33,24 @@ const COUNTRIES = [
   'Nigeria', 'Ghana', 'South Africa', 'United Kingdom', 'United States',
   'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal'
 ];
+
+const getCountryFlag = (countryName: string): string => {
+  const flagMap: Record<string, string> = {
+    'Nigeria': '🇳🇬',
+    'Ghana': '🇬🇭', 
+    'South Africa': '🇿🇦',
+    'United Kingdom': '🇬🇧',
+    'United States': '🇺🇸',
+    'Canada': '🇨🇦',
+    'France': '🇫🇷',
+    'Germany': '🇩🇪',
+    'Netherlands': '🇳🇱',
+    'Thailand': '🇹🇭',
+    'Ireland': '🇮🇪',
+    'Portugal': '🇵🇹'
+  };
+  return flagMap[countryName] || '🏳️';
+};
 
 export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange }) => {
   const toggleType = (type: MapItemType | 'all') => {
@@ -68,24 +87,35 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
     });
   };
 
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    if (range && range.from && range.to) {
+      onFiltersChange({ 
+        ...filters, 
+        dateRange: { from: range.from, to: range.to }
+      });
+    } else {
+      onFiltersChange({ ...filters, dateRange: undefined });
+    }
+  };
+
   return (
     <Card className="w-full">
-      <CardContent className="p-6">
-        <div className="space-y-6">
+      <CardContent className="p-3 md:p-6">
+        <div className="space-y-4 md:space-y-6">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-[#008751]" />
-              <h3 className="text-lg font-semibold text-black">Filters</h3>
+              <Filter className="h-4 w-4 md:h-5 md:w-5 text-[#008751]" />
+              <h3 className="text-base md:text-lg font-semibold text-black">Filters</h3>
             </div>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={clearFilters}
-              className="text-black border-[#008751]"
+              className="text-black border-[#008751] text-xs md:text-sm"
             >
-              <X className="h-4 w-4 mr-1" />
-              Clear All
+              <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+              Clear
             </Button>
           </div>
 
@@ -93,23 +123,23 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search by name, city, or country..."
+              placeholder="Search..."
               value={filters.searchQuery}
               onChange={(e) => onFiltersChange({ ...filters, searchQuery: e.target.value })}
-              className="pl-10"
+              className="pl-10 text-sm"
             />
           </div>
 
           {/* Types */}
           <div>
-            <h4 className="text-sm font-medium text-black mb-3">Content Types</h4>
-            <div className="flex flex-wrap gap-2">
+            <h4 className="text-xs md:text-sm font-medium text-black mb-2 md:mb-3">Content Types</h4>
+            <div className="flex flex-wrap gap-1 md:gap-2">
               {MAP_TYPES.map((type) => (
                 <Badge
                   key={type.value}
                   variant={filters.types.includes(type.value) ? "default" : "outline"}
                   className={cn(
-                    "cursor-pointer transition-colors",
+                    "cursor-pointer transition-colors text-xs",
                     filters.types.includes(type.value)
                       ? "bg-[#008751] text-white hover:bg-[#008751]/90"
                       : "text-black border-[#008751] hover:bg-[#008751]/10"
@@ -117,7 +147,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
                   onClick={() => toggleType(type.value)}
                 >
                   <span className="mr-1">{type.icon}</span>
-                  {type.label}
+                  <span className="hidden sm:inline">{type.label}</span>
                 </Badge>
               ))}
             </div>
@@ -125,21 +155,22 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
 
           {/* Countries */}
           <div>
-            <h4 className="text-sm font-medium text-black mb-3">Countries</h4>
-            <div className="flex flex-wrap gap-2">
+            <h4 className="text-xs md:text-sm font-medium text-black mb-2 md:mb-3">Countries</h4>
+            <div className="flex flex-wrap gap-1 md:gap-2">
               {COUNTRIES.map((country) => (
                 <Badge
                   key={country}
                   variant={filters.countries.includes(country) ? "default" : "outline"}
                   className={cn(
-                    "cursor-pointer transition-colors",
+                    "cursor-pointer transition-colors text-xs",
                     filters.countries.includes(country)
                       ? "bg-[#F97316] text-white hover:bg-[#F97316]/90"
                       : "text-black border-[#F97316] hover:bg-[#F97316]/10"
                   )}
                   onClick={() => toggleCountry(country)}
                 >
-                  {country}
+                  <span className="mr-1">{getCountryFlag(country)}</span>
+                  <span className="hidden sm:inline">{country}</span>
                 </Badge>
               ))}
             </div>
@@ -147,29 +178,29 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
 
           {/* Date Range for Events */}
           <div>
-            <h4 className="text-sm font-medium text-black mb-3">Event Date Range</h4>
+            <h4 className="text-xs md:text-sm font-medium text-black mb-2 md:mb-3">Event Date Range</h4>
             <div className="flex gap-2">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     className={cn(
-                      "justify-start text-left font-normal",
+                      "justify-start text-left font-normal text-xs md:text-sm",
                       !filters.dateRange?.from && "text-muted-foreground"
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    <CalendarIcon className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                     {filters.dateRange?.from ? (
                       filters.dateRange.to ? (
-                        <>
+                        <span className="hidden sm:inline">
                           {format(filters.dateRange.from, "LLL dd, y")} -{" "}
                           {format(filters.dateRange.to, "LLL dd, y")}
-                        </>
+                        </span>
                       ) : (
                         format(filters.dateRange.from, "LLL dd, y")
                       )
                     ) : (
-                      <span>Pick a date range</span>
+                      <span>Pick dates</span>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -179,8 +210,8 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
                     mode="range"
                     defaultMonth={filters.dateRange?.from}
                     selected={filters.dateRange}
-                    onSelect={(range) => onFiltersChange({ ...filters, dateRange: range })}
-                    numberOfMonths={2}
+                    onSelect={handleDateRangeChange}
+                    numberOfMonths={1}
                     className="pointer-events-auto"
                   />
                 </PopoverContent>
@@ -191,8 +222,9 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
                   variant="outline"
                   size="icon"
                   onClick={() => onFiltersChange({ ...filters, dateRange: undefined })}
+                  className="h-8 w-8 md:h-10 md:w-10"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               )}
             </div>

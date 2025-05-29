@@ -4,6 +4,42 @@ import { MapItem } from '@/types/map';
 import { CLUBS } from '@/data/clubs';
 import { ARTISTS } from '@/data/artists';
 
+// Get events data
+const getEventsData = () => {
+  // Sample events data - you can expand this with real events from your database
+  return [
+    {
+      id: 'event-afronation-2024',
+      name: 'Afro Nation Portugal 2024',
+      location: 'Portimão, Portugal',
+      coordinates: [-8.7613, 40.2033] as [number, number],
+      date: '2024-07-03',
+      endDate: '2024-07-06',
+      venue: 'Praia da Rocha',
+      image: '/afornationportugal.jpg'
+    },
+    {
+      id: 'event-detty-december',
+      name: 'Detty December Lagos',
+      location: 'Lagos, Nigeria', 
+      coordinates: [3.3792, 6.5244] as [number, number],
+      date: '2024-12-25',
+      endDate: '2024-12-31',
+      venue: 'Eko Atlantic'
+    },
+    {
+      id: 'event-afrofuture-detroit',
+      name: 'Afrofuture Detroit',
+      location: 'Detroit, United States',
+      coordinates: [-83.0458, 42.3314] as [number, number],
+      date: '2024-08-24',
+      endDate: '2024-08-25',
+      venue: 'Hart Plaza',
+      image: '/afrofuture detroit.jpeg'
+    }
+  ];
+};
+
 // Convert existing club data
 const getClubMapItems = (): MapItem[] => {
   return CLUBS.map(club => ({
@@ -20,23 +56,47 @@ const getClubMapItems = (): MapItem[] => {
   }));
 };
 
-// Convert existing artist data
+// Convert existing artist data with proper coordinates
 const getArtistMapItems = (): MapItem[] => {
-  return ARTISTS.map(artist => ({
-    id: `artist-${artist.id}`,
-    name: artist.name,
-    type: 'artist' as const,
-    coordinates: getArtistCoordinates(artist.origin || 'Nigeria'),
-    country: artist.origin || 'Nigeria',
-    description: artist.bio || `${artist.name} - Afrobeats Artist`,
-    image: artist.image,
-    socialLinks: {
-      spotify: artist.spotify,
-      instagram: artist.socialLinks?.instagram,
-      twitter: artist.socialLinks?.twitter,
-      youtube: artist.socialLinks?.youtube
-    },
-    genre: 'Afrobeats'
+  return ARTISTS.map(artist => {
+    // Get country from artist name or default to Nigeria
+    const country = getArtistCountry(artist.name);
+    
+    return {
+      id: `artist-${artist.id}`,
+      name: artist.name,
+      type: 'artist' as const,
+      coordinates: getArtistCoordinates(country),
+      country: country,
+      description: `${artist.name} - Afrobeats Artist`,
+      image: artist.image,
+      socialLinks: {
+        spotify: artist.spotify,
+        instagram: artist.instagram,
+        twitter: artist.twitter,
+        youtube: artist.youtube
+      },
+      genre: 'Afrobeats'
+    };
+  });
+};
+
+// Convert events data
+const getEventMapItems = (): MapItem[] => {
+  const events = getEventsData();
+  
+  return events.map(event => ({
+    id: event.id,
+    name: event.name,
+    type: 'event' as const,
+    coordinates: event.coordinates,
+    country: event.location.split(', ')[1] || event.location,
+    city: event.location.split(', ')[0],
+    description: `Afrobeats event at ${event.venue}`,
+    eventDate: event.date,
+    eventEndDate: event.endDate,
+    venue: event.venue,
+    image: event.image
   }));
 };
 
@@ -51,7 +111,34 @@ const getCountryFromCity = (city: string): string => {
   return cityToCountry[city] || city;
 };
 
-// Helper function to get coordinates for artists based on origin
+// Helper function to determine artist country based on name/origin
+const getArtistCountry = (artistName: string): string => {
+  // Map some artists to their known countries
+  const artistCountryMap: Record<string, string> = {
+    'Burna Boy': 'Nigeria',
+    'Wizkid': 'Nigeria',
+    'Davido': 'Nigeria',
+    'Tems': 'Nigeria',
+    'Asake': 'Nigeria',
+    'Rema': 'Nigeria',
+    'Ayra Starr': 'Nigeria',
+    'Omah Lay': 'Nigeria',
+    'Fireboy DML': 'Nigeria',
+    'Joeboy': 'Nigeria',
+    'King Promise': 'Ghana',
+    'Black Sherif': 'Ghana',
+    'Tyla': 'South Africa',
+    'Focalistic': 'South Africa',
+    'J Hus': 'United Kingdom',
+    'NSG': 'United Kingdom',
+    'Not3s': 'United Kingdom',
+    'Darkoo': 'United Kingdom'
+  };
+  
+  return artistCountryMap[artistName] || 'Nigeria'; // Default to Nigeria
+};
+
+// Helper function to get coordinates for artists based on country
 const getArtistCoordinates = (country: string): [number, number] => {
   const countryCoordinates: Record<string, [number, number]> = {
     'Nigeria': [8.6753, 9.0820],
@@ -69,32 +156,6 @@ const getArtistCoordinates = (country: string): [number, number] => {
 // Sample additional data for other types
 const getAdditionalMapItems = (): MapItem[] => {
   return [
-    // Sample Events
-    {
-      id: 'event-afronation-2024',
-      name: 'Afro Nation Portugal 2024',
-      type: 'event',
-      coordinates: [-8.7613, 40.2033],
-      country: 'Portugal',
-      city: 'Portimão',
-      description: 'The biggest Afrobeats festival in Europe',
-      eventDate: '2024-07-03',
-      eventEndDate: '2024-07-06',
-      venue: 'Praia da Rocha',
-      website: 'https://afronation.com'
-    },
-    {
-      id: 'event-detty-december',
-      name: 'Detty December Lagos',
-      type: 'event',
-      coordinates: [3.3792, 6.5244],
-      country: 'Nigeria',
-      city: 'Lagos',
-      description: 'Annual December music festival in Lagos',
-      eventDate: '2024-12-25',
-      eventEndDate: '2024-12-31',
-      venue: 'Eko Atlantic'
-    },
     // Sample Dancers
     {
       id: 'dancer-poco-lee',
@@ -133,15 +194,6 @@ const getAdditionalMapItems = (): MapItem[] => {
       description: 'Leading Nigerian record label',
       website: 'https://mavinrecords.com'
     },
-    {
-      id: 'agency-spaceship-collective',
-      name: 'Spaceship Collective',
-      type: 'agency',
-      coordinates: [3.3792, 6.5244],
-      country: 'Nigeria',
-      city: 'Lagos',
-      description: 'Music management and marketing agency'
-    },
     // Sample Groups
     {
       id: 'group-afrobeats-london',
@@ -161,9 +213,10 @@ export const useMapData = () => {
     queryFn: async (): Promise<MapItem[]> => {
       const clubs = getClubMapItems();
       const artists = getArtistMapItems();
+      const events = getEventMapItems();
       const additional = getAdditionalMapItems();
       
-      return [...clubs, ...artists, ...additional];
+      return [...clubs, ...artists, ...events, ...additional];
     }
   });
 };

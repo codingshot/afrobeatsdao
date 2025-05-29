@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MapPin, ExternalLink, Calendar, Users, Music, Instagram, Twitter, Youtube } from 'lucide-react';
-import { useCountryFlags } from '@/hooks/use-country-flags';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -26,7 +25,7 @@ const MapController = ({ items }: { items: MapItem[] }) => {
         const bounds = L.latLngBounds(
           validItems.map(item => [item.coordinates[1], item.coordinates[0]] as L.LatLngExpression)
         );
-        map.fitBounds(bounds, { padding: [50, 50] });
+        map.fitBounds(bounds, { padding: [20, 20] });
       }
     }
   }, [items, map]);
@@ -62,6 +61,24 @@ const getTypeIcon = (type: MapItemType): string => {
   return icons[type];
 };
 
+const getCountryFlag = (countryName: string): string => {
+  const flagMap: Record<string, string> = {
+    'Nigeria': '🇳🇬',
+    'Ghana': '🇬🇭', 
+    'South Africa': '🇿🇦',
+    'United Kingdom': '🇬🇧',
+    'United States': '🇺🇸',
+    'Canada': '🇨🇦',
+    'France': '🇫🇷',
+    'Germany': '🇩🇪',
+    'Netherlands': '🇳🇱',
+    'Thailand': '🇹🇭',
+    'Ireland': '🇮🇪',
+    'Portugal': '🇵🇹'
+  };
+  return flagMap[countryName] || '🏳️';
+};
+
 const createCustomIcon = (type: MapItemType) => {
   const color = getMarkerColor(type);
   
@@ -69,32 +86,30 @@ const createCustomIcon = (type: MapItemType) => {
     html: `
       <div style="
         background-color: ${color};
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
         border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 10px;
       ">
         ${getTypeIcon(type)}
       </div>
     `,
     className: 'custom-div-icon',
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-    popupAnchor: [0, -15]
+    iconSize: [25, 25],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -12]
   });
 };
 
 export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
   const isMobile = useIsMobile();
-  const { getFlag } = useCountryFlags();
   const defaultCenter = [20, 0] as [number, number];
-  const defaultZoom = 2;
-  const [hoveredItem, setHoveredItem] = useState<MapItem | null>(null);
+  const defaultZoom = isMobile ? 1 : 2;
 
   useEffect(() => {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -108,24 +123,24 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric'
     });
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 md:gap-4">
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 mb-4">
+      <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2 mb-2 md:mb-4">
         {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'user'].map(type => {
           const count = items.filter(item => item.type === type).length;
           return (
-            <Card key={type} className="p-2">
+            <Card key={type} className="p-1 md:p-2">
               <div className="text-center">
-                <div className="text-lg font-bold text-black">{count}</div>
+                <div className="text-sm md:text-lg font-bold text-black">{count}</div>
                 <div className="text-xs text-black/70 capitalize flex items-center justify-center gap-1">
-                  <span>{getTypeIcon(type as MapItemType)}</span>
-                  {type}s
+                  <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
+                  <span className="hidden sm:inline">{type}s</span>
                 </div>
               </div>
             </Card>
@@ -134,7 +149,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
       </div>
 
       {/* Map */}
-      <div className="rounded-lg overflow-hidden border border-[#008751] h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative">
+      <div className="rounded-lg overflow-hidden border border-[#008751] h-[70vh] md:h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative">
         <MapContainer 
           center={defaultCenter as L.LatLngExpression}
           zoom={defaultZoom} 
@@ -155,26 +170,27 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
                 key={`${item.id}-${index}`} 
                 position={[item.coordinates[1], item.coordinates[0]] as L.LatLngExpression}
                 icon={createCustomIcon(item.type)}
-                eventHandlers={{
-                  mouseover: () => setHoveredItem(item),
-                  mouseout: () => setHoveredItem(null)
-                }}
               >
-                <Popup>
-                  <Card className="border-0 shadow-none max-w-sm">
-                    <CardContent className="p-3">
-                      <div className="flex items-center gap-2 mb-2">
-                        {item.country && (
+                <Popup maxWidth={isMobile ? 250 : 350}>
+                  <Card className="border-0 shadow-none max-w-full">
+                    <CardContent className="p-2 md:p-3">
+                      {/* Image if available */}
+                      {item.image && (
+                        <div className="mb-2">
                           <img 
-                            src={getFlag(item.country)} 
-                            alt={`${item.country} flag`}
-                            className="w-6 h-4 object-cover rounded-sm"
+                            src={item.image} 
+                            alt={item.name}
+                            className="w-full h-24 md:h-32 object-cover rounded-md"
                           />
-                        )}
-                        <h3 className="text-lg font-bold text-black">{item.name}</h3>
-                      </div>
+                        </div>
+                      )}
                       
                       <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">{getCountryFlag(item.country)}</span>
+                        <h3 className="text-sm md:text-lg font-bold text-black flex-1">{item.name}</h3>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <Badge 
                           className="text-xs"
                           style={{ backgroundColor: getMarkerColor(item.type), color: 'white' }}
@@ -182,18 +198,20 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
                           {getTypeIcon(item.type)} {item.type}
                         </Badge>
                         {item.city && (
-                          <span className="text-sm text-muted-foreground">{item.city}, {item.country}</span>
+                          <span className="text-xs md:text-sm text-muted-foreground">
+                            {item.city}, {item.country}
+                          </span>
                         )}
                       </div>
 
                       {item.description && (
-                        <p className="text-sm text-black mb-3">{item.description}</p>
+                        <p className="text-xs md:text-sm text-black mb-2 md:mb-3 line-clamp-2">{item.description}</p>
                       )}
 
                       {/* Event specific info */}
                       {item.type === 'event' && item.eventDate && (
-                        <div className="flex items-center gap-1 mb-2 text-sm text-black">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <div className="flex items-center gap-1 mb-2 text-xs md:text-sm text-black">
+                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                           <span>{formatDate(item.eventDate)}</span>
                           {item.eventEndDate && (
                             <span> - {formatDate(item.eventEndDate)}</span>
@@ -203,50 +221,50 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
 
                       {/* Club specific info */}
                       {item.type === 'club' && item.openingHours && (
-                        <div className="text-sm text-black mb-2">
+                        <div className="text-xs md:text-sm text-black mb-2">
                           <strong>Hours:</strong> {item.openingHours}
                         </div>
                       )}
 
                       {/* Music style for clubs */}
                       {item.musicStyle && (
-                        <div className="flex items-center gap-1 mb-2 text-sm text-black">
-                          <Music className="h-4 w-4 text-muted-foreground" />
-                          <span>{item.musicStyle}</span>
+                        <div className="flex items-center gap-1 mb-2 text-xs md:text-sm text-black">
+                          <Music className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                          <span className="truncate">{item.musicStyle}</span>
                         </div>
                       )}
 
                       {/* Social links */}
                       {item.socialLinks && (
-                        <div className="flex gap-2 mb-3">
+                        <div className="flex gap-1 md:gap-2 mb-2 md:mb-3 flex-wrap">
                           {item.socialLinks.instagram && (
                             <Button
                               size="sm"
                               variant="outline"
-                              className="p-1 h-8 w-8"
+                              className="p-1 h-6 w-6 md:h-8 md:w-8"
                               onClick={() => window.open(`https://instagram.com/${item.socialLinks!.instagram}`, '_blank')}
                             >
-                              <Instagram className="h-4 w-4" />
+                              <Instagram className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           )}
                           {item.socialLinks.twitter && (
                             <Button
                               size="sm"
                               variant="outline"
-                              className="p-1 h-8 w-8"
+                              className="p-1 h-6 w-6 md:h-8 md:w-8"
                               onClick={() => window.open(`https://twitter.com/${item.socialLinks!.twitter}`, '_blank')}
                             >
-                              <Twitter className="h-4 w-4" />
+                              <Twitter className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           )}
                           {item.socialLinks.youtube && (
                             <Button
                               size="sm"
                               variant="outline"
-                              className="p-1 h-8 w-8"
+                              className="p-1 h-6 w-6 md:h-8 md:w-8"
                               onClick={() => window.open(`https://youtube.com/${item.socialLinks!.youtube}`, '_blank')}
                             >
-                              <Youtube className="h-4 w-4" />
+                              <Youtube className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           )}
                         </div>
@@ -258,10 +276,10 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items }) => {
                           <Button 
                             size="sm" 
                             variant="outline" 
-                            className="flex-1 bg-[#F97316] text-white hover:bg-[#F97316]/90"
+                            className="flex-1 bg-[#F97316] text-white hover:bg-[#F97316]/90 text-xs"
                             onClick={() => window.open(item.website, '_blank')}
                           >
-                            <ExternalLink className="mr-1 h-4 w-4" />
+                            <ExternalLink className="mr-1 h-3 w-3 md:h-4 md:w-4" />
                             Website
                           </Button>
                         )}

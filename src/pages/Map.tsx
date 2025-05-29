@@ -65,25 +65,29 @@ const Map = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Global Afrobeats Map - Worldwide Community" />
         <meta name="twitter:description" content="Explore Afrobeats artists, clubs, events & more on our interactive global map." />
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
-      <div className="min-h-screen bg-[#FEF7CD] pt-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-black mb-4">
+      <div className="min-h-screen bg-[#FEF7CD] pt-16 md:pt-20">
+        <div className="container mx-auto px-2 md:px-4">
+          <div className="text-center mb-4 md:mb-8">
+            <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold text-black mb-2 md:mb-4">
               Global Afrobeats Map
             </h1>
-            <p className="text-lg text-black/80 max-w-2xl mx-auto">
+            <p className="text-sm md:text-lg text-black/80 max-w-2xl mx-auto px-2">
               Discover the worldwide Afrobeats community - from artists and clubs to events and influencers
             </p>
           </div>
 
-          <MapFilters filters={filters} onFiltersChange={setFilters} />
+          <div className="mb-4 md:mb-8">
+            <MapFilters filters={filters} onFiltersChange={setFilters} />
+          </div>
           
-          <div className="mt-8">
+          <div>
             {isLoading ? (
-              <div className="flex items-center justify-center h-96">
-                <div className="text-black">Loading map data...</div>
+              <div className="flex items-center justify-center h-64 md:h-96">
+                <div className="text-black text-sm md:text-base">Loading map data...</div>
               </div>
             ) : (
               <GlobalMapView items={filteredItems} />
