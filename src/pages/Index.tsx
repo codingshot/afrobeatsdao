@@ -1,6 +1,7 @@
 
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
+import { TeamContactSection } from "@/components/TeamContactSection";
 import { MusicSection } from "@/components/MusicSection";
 import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { DanceCarousel } from "@/components/DanceCarousel";
@@ -55,6 +56,7 @@ const Index = () => {
         <DanceCarousel />
         <FutureSection />
         <TeamSection />
+        <TeamContactSection />
       </main>
       <Footer />
     </div>
