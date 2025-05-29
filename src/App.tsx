@@ -21,6 +21,7 @@ import Careers from "./pages/Careers";
 import JobDetails from "./pages/JobDetails";
 import Discord from "./pages/Discord";
 import News from "./pages/News";
+import Map from "./pages/Map";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 
 const App = () => {
@@ -51,6 +52,7 @@ const App = () => {
                   <Route path="/careers/:slug" element={<div className="page-careers"><JobDetails /></div>} />
                   <Route path="/news" element={<div className="page-news"><News /></div>} />
                   <Route path="/discord" element={<div className="page-discord"><Discord /></div>} />
+                  <Route path="/map" element={<div className="page-map"><Map /></div>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
