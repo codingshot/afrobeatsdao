@@ -1,7 +1,6 @@
 
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
-import { TeamContactSection } from "@/components/TeamContactSection";
 import { MusicSection } from "@/components/MusicSection";
 import { VibeOfTheDay, VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { DanceCarousel } from "@/components/DanceCarousel";
@@ -14,8 +13,12 @@ import { HeroSection } from "@/components/HeroSection";
 import NewsTicker from "@/components/NewsTicker";
 import MusicCarousel from "@/components/MusicCarousel";
 import ArtistsCarousel from "@/components/ArtistsCarousel";
+import { MiniGlobalMap } from "@/components/MiniGlobalMap";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
   const { playNow, currentSong } = useGlobalAudioPlayer();
 
   // Auto-play a random vibe when the page loads and no song is currently playing
@@ -54,9 +57,30 @@ const Index = () => {
         <MusicSection />
         <ArtistsCarousel />
         <DanceCarousel />
+        <MiniGlobalMap />
         <FutureSection />
         <TeamSection />
-        <TeamContactSection />
+        
+        {/* Partner CTA Section */}
+        <section className="py-16 bg-afro-teal text-white">
+          <div className="container mx-auto px-4 text-center">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-4xl font-heading font-bold mb-4">
+                Ready to Partner with Us?
+              </h2>
+              <p className="text-xl mb-8">
+                Join the global Afrobeats movement and collaborate with the world's leading Afrobeats hub.
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-afro-yellow text-black hover:bg-afro-yellow/90 font-heading text-xl rounded-full px-8 py-6 h-auto"
+                onClick={() => navigate('/partner')}
+              >
+                Explore Partnership Opportunities
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

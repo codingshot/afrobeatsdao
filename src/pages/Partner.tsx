@@ -4,9 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Calendar, 
   Video, 
@@ -25,13 +22,12 @@ import {
   Handshake,
   TrendingUp,
   Target,
-  Zap
+  Zap,
+  MessageCircle
 } from 'lucide-react';
 import { teamMembers } from "@/data/team";
 
 const Partner = () => {
-  const [selectedPartnership, setSelectedPartnership] = useState('');
-
   const partnershipTypes = [
     {
       id: 'events',
@@ -201,6 +197,10 @@ const Partner = () => {
     }
   ];
 
+  const handleDiscordJoin = () => {
+    window.open('https://discord.gg/TNrWwSA955', '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-afro-yellow font-sans">
       {/* Hero Section */}
@@ -216,18 +216,13 @@ const Partner = () => {
             <p className="text-xl text-black mb-8 max-w-3xl mx-auto">
               Join the world's leading Afrobeats hub to connect with fans, artists, and communities through events, music, and promotions.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 mb-8">
-              <Badge variant="secondary" className="text-lg py-2 px-4">100,000+ Fans</Badge>
-              <Badge variant="secondary" className="text-lg py-2 px-4">50+ Partners</Badge>
-              <Badge variant="secondary" className="text-lg py-2 px-4">20+ Countries</Badge>
-            </div>
             <Button 
               size="lg" 
               className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading text-xl rounded-full px-8 py-6 h-auto"
-              onClick={() => document.getElementById('partnership-types')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={handleDiscordJoin}
             >
-              <Zap className="mr-2 h-6 w-6" />
-              Explore Partnership Opportunities
+              <MessageCircle className="mr-2 h-6 w-6" />
+              Join Our Discord & Get Started
             </Button>
           </div>
         </div>
@@ -296,7 +291,10 @@ const Partner = () => {
                       <p className="font-semibold text-sm text-afro-teal">Deliverables:</p>
                       <p className="text-sm text-gray-600">{type.deliverables}</p>
                     </div>
-                    <Button className="w-full bg-afro-orange text-white hover:bg-afro-orange/90">
+                    <Button 
+                      className="w-full bg-afro-orange text-white hover:bg-afro-orange/90"
+                      onClick={handleDiscordJoin}
+                    >
                       {type.cta}
                     </Button>
                   </div>
@@ -342,8 +340,13 @@ const Partner = () => {
           </div>
           
           <div className="text-center mt-8">
-            <Button size="lg" className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading">
-              Want results like these? Contact us!
+            <Button 
+              size="lg" 
+              className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading"
+              onClick={handleDiscordJoin}
+            >
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Want results like these? Join our Discord!
             </Button>
           </div>
         </div>
@@ -376,7 +379,10 @@ const Partner = () => {
                   <li>• Community governance voting</li>
                   <li>• Decentralized funding pools</li>
                 </ul>
-                <Button className="bg-afro-yellow text-black hover:bg-afro-yellow/90">
+                <Button 
+                  className="bg-afro-yellow text-black hover:bg-afro-yellow/90"
+                  onClick={handleDiscordJoin}
+                >
                   Join Our DAO
                 </Button>
               </CardContent>
@@ -396,7 +402,10 @@ const Partner = () => {
                   <li>• Event data syndication</li>
                   <li>• Custom Web3 experiences</li>
                 </ul>
-                <Button className="bg-afro-yellow text-black hover:bg-afro-yellow/90">
+                <Button 
+                  className="bg-afro-yellow text-black hover:bg-afro-yellow/90"
+                  onClick={handleDiscordJoin}
+                >
                   Request API Access
                 </Button>
               </CardContent>
@@ -456,108 +465,11 @@ const Partner = () => {
             <Button 
               size="lg" 
               className="bg-white text-afro-orange hover:bg-gray-100 font-heading text-xl px-8 py-6 h-auto"
-              onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}
+              onClick={handleDiscordJoin}
             >
+              <MessageCircle className="mr-2 h-6 w-6" />
               Join Our Discord & Introduce Yourself
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Get Started Form */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-black mb-4">
-                Get Started
-              </h2>
-              <p className="text-xl text-gray-700">
-                Ready to partner with us? Fill out this form and we'll get back to you within 24 hours.
-              </p>
-            </div>
-            
-            <Card className="border-2 border-afro-teal">
-              <CardHeader>
-                <CardTitle className="text-2xl text-center">Partnership Inquiry</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Name *</label>
-                      <Input placeholder="Your full name" required />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Organization *</label>
-                      <Input placeholder="Company/Organization name" required />
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Email *</label>
-                      <Input type="email" placeholder="your@email.com" required />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Partnership Type *</label>
-                      <Select value={selectedPartnership} onValueChange={setSelectedPartnership}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select partnership type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {partnershipTypes.map((type) => (
-                            <SelectItem key={type.id} value={type.id}>
-                              {type.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Budget Range</label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select budget range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="under-1k">Under $1,000</SelectItem>
-                        <SelectItem value="1k-5k">$1,000 - $5,000</SelectItem>
-                        <SelectItem value="5k-10k">$5,000 - $10,000</SelectItem>
-                        <SelectItem value="10k-25k">$10,000 - $25,000</SelectItem>
-                        <SelectItem value="25k-plus">$25,000+</SelectItem>
-                        <SelectItem value="discuss">Let's discuss</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Goals & Objectives *</label>
-                    <Textarea 
-                      placeholder="Tell us about your partnership goals and what you hope to achieve..."
-                      rows={4}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Additional Details</label>
-                    <Textarea 
-                      placeholder="Any additional information, timeline, or specific requirements..."
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div className="text-center">
-                    <Button size="lg" className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading text-xl px-8 py-6 h-auto">
-                      Submit Your Proposal
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
