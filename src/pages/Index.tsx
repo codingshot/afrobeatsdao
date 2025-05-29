@@ -7,7 +7,6 @@ import { DanceCarousel } from "@/components/DanceCarousel";
 import { FutureSection } from "@/components/FutureSection";
 import { Footer } from "@/components/Footer";
 import { ClubsSection } from "@/components/ClubsSection";
-import { MapPreview } from "@/components/MapPreview";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection";
@@ -54,7 +53,6 @@ const Index = () => {
         <MusicSection />
         <ArtistsCarousel />
         <DanceCarousel />
-        <MapPreview />
         <FutureSection />
         <TeamSection />
       </main>
