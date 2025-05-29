@@ -174,7 +174,7 @@ export const MiniGlobalMap = () => {
   };
 
   return (
-    <section className="py-14 bg-gradient-to-br from-afro-yellow to-afro-orange">
+    <section className="py-14 bg-afro-yellow">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-heading font-bold mb-4 text-black">
@@ -352,8 +352,8 @@ export const MiniGlobalMap = () => {
               ))}
             </MapContainer>
 
-            {/* Stats overlay - moved to bottom right */}
-            <div className="absolute right-2 bottom-16 z-[500]">
+            {/* Stats overlay - moved to bottom left */}
+            <div className="absolute left-2 bottom-16 z-[500]">
               <Card className="bg-white/90 backdrop-blur-sm border-afro-teal shadow-lg">
                 <CardContent className="p-2">
                   <div className="grid grid-cols-2 gap-1 text-xs">
