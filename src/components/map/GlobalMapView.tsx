@@ -290,8 +290,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Bottom */}
-        <div className="absolute bottom-4 left-4 right-4 z-[1000]">
+        {/* Overlaid Stats - Bottom Left to avoid player */}
+        <div className="absolute bottom-4 left-4 z-[1000] max-w-[calc(100%-8rem)]">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
             <CardContent className="p-2 md:p-3">
               <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2">
@@ -312,8 +312,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           </Card>
         </div>
 
-        {/* Overlaid Country Filters - Top Left in single column with scroll */}
-        <div className="absolute top-4 left-4 z-[1000] w-48">
+        {/* Overlaid Country Filters - Top Right to avoid zoom controls */}
+        <div className="absolute top-4 right-4 z-[1000] w-48">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
             <CardContent className="p-2">
               <div className="max-h-32 overflow-y-auto space-y-1">
