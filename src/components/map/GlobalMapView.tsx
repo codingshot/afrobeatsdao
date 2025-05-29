@@ -290,8 +290,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Bottom Left to avoid player */}
-        <div className="absolute bottom-4 left-4 z-[1000] max-w-[calc(100%-8rem)]">
+        {/* Overlaid Stats - Bottom Center to avoid player */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] max-w-[calc(100%-2rem)]">
           <Card className="bg-white/90 backdrop-blur-sm border-[#008751]">
             <CardContent className="p-2 md:p-3">
               <div className="grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-2">

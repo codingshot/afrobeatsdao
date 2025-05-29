@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -81,9 +80,9 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
       <CardContent className="p-3 md:p-4">
         <div className="space-y-3 md:space-y-4">
           {/* Search, Clear, Advanced Settings, and Event Date Range in one row */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-            {/* Search - bigger */}
-            <div className="relative md:col-span-5">
+          <div className="flex gap-2">
+            {/* Search - dynamic width based on event selection */}
+            <div className={`relative ${eventsSelected ? 'flex-1' : 'flex-[2]'}`}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search..."
@@ -93,43 +92,39 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
               />
             </div>
 
-            {/* Clear Filter Button */}
-            <div className="md:col-span-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={clearFilters}
-                className="w-full text-black border-[#008751] text-xs md:text-sm h-10"
-              >
-                <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
-                Clear
-              </Button>
-            </div>
+            {/* Clear Filter Button - smaller width */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={clearFilters}
+              className="text-black border-[#008751] text-xs md:text-sm h-10 px-3"
+            >
+              <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+              Clear
+            </Button>
 
-            {/* Advanced Settings - smaller */}
-            <div className="md:col-span-2">
-              <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-                <CollapsibleTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between text-xs md:text-sm h-10">
-                    <div className="flex items-center gap-2">
-                      <Settings className="h-3 w-3 md:h-4 md:w-4" />
-                      Advanced
-                    </div>
-                    <ChevronDown className={cn("h-3 w-3 md:h-4 md:w-4 transition-transform", showAdvanced && "rotate-180")} />
-                  </Button>
-                </CollapsibleTrigger>
-              </Collapsible>
-            </div>
+            {/* Advanced Settings - smaller width */}
+            <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" className="justify-between text-xs md:text-sm h-10 px-3">
+                  <div className="flex items-center gap-2">
+                    <Settings className="h-3 w-3 md:h-4 md:w-4" />
+                    Advanced
+                  </div>
+                  <ChevronDown className={cn("h-3 w-3 md:h-4 md:w-4 transition-transform", showAdvanced && "rotate-180")} />
+                </Button>
+              </CollapsibleTrigger>
+            </Collapsible>
 
-            {/* Event Date Range - smaller, only show if events are selected */}
+            {/* Event Date Range - only show if events are selected */}
             {eventsSelected && (
-              <div className="md:col-span-3 flex gap-2">
+              <div className="flex gap-2">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "justify-start text-left font-normal text-xs md:text-sm w-full h-10",
+                        "justify-start text-left font-normal text-xs md:text-sm h-10 px-3",
                         !filters.dateRange?.from && "text-muted-foreground"
                       )}
                     >
@@ -201,7 +196,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
             </CollapsibleContent>
           </Collapsible>
 
-          {/* Types - removed "Content Types" label */}
+          {/* Types */}
           <div>
             <div className="flex flex-wrap gap-1 md:gap-2">
               {MAP_TYPES.map((type) => (
