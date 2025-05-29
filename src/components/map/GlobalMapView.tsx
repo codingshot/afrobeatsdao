@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem, MapItemType, MapFilters } from '@/types/map';
@@ -5,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { MapPin, ExternalLink, Calendar, Users, Music, Instagram, Twitter, Youtube, Globe } from 'lucide-react';
+import { MapPin, ExternalLink, Calendar, Users, Music, Instagram, Twitter, Youtube, Globe, Clock } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
