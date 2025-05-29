@@ -5,6 +5,7 @@ type TeamMember = {
   image: string;
   twitter?: string;
   instagram?: string;
+  linkedin?: string;
 };
 const teamMembers: TeamMember[] = [{
   name: "Larkim",
@@ -12,6 +13,19 @@ const teamMembers: TeamMember[] = [{
   image: "/larkim.png",
   twitter: "https://x.com/boy_larkim",
   instagram: "https://www.instagram.com/larkimolorin/"
+},{
+name: "Israel Igboze",
+role: "Web3 Lead",
+image: "/igboze.png",
+twitter: "https://x.com/israel_igboze",
+},
+{
+  name: "Oteejo",
+  role: "Community Lead",
+  image: "/oteejoe.png",
+  twitter: "https://x.com/oteejoe",
+  instagram: "https://www.instagram.com/oteejo",
+  linkedin: "https://www.linkedin.com/in/otoabasi-bassey-4b9055113/"
 }];
 export function TeamSection() {
   return <section id="team" className="py-16 bg-afro-yellow font-afro">
