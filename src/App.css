@@ -67,7 +67,7 @@ main {
   padding-top: 0;
 }
 
-/* Ensure h1 headings are white */
-h1 {
+/* Only make h1 headings black on non-event pages */
+.page-clubs h1, .page-music h1, .page-dance h1, .page-partner h1, .page-home h1 {
   color: #000 !important;
 }
