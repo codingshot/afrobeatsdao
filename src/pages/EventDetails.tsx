@@ -150,19 +150,119 @@ const EventDetails = () => {
   const bannerImage = event?.details?.image_url ? getImageUrl(event.details.image_url) : DEFAULT_IMAGE;
   const isMultiDayEvent = event?.details ? event.details.start_date !== event.details.end_date : false;
 
+  // Enhanced SEO data with dynamic event information
+  const eventDate = formatDate(event.details.start_date);
+  const eventLocation = event.details.location.split(',')[0]; // Get city name
+  const metaTitle = `${event.name} - ${eventDate} in ${eventLocation} | Afrobeats.party`;
+  const metaDescription = `🎉 Join ${event.name} on ${eventDate} in ${event.details.location}! ${event.details.event_description.substring(0, 120)}... Organized by ${event.details.organizer}. Get tickets now!`;
+  const canonicalUrl = `https://afrobeats.party/event/${slug}`;
+  
+  // Use event image for Open Graph, fallback to default
+  const ogImage = bannerImage;
+  const ogImageAlt = `${event.name} - ${eventDate} in ${eventLocation}`;
+  
+  // Enhanced keywords for better SEO
+  const seoKeywords = [
+    event.name.toLowerCase(),
+    'afrobeats event',
+    'african music event',
+    eventLocation.toLowerCase(),
+    event.details.organizer.toLowerCase(),
+    'afrobeats party',
+    'music festival',
+    'concert',
+    'cultural event',
+    'african culture'
+  ].filter(Boolean).join(', ');
+
   return (
     <>
       <Helmet>
-        <title>{event ? `${event.name} | Afrobeats.party` : 'Event Not Found | Afrobeats.party'}</title>
-        <meta name="description" content={event?.details?.event_description || 'Event details'} />
-        <meta property="og:title" content={event ? `${event.name} | Afrobeats.party` : 'Event Not Found | Afrobeats.party'} />
-        <meta property="og:description" content={event?.details?.event_description || 'Event details'} />
-        <meta property="og:image" content={bannerImage} />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        
+        {/* Open Graph / Facebook */}
         <meta property="og:type" content="event" />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:alt" content={ogImageAlt} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="Afrobeats.party" />
+        <meta property="og:locale" content="en_US" />
+        
+        {/* Event specific Open Graph */}
+        <meta property="event:start_time" content={event.details.start_date} />
+        <meta property="event:end_time" content={event.details.end_date} />
+        <meta property="event:location" content={event.details.location} />
+        <meta property="event:organizer" content={event.details.organizer} />
+        
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={event ? `${event.name} | Afrobeats.party` : 'Event Not Found | Afrobeats.party'} />
-        <meta name="twitter:description" content={event?.details?.event_description || 'Event details'} />
-        <meta name="twitter:image" content={bannerImage} />
+        <meta name="twitter:site" content="@afrobeatsdao" />
+        <meta name="twitter:creator" content="@afrobeatsdao" />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:image:alt" content={ogImageAlt} />
+        
+        {/* Additional SEO */}
+        <link rel="canonical" href={canonicalUrl} />
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="author" content="Afrobeats.party" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="theme-color" content="#008751" />
+        
+        {/* Geographic SEO */}
+        <meta name="geo.region" content={eventLocation} />
+        <meta name="geo.placename" content={event.details.location} />
+        
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": event.name,
+            "description": event.details.event_description,
+            "image": ogImage,
+            "url": canonicalUrl,
+            "startDate": event.details.start_date,
+            "endDate": event.details.end_date,
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "location": {
+              "@type": "Place",
+              "name": event.details.location,
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": eventLocation,
+                "addressRegion": event.details.location
+              }
+            },
+            "organizer": {
+              "@type": "Organization",
+              "name": event.details.organizer
+            },
+            "offers": {
+              "@type": "Offer",
+              "description": event.details.ticket_info,
+              "url": event.details.website,
+              "availability": "https://schema.org/InStock"
+            },
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and culture events"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonicalUrl
+            }
+          })}
+        </script>
       </Helmet>
       
       <div className="min-h-screen flex flex-col bg-black text-white">

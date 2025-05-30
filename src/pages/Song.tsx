@@ -41,8 +41,16 @@ const Song = () => {
     return (
       <>
         <Helmet>
-          <title>Song Not Found - afrobeats.party</title>
-          <meta name="description" content="Song not found on afrobeats.party - Discover the best African music, artists, and Afrobeats culture." />
+          <title>Song Not Found | Afrobeats.party - African Music & Culture</title>
+          <meta name="description" content="Song not found on Afrobeats.party - Discover the best African music, artists, and Afrobeats culture. Join the global Afrobeats community." />
+          <meta property="og:title" content="Song Not Found | Afrobeats.party" />
+          <meta property="og:description" content="Discover the best African music, artists, and Afrobeats culture on Afrobeats.party" />
+          <meta property="og:image" content="/AfrobeatsDAOMeta.png" />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Song Not Found | Afrobeats.party" />
+          <meta name="twitter:description" content="Discover the best African music, artists, and Afrobeats culture on Afrobeats.party" />
+          <meta name="twitter:image" content="/AfrobeatsDAOMeta.png" />
         </Helmet>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
@@ -73,10 +81,31 @@ const Song = () => {
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   const standardThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   
-  // SEO optimized meta data
-  const metaTitle = `${song.title} by ${artist.name} - Afrobeats Music | afrobeats.party`;
-  const metaDescription = `Listen to "${song.title}" by ${artist.name} on afrobeats.party. Stream the best Afrobeats music, discover African artists, and join the global Afrobeats community. ${artist.country ? `From ${artist.country}` : ''} ${artist.genre ? `- ${artist.genre}` : ''}.`;
+  // Enhanced SEO meta data with dynamic content
+  const metaTitle = `${song.title} by ${artist.name} - ${artist.country ? `${artist.country} ` : ''}Afrobeats Music | Afrobeats.party`;
+  const metaDescription = `🎵 Listen to "${song.title}" by ${artist.name} on Afrobeats.party. ${artist.country ? `Discover this ${artist.country} artist's ` : 'Explore '}${artist.genre || 'Afrobeats'} music and join the global African music community. Stream now!`;
   const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
+  
+  // Use YouTube thumbnail as primary OG image, fallback to artist image, then default
+  const ogImage = thumbnailUrl || artist.image || "/AfrobeatsDAOMeta.png";
+  const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video Thumbnail`;
+  
+  // Enhanced keywords for better SEO
+  const seoKeywords = [
+    song.title.toLowerCase(),
+    artist.name.toLowerCase(),
+    'afrobeats',
+    'african music',
+    artist.country?.toLowerCase(),
+    artist.genre?.toLowerCase(),
+    'afrobeats party',
+    'music streaming',
+    'african artists',
+    'afrobeats dao',
+    'nigerian music',
+    'ghana music',
+    'south african music'
+  ].filter(Boolean).join(', ');
   
   const handlePlay = () => {
     playNow({
@@ -140,28 +169,43 @@ const Song = () => {
         <meta property="og:type" content="music.song" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={thumbnailUrl} />
-        <meta property="og:image:alt" content={`${song.title} by ${artist.name} - Afrobeats Music Video`} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:alt" content={ogImageAlt} />
+        <meta property="og:image:width" content="1280" />
+        <meta property="og:image:height" content="720" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:site_name" content="afrobeats.party" />
+        <meta property="og:site_name" content="Afrobeats.party" />
+        <meta property="og:locale" content="en_US" />
         
         {/* Music specific Open Graph */}
         <meta property="music:song" content={canonicalUrl} />
         <meta property="music:musician" content={`https://afrobeats.party/music/artist/${artist.id}`} />
+        <meta property="music:album" content={artist.name} />
         <meta property="music:duration" content="180" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
+        <meta name="twitter:creator" content="@afrobeatsdao" />
         <meta name="twitter:title" content={metaTitle} />
         <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content={thumbnailUrl} />
-        <meta name="twitter:image:alt" content={`${song.title} by ${artist.name} - Afrobeats Music Video`} />
+        <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:image:alt" content={ogImageAlt} />
         
         {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
-        <meta name="keywords" content={`${song.title}, ${artist.name}, Afrobeats, African music, ${artist.country || ''}, ${artist.genre || ''}, afrobeats party, music streaming, African artists, Afrobeats DAO`} />
-        <meta name="author" content="afrobeats.party" />
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="author" content="Afrobeats.party" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="theme-color" content="#008751" />
+        
+        {/* Geographic SEO */}
+        {artist.country && (
+          <>
+            <meta name="geo.region" content={artist.country} />
+            <meta name="geo.placename" content={artist.country} />
+          </>
+        )}
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
@@ -169,20 +213,39 @@ const Song = () => {
             "@context": "https://schema.org",
             "@type": "MusicRecording",
             "name": song.title,
+            "description": metaDescription,
+            "url": canonicalUrl,
+            "image": ogImage,
+            "genre": artist.genre || "Afrobeats",
+            "datePublished": new Date().toISOString().split('T')[0],
+            "inLanguage": "en",
             "byArtist": {
               "@type": "MusicGroup",
               "name": artist.name,
+              "image": artist.image,
+              "genre": artist.genre || "Afrobeats",
               ...(artist.country && { "foundingLocation": artist.country }),
-              "url": `https://afrobeats.party/music/artist/${artist.id}`
+              "url": `https://afrobeats.party/music/artist/${artist.id}`,
+              "sameAs": [
+                artist.spotify,
+                artist.instagram,
+                artist.twitter,
+                artist.youtube
+              ].filter(Boolean)
             },
-            "genre": artist.genre || "Afrobeats",
-            "url": canonicalUrl,
-            "image": thumbnailUrl,
-            "description": metaDescription,
             "isPartOf": {
               "@type": "WebSite",
-              "name": "afrobeats.party",
-              "url": "https://afrobeats.party"
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and Afrobeats culture"
+            },
+            "potentialAction": {
+              "@type": "ListenAction",
+              "target": song.youtube,
+              "expectsAcceptanceOf": {
+                "@type": "Offer",
+                "category": "free"
+              }
             }
           })}
         </script>
