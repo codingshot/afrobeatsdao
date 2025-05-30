@@ -162,7 +162,7 @@ export function EventsSection() {
     }
     return endDate >= today;
   }).sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-  
+
   const isEventActive = (startDate: string, endDate: string) => {
     const now = today.getTime();
     const start = new Date(startDate).getTime();
@@ -173,37 +173,51 @@ export function EventsSection() {
   return (
     <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2 text-black">
-            <span>Events</span>
-            <span className="text-4xl">🎊</span>
-          </h2>
-          <div className="flex justify-center gap-4 mb-8">
-            <Button 
-              variant={!showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(false)} 
-              className="bg-[#008751] text-white hover:bg-[#008751]/90"
-            >
-              Upcoming Events
-            </Button>
-            <Button 
-              variant={showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(true)} 
-              className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}
-            >
-              Past Events
-            </Button>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-6">
+            <h2 className="text-4xl font-heading font-bold flex items-center gap-2 text-black">
+              <span>Events</span>
+              <span className="text-4xl">🎊</span>
+            </h2>
+            
+            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1">
+              <Button 
+                variant={!showPastEvents ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setShowPastEvents(false)} 
+                className={`rounded-full px-4 ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+              >
+                Upcoming
+              </Button>
+              <Button 
+                variant={showPastEvents ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setShowPastEvents(true)} 
+                className={`rounded-full px-4 ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+              >
+                Past
+              </Button>
+            </div>
           </div>
+          
+          <Link to="/events">
+            <Button 
+              variant="outline" 
+              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white"
+            >
+              See All Events
+            </Button>
+          </Link>
         </div>
         
         {filteredEvents.length > 0 ? (
           <Carousel opts={{ align: "start", loop: true }} className="w-full">
             <CarouselContent>
               {filteredEvents.map(([name, event]) => (
-                <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={name} className="md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                   <Link to={`/event/${slugify(name)}`} className="block">
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]">
-                      <div className="relative aspect-[16/9]">
+                    <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] h-full">
+                      <div className="relative aspect-[16/10]">
                         <img 
                           src={getImageUrl(event.image_url)} 
                           onError={(e) => {
@@ -214,28 +228,28 @@ export function EventsSection() {
                           className="absolute inset-0 w-full h-full object-cover" 
                         />
                         {isEventActive(event.start_date, event.end_date) && (
-                          <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                             Active
                           </div>
                         )}
                       </div>
-                      <div className="p-6 space-y-4">
-                        <h3 className="text-2xl font-heading font-bold text-slate-950">{name}</h3>
+                      <div className="p-4 space-y-2">
+                        <h3 className="text-lg font-heading font-bold text-slate-950 line-clamp-2">{name}</h3>
                         
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <MapPin className="shrink-0" />
-                          <span>{event.location}</span>
+                        <div className="flex items-center gap-1 text-gray-600 text-sm">
+                          <MapPin className="shrink-0 h-3 w-3" />
+                          <span className="line-clamp-1">{event.location}</span>
                         </div>
                         
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <CalendarDays className="shrink-0" />
-                          <span>
+                        <div className="flex items-center gap-1 text-gray-600 text-sm">
+                          <CalendarDays className="shrink-0 h-3 w-3" />
+                          <span className="line-clamp-1">
                             {formatDate(event.start_date)}
                             {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
                           </span>
                         </div>
                         
-                        <p className="text-gray-600 line-clamp-2">
+                        <p className="text-gray-600 line-clamp-2 text-sm">
                           {event.event_description}
                         </p>
                       </div>
