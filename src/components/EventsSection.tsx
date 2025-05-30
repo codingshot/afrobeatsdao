@@ -1,4 +1,3 @@
-
 import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -163,7 +162,7 @@ export function EventsSection() {
     }
     return endDate >= today;
   }).sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-  
+
   const isEventActive = (startDate: string, endDate: string) => {
     const now = today.getTime();
     const start = new Date(startDate).getTime();
@@ -174,27 +173,41 @@ export function EventsSection() {
   return (
     <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2 text-black">
-            <span>Events</span>
-            <span className="text-4xl">🎊</span>
-          </h2>
-          <div className="flex justify-center gap-4 mb-8">
-            <Button 
-              variant={!showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(false)} 
-              className="bg-[#008751] text-white hover:bg-[#008751]/90"
-            >
-              Upcoming Events
-            </Button>
-            <Button 
-              variant={showPastEvents ? "default" : "outline"} 
-              onClick={() => setShowPastEvents(true)} 
-              className={showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : ""}
-            >
-              Past Events
-            </Button>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-6">
+            <h2 className="text-4xl font-heading font-bold flex items-center gap-2 text-black">
+              <span>Events</span>
+              <span className="text-4xl">🎊</span>
+            </h2>
+            
+            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1">
+              <Button 
+                variant={!showPastEvents ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setShowPastEvents(false)} 
+                className={`rounded-full px-4 ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+              >
+                Upcoming
+              </Button>
+              <Button 
+                variant={showPastEvents ? "default" : "ghost"} 
+                size="sm"
+                onClick={() => setShowPastEvents(true)} 
+                className={`rounded-full px-4 ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+              >
+                Past
+              </Button>
+            </div>
           </div>
+          
+          <Link to="/events">
+            <Button 
+              variant="outline" 
+              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white"
+            >
+              See All Events
+            </Button>
+          </Link>
         </div>
         
         {filteredEvents.length > 0 ? (
