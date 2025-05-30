@@ -1,3 +1,4 @@
+
 import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -200,10 +201,10 @@ export function EventsSection() {
           <Carousel opts={{ align: "start", loop: true }} className="w-full">
             <CarouselContent>
               {filteredEvents.map(([name, event]) => (
-                <CarouselItem key={name} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={name} className="md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                   <Link to={`/event/${slugify(name)}`} className="block">
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-transform hover:scale-[1.02]">
-                      <div className="relative aspect-[16/9]">
+                    <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] h-full">
+                      <div className="relative aspect-[16/10]">
                         <img 
                           src={getImageUrl(event.image_url)} 
                           onError={(e) => {
@@ -214,28 +215,28 @@ export function EventsSection() {
                           className="absolute inset-0 w-full h-full object-cover" 
                         />
                         {isEventActive(event.start_date, event.end_date) && (
-                          <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                             Active
                           </div>
                         )}
                       </div>
-                      <div className="p-6 space-y-4">
-                        <h3 className="text-2xl font-heading font-bold text-slate-950">{name}</h3>
+                      <div className="p-4 space-y-2">
+                        <h3 className="text-lg font-heading font-bold text-slate-950 line-clamp-2">{name}</h3>
                         
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <MapPin className="shrink-0" />
-                          <span>{event.location}</span>
+                        <div className="flex items-center gap-1 text-gray-600 text-sm">
+                          <MapPin className="shrink-0 h-3 w-3" />
+                          <span className="line-clamp-1">{event.location}</span>
                         </div>
                         
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <CalendarDays className="shrink-0" />
-                          <span>
+                        <div className="flex items-center gap-1 text-gray-600 text-sm">
+                          <CalendarDays className="shrink-0 h-3 w-3" />
+                          <span className="line-clamp-1">
                             {formatDate(event.start_date)}
                             {event.end_date !== event.start_date && ` - ${formatDate(event.end_date)}`}
                           </span>
                         </div>
                         
-                        <p className="text-gray-600 line-clamp-2">
+                        <p className="text-gray-600 line-clamp-2 text-sm">
                           {event.event_description}
                         </p>
                       </div>
