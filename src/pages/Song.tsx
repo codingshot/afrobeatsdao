@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -86,7 +87,7 @@ const Song = () => {
   const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
   
   // Use YouTube thumbnail as primary OG image, ensure it's a full URL
-  const ogImage = thumbnailUrl ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
+  const ogImage = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
                  (artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
   const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video`;
   
@@ -146,7 +147,7 @@ const Song = () => {
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+    e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
   };
 
   // Get related songs from the same artist (excluding current song)
