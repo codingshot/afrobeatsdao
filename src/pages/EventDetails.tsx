@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deslugify, slugify } from '@/lib/slugUtils';
@@ -406,19 +405,19 @@ const EventDetails = () => {
                   </div>
                 </div>
                 
-                {/* Related events */}
+                {/* Related events with enhanced hover effects */}
                 {relatedEvents.length > 0 && (
                   <div className="mt-12">
                     <h2 className="text-3xl font-heading font-bold mb-6 text-white">Related Events</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {relatedEvents.map(({ name, details }) => (
                         <Link key={name} to={`/event/${slugify(name)}`}>
-                          <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-gray-900 border-gray-800">
-                            <div className="h-48 relative">
+                          <Card className="h-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#008751]/20 hover:border-[#008751]/50 bg-gray-900 border-gray-800 group">
+                            <div className="h-48 relative overflow-hidden">
                               <img 
                                 src={getImageUrl(details.image_url)} 
                                 alt={name} 
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 onError={(e) => {
                                   const imgElement = e.target as HTMLImageElement;
                                   imgElement.src = DEFAULT_IMAGE;
@@ -426,7 +425,7 @@ const EventDetails = () => {
                               />
                             </div>
                             <CardContent className="p-4">
-                              <h3 className="font-bold text-lg mb-2 text-white">{name}</h3>
+                              <h3 className="font-bold text-lg mb-2 text-white group-hover:text-[#FFD600] transition-colors duration-300">{name}</h3>
                               <div className="flex items-center text-sm text-gray-300 mb-2">
                                 <CalendarDays className="h-4 w-4 mr-1" />
                                 <span>{formatDate(details.start_date)}</span>
