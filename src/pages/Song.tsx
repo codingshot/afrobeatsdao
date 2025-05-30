@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -45,12 +44,12 @@ const Song = () => {
           <meta name="description" content="Song not found on Afrobeats.party - Discover the best African music, artists, and Afrobeats culture. Join the global Afrobeats community." />
           <meta property="og:title" content="Song Not Found | Afrobeats.party" />
           <meta property="og:description" content="Discover the best African music, artists, and Afrobeats culture on Afrobeats.party" />
-          <meta property="og:image" content="/AfrobeatsDAOMeta.png" />
+          <meta property="og:image" content="https://afrobeats.party/AfrobeatsDAOMeta.png" />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Song Not Found | Afrobeats.party" />
           <meta name="twitter:description" content="Discover the best African music, artists, and Afrobeats culture on Afrobeats.party" />
-          <meta name="twitter:image" content="/AfrobeatsDAOMeta.png" />
+          <meta name="twitter:image" content="https://afrobeats.party/AfrobeatsDAOMeta.png" />
         </Helmet>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
@@ -82,13 +81,14 @@ const Song = () => {
   const standardThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   
   // Enhanced SEO meta data with dynamic content
-  const metaTitle = `${song.title} by ${artist.name} - ${artist.country ? `${artist.country} ` : ''}Afrobeats Music | Afrobeats.party`;
+  const metaTitle = `${song.title} by ${artist.name}${artist.country ? ` - ${artist.country}` : ''} | Afrobeats.party`;
   const metaDescription = `🎵 Listen to "${song.title}" by ${artist.name} on Afrobeats.party. ${artist.country ? `Discover this ${artist.country} artist's ` : 'Explore '}${artist.genre || 'Afrobeats'} music and join the global African music community. Stream now!`;
   const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
   
-  // Use YouTube thumbnail as primary OG image, fallback to artist image, then default
-  const ogImage = thumbnailUrl || artist.image || "/AfrobeatsDAOMeta.png";
-  const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video Thumbnail`;
+  // Use YouTube thumbnail as primary OG image, ensure it's a full URL
+  const ogImage = thumbnailUrl ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
+                 (artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
+  const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video`;
   
   // Enhanced keywords for better SEO
   const seoKeywords = [
@@ -222,7 +222,7 @@ const Song = () => {
             "byArtist": {
               "@type": "MusicGroup",
               "name": artist.name,
-              "image": artist.image,
+              "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
               "genre": artist.genre || "Afrobeats",
               ...(artist.country && { "foundingLocation": artist.country }),
               "url": `https://afrobeats.party/music/artist/${artist.id}`,

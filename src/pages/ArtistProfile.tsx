@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -189,12 +188,12 @@ const ArtistProfile = () => {
           <meta name="description" content="The requested artist could not be found. Discover amazing African artists and Afrobeats music on Afrobeats.party - your gateway to African culture." />
           <meta property="og:title" content="Artist Not Found | Afrobeats.party" />
           <meta property="og:description" content="Discover amazing African artists and Afrobeats music on Afrobeats.party" />
-          <meta property="og:image" content="/AfrobeatsDAOMeta.png" />
+          <meta property="og:image" content="https://afrobeats.party/AfrobeatsDAOMeta.png" />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Artist Not Found | Afrobeats.party" />
           <meta name="twitter:description" content="Discover amazing African artists and Afrobeats music on Afrobeats.party" />
-          <meta name="twitter:image" content="/AfrobeatsDAOMeta.png" />
+          <meta name="twitter:image" content="https://afrobeats.party/AfrobeatsDAOMeta.png" />
         </Helmet>
         <div className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 text-center">
@@ -215,8 +214,8 @@ const ArtistProfile = () => {
   const metaDescription = `🎵 Discover ${artist.name}'s music on Afrobeats.party! ${artist.country ? `This ${artist.country} artist ` : 'Listen to '}${artist.top_songs.length} top songs including their biggest hits. ${artist.genre ? `Experience the best of ${artist.genre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
   const canonicalUrl = `https://afrobeats.party/music/artist/${artist.id}`;
   
-  // Use artist image for Open Graph, fallback to default
-  const ogImage = artist.image || "/AfrobeatsDAOMeta.png";
+  // Use artist image for Open Graph, ensure it's a full URL
+  const ogImage = artist.image ? (artist.image.startsWith('http') ? artist.image : `https://afrobeats.party${artist.image}`) : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
   const ogImageAlt = `${artist.name} - ${artist.country ? `${artist.country} ` : ''}${artist.genre || 'Afrobeats'} Artist Profile`;
   
   // Enhanced keywords for better SEO
@@ -299,7 +298,7 @@ const ArtistProfile = () => {
             "@type": "MusicGroup",
             "name": artist.name,
             "description": metaDescription,
-            "image": artist.image,
+            "image": ogImage,
             "url": canonicalUrl,
             "genre": artist.genre || "Afrobeats",
             ...(artist.country && { "foundingLocation": artist.country }),

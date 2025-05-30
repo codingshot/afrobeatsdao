@@ -153,11 +153,15 @@ const EventDetails = () => {
   const eventDate = formatDate(event.details.start_date);
   const eventLocation = event.details.location.split(',')[0]; // Get city name
   const metaTitle = `${event.name} - ${eventDate} in ${eventLocation} | Afrobeats.party`;
-  const metaDescription = `🎉 Join ${event.name} on ${eventDate} in ${event.details.location}! ${event.details.event_description.substring(0, 120)}... Organized by ${event.details.organizer}. Get tickets now!`;
+  const metaDescription = `🎉 Join ${event.name} on ${eventDate} in ${event.details.location}! ${event.details.event_description.substring(0, 100)}... Experience the best Afrobeats culture with ${event.details.organizer}. Get tickets now!`;
   const canonicalUrl = `https://afrobeats.party/event/${slug}`;
   
-  // Use event image for Open Graph, fallback to default
-  const ogImage = bannerImage;
+  // Use event image for Open Graph, ensure it's a full URL
+  const ogImage = event.details.image_url 
+    ? (event.details.image_url.startsWith('http') 
+       ? event.details.image_url 
+       : `https://afrobeats.party${getImageUrl(event.details.image_url)}`)
+    : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
   const ogImageAlt = `${event.name} - ${eventDate} in ${eventLocation}`;
   
   // Enhanced keywords for better SEO
