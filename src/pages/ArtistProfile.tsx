@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -26,7 +27,7 @@ const ArtistProfile = () => {
   }, [id]);
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/AfrobeatsDAOMeta.png";
+    e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
   };
   
   const getVideoId = (url: string): string => {
@@ -215,7 +216,7 @@ const ArtistProfile = () => {
   const canonicalUrl = `https://afrobeats.party/music/artist/${artist.id}`;
   
   // Use artist image for Open Graph, ensure it's a full URL
-  const ogImage = artist.image ? (artist.image.startsWith('http') ? artist.image : `https://afrobeats.party${artist.image}`) : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImage = artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
   const ogImageAlt = `${artist.name} - ${artist.country ? `${artist.country} ` : ''}${artist.genre || 'Afrobeats'} Artist Profile`;
   
   // Enhanced keywords for better SEO

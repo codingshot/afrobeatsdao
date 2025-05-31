@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -61,8 +62,8 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const metaDescription = `🕺 Learn the ${dance.name} dance${dance.origin ? ` from ${dance.origin}` : ''}! ${dance.description} ${dance.difficulty} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`;
   const canonicalUrl = `https://afrobeats.party/dance/${dance.id}`;
   
-  // Use dance image for Open Graph, fallback to default
-  const ogImage = dance.image || "/AfrobeatsDAOMeta.png";
+  // Use dance image for Open Graph, fallback to default - ensure full URL
+  const ogImage = dance.image ? `https://afrobeats.party${dance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
   const ogImageAlt = `${dance.name} Dance${dance.origin ? ` from ${dance.origin}` : ''} - ${dance.difficulty} Level Tutorial`;
   
   // Enhanced keywords for better SEO
