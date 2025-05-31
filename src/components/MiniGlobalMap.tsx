@@ -352,8 +352,8 @@ export const MiniGlobalMap = () => {
               ))}
             </MapContainer>
 
-            {/* Stats overlay - moved to bottom left */}
-            <div className="absolute left-2 bottom-16 z-[500]">
+            {/* Stats overlay - moved to bottom left with lower z-index */}
+            <div className="absolute left-2 bottom-16 z-[20]">
               <Card className="bg-white/90 backdrop-blur-sm border-afro-teal shadow-lg">
                 <CardContent className="p-2">
                   <div className="grid grid-cols-2 gap-1 text-xs">
@@ -372,7 +372,7 @@ export const MiniGlobalMap = () => {
             </div>
 
             {/* Country filters overlay - compact version */}
-            <div className="absolute top-2 right-2 z-[500] w-40">
+            <div className="absolute top-2 right-2 z-[20] w-40">
               <Card className="bg-white/90 backdrop-blur-sm border-afro-teal shadow-lg">
                 <CardContent className="p-2">
                   <h4 className="text-xs font-semibold text-black mb-1">Filter Countries</h4>
@@ -398,7 +398,7 @@ export const MiniGlobalMap = () => {
             </div>
             
             {/* Overlay button */}
-            <div className="absolute bottom-4 right-4 z-[1000]">
+            <div className="absolute bottom-4 right-4 z-[30]">
               <Button 
                 onClick={() => navigate('/map')}
                 className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading shadow-lg"
