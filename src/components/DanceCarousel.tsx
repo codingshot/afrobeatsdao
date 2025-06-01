@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
@@ -141,9 +142,9 @@ export function DanceCarousel() {
                   >
                     <CardContent className="p-0 aspect-video relative">
                       {/* Tags positioned over the video preview */}
-                      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1">
+                      <div className="absolute top-2 left-2 z-10">
                         {flagUrl && (
-                          <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1 shadow-sm">
+                          <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1 shadow-sm w-fit px-2 py-1">
                             <img 
                               src={flagUrl} 
                               alt={dance.origin} 
@@ -152,7 +153,10 @@ export function DanceCarousel() {
                             {dance.origin}
                           </Badge>
                         )}
-                        <Badge className={`${getDifficultyColor(dance.difficulty)} shadow-sm`}>
+                      </div>
+                      
+                      <div className="absolute top-2 right-2 z-10">
+                        <Badge className={`${getDifficultyColor(dance.difficulty)} shadow-sm w-fit px-2 py-1`}>
                           {dance.difficulty}
                         </Badge>
                       </div>
