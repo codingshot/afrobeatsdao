@@ -3,7 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { danceCurriculum } from "@/data/dance-curriculum";
+import { useCountryFlags } from "@/hooks/use-country-flags";
 import { 
   Carousel,
   CarouselContent,
@@ -27,8 +29,26 @@ const getAllDances = () => {
   return allDances;
 };
 
+// Helper function to get difficulty color
+const getDifficultyColor = (difficulty: string) => {
+  switch (difficulty.toLowerCase()) {
+    case 'easy':
+    case 'easy-medium':
+      return 'bg-green-200 text-green-800 border-green-300';
+    case 'medium':
+      return 'bg-yellow-200 text-yellow-800 border-yellow-300';
+    case 'medium-hard':
+      return 'bg-orange-200 text-orange-800 border-orange-300';
+    case 'hard':
+      return 'bg-red-200 text-red-800 border-red-300';
+    default:
+      return 'bg-gray-200 text-gray-800 border-gray-300';
+  }
+};
+
 export function DanceCarousel() {
   const navigate = useNavigate();
+  const { getFlag } = useCountryFlags();
   const [isPlaying, setIsPlaying] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -113,6 +133,7 @@ export function DanceCarousel() {
           <CarouselContent className="-ml-4">
             {dances.slice(0, 8).map((dance) => {
               const videoId = getVideoId(dance.tutorials);
+              const flagUrl = getFlag(dance.origin);
               return (
                 <CarouselItem key={dance.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                   <Card 
@@ -120,6 +141,26 @@ export function DanceCarousel() {
                     onClick={() => handleDanceClick(dance.genre, dance.id)}
                   >
                     <CardContent className="p-0 aspect-video relative">
+                      {/* Tags positioned over the video preview */}
+                      <div className="absolute top-2 left-2 z-10">
+                        {flagUrl && (
+                          <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1 shadow-sm w-fit px-2 py-1">
+                            <img 
+                              src={flagUrl} 
+                              alt={dance.origin} 
+                              className="w-4 h-3"
+                            />
+                            {dance.origin}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="absolute top-2 right-2 z-10">
+                        <Badge className={`${getDifficultyColor(dance.difficulty)} shadow-sm w-fit px-2 py-1`}>
+                          {dance.difficulty}
+                        </Badge>
+                      </div>
+
                       {isPlaying === dance.id && videoId ? (
                         <iframe
                           ref={(ref) => ref && registerVideoRef(dance.id, ref)}
@@ -150,16 +191,8 @@ export function DanceCarousel() {
                         </>
                       )}
                     </CardContent>
-                    <CardFooter className="p-4 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-xl font-bold text-black mb-1">{dance.name}</h3>
-                        <p className="text-sm text-gray-500">Origin: {dance.origin}</p>
-                      </div>
-                      <div className="mt-3">
-                        <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-full">
-                          {dance.difficulty}
-                        </span>
-                      </div>
+                    <CardFooter className="p-4 flex-1 flex flex-col items-center text-center">
+                      <h3 className="text-xl font-bold text-black">{dance.name}</h3>
                     </CardFooter>
                   </Card>
                 </CarouselItem>
