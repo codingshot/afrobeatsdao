@@ -5,231 +5,219 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { desiredChapters, DesiredChapter, getChaptersByRegion } from '@/data/chapters';
-import { MapPin, Users, Star, MessageCircle, Twitter, Search } from 'lucide-react';
+import { desiredChapters, getChaptersByRegion, getChaptersByStatus } from '@/data/chapters';
+import { MessageCircle, Twitter, Users, MapPin, Search, Filter } from 'lucide-react';
 
-const getStatusColor = (status: string): string => {
-  const colors: Record<string, string> = {
-    target: '#008751',
-    interest: '#F97316',
-    forming: '#8B5CF6',
-    'leader-wanted': '#E63946'
+const getCountryFlag = (country: string) => {
+  const flagMap: Record<string, string> = {
+    'Nigeria': '🇳🇬',
+    'Ghana': '🇬🇭',
+    'Kenya': '🇰🇪',
+    'South Africa': '🇿🇦',
+    'United States': '🇺🇸',
+    'United Kingdom': '🇬🇧',
+    'Canada': '🇨🇦',
+    'France': '🇫🇷'
   };
-  return colors[status] || '#6B7280';
+  return flagMap[country] || '🌍';
 };
 
-const getStatusLabel = (status: string): string => {
-  const labels: Record<string, string> = {
-    target: 'Target University',
-    interest: 'Interest Expressed',
-    forming: 'Chapter Forming',
-    'leader-wanted': 'Leader Wanted'
-  };
-  return labels[status] || status;
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'target': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'interest': return 'bg-green-100 text-green-800 border-green-200';
+    case 'forming': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'leader-wanted': return 'bg-purple-100 text-purple-800 border-purple-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
+};
+
+const getPriorityColor = (priority: string) => {
+  switch (priority) {
+    case 'high': return 'bg-red-100 text-red-800 border-red-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
 };
 
 export const ChaptersList = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [regionFilter, setRegionFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [regionFilter, setRegionFilter] = useState<string>('all');
+  
+  const chaptersByRegion = getChaptersByRegion();
+  const chaptersByStatus = getChaptersByStatus();
+  
+  const regions = Object.keys(chaptersByRegion);
+  const statuses = Object.keys(chaptersByStatus);
 
   const filteredChapters = desiredChapters.filter(chapter => {
     const matchesSearch = chapter.university.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          chapter.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          chapter.country.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesRegion = regionFilter === 'all' || chapter.region === regionFilter;
     const matchesStatus = statusFilter === 'all' || chapter.status === statusFilter;
-    const matchesPriority = priorityFilter === 'all' || chapter.priority === priorityFilter;
-
-    return matchesSearch && matchesRegion && matchesStatus && matchesPriority;
+    const matchesRegion = regionFilter === 'all' || chapter.region === regionFilter;
+    
+    return matchesSearch && matchesStatus && matchesRegion;
   });
-
-  const regionsByGroup = getChaptersByRegion();
-  const regions = Object.keys(regionsByGroup);
 
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-white rounded-lg border-2 border-afro-teal">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
-            placeholder="Search universities..."
+            placeholder="Search universities, cities, or countries..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
-        
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full md:w-48">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            {statuses.map(status => (
+              <SelectItem key={status} value={status}>
+                {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="All Regions" />
+          <SelectTrigger className="w-full md:w-48">
+            <SelectValue placeholder="Filter by region" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Regions</SelectItem>
             {regions.map(region => (
-              <SelectItem key={region} value={region}>{region}</SelectItem>
+              <SelectItem key={region} value={region}>
+                {region}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="All Statuses" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="target">Target University</SelectItem>
-            <SelectItem value="interest">Interest Expressed</SelectItem>
-            <SelectItem value="forming">Chapter Forming</SelectItem>
-            <SelectItem value="leader-wanted">Leader Wanted</SelectItem>
-          </SelectContent>
-        </Select>
-        
-        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="All Priorities" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            <SelectItem value="high">High Priority</SelectItem>
-            <SelectItem value="medium">Medium Priority</SelectItem>
-            <SelectItem value="low">Low Priority</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
-      {/* Results count */}
-      <div className="text-center">
-        <p className="text-lg text-black">
-          Showing {filteredChapters.length} of {desiredChapters.length} universities
-        </p>
+      {/* Results Summary */}
+      <div className="text-sm text-gray-600 mb-4">
+        Showing {filteredChapters.length} of {desiredChapters.length} target universities
       </div>
 
       {/* Chapters Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredChapters.map((chapter) => (
-          <Card key={chapter.id} className="border-2 border-afro-teal hover:shadow-lg transition-shadow">
+          <Card key={chapter.id} className="border-2 border-gray-200 hover:border-afro-teal transition-colors">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="text-lg mb-2">{chapter.university}</CardTitle>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
-                    <MapPin className="h-4 w-4" />
-                    {chapter.city}, {chapter.country}
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <Badge 
-                    className="text-xs"
-                    style={{ backgroundColor: getStatusColor(chapter.status), color: 'white' }}
-                  >
-                    {getStatusLabel(chapter.status)}
+                <CardTitle className="text-lg leading-tight">
+                  {chapter.university}
+                </CardTitle>
+                <div className="flex flex-col gap-1">
+                  <Badge className={getPriorityColor(chapter.priority)}>
+                    {chapter.priority}
                   </Badge>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 text-yellow-500" />
-                    <span className="text-xs capitalize">{chapter.priority}</span>
-                  </div>
                 </div>
               </div>
             </CardHeader>
-            
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600">{chapter.description}</p>
-              
+              {/* Location with Flag */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <MapPin className="h-4 w-4" />
+                <span className="flex items-center gap-1">
+                  {getCountryFlag(chapter.country)}
+                  {chapter.city}, {chapter.country}
+                </span>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center gap-2">
+                <Badge className={getStatusColor(chapter.status)}>
+                  {chapter.status.replace('-', ' ')}
+                </Badge>
+                <span className="text-sm text-gray-500">•</span>
+                <span className="text-sm text-gray-600">{chapter.region}</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {chapter.description}
+              </p>
+
+              {/* Key Details */}
               {chapter.targetStudentPopulation && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Users className="h-4 w-4 text-blue-600" />
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Users className="h-4 w-4" />
                   <span>{chapter.targetStudentPopulation.toLocaleString()} students</span>
                 </div>
               )}
-              
+
+              {/* Afrobeats Presence */}
               {chapter.existingAfrobeatsPresence && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Afrobeats Presence:</p>
-                  <p className="text-sm text-gray-600">{chapter.existingAfrobeatsPresence}</p>
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700">Afrobeats Presence:</span>
+                  <span className="text-gray-600 ml-1">{chapter.existingAfrobeatsPresence}</span>
                 </div>
               )}
-              
-              {chapter.keyFacilities && chapter.keyFacilities.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Key Facilities:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {chapter.keyFacilities.slice(0, 3).map((facility, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {facility}
-                      </Badge>
-                    ))}
-                    {chapter.keyFacilities.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{chapter.keyFacilities.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              )}
-              
+
+              {/* Reasoning */}
               {chapter.reasoning && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Why this university:</p>
-                  <p className="text-sm text-gray-600 italic">{chapter.reasoning}</p>
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700">Why this university:</span>
+                  <p className="text-gray-600 mt-1">{chapter.reasoning}</p>
                 </div>
               )}
-              
-              <div className="pt-2 border-t">
-                <p className="text-sm font-medium text-gray-700 mb-2">Interested in starting this chapter?</p>
-                <div className="flex gap-2">
+
+              {/* Contact Methods */}
+              <div className="flex gap-2 pt-2 border-t border-gray-100">
+                {chapter.contactMethods.discord && (
                   <Button
                     size="sm"
-                    className="flex-1 bg-[#008751] hover:bg-[#008751]/90 text-white"
+                    variant="outline"
                     onClick={() => window.open(chapter.contactMethods.discord, '_blank')}
                   >
-                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <MessageCircle className="mr-1 h-3 w-3" />
                     Discord
                   </Button>
-                  {chapter.contactMethods.twitter && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-blue-200 hover:bg-blue-50"
-                      onClick={() => window.open(chapter.contactMethods.twitter, '_blank')}
-                    >
-                      <Twitter className="h-4 w-4 text-blue-600" />
-                    </Button>
-                  )}
-                  {chapter.contactMethods.telegram && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-blue-200 hover:bg-blue-50"
-                      onClick={() => window.open(chapter.contactMethods.telegram, '_blank')}
-                    >
-                      <MessageCircle className="h-4 w-4 text-blue-600" />
-                    </Button>
-                  )}
-                </div>
+                )}
+                {chapter.contactMethods.telegram && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => window.open(chapter.contactMethods.telegram, '_blank')}
+                  >
+                    <MessageCircle className="mr-1 h-3 w-3" />
+                    Telegram
+                  </Button>
+                )}
+                {chapter.contactMethods.twitter && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => window.open(chapter.contactMethods.twitter, '_blank')}
+                  >
+                    <Twitter className="mr-1 h-3 w-3" />
+                    Twitter
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
+      {/* No Results */}
       {filteredChapters.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-gray-600 mb-4">No universities match your filters</p>
-          <Button
-            onClick={() => {
-              setSearchTerm('');
-              setRegionFilter('all');
-              setStatusFilter('all');
-              setPriorityFilter('all');
-            }}
-            variant="outline"
-          >
-            Clear Filters
-          </Button>
+          <Filter className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-600 mb-2">No universities found</h3>
+          <p className="text-gray-500">
+            Try adjusting your search terms or filters to find target universities.
+          </p>
         </div>
       )}
     </div>
