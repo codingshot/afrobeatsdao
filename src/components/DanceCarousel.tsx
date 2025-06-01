@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
@@ -141,6 +140,23 @@ export function DanceCarousel() {
                     onClick={() => handleDanceClick(dance.genre, dance.id)}
                   >
                     <CardContent className="p-0 aspect-video relative">
+                      {/* Tags positioned over the video preview */}
+                      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1">
+                        {flagUrl && (
+                          <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1 shadow-sm">
+                            <img 
+                              src={flagUrl} 
+                              alt={dance.origin} 
+                              className="w-4 h-3"
+                            />
+                            {dance.origin}
+                          </Badge>
+                        )}
+                        <Badge className={`${getDifficultyColor(dance.difficulty)} shadow-sm`}>
+                          {dance.difficulty}
+                        </Badge>
+                      </div>
+
                       {isPlaying === dance.id && videoId ? (
                         <iframe
                           ref={(ref) => ref && registerVideoRef(dance.id, ref)}
@@ -172,26 +188,7 @@ export function DanceCarousel() {
                       )}
                     </CardContent>
                     <CardFooter className="p-4 flex-1 flex flex-col items-center text-center">
-                      <div className="mb-3">
-                        <h3 className="text-xl font-bold text-black mb-2">{dance.name}</h3>
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          {flagUrl && (
-                            <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1">
-                              <img 
-                                src={flagUrl} 
-                                alt={dance.origin} 
-                                className="w-4 h-3"
-                              />
-                              {dance.origin}
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <Badge className={getDifficultyColor(dance.difficulty)}>
-                          {dance.difficulty}
-                        </Badge>
-                      </div>
+                      <h3 className="text-xl font-bold text-black">{dance.name}</h3>
                     </CardFooter>
                   </Card>
                 </CarouselItem>
