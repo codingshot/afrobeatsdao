@@ -66,7 +66,7 @@ export const ChaptersList = () => {
     <div className="space-y-6">
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="Search universities, cities, or countries..."
@@ -76,10 +76,10 @@ export const ChaptersList = () => {
           />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-full md:w-48">
+          <SelectTrigger className="w-full md:w-auto bg-white">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white border border-gray-200 shadow-lg">
             <SelectItem value="all">All Statuses</SelectItem>
             {statuses.map(status => (
               <SelectItem key={status} value={status}>
@@ -89,10 +89,10 @@ export const ChaptersList = () => {
           </SelectContent>
         </Select>
         <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger className="w-full md:w-48">
+          <SelectTrigger className="w-full md:w-auto bg-white">
             <SelectValue placeholder="Filter by region" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white border border-gray-200 shadow-lg">
             <SelectItem value="all">All Regions</SelectItem>
             {regions.map(region => (
               <SelectItem key={region} value={region}>

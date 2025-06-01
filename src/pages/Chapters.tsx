@@ -15,7 +15,7 @@ const Chapters = () => {
   const [activeView, setActiveView] = useState<'map' | 'list'>('map');
 
   return (
-    <div className="min-h-screen bg-afro-yellow font-afro">
+    <div className="min-h-screen bg-afro-yellow font-afro pt-20">
       {/* Hero Section */}
       <section className="py-16 bg-afro-teal text-white">
         <div className="container mx-auto px-4 text-center">
@@ -47,43 +47,15 @@ const Chapters = () => {
         </div>
       </section>
 
-      {/* Quick Stats */}
-      <section className="py-8 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="space-y-2">
-              <Globe className="h-8 w-8 mx-auto text-afro-teal" />
-              <div className="text-2xl font-bold text-black">15+</div>
-              <div className="text-sm text-gray-600">Target Universities</div>
-            </div>
-            <div className="space-y-2">
-              <Users className="h-8 w-8 mx-auto text-afro-orange" />
-              <div className="text-2xl font-bold text-black">5</div>
-              <div className="text-sm text-gray-600">Min Team Members</div>
-            </div>
-            <div className="space-y-2">
-              <Calendar className="h-8 w-8 mx-auto text-afro-red" />
-              <div className="text-2xl font-bold text-black">4+</div>
-              <div className="text-sm text-gray-600">Events per Semester</div>
-            </div>
-            <div className="space-y-2">
-              <BookOpen className="h-8 w-8 mx-auto text-purple-600" />
-              <div className="text-2xl font-bold text-black">10+</div>
-              <div className="text-sm text-gray-600">Resource Templates</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Chapter Map & Directory */}
       <section className="py-16 bg-afro-yellow">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-heading font-bold mb-4 text-black">
-              Desired Chapter Locations
+              Chapter Locations
             </h2>
             <p className="text-xl text-black/80 max-w-2xl mx-auto mb-8">
-              Explore universities where we're looking to establish Afrobeats DAO chapters and help us expand the movement globally.
+              Explore universities with Afrobeats DAO Chapters and places we are looking to expand the movement globally.
             </p>
             <div className="flex justify-center gap-4 mb-6">
               <Button
