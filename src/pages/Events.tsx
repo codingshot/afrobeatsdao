@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -139,6 +140,20 @@ const EVENTS_DATA: Record<string, any> = {
   }
 };
 
+// Helper function to process image URLs from JSON data
+const getImageUrl = (imageUrl: string) => {
+  // If it's already a full HTTP/HTTPS URL, return as is
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl;
+  }
+  // If it starts with a slash, it's already a proper public path
+  if (imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  // If it doesn't start with a slash, add one to make it a proper public path
+  return `/${imageUrl}`;
+};
+
 // Convert the event data to match our MusicEvent interface
 const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], index) => {
   return {
@@ -146,7 +161,7 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
     title: name,
     location: event.location,
     date: event.start_date,
-    image: event.image_url.startsWith('/') ? event.image_url : `/${event.image_url}`,
+    image: getImageUrl(event.image_url),
     description: event.event_description,
     type: event.location.includes("UK") ? "Festival" : event.event_description.toLowerCase().includes("workshop") ? "Workshop" : event.event_description.toLowerCase().includes("party") ? "Party" : "Festival",
     ticketLink: event.ticket_info ? event.website : undefined,
