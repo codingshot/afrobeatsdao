@@ -57,7 +57,7 @@ main {
 }
 
 /* Add padding to inner pages to prevent navbar overlap */
-.page-clubs, .page-music, .page-dance, .page-partner {
+.page-clubs, .page-music, .page-dance, .page-partner, .page-join {
   padding-top: 5rem;
   background-color: #FEF7CD; /* Soft yellow background to match content */
 }
@@ -68,6 +68,6 @@ main {
 }
 
 /* Only make h1 headings black on non-event pages */
-.page-clubs h1, .page-music h1, .page-dance h1, .page-partner h1, .page-home h1 {
+.page-clubs h1, .page-music h1, .page-dance h1, .page-partner h1, .page-home h1, .page-join h1 {
   color: #000 !important;
 }

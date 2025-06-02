@@ -145,13 +145,17 @@ export function EventsSection() {
   const today = new Date();
   const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
   
+  // Improved function to handle image URLs from JSON data
   const getImageUrl = (imageUrl: string) => {
+    // If it's already a full HTTP/HTTPS URL, return as is
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return imageUrl;
     }
+    // If it starts with a slash, it's already a proper public path
     if (imageUrl.startsWith('/')) {
       return imageUrl;
     }
+    // If it doesn't start with a slash, add one to make it a proper public path
     return `/${imageUrl}`;
   };
   

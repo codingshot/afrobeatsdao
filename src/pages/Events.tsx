@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -48,7 +49,7 @@ const EVENTS_DATA: Record<string, any> = {
     ticket_info: "Tickets start at approximately $70 based on previous pricing. Check detroit.afronation.com for 2025 ticket sales and priority access sign-ups."
   },
   "AfroFuture Fest": {
-    image_url: "https://www.palacetravel.com/wp-content/uploads/2023/09/AfroFuture-Fest-2024.jpg",
+    image_url: "/events/afrofuturedetroit.jpg",
     website: "https://www.afrofuture.com",
     location: "Accra, Ghana",
     event_description: "AfroFuture Fest (formerly Afrochella) is an 8-day cultural festival showcasing live Afrobeats performances, art installations, and African cuisine. Past lineups included Burna Boy, Wizkid, and Davido, offering a deep dive into African heritage.",
@@ -57,16 +58,26 @@ const EVENTS_DATA: Record<string, any> = {
     end_date: "2026-01-03",
     ticket_info: "Ticket prices vary, typically bundled with travel packages. Check palacetravel.com or afrofuturefest.com for booking details."
   },
-  "Afro Nation Nigeria": {
-    image_url: "https://www.okayafrica.com/wp-content/uploads/2023/09/afro-nation-nigeria-2023.jpg",
-    website: "https://nigeria.afronation.com",
-    location: "Lagos, Nigeria",
-    event_description: "The world's largest Afrobeats festival returns to Lagos, featuring top Afrobeats artists and a vibrant cultural experience. Expect high-energy performances and a celebration of African music and culture.",
-    organizer: "Afro Nation, in partnership with Live Nation",
-    start_date: "2025-12-19",
-    end_date: "2025-12-21",
-    ticket_info: "Ticket prices TBD; previous events had tickets starting around $50–$100. Sign up for priority access at afronation.com."
+    "Afrofuture Juneteenth Block Party": {
+    image_url: "/events/afrofuturedetroitblockparty.jpg",
+    website: "https://www.detroit.afrofuture.com",
+    location: "Detroit, MI, USA",
+    event_description: "Hart of Detroit Summer Fest x AfroFuture x DVE Juneteenth Block Party! Juneteenth in the D hits different 🔥 AfroFuture is shutting down Hart Plaza for the ultimate Juneteenth Block Party — music, vibes, and Black joy all day long! 📍 Hart Plaza | 🗓️ June 19 | ⏰ 12–5PM 🎟️ First 1000 RSVPs get free entry from 12–5PM! LINK IN BIO 🔗",
+    organizer: "AfroFuture",
+    start_date: "2025-06-19",
+    end_date: "2026-06-19",
+    ticket_info: "First 1000 tickets free"
   },
+  // "Afro Nation Nigeria": {
+  //   image_url: "https://www.okayafrica.com/wp-content/uploads/2023/09/afro-nation-nigeria-2023.jpg",
+  //   website: "https://nigeria.afronation.com",
+  //   location: "Lagos, Nigeria",
+  //   event_description: "The world's largest Afrobeats festival returns to Lagos, featuring top Afrobeats artists and a vibrant cultural experience. Expect high-energy performances and a celebration of African music and culture.",
+  //   organizer: "Afro Nation, in partnership with Live Nation",
+  //   start_date: "2025-12-19",
+  //   end_date: "2025-12-21",
+  //   ticket_info: "Ticket prices TBD; previous events had tickets starting around $50–$100. Sign up for priority access at afronation.com."
+  // },
   "Mawazine Festival": {
     image_url: "/mawazine.webp",
     website: "https://www.mawazine.ma",
@@ -88,8 +99,8 @@ const EVENTS_DATA: Record<string, any> = {
     ticket_info: "General Admission (AED 199–299), Brunch Package (AED 549), VIP Standing (AED 699). Purchase via PlatinumList."
   },
   "AMAFEST UK": {
-    image_url: "https://amafest.com/wp-content/uploads/2024/03/amafest-uk-2025-poster.jpg",
-    website: "https://www.amafest.com",
+    image_url: "/events/amafestuk.webp",
+    website: "https://www.instagram.com/amafestuk",
     location: "Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK",
     event_description: "The world's largest Amapiano festival in the UK, featuring top Amapiano artists, immersive art installations, and interactive activities. Past lineups included Uncle Waffles and Musa Keys.",
     organizer: "AMAFEST",
@@ -98,8 +109,8 @@ const EVENTS_DATA: Record<string, any> = {
     ticket_info: "Tickets available via amafest.com and Eventbrite."
   },
   "Amapiano Kingdxm": {
-    image_url: "https://cdn-az.allevents.in/events5/banners/1e6b2a0d6e4c3e6b2a0d6e4c3e6b2a0d.jpg",
-    website: "https://www.eventbrite.co.uk/e/amapiano-kingdxm-2025-tickets-786543209177",
+    image_url: "/events/amapianokingdxm.heic",
+    website: "https://www.instagram.com/amapianokingdxm/",
     location: "Playa del Inglés, Gran Canaria, Spain",
     event_description: "A weekend of themed parties, pool parties, boat parties, and club nights, featuring top Amapiano DJs and artists. Packages include hotel stays and access to all events.",
     organizer: "Amapiano Kingdxm",
@@ -107,19 +118,19 @@ const EVENTS_DATA: Record<string, any> = {
     end_date: "2025-10-06",
     ticket_info: "Event Pass (£169+), Hotel & Events Package (£319+). Book via Eventbrite."
   },
-  "Amapiano Festival UK": {
-    image_url: "https://d31fr2pwly4c4s.cloudfront.net/3/5/3/162029353_7000968_700x700.jpg",
-    website: "https://www.ents24.com/bideford-events/the-palladium-club/amapiano-festival-2025/7000968",
-    location: "The Palladium Club, Bideford, England, UK",
-    event_description: "The UK's premier South African Amapiano music festival, celebrating the genre's fusion of deep house, jazz, and lounge influences with live performances and DJ sets.",
-    organizer: "Amapiano Festival UK",
-    start_date: "2025-10-25",
-    end_date: "2025-10-25",
-    ticket_info: "Tickets available via Ents24."
-  },
+  // "Amapiano Festival UK": {
+  //   image_url: "https://d31fr2pwly4c4s.cloudfront.net/3/5/3/162029353_7000968_700x700.jpg",
+  //   website: "https://www.instagram.com/amapiano_festiva",
+  //   location: "The Palladium Club, Bideford, England, UK",
+  //   event_description: "The UK's premier South African Amapiano music festival, celebrating the genre's fusion of deep house, jazz, and lounge influences with live performances and DJ sets.",
+  //   organizer: "Amapiano Festival UK",
+  //   start_date: "2025-10-25",
+  //   end_date: "2025-10-25",
+  //   ticket_info: "Tickets available via Ents24."
+  // },
   "Brisbane Afrobeats Festival": {
-    image_url: "https://s3-ap-southeast-2.amazonaws.com/ticketbooth-images/production/events/afrobeats-brisbane-2025.jpg",
-    website: "https://tickets.oztix.com.au/outlet/event/2b1f5c9c-4e7f-4e3e-8c4b-4c7f2b2d8e8c",
+    image_url: "/events/brisbaneafrobeatsfestival.png",
+    website: "https://www.instagram.com/BrisbaneAfrobeatsFestival",
     location: "Brisbane, Australia (venue TBA)",
     event_description: "Features live Afrobeats, Amapiano, Afro remixes, DJ sets, dancers, African food, arts, fashion stalls, and business showcases. Open to all 18+.",
     organizer: "Afrobeats Brisbane",
@@ -129,6 +140,20 @@ const EVENTS_DATA: Record<string, any> = {
   }
 };
 
+// Helper function to process image URLs from JSON data
+const getImageUrl = (imageUrl: string) => {
+  // If it's already a full HTTP/HTTPS URL, return as is
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl;
+  }
+  // If it starts with a slash, it's already a proper public path
+  if (imageUrl.startsWith('/')) {
+    return imageUrl;
+  }
+  // If it doesn't start with a slash, add one to make it a proper public path
+  return `/${imageUrl}`;
+};
+
 // Convert the event data to match our MusicEvent interface
 const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], index) => {
   return {
@@ -136,7 +161,7 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
     title: name,
     location: event.location,
     date: event.start_date,
-    image: event.image_url.startsWith('/') ? event.image_url : `/${event.image_url}`,
+    image: getImageUrl(event.image_url),
     description: event.event_description,
     type: event.location.includes("UK") ? "Festival" : event.event_description.toLowerCase().includes("workshop") ? "Workshop" : event.event_description.toLowerCase().includes("party") ? "Party" : "Festival",
     ticketLink: event.ticket_info ? event.website : undefined,
