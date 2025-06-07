@@ -6,7 +6,7 @@ import { FlippableAlbum } from "./FlippableAlbum";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 function AlbumCountdown() {
-  const releaseDate = new Date("2025-06-06T00:00:00Z");
+  const releaseDate = new Date("2025-07-06T00:00:00Z");
   const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -52,7 +52,7 @@ export function MusicSection() {
             🆓 — available everywhere soon.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
-            Album drops June 6th, 2025!
+            Album drops July 6th, 2025!
           </p>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 max-w-5xl mx-auto">
