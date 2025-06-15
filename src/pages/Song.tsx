@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -159,47 +160,6 @@ const Song = () => {
     .sort(() => Math.random() - 0.5)
     .slice(0, 6);
 
-  // Create structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "MusicRecording",
-    "name": song.title,
-    "description": metaDescription,
-    "url": canonicalUrl,
-    "image": ogImage,
-    "genre": artist.genre || "Afrobeats",
-    "datePublished": new Date().toISOString().split('T')[0],
-    "inLanguage": "en",
-    "byArtist": {
-      "@type": "MusicGroup",
-      "name": artist.name,
-      "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
-      "genre": artist.genre || "Afrobeats",
-      ...(artist.country && { "foundingLocation": artist.country }),
-      "url": `https://afrobeats.party/music/artist/${artist.id}`,
-      "sameAs": [
-        artist.spotify,
-        artist.instagram,
-        artist.twitter,
-        artist.youtube
-      ].filter(Boolean)
-    },
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Afrobeats.party",
-      "url": "https://afrobeats.party",
-      "description": "Global platform for African music and Afrobeats culture"
-    },
-    "potentialAction": {
-      "@type": "ListenAction",
-      "target": song.youtube,
-      "expectsAcceptanceOf": {
-        "@type": "Offer",
-        "category": "free"
-      }
-    }
-  };
-
   return (
     <>
       <Helmet>
@@ -249,10 +209,47 @@ const Song = () => {
         )}
         
         {/* Schema.org structured data */}
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicRecording",
+            "name": song.title,
+            "description": metaDescription,
+            "url": canonicalUrl,
+            "image": ogImage,
+            "genre": artist.genre || "Afrobeats",
+            "datePublished": new Date().toISOString().split('T')[0],
+            "inLanguage": "en",
+            "byArtist": {
+              "@type": "MusicGroup",
+              "name": artist.name,
+              "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
+              "genre": artist.genre || "Afrobeats",
+              ...(artist.country && { "foundingLocation": artist.country }),
+              "url": `https://afrobeats.party/music/artist/${artist.id}`,
+              "sameAs": [
+                artist.spotify,
+                artist.instagram,
+                artist.twitter,
+                artist.youtube
+              ].filter(Boolean)
+            },
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and Afrobeats culture"
+            },
+            "potentialAction": {
+              "@type": "ListenAction",
+              "target": song.youtube,
+              "expectsAcceptanceOf": {
+                "@type": "Offer",
+                "category": "free"
+              }
+            }
+          })}
+        </script>
       </Helmet>
       
       <div className="min-h-screen bg-gray-50 py-8">
@@ -266,8 +263,8 @@ const Song = () => {
             <span className="text-black">{song.title}</span>
           </div>
 
-          {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
             <div className="lg:col-span-2">
               {/* YouTube Video */}
               <div className="mb-6">

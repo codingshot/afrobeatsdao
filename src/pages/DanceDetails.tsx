@@ -107,26 +107,6 @@ const DanceDetails = () => {
   const danceDescription = dance?.description || 'Learn about this dance style on Afrobeats.party';
   const danceThumbnail = dance?.thumbnail || '/AfrobeatsDAOMeta.png';
 
-  // Create structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": `How to dance ${danceTitle}`,
-    "description": danceDescription,
-    "image": danceThumbnail,
-    "totalTime": "PT30M",
-    "estimatedCost": {
-      "@type": "MonetaryAmount",
-      "currency": "USD",
-      "value": "0"
-    },
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Afrobeats.party",
-      "url": "https://afrobeats.party"
-    }
-  };
-
   return (
     <>
       <Helmet>
@@ -140,12 +120,6 @@ const DanceDetails = () => {
         <meta name="twitter:title" content={`${danceTitle} | Afrobeats.party`} />
         <meta name="twitter:description" content={danceDescription} />
         <meta name="twitter:image" content={danceThumbnail} />
-        
-        {/* Schema.org structured data */}
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
       </Helmet>
       <DanceDetailsComponent dance={dance} />
     </>

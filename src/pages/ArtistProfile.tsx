@@ -246,38 +246,6 @@ const ArtistProfile = () => {
     artist.website
   ].filter(Boolean);
   
-  // Create structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": artist.name,
-    "description": metaDescription,
-    "image": ogImage,
-    "url": canonicalUrl,
-    "genre": artist.genre || "Afrobeats",
-    ...(artist.country && { "foundingLocation": artist.country }),
-    "sameAs": socialLinks,
-    "track": artist.top_songs.map(song => ({
-      "@type": "MusicRecording",
-      "name": song.title,
-      "url": song.youtube,
-      "byArtist": {
-        "@type": "MusicGroup",
-        "name": artist.name
-      }
-    })),
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Afrobeats.party",
-      "url": "https://afrobeats.party",
-      "description": "Global platform for African music and Afrobeats culture"
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl
-    }
-  };
-  
   return (
     <>
       <Helmet>
@@ -325,10 +293,38 @@ const ArtistProfile = () => {
         )}
         
         {/* Schema.org structured data */}
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicGroup",
+            "name": artist.name,
+            "description": metaDescription,
+            "image": ogImage,
+            "url": canonicalUrl,
+            "genre": artist.genre || "Afrobeats",
+            ...(artist.country && { "foundingLocation": artist.country }),
+            "sameAs": socialLinks,
+            "track": artist.top_songs.map(song => ({
+              "@type": "MusicRecording",
+              "name": song.title,
+              "url": song.youtube,
+              "byArtist": {
+                "@type": "MusicGroup",
+                "name": artist.name
+              }
+            })),
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and Afrobeats culture"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonicalUrl
+            }
+          })}
+        </script>
       </Helmet>
       
       <div className="min-h-screen bg-background">

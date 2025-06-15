@@ -82,60 +82,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
   ].filter(Boolean).join(', ');
 
-  // Create structured data with safe string values only
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": `How to dance ${dance.name}`,
-    "description": metaDescription,
-    "image": ogImage,
-    "url": canonicalUrl,
-    "totalTime": "PT30M",
-    "estimatedCost": {
-      "@type": "MonetaryAmount",
-      "currency": "USD",
-      "value": "0"
-    },
-    "supply": [
-      {
-        "@type": "HowToSupply",
-        "name": "Comfortable clothing"
-      },
-      {
-        "@type": "HowToSupply", 
-        "name": "Open space to dance"
-      }
-    ],
-    "tool": [
-      {
-        "@type": "HowToTool",
-        "name": "Music player"
-      }
-    ],
-    "step": dance.keyMoves?.map((move, index) => ({
-      "@type": "HowToStep",
-      "position": index + 1,
-      "name": String(move.name),
-      "text": move.steps.join('. ')
-    })) || [],
-    "about": {
-      "@type": "Thing",
-      "name": "African Dance",
-      "description": "Traditional and modern African dance forms"
-    },
-    "inLanguage": "en",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Afrobeats.party",
-      "url": "https://afrobeats.party",
-      "description": "Global platform for African music and culture"
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl
-    }
-  };
-
   return (
     <>
       <Helmet>
@@ -183,10 +129,60 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         )}
         
         {/* Schema.org structured data */}
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": `How to dance ${dance.name}`,
+            "description": metaDescription,
+            "image": ogImage,
+            "url": canonicalUrl,
+            "totalTime": "PT30M",
+            "estimatedCost": {
+              "@type": "MonetaryAmount",
+              "currency": "USD",
+              "value": "0"
+            },
+            "supply": [
+              {
+                "@type": "HowToSupply",
+                "name": "Comfortable clothing"
+              },
+              {
+                "@type": "HowToSupply", 
+                "name": "Open space to dance"
+              }
+            ],
+            "tool": [
+              {
+                "@type": "HowToTool",
+                "name": "Music player"
+              }
+            ],
+            "step": dance.keyMoves?.map((move, index) => ({
+              "@type": "HowToStep",
+              "position": index + 1,
+              "name": move.name,
+              "text": move.steps.join('. ')
+            })) || [],
+            "about": {
+              "@type": "Thing",
+              "name": "African Dance",
+              "description": "Traditional and modern African dance forms"
+            },
+            "inLanguage": "en",
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and culture"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonicalUrl
+            }
+          })}
+        </script>
       </Helmet>
       
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
