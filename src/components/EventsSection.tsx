@@ -1,3 +1,4 @@
+
 import { CalendarDays, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -177,19 +178,19 @@ export function EventsSection() {
   return (
     <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:gap-6">
             <h2 className="text-4xl font-heading font-bold flex items-center gap-2 text-black">
               <span>Events</span>
               <span className="text-4xl">🎊</span>
             </h2>
             
-            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1">
+            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1 w-full sm:w-auto">
               <Button 
                 variant={!showPastEvents ? "default" : "ghost"} 
                 size="sm"
                 onClick={() => setShowPastEvents(false)} 
-                className={`rounded-full px-4 ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+                className={`rounded-full px-3 sm:px-4 text-sm ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Upcoming
               </Button>
@@ -197,17 +198,17 @@ export function EventsSection() {
                 variant={showPastEvents ? "default" : "ghost"} 
                 size="sm"
                 onClick={() => setShowPastEvents(true)} 
-                className={`rounded-full px-4 ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+                className={`rounded-full px-3 sm:px-4 text-sm ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Past
               </Button>
             </div>
           </div>
           
-          <Link to="/events">
+          <Link to="/events" className="w-full sm:w-auto">
             <Button 
               variant="outline" 
-              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white"
+              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto"
             >
               See All Events
             </Button>
