@@ -1,4 +1,3 @@
-
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
@@ -57,28 +56,6 @@ const Index = () => {
         <MusicSection />
         <ArtistsCarousel />
         <DanceCarousel />
-        
-        {/* Start A Chapter CTA Section */}
-        <section className="py-12 bg-afro-yellow">
-          <div className="container mx-auto px-4 text-center">
-            <div className="max-w-2xl mx-auto">
-              <h2 className="text-3xl font-heading font-bold mb-4 text-black">
-                Build the Movement at Your University
-              </h2>
-              <p className="text-lg mb-6 text-black/80">
-                Start an Afrobeats DAO chapter and bring African music culture to your campus.
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-afro-teal text-white hover:bg-afro-teal/90 font-heading text-xl rounded-full px-8 py-6 h-auto"
-                onClick={() => navigate('/chapters')}
-              >
-                Start A Chapter
-              </Button>
-            </div>
-          </div>
-        </section>
-        
         <MiniGlobalMap />
         <FutureSection />
         <TeamSection />
