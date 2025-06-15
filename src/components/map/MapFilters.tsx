@@ -88,9 +88,9 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
       <CardContent className="p-3 md:p-4">
         <div className="space-y-3 md:space-y-4">
           {/* Search, View Toggle, Clear, Advanced Settings, and Event Date Range in one row */}
-          <div className="flex gap-2">
-            {/* Search - dynamic width based on event selection */}
-            <div className={`relative ${eventsSelected ? 'flex-1' : 'flex-[2]'}`}>
+          <div className="flex gap-2 flex-wrap md:flex-nowrap">
+            {/* Search - dynamic width based on event selection and screen size */}
+            <div className={`relative ${eventsSelected ? 'flex-1 w-full md:w-auto' : 'flex-[2] w-full md:w-auto'} ${eventsSelected ? 'order-1' : 'order-1'}`}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search locations, artists, clubs..."
@@ -102,7 +102,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
 
             {/* View Toggle */}
             {onViewModeChange && (
-              <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white">
+              <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white order-2">
                 <Button
                   variant={viewMode === 'map' ? 'default' : 'ghost'}
                   size="sm"
@@ -110,7 +110,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
                   className={viewMode === 'map' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
                 >
                   <MapIcon className="h-4 w-4 mr-1" />
-                  Map
+                  <span className="hidden sm:inline">Map</span>
                 </Button>
                 <Button
                   variant={viewMode === 'list' ? 'default' : 'ghost'}
@@ -119,44 +119,44 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
                   className={viewMode === 'list' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
                 >
                   <List className="h-4 w-4 mr-1" />
-                  List
+                  <span className="hidden sm:inline">List</span>
                 </Button>
               </div>
             )}
 
-            {/* Clear Filter Button - smaller width */}
+            {/* Clear Filter Button */}
             <Button 
               variant="outline" 
               size="sm" 
               onClick={clearFilters}
-              className="text-black border-[#008751] text-xs md:text-sm h-10 px-3"
+              className="text-black border-[#008751] text-xs md:text-sm h-10 px-3 order-3"
             >
               <X className="h-3 w-3 md:h-4 md:w-4 mr-1" />
-              Clear
+              <span className="hidden sm:inline">Clear</span>
             </Button>
 
-            {/* Advanced Settings - smaller width */}
+            {/* Advanced Settings */}
             <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
               <CollapsibleTrigger asChild>
-                <Button variant="outline" className="justify-between text-xs md:text-sm h-10 px-3">
+                <Button variant="outline" className="justify-between text-xs md:text-sm h-10 px-3 order-4">
                   <div className="flex items-center gap-2">
                     <Settings className="h-3 w-3 md:h-4 md:w-4" />
-                    Advanced
+                    <span className="hidden sm:inline">Advanced</span>
                   </div>
                   <ChevronDown className={cn("h-3 w-3 md:h-4 md:w-4 transition-transform", showAdvanced && "rotate-180")} />
                 </Button>
               </CollapsibleTrigger>
             </Collapsible>
 
-            {/* Event Date Range - only show if events are selected */}
+            {/* Event Date Range - only show if events are selected and responsive */}
             {eventsSelected && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 order-5 w-full md:w-auto">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       className={cn(
-                        "justify-start text-left font-normal text-xs md:text-sm h-10 px-3",
+                        "justify-start text-left font-normal text-xs md:text-sm h-10 px-3 flex-1 md:flex-initial",
                         !filters.dateRange?.from && "text-muted-foreground"
                       )}
                     >
@@ -167,7 +167,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
                             {format(filters.dateRange.from, "MMM dd")} - {format(filters.dateRange.to, "MMM dd")}
                           </span>
                         ) : (
-                          format(filters.dateRange.from, "MMM dd")
+                          <span>{format(filters.dateRange.from, "MMM dd")}</span>
                         )
                       ) : (
                         <span>Event dates</span>
