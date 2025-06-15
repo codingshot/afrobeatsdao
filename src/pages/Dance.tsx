@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,25 @@ const DancePage = () => {
     setSelectedDifficulty("all");  // Changed from "" to "all"
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": `African Dance Curriculum - ${selectedGenre === "all" ? "African" : selectedGenre}`,
+    "description": metaDescription,
+    "provider": {
+      "@type": "Organization",
+      "name": "Afrobeats DAO",
+      "sameAs": "https://afrobeats.party"
+    },
+    "coursePrerequisites": "No prior dance experience required",
+    "numberOfLessons": genreCount,
+    "educationalLevel": difficulties.join(', '),
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online"
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -131,26 +151,10 @@ const DancePage = () => {
         <meta property="og:type" content="website" />
         <meta name="keywords" content={`african dance, ${selectedGenre}, dance tutorial, dance curriculum, ${difficulties.join(', ')} level`} />
         <link rel="canonical" href={window.location.href} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            "name": `African Dance Curriculum - ${selectedGenre === "all" ? "African" : selectedGenre}`,
-            "description": metaDescription,
-            "provider": {
-              "@type": "Organization",
-              "name": "Afrobeats DAO",
-              "sameAs": "https://afrobeats.party"
-            },
-            "coursePrerequisites": "No prior dance experience required",
-            "numberOfLessons": genreCount,
-            "educationalLevel": difficulties.join(', '),
-            "hasCourseInstance": {
-              "@type": "CourseInstance",
-              "courseMode": "online"
-            }
-          })}
-        </script>
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </Helmet>
 
       <div 
