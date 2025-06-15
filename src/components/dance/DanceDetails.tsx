@@ -136,9 +136,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     }
   };
 
-  // Convert to JSON string safely
-  const structuredDataJson = JSON.stringify(structuredData);
-
   return (
     <>
       <Helmet>
@@ -186,9 +183,10 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         )}
         
         {/* Schema.org structured data */}
-        <script type="application/ld+json">
-          {structuredDataJson}
-        </script>
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </Helmet>
       
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
