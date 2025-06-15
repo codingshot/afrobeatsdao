@@ -82,32 +82,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
   ].filter(Boolean).join(', ');
 
-  // Clean function to safely prepare data for JSON.stringify
-  const cleanDataForJson = (obj: any): any => {
-    if (obj === null || obj === undefined) return obj;
-    if (typeof obj === 'symbol') return obj.toString();
-    if (typeof obj === 'function') return undefined;
-    if (obj instanceof Date) return obj.toISOString();
-    
-    if (Array.isArray(obj)) {
-      return obj.map(cleanDataForJson).filter(item => item !== undefined);
-    }
-    
-    if (typeof obj === 'object') {
-      const cleaned: any = {};
-      for (const [key, value] of Object.entries(obj)) {
-        const cleanedValue = cleanDataForJson(value);
-        if (cleanedValue !== undefined) {
-          cleaned[key] = cleanedValue;
-        }
-      }
-      return cleaned;
-    }
-    
-    return obj;
-  };
-
-  // Create clean structured data
+  // Create structured data with safe string values only
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -140,7 +115,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     "step": dance.keyMoves?.map((move, index) => ({
       "@type": "HowToStep",
       "position": index + 1,
-      "name": move.name,
+      "name": String(move.name),
       "text": move.steps.join('. ')
     })) || [],
     "about": {
@@ -161,7 +136,8 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     }
   };
 
-  const cleanedStructuredData = cleanDataForJson(structuredData);
+  // Convert to JSON string safely
+  const structuredDataJson = JSON.stringify(structuredData);
 
   return (
     <>
@@ -211,7 +187,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
-          {JSON.stringify(cleanedStructuredData)}
+          {structuredDataJson}
         </script>
       </Helmet>
       
