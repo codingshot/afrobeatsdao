@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slugUtils";
+import EVENTS_DATA from "@/data/events.json";
 
 type Event = {
   image_url: string;
@@ -17,128 +18,7 @@ type Event = {
   ticket_info: string;
 };
 
-export const EVENTS: Record<string, Event> = {
-  "Afro Nation Portugal": {
-    image_url: "/afornationportugal.jpg",
-    website: "https://www.afronation.com",
-    location: "Portimão, Portugal",
-    event_description: "Afro Nation Portugal is the world's leading Afrobeats and Amapiano festival, celebrating African music genres on the golden beaches of the Algarve. The 2025 edition features superstars like Burna Boy, Tems, Amaarae, Uncle Waffles, DBN Gogo, and more. Expect exclusive lounges, premium beachfront experiences, and a vibrant gathering of the global African diaspora.",
-    organizer: "Afro Nation (founded by Obi Asika and Smade, in association with BBC 1Xtra)",
-    start_date: "2025-07-09",
-    end_date: "2025-07-11",
-    ticket_info: "General admission tickets start at approximately €16. VIP and Golden Ticket packages offer premium amenities like private beach access, spa treatments, and exclusive lounges. Early bird tickets recommended. Purchase at afronation.com."
-  },
-  "Afro Nation Detroit": {
-    image_url: "/afrofuture detroit.jpeg",
-    website: "https://detroit.afronation.com",
-    location: "Detroit, MI, USA",
-    event_description: "Held at Bedrock's Douglass Site, Afro Nation Detroit features two stages, one dedicated to Amapiano, with artists like Lil Wayne, Scorpion Kings, and local talent. It's a celebration of Afrobeats and African diaspora culture in the heart of Detroit.",
-    organizer: "Afro Nation, in collaboration with Bedrock",
-    start_date: "2025-08-15",
-    end_date: "2025-08-17",
-    ticket_info: "Tickets start at approximately $70 based on previous pricing. Check detroit.afronation.com for 2025 ticket sales and priority access sign-ups."
-  },
-  "AfroFuture Fest": {
-    image_url: "https://www.palacetravel.com/wp-content/uploads/2023/09/AfroFuture-Fest-2024.jpg",
-    website: "https://www.afrofuture.com",
-    location: "Accra, Ghana",
-    event_description: "AfroFuture Fest (formerly Afrochella) is an 8-day cultural festival showcasing live Afrobeats performances, art installations, and African cuisine. Past lineups included Burna Boy, Wizkid, and Davido, offering a deep dive into African heritage.",
-    organizer: "AfroFuture",
-    start_date: "2025-12-27",
-    end_date: "2026-01-03",
-    ticket_info: "Ticket prices vary, typically bundled with travel packages. Check palacetravel.com or afrofuturefest.com for booking details."
-  },
-  "Afro Nation Nigeria": {
-    image_url: "https://www.okayafrica.com/wp-content/uploads/2023/09/afro-nation-nigeria-2023.jpg",
-    website: "https://nigeria.afronation.com",
-    location: "Lagos, Nigeria",
-    event_description: "The world's largest Afrobeats festival returns to Lagos, featuring top Afrobeats artists and a vibrant cultural experience. Expect high-energy performances and a celebration of African music and culture.",
-    organizer: "Afro Nation, in partnership with Live Nation",
-    start_date: "2025-12-19",
-    end_date: "2025-12-21",
-    ticket_info: "Ticket prices TBD; previous events had tickets starting around $50–$100. Sign up for priority access at afronation.com."
-  },
-  "Mawazine Festival": {
-    image_url: "/mawazine.webp",
-    website: "https://www.mawazine.ma",
-    location: "Rabat, Morocco",
-    event_description: "Mawazine's Afrobeats night at OLM Souissi stage features artists like Wizkid and Lojay. Part of a larger international music festival, it blends global and African music genres for a diverse audience.",
-    organizer: "Maroc Cultures Association",
-    start_date: "2025-06-26",
-    end_date: "2025-06-26",
-    ticket_info: "Tickets vary by stage access; some performances free, premium tickets $20–$100. Check mawazine.ma for details."
-  },
-  "AfroLOUD Dubai": {
-    image_url: "https://assets.platinumlist.net/uploads/2d/77/2d77d6b5d7c1a0b7b7e2e1e2d3a1d1e7.jpg",
-    website: "https://dubai.platinumlist.net/event-tickets/90958/afro-loud-dubai-2025",
-    location: "Ain Dubai, Bluewaters Island, Dubai, United Arab Emirates",
-    event_description: "AfroLOUD Dubai is the region's biggest Afro music festival, featuring Afrobeats, Amapiano, Afro house, and Afro Desi. Headliners include CKay, Victony, and Scorpion Kings. The event includes food vendors, a Loud Brunch Club, and Fashion Avenue pop-ups.",
-    organizer: "AfroLOUD",
-    start_date: "2025-04-05",
-    end_date: "2025-04-05",
-    ticket_info: "General Admission (AED 199–299), Brunch Package (AED 549), VIP Standing (AED 699). Purchase via PlatinumList."
-  },
-  "AMAFEST UK": {
-    image_url: "https://amafest.com/wp-content/uploads/2024/03/amafest-uk-2025-poster.jpg",
-    website: "https://www.amafest.com",
-    location: "Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK",
-    event_description: "The world's largest Amapiano festival in the UK, featuring top Amapiano artists, immersive art installations, and interactive activities. Past lineups included Uncle Waffles and Musa Keys.",
-    organizer: "AMAFEST",
-    start_date: "2025-07-19",
-    end_date: "2025-07-19",
-    ticket_info: "Tickets available via amafest.com and Eventbrite."
-  },
-  "Amapiano Kingdxm": {
-    image_url: "https://cdn-az.allevents.in/events5/banners/1e6b2a0d6e4c3e6b2a0d6e4c3e6b2a0d.jpg",
-    website: "https://www.eventbrite.co.uk/e/amapiano-kingdxm-2025-tickets-786543209177",
-    location: "Playa del Inglés, Gran Canaria, Spain",
-    event_description: "A weekend of themed parties, pool parties, boat parties, and club nights, featuring top Amapiano DJs and artists. Packages include hotel stays and access to all events.",
-    organizer: "Amapiano Kingdxm",
-    start_date: "2025-10-03",
-    end_date: "2025-10-06",
-    ticket_info: "Event Pass (£169+), Hotel & Events Package (£319+). Book via Eventbrite."
-  },
-  "Amapiano Festival UK": {
-    image_url: "https://d31fr2pwly4c4s.cloudfront.net/3/5/3/162029353_7000968_700x700.jpg",
-    website: "https://www.ents24.com/bideford-events/the-palladium-club/amapiano-festival-2025/7000968",
-    location: "The Palladium Club, Bideford, England, UK",
-    event_description: "The UK's premier South African Amapiano music festival, celebrating the genre's fusion of deep house, jazz, and lounge influences with live performances and DJ sets.",
-    organizer: "Amapiano Festival UK",
-    start_date: "2025-10-25",
-    end_date: "2025-10-25",
-    ticket_info: "Tickets available via Ents24."
-  },
-  "Brisbane Afrobeats Festival": {
-    image_url: "https://s3-ap-southeast-2.amazonaws.com/ticketbooth-images/production/events/afrobeats-brisbane-2025.jpg",
-    website: "https://tickets.oztix.com.au/outlet/event/2b1f5c9c-4e7f-4e3e-8c4b-4c7f2b2d8e8c",
-    location: "Brisbane, Australia (venue TBA)",
-    event_description: "Features live Afrobeats, Amapiano, Afro remixes, DJ sets, dancers, African food, arts, fashion stalls, and business showcases. Open to all 18+.",
-    organizer: "Afrobeats Brisbane",
-    start_date: "2025-08-16",
-    end_date: "2025-08-16",
-    ticket_info: "Presale $45.90 AUD, First Release $57.15 AUD, Second Release $62.25 AUD. Purchase via Oztix."
-  },
-  "Afrobash NYC": {
-    image_url: "https://cdn.evbstatic.com/s3-build/fe/build/images/eb-logo-square-7b7b7b7.png",
-    website: "https://www.eventbrite.com/e/afrobash-afrobeats-amapiano-hip-hop-party-tickets-877859982047",
-    location: "SOB's, 204 Varick Street, New York City, USA",
-    event_description: "A late-night party with Afrobeats, Amapiano, and hip hop, featuring DJ sets, happy hour, and dance classes. Regular monthly editions.",
-    organizer: "Afrobash NYC",
-    start_date: "2025-05-02",
-    end_date: "2025-05-03",
-    ticket_info: "Free with RSVP before 11:30 PM, $0–$20.74 for late entry. Available via Eventbrite."
-  },
-  "Amapiano & Afrobeats Day Festival London": {
-    image_url: "https://www.eventbrite.com/e/amapiano-afrobeats-day-festival-at-studio-338-tickets-1331409253919",
-    website: "https://www.eventbrite.com/e/amapiano-afrobeats-day-festival-at-studio-338-tickets-1331409253919",
-    location: "Studio 338, 388 Boord Street, London, UK",
-    event_description: "A day festival celebrating Amapiano and Afrobeats at one of London's top club venues.",
-    organizer: "Studio 338",
-    start_date: "2025-06-01",
-    end_date: "2025-06-01",
-    ticket_info: "Tickets via Eventbrite."
-  }
-};
+export const EVENTS: Record<string, Event> = EVENTS_DATA;
 
 export function EventsSection() {
   const [showPastEvents, setShowPastEvents] = useState(false);
@@ -177,19 +57,19 @@ export function EventsSection() {
   return (
     <section id="events" className="py-16 font-afro bg-white">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row lg:flex-row items-start sm:items-center lg:items-center gap-4 lg:gap-6">
             <h2 className="text-4xl font-heading font-bold flex items-center gap-2 text-black">
               <span>Events</span>
               <span className="text-4xl">🎊</span>
             </h2>
             
-            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1">
+            <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1 w-full sm:w-auto lg:w-auto">
               <Button 
                 variant={!showPastEvents ? "default" : "ghost"} 
                 size="sm"
                 onClick={() => setShowPastEvents(false)} 
-                className={`rounded-full px-4 ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+                className={`rounded-full px-3 sm:px-4 text-sm ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Upcoming
               </Button>
@@ -197,17 +77,17 @@ export function EventsSection() {
                 variant={showPastEvents ? "default" : "ghost"} 
                 size="sm"
                 onClick={() => setShowPastEvents(true)} 
-                className={`rounded-full px-4 ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
+                className={`rounded-full px-3 sm:px-4 text-sm ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Past
               </Button>
             </div>
           </div>
           
-          <Link to="/events">
+          <Link to="/events" className="w-full sm:w-auto lg:w-auto">
             <Button 
               variant="outline" 
-              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white"
+              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto lg:w-auto"
             >
               See All Events
             </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -11,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slugUtils";
 import { Helmet } from "react-helmet";
+import EVENTS_DATA from "@/data/events.json";
 
 // Define event types to match the events in EventsSection 
 // Renamed from Event to MusicEvent to avoid conflict with DOM Event
@@ -25,120 +25,6 @@ interface MusicEvent {
   ticketLink?: string;
   website?: string;
 }
-
-// Events data from EventsSection.tsx
-const EVENTS_DATA: Record<string, any> = {
-  "Afro Nation Portugal": {
-    image_url: "/afornationportugal.jpg",
-    website: "https://www.afronation.com",
-    location: "Portimão, Portugal",
-    event_description: "Afro Nation Portugal is the world's leading Afrobeats and Amapiano festival, celebrating African music genres on the golden beaches of the Algarve. The 2025 edition features superstars like Burna Boy, Tems, Amaarae, Uncle Waffles, DBN Gogo, and more. Expect exclusive lounges, premium beachfront experiences, and a vibrant gathering of the global African diaspora.",
-    organizer: "Afro Nation (founded by Obi Asika and Smade, in association with BBC 1Xtra)",
-    start_date: "2025-07-09",
-    end_date: "2025-07-11",
-    ticket_info: "General admission tickets start at approximately €16. VIP and Golden Ticket packages offer premium amenities like private beach access, spa treatments, and exclusive lounges. Early bird tickets recommended. Purchase at afronation.com."
-  },
-  "Afro Nation Detroit": {
-    image_url: "/afrofuture detroit.jpeg",
-    website: "https://detroit.afronation.com",
-    location: "Detroit, MI, USA",
-    event_description: "Held at Bedrock's Douglass Site, Afro Nation Detroit features two stages, one dedicated to Amapiano, with artists like Lil Wayne, Scorpion Kings, and local talent. It's a celebration of Afrobeats and African diaspora culture in the heart of Detroit.",
-    organizer: "Afro Nation, in collaboration with Bedrock",
-    start_date: "2025-08-15",
-    end_date: "2025-08-17",
-    ticket_info: "Tickets start at approximately $70 based on previous pricing. Check detroit.afronation.com for 2025 ticket sales and priority access sign-ups."
-  },
-  "AfroFuture Fest": {
-    image_url: "/events/afrofuturedetroit.jpg",
-    website: "https://www.afrofuture.com",
-    location: "Accra, Ghana",
-    event_description: "AfroFuture Fest (formerly Afrochella) is an 8-day cultural festival showcasing live Afrobeats performances, art installations, and African cuisine. Past lineups included Burna Boy, Wizkid, and Davido, offering a deep dive into African heritage.",
-    organizer: "AfroFuture",
-    start_date: "2025-12-27",
-    end_date: "2026-01-03",
-    ticket_info: "Ticket prices vary, typically bundled with travel packages. Check palacetravel.com or afrofuturefest.com for booking details."
-  },
-    "Afrofuture Juneteenth Block Party": {
-    image_url: "/events/afrofuturedetroitblockparty.jpg",
-    website: "https://www.detroit.afrofuture.com",
-    location: "Detroit, MI, USA",
-    event_description: "Hart of Detroit Summer Fest x AfroFuture x DVE Juneteenth Block Party! Juneteenth in the D hits different 🔥 AfroFuture is shutting down Hart Plaza for the ultimate Juneteenth Block Party — music, vibes, and Black joy all day long! 📍 Hart Plaza | 🗓️ June 19 | ⏰ 12–5PM 🎟️ First 1000 RSVPs get free entry from 12–5PM! LINK IN BIO 🔗",
-    organizer: "AfroFuture",
-    start_date: "2025-06-19",
-    end_date: "2026-06-19",
-    ticket_info: "First 1000 tickets free"
-  },
-  // "Afro Nation Nigeria": {
-  //   image_url: "https://www.okayafrica.com/wp-content/uploads/2023/09/afro-nation-nigeria-2023.jpg",
-  //   website: "https://nigeria.afronation.com",
-  //   location: "Lagos, Nigeria",
-  //   event_description: "The world's largest Afrobeats festival returns to Lagos, featuring top Afrobeats artists and a vibrant cultural experience. Expect high-energy performances and a celebration of African music and culture.",
-  //   organizer: "Afro Nation, in partnership with Live Nation",
-  //   start_date: "2025-12-19",
-  //   end_date: "2025-12-21",
-  //   ticket_info: "Ticket prices TBD; previous events had tickets starting around $50–$100. Sign up for priority access at afronation.com."
-  // },
-  "Mawazine Festival": {
-    image_url: "/mawazine.webp",
-    website: "https://www.mawazine.ma",
-    location: "Rabat, Morocco",
-    event_description: "Mawazine's Afrobeats night at OLM Souissi stage features artists like Wizkid and Lojay. Part of a larger international music festival, it blends global and African music genres for a diverse audience.",
-    organizer: "Maroc Cultures Association",
-    start_date: "2025-06-26",
-    end_date: "2025-06-26",
-    ticket_info: "Tickets vary by stage access; some performances free, premium tickets $20–$100. Check mawazine.ma for details."
-  },
-  "AfroLOUD Dubai": {
-    image_url: "https://assets.platinumlist.net/uploads/2d/77/2d77d6b5d7c1a0b7b7e2e1e2d3a1d1e7.jpg",
-    website: "https://dubai.platinumlist.net/event-tickets/90958/afro-loud-dubai-2025",
-    location: "Ain Dubai, Bluewaters Island, Dubai, United Arab Emirates",
-    event_description: "AfroLOUD Dubai is the region's biggest Afro music festival, featuring Afrobeats, Amapiano, Afro house, and Afro Desi. Headliners include CKay, Victony, and Scorpion Kings. The event includes food vendors, a Loud Brunch Club, and Fashion Avenue pop-ups.",
-    organizer: "AfroLOUD",
-    start_date: "2025-04-05",
-    end_date: "2025-04-05",
-    ticket_info: "General Admission (AED 199–299), Brunch Package (AED 549), VIP Standing (AED 699). Purchase via PlatinumList."
-  },
-  "AMAFEST UK": {
-    image_url: "/events/amafestuk.webp",
-    website: "https://www.instagram.com/amafestuk",
-    location: "Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK",
-    event_description: "The world's largest Amapiano festival in the UK, featuring top Amapiano artists, immersive art installations, and interactive activities. Past lineups included Uncle Waffles and Musa Keys.",
-    organizer: "AMAFEST",
-    start_date: "2025-07-19",
-    end_date: "2025-07-19",
-    ticket_info: "Tickets available via amafest.com and Eventbrite."
-  },
-  "Amapiano Kingdxm": {
-    image_url: "/events/amapianokingdxm.heic",
-    website: "https://www.instagram.com/amapianokingdxm/",
-    location: "Playa del Inglés, Gran Canaria, Spain",
-    event_description: "A weekend of themed parties, pool parties, boat parties, and club nights, featuring top Amapiano DJs and artists. Packages include hotel stays and access to all events.",
-    organizer: "Amapiano Kingdxm",
-    start_date: "2025-10-03",
-    end_date: "2025-10-06",
-    ticket_info: "Event Pass (£169+), Hotel & Events Package (£319+). Book via Eventbrite."
-  },
-  // "Amapiano Festival UK": {
-  //   image_url: "https://d31fr2pwly4c4s.cloudfront.net/3/5/3/162029353_7000968_700x700.jpg",
-  //   website: "https://www.instagram.com/amapiano_festiva",
-  //   location: "The Palladium Club, Bideford, England, UK",
-  //   event_description: "The UK's premier South African Amapiano music festival, celebrating the genre's fusion of deep house, jazz, and lounge influences with live performances and DJ sets.",
-  //   organizer: "Amapiano Festival UK",
-  //   start_date: "2025-10-25",
-  //   end_date: "2025-10-25",
-  //   ticket_info: "Tickets available via Ents24."
-  // },
-  "Brisbane Afrobeats Festival": {
-    image_url: "/events/brisbaneafrobeatsfestival.png",
-    website: "https://www.instagram.com/BrisbaneAfrobeatsFestival",
-    location: "Brisbane, Australia (venue TBA)",
-    event_description: "Features live Afrobeats, Amapiano, Afro remixes, DJ sets, dancers, African food, arts, fashion stalls, and business showcases. Open to all 18+.",
-    organizer: "Afrobeats Brisbane",
-    start_date: "2025-08-16",
-    end_date: "2025-08-16",
-    ticket_info: "Presale $45.90 AUD, First Release $57.15 AUD, Second Release $62.25 AUD. Purchase via Oztix."
-  }
-};
 
 // Helper function to process image URLs from JSON data
 const getImageUrl = (imageUrl: string) => {

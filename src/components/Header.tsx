@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu";
@@ -44,7 +45,7 @@ export function Header() {
   const onDancePage = location.pathname.startsWith('/dance');
 
   return <>
-    <header className={`fixed top-0 w-full z-50 bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+    <header className={`fixed top-0 w-full z-[9999] bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
@@ -103,7 +104,7 @@ export function Header() {
                     </span>}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-56 bg-white text-black border-black/10">
+              <DropdownMenuContent align="center" className="w-56 bg-white text-black border-black/10 z-[9999]">
                 <div className="p-2 text-sm font-medium border-b border-black/10">
                   Your Dance Progress
                 </div>
@@ -135,7 +136,7 @@ export function Header() {
                       Progress {progress.started > 0 && <span className="ml-1">{progress.started}</span>}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10">
+                  <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10 z-[9999]">
                     <div className="p-2 text-sm font-medium border-b border-black/10">
                       Your Dance Progress
                     </div>
@@ -164,7 +165,7 @@ export function Header() {
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] bg-[#FFD600] p-0">
+                <SheetContent side="right" className="w-[300px] bg-[#FFD600] p-0 z-[9999]">
                   <nav className="flex flex-col h-full">
                     <Link to="/dance" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/dance") && "bg-black/20")}>
                       <Disc3 className="mr-3 h-5 w-5" />
