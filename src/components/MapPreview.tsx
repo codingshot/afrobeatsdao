@@ -2,10 +2,10 @@
 import React, { useEffect, useRef } from 'react';
 
 interface MapPreviewProps {
-  location: string;
+  location?: string;
 }
 
-export function MapPreview({ location }: MapPreviewProps) {
+export function MapPreview({ location = "world" }: MapPreviewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const apiKey = 'AIzaSyAEqA2TLmk6L6G1N4XcgTXDpxuoDsSBj5Q'; // Google Maps API key for static maps
 
@@ -24,9 +24,6 @@ export function MapPreview({ location }: MapPreviewProps) {
       loadingEl.className = 'text-gray-500 absolute inset-0 flex items-center justify-center';
       loadingEl.textContent = 'Loading map...';
       mapContainerRef.current.appendChild(loadingEl);
-      
-      // Encode the location for the URL
-      const encodedLocation = encodeURIComponent(location);
       
       // Create an image element for the static map
       const mapImage = new Image();
@@ -49,9 +46,20 @@ export function MapPreview({ location }: MapPreviewProps) {
         }
       };
       
+      // Handle global world view vs specific location
+      let mapUrl;
+      if (location === "world") {
+        // Global world view - no markers, just the world map
+        mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=1&size=600x300&maptype=roadmap&key=${apiKey}`;
+      } else {
+        // Specific location with marker
+        const encodedLocation = encodeURIComponent(location);
+        mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodedLocation}&zoom=14&size=600x300&maptype=roadmap&markers=color:green%7C${encodedLocation}&key=${apiKey}`;
+      }
+      
       // Set the source after attaching event handlers
-      mapImage.src = `https://maps.googleapis.com/maps/api/staticmap?center=${encodedLocation}&zoom=14&size=600x300&maptype=roadmap&markers=color:green%7C${encodedLocation}&key=${apiKey}`;
-      mapImage.alt = `Map of ${location}`;
+      mapImage.src = mapUrl;
+      mapImage.alt = location === "world" ? "Global map" : `Map of ${location}`;
     };
     
     // Add a slight delay to ensure container is fully rendered
