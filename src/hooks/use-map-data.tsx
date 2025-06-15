@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { MapItem } from '@/types/map';
 import { ARTISTS } from '@/data/artists';
@@ -127,7 +126,7 @@ export const useMapData = () => {
           mapItems.push({
             id: `community-${community.id}`,
             name: community.name,
-            type: community.type as any,
+            type: 'community',
             coordinates: [community.coordinates[0], community.coordinates[1]] as [number, number],
             country: community.country,
             city: community.city,

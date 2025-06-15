@@ -7,6 +7,7 @@ export type MapItemType =
   | 'influencer' 
   | 'agency' 
   | 'group' 
+  | 'community'
   | 'user';
 
 export interface MapItem {

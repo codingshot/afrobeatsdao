@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { GlobalMapView } from '@/components/map/GlobalMapView';
@@ -86,42 +85,13 @@ const Map = () => {
             </p>
           </div>
 
-          {/* Search and View Toggle */}
-          <div className="mb-4 flex gap-2 items-center">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search locations, artists, clubs..."
-                value={filters.searchQuery}
-                onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
-                className="pl-10 text-sm"
-              />
-            </div>
-            
-            <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white">
-              <Button
-                variant={viewMode === 'map' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('map')}
-                className={viewMode === 'map' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
-              >
-                <MapIcon className="h-4 w-4 mr-1" />
-                Map
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className={viewMode === 'list' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
-              >
-                <List className="h-4 w-4 mr-1" />
-                List
-              </Button>
-            </div>
-          </div>
-
           <div className="mb-4 md:mb-8">
-            <MapFilters filters={filters} onFiltersChange={setFilters} />
+            <MapFilters 
+              filters={filters} 
+              onFiltersChange={setFilters}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
           </div>
           
           <div>

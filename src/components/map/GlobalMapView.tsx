@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem, MapItemType, MapFilters } from '@/types/map';
@@ -44,6 +43,7 @@ const getMarkerColor = (type: MapItemType): string => {
     influencer: '#3B82F6', // Blue
     agency: '#6366F1', // Indigo
     group: '#10B981', // Emerald
+    community: '#22D3EE', // Cyan
     user: '#6B7280'   // Gray
   };
   return colors[type];
@@ -58,6 +58,7 @@ const getTypeIcon = (type: MapItemType): string => {
     influencer: '📱',
     agency: '🏢',
     group: '👥',
+    community: '🌐',
     user: '👤'
   };
   return icons[type];
@@ -77,7 +78,8 @@ const getCountryFlag = (countryName: string): string => {
     'Thailand': '🇹🇭',
     'Ireland': '🇮🇪',
     'Portugal': '🇵🇹',
-    'Morocco': '🇲🇦'
+    'Morocco': '🇲🇦',
+    'Vietnam': '🇻🇳'
   };
   return flagMap[countryName] || '🏳️';
 };
@@ -134,7 +136,7 @@ const formatYouTubeUrl = (url: string): string => {
 
 const COUNTRIES = [
   'Nigeria', 'Ghana', 'South Africa', 'United Kingdom', 'United States',
-  'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal', 'Morocco'
+  'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal', 'Morocco', 'Vietnam'
 ];
 
 export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, onFiltersChange }) => {
@@ -346,7 +348,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
             <CardContent className="p-2">
               <div className="space-y-1.5">
-                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group'].map(type => {
+                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'community'].map(type => {
                   const count = items.filter(item => item.type === type).length;
                   return (
                     <div key={type} className="flex items-center gap-2">

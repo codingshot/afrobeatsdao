@@ -19,6 +19,7 @@ const getMarkerColor = (type: MapItemType): string => {
     influencer: '#3B82F6',
     agency: '#6366F1',
     group: '#10B981',
+    community: '#22D3EE',
     user: '#6B7280'
   };
   return colors[type];
@@ -33,6 +34,7 @@ const getTypeIcon = (type: MapItemType): string => {
     influencer: '📱',
     agency: '🏢',
     group: '👥',
+    community: '🌐',
     user: '👤'
   };
   return icons[type];

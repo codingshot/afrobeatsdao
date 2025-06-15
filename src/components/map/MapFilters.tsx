@@ -7,7 +7,7 @@ import { MapItemType, MapFilters as MapFiltersType } from '@/types/map';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { CalendarIcon, Search, X, ChevronDown, Settings } from 'lucide-react';
+import { CalendarIcon, Search, X, ChevronDown, Settings, Map as MapIcon, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
@@ -15,6 +15,8 @@ import { DateRange } from 'react-day-picker';
 interface MapFiltersProps {
   filters: MapFiltersType;
   onFiltersChange: (filters: MapFiltersType) => void;
+  viewMode?: 'map' | 'list';
+  onViewModeChange?: (mode: 'map' | 'list') => void;
 }
 
 const MAP_TYPES: { value: MapItemType | 'all'; label: string; icon: string }[] = [
@@ -25,14 +27,20 @@ const MAP_TYPES: { value: MapItemType | 'all'; label: string; icon: string }[] =
   { value: 'dancer', label: 'Dancers', icon: '💃' },
   { value: 'influencer', label: 'Influencers', icon: '📱' },
   { value: 'agency', label: 'Agencies', icon: '🏢' },
-  { value: 'group', label: 'Groups', icon: '👥' }
+  { value: 'group', label: 'Groups', icon: '👥' },
+  { value: 'community', label: 'Communities', icon: '🌐' }
 ];
 
 const ADVANCED_TYPES: { value: MapItemType; label: string; icon: string }[] = [
   { value: 'user', label: 'Users', icon: '👤' }
 ];
 
-export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange }) => {
+export const MapFilters: React.FC<MapFiltersProps> = ({ 
+  filters, 
+  onFiltersChange, 
+  viewMode = 'map', 
+  onViewModeChange 
+}) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   
   const toggleType = (type: MapItemType | 'all') => {
@@ -79,18 +87,42 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filters, onFiltersChange
     <Card className="w-full">
       <CardContent className="p-3 md:p-4">
         <div className="space-y-3 md:space-y-4">
-          {/* Search, Clear, Advanced Settings, and Event Date Range in one row */}
+          {/* Search, View Toggle, Clear, Advanced Settings, and Event Date Range in one row */}
           <div className="flex gap-2">
             {/* Search - dynamic width based on event selection */}
             <div className={`relative ${eventsSelected ? 'flex-1' : 'flex-[2]'}`}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search..."
+                placeholder="Search locations, artists, clubs..."
                 value={filters.searchQuery}
                 onChange={(e) => onFiltersChange({ ...filters, searchQuery: e.target.value })}
                 className="pl-10 text-sm"
               />
             </div>
+
+            {/* View Toggle */}
+            {onViewModeChange && (
+              <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white">
+                <Button
+                  variant={viewMode === 'map' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => onViewModeChange('map')}
+                  className={viewMode === 'map' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
+                >
+                  <MapIcon className="h-4 w-4 mr-1" />
+                  Map
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => onViewModeChange('list')}
+                  className={viewMode === 'list' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
+                >
+                  <List className="h-4 w-4 mr-1" />
+                  List
+                </Button>
+              </div>
+            )}
 
             {/* Clear Filter Button - smaller width */}
             <Button 
