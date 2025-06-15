@@ -12,16 +12,20 @@ export function MapPreview({ location = "world" }: MapPreviewProps) {
   useEffect(() => {
     if (!mapContainerRef.current) return;
     
+    console.log('MapPreview: Loading map with location:', location);
+    
     // Create a function to load the map
     const loadMap = () => {
       if (!mapContainerRef.current) return;
+      
+      console.log('MapPreview: Starting map load process');
       
       // Clear any existing content
       mapContainerRef.current.innerHTML = '';
       
       // Add loading message
       const loadingEl = document.createElement('div');
-      loadingEl.className = 'text-gray-500 absolute inset-0 flex items-center justify-center';
+      loadingEl.className = 'text-gray-500 absolute inset-0 flex items-center justify-center bg-gray-100';
       loadingEl.textContent = 'Loading map...';
       mapContainerRef.current.appendChild(loadingEl);
       
@@ -29,6 +33,7 @@ export function MapPreview({ location = "world" }: MapPreviewProps) {
       const mapImage = new Image();
       
       mapImage.onload = () => {
+        console.log('MapPreview: Map image loaded successfully');
         if (mapContainerRef.current) {
           mapContainerRef.current.innerHTML = '';
           mapImage.className = 'w-full h-full object-cover rounded-lg';
@@ -36,11 +41,12 @@ export function MapPreview({ location = "world" }: MapPreviewProps) {
         }
       };
       
-      mapImage.onerror = () => {
+      mapImage.onerror = (error) => {
+        console.error('MapPreview: Error loading map image:', error);
         if (mapContainerRef.current) {
           mapContainerRef.current.innerHTML = '';
           const errorEl = document.createElement('div');
-          errorEl.className = 'text-red-500 absolute inset-0 flex items-center justify-center';
+          errorEl.className = 'text-red-500 absolute inset-0 flex items-center justify-center bg-gray-100 text-center p-4';
           errorEl.textContent = 'Could not load map for this location';
           mapContainerRef.current.appendChild(errorEl);
         }
@@ -57,23 +63,27 @@ export function MapPreview({ location = "world" }: MapPreviewProps) {
         mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodedLocation}&zoom=14&size=600x300&maptype=roadmap&markers=color:green%7C${encodedLocation}&key=${apiKey}`;
       }
       
+      console.log('MapPreview: Loading map URL:', mapUrl);
+      
       // Set the source after attaching event handlers
       mapImage.src = mapUrl;
       mapImage.alt = location === "world" ? "Global map" : `Map of ${location}`;
     };
     
-    // Add a slight delay to ensure container is fully rendered
-    const timeoutId = setTimeout(loadMap, 300);
+    // Load map immediately instead of with delay
+    loadMap();
     
     return () => {
-      clearTimeout(timeoutId);
+      if (mapContainerRef.current) {
+        mapContainerRef.current.innerHTML = '';
+      }
     };
-  }, [location]);
+  }, [location, apiKey]);
 
   return (
     <div 
       ref={mapContainerRef}
-      className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center relative"
+      className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center relative min-h-[300px]"
     >
       <div className="text-gray-500">Loading map...</div>
     </div>
