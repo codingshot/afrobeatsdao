@@ -82,6 +82,87 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
   ].filter(Boolean).join(', ');
 
+  // Clean function to safely prepare data for JSON.stringify
+  const cleanDataForJson = (obj: any): any => {
+    if (obj === null || obj === undefined) return obj;
+    if (typeof obj === 'symbol') return obj.toString();
+    if (typeof obj === 'function') return undefined;
+    if (obj instanceof Date) return obj.toISOString();
+    
+    if (Array.isArray(obj)) {
+      return obj.map(cleanDataForJson).filter(item => item !== undefined);
+    }
+    
+    if (typeof obj === 'object') {
+      const cleaned: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        const cleanedValue = cleanDataForJson(value);
+        if (cleanedValue !== undefined) {
+          cleaned[key] = cleanedValue;
+        }
+      }
+      return cleaned;
+    }
+    
+    return obj;
+  };
+
+  // Create clean structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": `How to dance ${dance.name}`,
+    "description": metaDescription,
+    "image": ogImage,
+    "url": canonicalUrl,
+    "totalTime": "PT30M",
+    "estimatedCost": {
+      "@type": "MonetaryAmount",
+      "currency": "USD",
+      "value": "0"
+    },
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Comfortable clothing"
+      },
+      {
+        "@type": "HowToSupply", 
+        "name": "Open space to dance"
+      }
+    ],
+    "tool": [
+      {
+        "@type": "HowToTool",
+        "name": "Music player"
+      }
+    ],
+    "step": dance.keyMoves?.map((move, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": move.name,
+      "text": move.steps.join('. ')
+    })) || [],
+    "about": {
+      "@type": "Thing",
+      "name": "African Dance",
+      "description": "Traditional and modern African dance forms"
+    },
+    "inLanguage": "en",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Afrobeats.party",
+      "url": "https://afrobeats.party",
+      "description": "Global platform for African music and culture"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl
+    }
+  };
+
+  const cleanedStructuredData = cleanDataForJson(structuredData);
+
   return (
     <>
       <Helmet>
@@ -130,58 +211,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "HowTo",
-            "name": `How to dance ${dance.name}`,
-            "description": metaDescription,
-            "image": ogImage,
-            "url": canonicalUrl,
-            "totalTime": "PT30M",
-            "estimatedCost": {
-              "@type": "MonetaryAmount",
-              "currency": "USD",
-              "value": "0"
-            },
-            "supply": [
-              {
-                "@type": "HowToSupply",
-                "name": "Comfortable clothing"
-              },
-              {
-                "@type": "HowToSupply", 
-                "name": "Open space to dance"
-              }
-            ],
-            "tool": [
-              {
-                "@type": "HowToTool",
-                "name": "Music player"
-              }
-            ],
-            "step": dance.keyMoves?.map((move, index) => ({
-              "@type": "HowToStep",
-              "position": index + 1,
-              "name": move.name,
-              "text": move.steps.join('. ')
-            })) || [],
-            "about": {
-              "@type": "Thing",
-              "name": "African Dance",
-              "description": "Traditional and modern African dance forms"
-            },
-            "inLanguage": "en",
-            "isPartOf": {
-              "@type": "WebSite",
-              "name": "Afrobeats.party",
-              "url": "https://afrobeats.party",
-              "description": "Global platform for African music and culture"
-            },
-            "mainEntityOfPage": {
-              "@type": "WebPage",
-              "@id": canonicalUrl
-            }
-          })}
+          {JSON.stringify(cleanedStructuredData)}
         </script>
       </Helmet>
       
