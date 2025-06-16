@@ -71,3 +71,18 @@ main {
 .page-clubs h1, .page-music h1, .page-dance h1, .page-partner h1, .page-home h1, .page-join h1 {
   color: #000 !important;
 }
+
+/* Ensure map containers have proper z-index but stay below audio player */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-control-container {
+  z-index: 10 !important;
+}
+
+/* Ensure map overlays stay below audio player */
+.leaflet-popup,
+.leaflet-popup-pane {
+  z-index: 20 !important;
+}
