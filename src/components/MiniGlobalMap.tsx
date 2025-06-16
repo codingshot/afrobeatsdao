@@ -1,67 +1,89 @@
 
-import { GlobalMapView } from "@/components/map/GlobalMapView";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import MapFilters from "./map/MapFilters";
+import { ListView } from "./map/ListView";
+import { GlobalMapView } from "./map/GlobalMapView";
+import { useMapData } from "@/hooks/use-map-data";
+import { Map as MapIcon, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useMapData } from '@/hooks/use-map-data';
-import { useState } from 'react';
-import { MapFilters } from '@/types/map';
 
 export function MiniGlobalMap() {
+  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [selectedFilters, setSelectedFilters] = useState<string[]>(['all']);
   const navigate = useNavigate();
-  const { data: mapItems, isLoading } = useMapData();
   
-  // Simple filters for the mini map - just show all types, no filtering
-  const [filters] = useState<MapFilters>({
-    types: ['all'],
-    countries: [],
-    searchQuery: '',
-    dateRange: undefined
-  });
-
-  const filteredItems = mapItems || [];
+  const { 
+    filteredData, 
+    totalCounts,
+    selectedDateRange,
+    setSelectedDateRange
+  } = useMapData(selectedFilters);
 
   return (
-    <section className="py-16 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-heading font-bold mb-4 text-slate-950">
-            Global Afrobeats Movement
+          <h2 className="text-4xl font-heading font-bold mb-4 text-black">
+            Global Afrobeats Network
           </h2>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Discover clubs, artists, events, and communities around the world spreading Afrobeats culture.
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+            Discover Afrobeats events, clubs, and communities worldwide
           </p>
         </div>
-        
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-          <div className="h-[500px]">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-full bg-gray-200 rounded-2xl">
-                <div className="text-gray-500">Loading map...</div>
-              </div>
-            ) : (
-              <GlobalMapView items={filteredItems} filters={filters} onFiltersChange={() => {}} />
-            )}
-          </div>
-          
-          {/* Overlaid buttons */}
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-3 z-[1000]">
-            <Button 
-              size="lg" 
-              className="bg-afro-yellow text-black hover:bg-afro-yellow/90 font-heading text-lg rounded-full px-6 py-3 h-auto shadow-lg"
-              onClick={() => navigate('/chapters')}
+
+        {/* Filters with proper z-index to stay behind audio player */}
+        <div className="mb-6 relative z-10">
+          <MapFilters
+            selectedFilters={selectedFilters}
+            onFiltersChange={setSelectedFilters}
+            totalCounts={totalCounts}
+            selectedDateRange={selectedDateRange}
+            onDateRangeChange={setSelectedDateRange}
+          />
+        </div>
+
+        {/* View Toggle */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-gray-100 p-1 rounded-lg">
+            <Button
+              variant={viewMode === 'map' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('map')}
+              className="mr-1"
             >
-              Start A Chapter
+              <MapIcon className="w-4 h-4 mr-2" />
+              Map
             </Button>
-            
-            <Button 
-              size="lg" 
-              variant="white"
-              className="font-heading text-lg rounded-full px-6 py-3 h-auto shadow-lg"
-              onClick={() => navigate('/map')}
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
             >
-              Explore Full Map
+              <List className="w-4 h-4 mr-2" />
+              List
             </Button>
           </div>
+        </div>
+
+        {/* Map/List Content */}
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6">
+          {viewMode === 'map' ? (
+            <GlobalMapView data={filteredData} />
+          ) : (
+            <ListView data={filteredData} />
+          )}
+        </div>
+
+        {/* Full Map CTA */}
+        <div className="text-center">
+          <Button 
+            onClick={() => navigate('/map')}
+            size="lg"
+            className="bg-afro-teal text-white hover:bg-afro-teal/90"
+          >
+            Explore Full Map
+          </Button>
         </div>
       </div>
     </section>

@@ -85,6 +85,7 @@ export const GlobalAudioPlayerProvider = ({
   const [playedSongs, setPlayedSongs] = useState<Set<string>>(new Set());
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -549,113 +550,238 @@ export const GlobalAudioPlayerProvider = ({
     isDragging
   }}>
       {children}
-      <div ref={playerContainerRef} className="fixed bottom-[80px] right-4 z-[100] bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl" style={{
-      display: expandedView ? 'block' : 'none',
-      visibility: videoVisible ? 'visible' : 'hidden',
-      position: 'fixed',
-      ...(expandedView && !videoVisible ? {
-        left: '-9999px'
-      } : {
-        right: '4px'
-      })
-    }}>
+      {/* Video player container - positioned flush with top of player on mobile */}
+      <div ref={playerContainerRef} className={`fixed z-[200] bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl ${
+        isMobile 
+          ? 'bottom-[140px] right-4 left-4' 
+          : 'bottom-[80px] right-4'
+      }`} style={{
+        display: expandedView ? 'block' : 'none',
+        visibility: videoVisible ? 'visible' : 'hidden',
+        ...(expandedView && !videoVisible ? {
+          left: '-9999px'
+        } : {})
+      }}>
         <div id="youtube-player"></div>
       </div>
 
       <QueueDrawer queue={queue} isVisible={queueVisible} playNow={playNow} reorderQueue={reorderQueue} playedSongs={playedSongs} showPlayedSongs={showPlayedSongs} setShowPlayedSongs={setShowPlayedSongs} />
 
-      <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-4 z-50">
-        {currentSong || isLoading ? <div className="max-w-7xl mx-auto flex flex-col gap-2">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
-                <div className="flex-shrink-0">
-                  {thumbnailUrl ? (
-                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
-                      <img src={thumbnailUrl} alt="Thumbnail" className="object-cover w-full h-full" />
-                    </Avatar>
-                  ) : (
-                    <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
-                  )}
+      {/* Audio player with improved mobile layout */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-white/10 backdrop-blur-lg text-white p-3 z-[150]">
+        {currentSong || isLoading ? (
+          <div className="max-w-7xl mx-auto">
+            {isMobile ? (
+              // Mobile layout
+              <div className="flex flex-col gap-3">
+                {/* Title and Queue Button Row */}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="flex-shrink-0">
+                      {thumbnailUrl ? (
+                        <Avatar className="h-8 w-8">
+                          <img src={thumbnailUrl} alt="Thumbnail" className="object-cover w-full h-full" />
+                        </Avatar>
+                      ) : (
+                        <Music2 className="h-8 w-8 text-[#FFD600]" />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-medium truncate">
+                        {isLoading ? loadingTitle : videoTitle}
+                      </h3>
+                      <p className="text-xs text-gray-400 truncate">
+                        {isLoading ? "Loading..." : channelTitle}
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10 flex-shrink-0`} title={queueVisible ? "Hide queue" : "Show queue"}>
+                    {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
+                  </Button>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-sm font-medium truncate">
-                    {isLoading ? loadingTitle : videoTitle}
-                  </h3>
-                  <p className="text-xs text-gray-400 truncate">
-                    {isLoading ? "Loading..." : channelTitle}
-                  </p>
+
+                {/* Time Slider */}
+                <div className="flex items-center gap-2 w-full">
+                  <span className="text-xs text-gray-400 min-w-[40px]">
+                    {formatTime(currentTime)}
+                  </span>
+                  <Slider 
+                    value={[currentTime]} 
+                    min={0} 
+                    max={duration} 
+                    step={1} 
+                    onValueChange={([value]) => {
+                      setCurrentTime(value);
+                      setIsDragging(true);
+                    }} 
+                    onValueCommit={([value]) => {
+                      handleTimeChange(value);
+                      setIsDragging(false);
+                    }} 
+                    className="cursor-pointer flex-1" 
+                  />
+                  <span className="text-xs text-gray-400 min-w-[40px]">
+                    {formatTime(duration)}
+                  </span>
+                </div>
+
+                {/* Controls Row */}
+                <div className="flex items-center justify-center gap-4">
+                  <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
+                    <SkipBack className="h-5 w-5" />
+                  </Button>
+                  
+                  <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
+                    {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                  </Button>
+                  
+                  <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
+                    <SkipForward className="h-5 w-5" />
+                  </Button>
+                  
+                  <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
+                    {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
+                  </Button>
+                </div>
+
+                {/* Volume and Video Controls Row */}
+                <div className="flex items-center justify-center gap-4">
+                  {/* Volume Control with Vertical Popup */}
+                  <div className="relative">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-white hover:bg-white/10"
+                      onMouseEnter={() => setShowVolumeSlider(true)}
+                      onMouseLeave={() => setShowVolumeSlider(false)}
+                      onClick={() => setVolume(volume === 0 ? 100 : 0)}
+                    >
+                      {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    </Button>
+                    {showVolumeSlider && (
+                      <div 
+                        className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-black/90 p-2 rounded-lg"
+                        onMouseEnter={() => setShowVolumeSlider(true)}
+                        onMouseLeave={() => setShowVolumeSlider(false)}
+                      >
+                        <div className="h-24 w-8 flex items-center justify-center">
+                          <Slider 
+                            value={[volume]} 
+                            min={0} 
+                            max={100} 
+                            step={1} 
+                            orientation="vertical"
+                            onValueChange={([value]) => updateVolume(value)} 
+                            className="cursor-pointer h-20" 
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
+                    {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                  </Button>
                 </div>
               </div>
+            ) : (
+              // Desktop layout (keep existing)
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
+                    <div className="flex-shrink-0">
+                      {thumbnailUrl ? (
+                        <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                          <img src={thumbnailUrl} alt="Thumbnail" className="object-cover w-full h-full" />
+                        </Avatar>
+                      ) : (
+                        <Music2 className="h-8 w-8 sm:h-10 sm:w-10 text-[#FFD600]" />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-medium truncate">
+                        {isLoading ? loadingTitle : videoTitle}
+                      </h3>
+                      <p className="text-xs text-gray-400 truncate">
+                        {isLoading ? "Loading..." : channelTitle}
+                      </p>
+                    </div>
+                  </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
-                <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
-                  <SkipBack className="h-5 w-5" />
-                </Button>
-                
-                <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
-                  {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                </Button>
-                
-                <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
-                  <SkipForward className="h-5 w-5" />
-                </Button>
-                
-                <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
-                  {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
-                </Button>
-              </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
+                      <SkipBack className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
+                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                    </Button>
+                    
+                    <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
+                      <SkipForward className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
+                      {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
+                    </Button>
+                  </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <Button variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} title={queueVisible ? "Hide queue" : "Show queue"}>
-                  {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
-                </Button>
-                
-                <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
-                  {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-                </Button>
-                
-                <Button variant="ghost" size="icon" onClick={() => setVolume(volume === 0 ? 100 : 0)} className="text-white hover:bg-white/10">
-                  {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                </Button>
-                
-                <div className="w-24">
-                  <Slider value={[volume]} min={0} max={100} step={1} onValueChange={([value]) => updateVolume(value)} className="cursor-pointer flex-1" />
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <Button variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} title={queueVisible ? "Hide queue" : "Show queue"}>
+                      {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
+                    </Button>
+                    
+                    <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
+                      {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                    </Button>
+                    
+                    <Button variant="ghost" size="icon" onClick={() => setVolume(volume === 0 ? 100 : 0)} className="text-white hover:bg-white/10">
+                      {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    </Button>
+                    
+                    <div className="w-24">
+                      <Slider value={[volume]} min={0} max={100} step={1} onValueChange={([value]) => updateVolume(value)} className="cursor-pointer flex-1" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 w-full px-2">
+                  <span className="text-xs text-gray-400 min-w-[40px]">
+                    {formatTime(currentTime)}
+                  </span>
+                  <Slider value={[currentTime]} min={0} max={duration} step={1} onValueChange={([value]) => {
+                setCurrentTime(value);
+                setIsDragging(true);
+              }} onValueCommit={([value]) => {
+                handleTimeChange(value);
+                setIsDragging(false);
+              }} className="cursor-pointer flex-1" />
+                  <span className="text-xs text-gray-400 min-w-[40px]">
+                    {formatTime(duration)}
+                  </span>
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2 w-full px-2">
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(currentTime)}
-              </span>
-              <Slider value={[currentTime]} min={0} max={duration} step={1} onValueChange={([value]) => {
-            setCurrentTime(value);
-            setIsDragging(true);
-          }} onValueCommit={([value]) => {
-            handleTimeChange(value);
-            setIsDragging(false);
-          }} className="cursor-pointer flex-1" />
-              <span className="text-xs text-gray-400 min-w-[40px]">
-                {formatTime(duration)}
-              </span>
-            </div>
-          </div> : <div className="max-w-7xl mx-auto flex items-center justify-between">
+            )}
+          </div>
+        ) : (
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Music2 className="h-8 w-8 text-[#FFD600]" />
               <span className="text-sm">Afrobeats Player</span>
             </div>
             <Button onClick={() => {
-          const defaultVideo = getRandomVibeVideo();
-          playNow({
-            id: `default-vibe-${defaultVideo}`,
-            youtube: defaultVideo,
-            title: "Random Vibe"
-          });
-        }} className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90">
+              const defaultVideo = getRandomVibeVideo();
+              playNow({
+                id: `default-vibe-${defaultVideo}`,
+                youtube: defaultVideo,
+                title: "Random Vibe"
+              });
+            }} className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90">
               <Play className="mr-2 h-4 w-4" />
               Play Something
             </Button>
-          </div>}
+          </div>
+        )}
       </div>
     </GlobalAudioPlayerContext.Provider>;
 };
