@@ -1,24 +1,75 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import MapFilters from "./map/MapFilters";
+import { MapFilters } from "./map/MapFilters";
 import { ListView } from "./map/ListView";
 import { GlobalMapView } from "./map/GlobalMapView";
 import { useMapData } from "@/hooks/use-map-data";
 import { Map as MapIcon, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { MapFilters as MapFiltersType } from "@/types/map";
 
 export function MiniGlobalMap() {
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
-  const [selectedFilters, setSelectedFilters] = useState<string[]>(['all']);
+  const [filters, setFilters] = useState<MapFiltersType>({
+    types: ['all'],
+    countries: [],
+    searchQuery: '',
+    dateRange: undefined
+  });
   const navigate = useNavigate();
   
-  const { 
-    filteredData, 
-    totalCounts,
-    selectedDateRange,
-    setSelectedDateRange
-  } = useMapData(selectedFilters);
+  const { data: mapItems = [], isLoading } = useMapData();
+
+  // Filter the data based on current filters
+  const filteredData = mapItems.filter(item => {
+    // Type filter
+    if (!filters.types.includes('all') && !filters.types.includes(item.type)) {
+      return false;
+    }
+
+    // Country filter
+    if (filters.countries.length > 0 && !filters.countries.includes(item.country)) {
+      return false;
+    }
+
+    // Search filter
+    if (filters.searchQuery) {
+      const query = filters.searchQuery.toLowerCase();
+      const searchText = `${item.name} ${item.city} ${item.country} ${item.description || ''}`.toLowerCase();
+      if (!searchText.includes(query)) {
+        return false;
+      }
+    }
+
+    // Date range filter (only for events)
+    if (filters.dateRange && item.type === 'event' && item.eventDate) {
+      const eventDate = new Date(item.eventDate);
+      if (eventDate < filters.dateRange.from || eventDate > filters.dateRange.to) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Calculate total counts for each type
+  const totalCounts = mapItems.reduce((acc, item) => {
+    acc[item.type] = (acc[item.type] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p className="text-xl text-gray-700">Loading map data...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-white">
@@ -35,43 +86,23 @@ export function MiniGlobalMap() {
         {/* Filters with proper z-index to stay behind audio player */}
         <div className="mb-6 relative z-10">
           <MapFilters
-            selectedFilters={selectedFilters}
-            onFiltersChange={setSelectedFilters}
-            totalCounts={totalCounts}
-            selectedDateRange={selectedDateRange}
-            onDateRangeChange={setSelectedDateRange}
+            filters={filters}
+            onFiltersChange={setFilters}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
           />
-        </div>
-
-        {/* View Toggle */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-gray-100 p-1 rounded-lg">
-            <Button
-              variant={viewMode === 'map' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('map')}
-              className="mr-1"
-            >
-              <MapIcon className="w-4 h-4 mr-2" />
-              Map
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-            >
-              <List className="w-4 h-4 mr-2" />
-              List
-            </Button>
-          </div>
         </div>
 
         {/* Map/List Content */}
         <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6">
           {viewMode === 'map' ? (
-            <GlobalMapView data={filteredData} />
+            <GlobalMapView 
+              items={filteredData} 
+              filters={filters}
+              onFiltersChange={setFilters}
+            />
           ) : (
-            <ListView data={filteredData} />
+            <ListView items={filteredData} />
           )}
         </div>
 
