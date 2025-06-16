@@ -75,7 +75,7 @@ const Index = () => {
                 className="bg-afro-yellow text-black hover:bg-afro-yellow/90 font-heading text-xl rounded-full px-8 py-6 h-auto"
                 onClick={() => navigate('/partner')}
               >
-                Explore Partnership Opportunities
+                Partner
               </Button>
             </div>
           </div>
