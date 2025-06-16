@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Bungee', 'cursive'], // Updated font for headings
+        heading: ['Bubblegum Sans', 'cursive'], // Updated font for headings
         afro: ['Montserrat', 'sans-serif'], // fallback for subheadings/body
         sans: ['Montserrat', 'sans-serif'],
       },

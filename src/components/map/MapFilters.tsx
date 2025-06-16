@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -80,8 +81,8 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
     }
   };
 
-  // Check if events are selected
-  const eventsSelected = filters.types.includes('event') || filters.types.includes('all');
+  // Check if ONLY events are selected (not 'all' and only 'event')
+  const onlyEventsSelected = filters.types.length === 1 && filters.types.includes('event');
 
   return (
     <Card className="w-full">
@@ -90,7 +91,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
           {/* Search, View Toggle, Clear, Advanced Settings, and Event Date Range in one row */}
           <div className="flex gap-2">
             {/* Search - dynamic width based on event selection */}
-            <div className={`relative ${eventsSelected ? 'flex-1' : 'flex-[2]'}`}>
+            <div className={`relative ${onlyEventsSelected ? 'flex-1' : 'flex-[2]'}`}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search locations, artists, clubs..."
@@ -148,8 +149,8 @@ export const MapFilters: React.FC<MapFiltersProps> = ({
               </CollapsibleTrigger>
             </Collapsible>
 
-            {/* Event Date Range - only show if events are selected */}
-            {eventsSelected && (
+            {/* Event Date Range - only show if ONLY events are selected */}
+            {onlyEventsSelected && (
               <div className="flex gap-2">
                 <Popover>
                   <PopoverTrigger asChild>
