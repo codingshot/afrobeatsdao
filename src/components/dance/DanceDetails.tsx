@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -57,65 +56,52 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Enhanced SEO data with dynamic dance information
-  const metaTitle = `${dance.name} Dance${dance.origin ? ` from ${dance.origin}` : ''} - Learn ${dance.difficulty} Level | Afrobeats.party`;
-  const metaDescription = `🕺 Learn the ${dance.name} dance${dance.origin ? ` from ${dance.origin}` : ''}! ${dance.description} ${dance.difficulty} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`;
-  const canonicalUrl = `https://afrobeats.party/dance/${dance.id}`;
+  // Sanitize all values to ensure they are safe strings
+  const safeString = (value: any): string => {
+    if (value === null || value === undefined || typeof value === 'symbol' || typeof value === 'function') {
+      return '';
+    }
+    if (typeof value === 'object') {
+      return '';
+    }
+    return String(value);
+  };
+
+  // Enhanced SEO data with dynamic dance information - all values sanitized
+  const metaTitle = safeString(`${dance?.name || 'Dance'} Dance${dance?.origin ? ` from ${dance.origin}` : ''} - Learn ${dance?.difficulty || 'Beginner'} Level | Afrobeats.party`);
+  const metaDescription = safeString(`🕺 Learn the ${dance?.name || 'dance'} dance${dance?.origin ? ` from ${dance.origin}` : ''}! ${dance?.description || 'Learn this amazing dance'} ${dance?.difficulty || 'Beginner'} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`);
+  const canonicalUrl = safeString(`https://afrobeats.party/dance/${dance?.id || 'dance'}`);
   
   // Use dance image for Open Graph, fallback to default - ensure full URL
-  const ogImage = dance.image ? `https://afrobeats.party${dance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
-  const ogImageAlt = `${dance.name} Dance${dance.origin ? ` from ${dance.origin}` : ''} - ${dance.difficulty} Level Tutorial`;
+  const ogImage = safeString(dance?.image ? `https://afrobeats.party${dance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png");
+  const ogImageAlt = safeString(`${dance?.name || 'Dance'} Dance${dance?.origin ? ` from ${dance.origin}` : ''} - ${dance?.difficulty || 'Beginner'} Level Tutorial`);
   
   // Enhanced keywords for better SEO
-  const seoKeywords = [
-    dance.name.toLowerCase(),
+  const seoKeywords = safeString([
+    dance?.name?.toLowerCase() || 'dance',
     'african dance',
     'afrobeats dance',
-    dance.origin?.toLowerCase(),
-    dance.difficulty.toLowerCase(),
+    dance?.origin?.toLowerCase() || '',
+    dance?.difficulty?.toLowerCase() || 'beginner',
     'dance tutorial',
     'dance lessons',
     'afrobeats party',
     'african culture',
     'dance moves',
     'learn to dance',
-    ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
-  ].filter(Boolean).join(', ');
-
-  // Completely sanitize function to remove any problematic values
-  const sanitizeValue = (value: any): string => {
-    if (value === null || value === undefined || typeof value === 'symbol' || typeof value === 'function') {
-      return '';
-    }
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
-    }
-    return String(value);
-  };
+    ...(dance?.keyMoves?.map(move => move?.name?.toLowerCase()).filter(Boolean) || [])
+  ].filter(Boolean).join(', '));
 
   // Create structured data with complete sanitization
   const createStructuredData = () => {
     try {
-      // Create a completely clean object with only safe string values
-      const cleanDance = {
-        name: sanitizeValue(dance?.name) || 'Dance Tutorial',
-        description: sanitizeValue(dance?.description) || metaDescription,
-        id: sanitizeValue(dance?.id) || 'dance',
-        keyMoves: Array.isArray(dance?.keyMoves) ? dance.keyMoves.filter(move => 
-          move && typeof move === 'object' && move.name && Array.isArray(move.steps)
-        ).map(move => ({
-          name: sanitizeValue(move.name),
-          steps: Array.isArray(move.steps) ? move.steps.map(step => sanitizeValue(step)).filter(Boolean) : []
-        })) : []
-      };
-
       const structuredData = {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": `How to dance ${cleanDance.name}`,
-        "description": cleanDance.description,
-        "image": sanitizeValue(ogImage),
-        "url": sanitizeValue(canonicalUrl),
+        "name": safeString(`How to dance ${dance?.name || 'this dance'}`),
+        "description": metaDescription,
+        "image": ogImage,
+        "url": canonicalUrl,
         "totalTime": "PT30M",
         "estimatedCost": {
           "@type": "MonetaryAmount",
@@ -138,12 +124,14 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             "name": "Music player"
           }
         ],
-        "step": cleanDance.keyMoves.map((move, index) => ({
+        "step": Array.isArray(dance?.keyMoves) ? dance.keyMoves.filter(move => 
+          move && move.name
+        ).map((move, index) => ({
           "@type": "HowToStep",
           "position": index + 1,
-          "name": move.name || `Step ${index + 1}`,
-          "text": move.steps.join('. ')
-        })),
+          "name": safeString(move.name || `Step ${index + 1}`),
+          "text": safeString(Array.isArray(move.steps) ? move.steps.filter(Boolean).join('. ') : '')
+        })) : [],
         "about": {
           "@type": "Thing",
           "name": "African Dance",
@@ -158,14 +146,13 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": sanitizeValue(canonicalUrl)
+          "@id": canonicalUrl
         }
       };
       
       return JSON.stringify(structuredData);
     } catch (error) {
       console.error('Error creating structured data:', error);
-      // Return minimal safe structured data
       return JSON.stringify({
         "@context": "https://schema.org",
         "@type": "HowTo",
@@ -195,7 +182,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta property="article:section" content="Dance" />
         <meta property="article:tag" content="African Dance" />
         <meta property="article:tag" content="Afrobeats" />
-        {dance.origin && <meta property="article:tag" content={dance.origin} />}
+        {dance?.origin && <meta property="article:tag" content={safeString(dance.origin)} />}
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -214,10 +201,10 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta name="theme-color" content="#FFD600" />
         
         {/* Geographic SEO */}
-        {dance.origin && (
+        {dance?.origin && (
           <>
-            <meta name="geo.region" content={dance.origin} />
-            <meta name="geo.placename" content={dance.origin} />
+            <meta name="geo.region" content={safeString(dance.origin)} />
+            <meta name="geo.placename" content={safeString(dance.origin)} />
           </>
         )}
         
