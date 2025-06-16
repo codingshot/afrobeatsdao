@@ -1,13 +1,12 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ListView } from "./map/ListView";
 import { GlobalMapView } from "./map/GlobalMapView";
 import { useMapData } from "@/hooks/use-map-data";
 import { useNavigate } from "react-router-dom";
 import { MapFilters as MapFiltersType } from "@/types/map";
 
 export function MiniGlobalMap() {
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
   const [filters, setFilters] = useState<MapFiltersType>({
     types: ['all'],
     countries: [],
@@ -63,7 +62,7 @@ export function MiniGlobalMap() {
   }
 
   return (
-    <section className="py-16 bg-white relative z-0">
+    <section className="py-16 bg-white relative">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-heading font-bold mb-4 text-black">
@@ -75,7 +74,7 @@ export function MiniGlobalMap() {
         </div>
 
         {/* Map Content with fixed height */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative z-0">
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden">
           <GlobalMapView 
             items={filteredData} 
             filters={filters}
@@ -85,7 +84,7 @@ export function MiniGlobalMap() {
         </div>
 
         {/* Full Map CTA */}
-        <div className="text-center relative z-0">
+        <div className="text-center">
           <Button 
             onClick={() => navigate('/map')}
             size="lg"

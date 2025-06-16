@@ -167,14 +167,14 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
 
   return (
     <div className="relative">
-      {/* Map with lower z-index to stay behind audio player */}
-      <div className={`rounded-lg overflow-hidden border border-[#008751] w-full bg-[#FEF7CD]/50 relative z-10 ${
-        isHomePage ? 'h-full' : 'h-[70vh] md:h-[calc(100vh-250px)]'
+      {/* Map container with proper z-index management */}
+      <div className={`rounded-lg overflow-hidden border border-[#008751] w-full bg-[#FEF7CD]/50 relative ${
+        isHomePage ? 'h-full z-10' : 'h-[70vh] md:h-[calc(100vh-250px)] z-10'
       }`}>
         <MapContainer 
           center={defaultCenter as L.LatLngExpression}
           zoom={defaultZoom} 
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '100%', width: '100%', zIndex: 1 }}
           scrollWheelZoom={true}
         >
           <TileLayer
@@ -340,11 +340,11 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Only show overlays on full map page, not home page - with lower z-index than audio player */}
+        {/* Only show overlays on full map page, not home page - ensure lower z-index than audio player */}
         {!isHomePage && (
           <>
             {/* Overlaid Stats */}
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-2">
                   <div className="space-y-1.5">
@@ -364,7 +364,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
             </div>
 
             {/* Overlaid Country Filters */}
-            <div className="absolute top-4 right-4 z-20 w-48">
+            <div className="absolute top-4 right-4 z-30 w-48">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-3">
                   <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>
