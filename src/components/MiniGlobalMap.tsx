@@ -141,8 +141,8 @@ export function MiniGlobalMap() {
           </p>
         </div>
 
-        {/* Map Content with fixed height */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative">
+        {/* Map Content with increased height */}
+        <div className="bg-gray-50 rounded-lg p-4 h-[600px] mb-6 overflow-hidden relative">
           <MapContainer 
             center={[20, 0] as L.LatLngExpression}
             zoom={2} 
