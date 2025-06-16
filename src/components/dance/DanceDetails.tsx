@@ -57,56 +57,58 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Enhanced safe string conversion that handles all data types
+  // Ultra-safe string conversion that handles all edge cases
   const safeString = (value: any): string => {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'string') {
-      return value;
-    }
-    if (typeof value === 'number') {
-      return String(value);
-    }
-    if (typeof value === 'boolean') {
-      return String(value);
-    }
-    // Handle Symbols and other complex types
-    if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'object') {
-      return '';
-    }
-    // Fallback for any other type
     try {
-      return String(value);
-    } catch {
+      if (value === null || value === undefined) {
+        return '';
+      }
+      if (typeof value === 'string') {
+        return value;
+      }
+      if (typeof value === 'number' && !isNaN(value)) {
+        return String(value);
+      }
+      if (typeof value === 'boolean') {
+        return String(value);
+      }
+      // Reject all complex types including Symbols
+      return '';
+    } catch (error) {
+      console.error('Error in safeString conversion:', error, value);
       return '';
     }
   };
 
-  // Create safe meta values with fallbacks
-  const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin) || '';
-  const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
-  const safeDanceDifficulty = safeString(dance?.difficulty) || 'Beginner';
-  const safeDanceId = safeString(dance?.id) || 'dance';
+  // Safely extract and validate all dance properties
+  const safeDance = {
+    name: safeString(dance?.name) || 'Dance',
+    origin: safeString(dance?.origin) || '',
+    description: safeString(dance?.description) || 'Learn this amazing dance',
+    difficulty: safeString(dance?.difficulty) || 'Beginner',
+    id: safeString(dance?.id) || 'dance',
+    image: safeString(dance?.image) || ''
+  };
 
-  // Build meta values safely with proper fallbacks
-  const metaTitle = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - Learn ${safeDanceDifficulty} Level | Afrobeats.party`;
-  const metaDescription = `Learn the ${safeDanceName} dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''}! ${safeDanceDescription} ${safeDanceDifficulty} difficulty level. Master African dance moves with our step-by-step tutorials.`;
-  const canonicalUrl = `https://afrobeats.party/dance/${safeDanceId}`;
+  console.log('DanceDetails - Safe dance object:', safeDance);
+
+  // Build meta values with completely safe strings
+  const metaTitle = `${safeDance.name} Dance${safeDance.origin ? ` from ${safeDance.origin}` : ''} - Learn ${safeDance.difficulty} Level | Afrobeats.party`;
+  const metaDescription = `Learn the ${safeDance.name} dance${safeDance.origin ? ` from ${safeDance.origin}` : ''}! ${safeDance.description} ${safeDance.difficulty} difficulty level. Master African dance moves with our step-by-step tutorials.`;
+  const canonicalUrl = `https://afrobeats.party/dance/${safeDance.id}`;
   
   // Use dance image for Open Graph, fallback to default
-  const ogImage = dance?.image ? `https://afrobeats.party${safeString(dance.image)}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
-  const ogImageAlt = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - ${safeDanceDifficulty} Level Tutorial`;
+  const ogImage = safeDance.image ? `https://afrobeats.party${safeDance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
+  const ogImageAlt = `${safeDance.name} Dance${safeDance.origin ? ` from ${safeDance.origin}` : ''} - ${safeDance.difficulty} Level Tutorial`;
   
-  // Enhanced keywords for better SEO
-  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(Boolean) || [];
+  // Enhanced keywords for better SEO - safely extract key moves
+  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(name => name.length > 0) || [];
   const seoKeywords = [
-    safeDanceName.toLowerCase(),
+    safeDance.name.toLowerCase(),
     'african dance',
     'afrobeats dance',
-    safeDanceOrigin.toLowerCase(),
-    safeDanceDifficulty.toLowerCase(),
+    safeDance.origin.toLowerCase(),
+    safeDance.difficulty.toLowerCase(),
     'dance tutorial',
     'dance lessons',
     'afrobeats party',
@@ -114,7 +116,16 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     'dance moves',
     'learn to dance',
     ...keyMovesKeywords.map(k => k.toLowerCase())
-  ].filter(Boolean).join(', ');
+  ].filter(keyword => keyword.length > 0).join(', ');
+
+  console.log('DanceDetails - Meta values:', {
+    metaTitle,
+    metaDescription,
+    canonicalUrl,
+    ogImage,
+    ogImageAlt,
+    seoKeywords
+  });
 
   return (
     <>
@@ -135,7 +146,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta property="article:section" content="Dance" />
         <meta property="article:tag" content="African Dance" />
         <meta property="article:tag" content="Afrobeats" />
-        {safeDanceOrigin && <meta property="article:tag" content={safeDanceOrigin} />}
+        {safeDance.origin && <meta property="article:tag" content={safeDance.origin} />}
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
@@ -151,10 +162,10 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#FFD600" />
         
-        {safeDanceOrigin && (
+        {safeDance.origin && (
           <>
-            <meta name="geo.region" content={safeDanceOrigin} />
-            <meta name="geo.placename" content={safeDanceOrigin} />
+            <meta name="geo.region" content={safeDance.origin} />
+            <meta name="geo.placename" content={safeDance.origin} />
           </>
         )}
       </Helmet>

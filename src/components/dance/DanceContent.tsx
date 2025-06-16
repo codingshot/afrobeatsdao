@@ -31,28 +31,25 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const { startDance, markModuleComplete, getDanceProgress } = useDanceProgress();
   const danceProgress = getDanceProgress(dance.id);
 
-  // Enhanced safe string conversion that handles all data types
+  // Ultra-safe string conversion that handles all edge cases
   const safeString = (value: any): string => {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'string') {
-      return value;
-    }
-    if (typeof value === 'number') {
-      return String(value);
-    }
-    if (typeof value === 'boolean') {
-      return String(value);
-    }
-    // Handle Symbols and other complex types
-    if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'object') {
-      return '';
-    }
-    // Fallback for any other type
     try {
-      return String(value);
-    } catch {
+      if (value === null || value === undefined) {
+        return '';
+      }
+      if (typeof value === 'string') {
+        return value;
+      }
+      if (typeof value === 'number' && !isNaN(value)) {
+        return String(value);
+      }
+      if (typeof value === 'boolean') {
+        return String(value);
+      }
+      // Reject all complex types including Symbols
+      return '';
+    } catch (error) {
+      console.error('Error in safeString conversion:', error, value);
       return '';
     }
   };
@@ -65,11 +62,17 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     console.log(`Viewing dance: ${dance.name} (${dance.id})`);
   }, [dance.id, dance.name]);
 
-  // Safe meta values with enhanced sanitization
-  const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin) || '';
-  const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
-  const safeDanceKeywords = dance?.keyMoves?.map(m => safeString(m?.name)).filter(Boolean).join(', ') || '';
+  // Safely extract and validate all dance properties for meta tags
+  const safeDance = {
+    name: safeString(dance?.name) || 'Dance',
+    origin: safeString(dance?.origin) || '',
+    description: safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party'
+  };
+
+  const safeDanceKeywords = dance?.keyMoves?.map(m => safeString(m?.name)).filter(name => name.length > 0).join(', ') || '';
+
+  console.log('DanceContent - Safe dance object:', safeDance);
+  console.log('DanceContent - Safe keywords:', safeDanceKeywords);
 
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
@@ -207,12 +210,12 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   return (
     <>
       <Helmet>
-        <title>{safeDanceName} - Learn {safeDanceOrigin} Dance</title>
-        <meta name="description" content={safeDanceDescription} />
-        <meta property="og:title" content={`Learn ${safeDanceName} - African Dance Tutorial`} />
-        <meta property="og:description" content={safeDanceDescription} />
+        <title>{safeDance.name} - Learn {safeDance.origin} Dance</title>
+        <meta name="description" content={safeDance.description} />
+        <meta property="og:title" content={`Learn ${safeDance.name} - African Dance Tutorial`} />
+        <meta property="og:description" content={safeDance.description} />
         <meta property="og:type" content="article" />
-        <meta name="keywords" content={`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`} />
+        <meta name="keywords" content={`${safeDance.name.toLowerCase()}, ${safeDance.origin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`} />
       </Helmet>
 
       <Card 
