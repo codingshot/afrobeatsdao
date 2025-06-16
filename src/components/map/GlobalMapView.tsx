@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem, MapItemType, MapFilters } from '@/types/map';
@@ -172,11 +173,11 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
   return (
     <div className="relative">
       {/* Map */}
-      <div className="rounded-lg overflow-hidden border border-[#008751] h-[70vh] md:h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative">
+      <div className="rounded-lg overflow-hidden border border-[#008751] h-[70vh] md:h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative z-0">
         <MapContainer 
           center={defaultCenter as L.LatLngExpression}
           zoom={defaultZoom} 
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '100%', width: '100%', zIndex: 0 }}
           scrollWheelZoom={true}
           className="z-0"
         >
@@ -343,8 +344,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Mid Left as single column with proper z-index */}
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-[500]">
+        {/* Overlaid Stats - Mid Left with lower z-index than audio player */}
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
           <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
             <CardContent className="p-2">
               <div className="space-y-1.5">
@@ -363,8 +364,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           </Card>
         </div>
 
-        {/* Overlaid Country Filters - Top Right */}
-        <div className="absolute top-4 right-4 z-[1000] w-48">
+        {/* Overlaid Country Filters - Top Right with lower z-index than audio player */}
+        <div className="absolute top-4 right-4 z-30 w-48">
           <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
             <CardContent className="p-3">
               <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>
