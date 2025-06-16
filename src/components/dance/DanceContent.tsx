@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,17 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const { startDance, markModuleComplete, getDanceProgress } = useDanceProgress();
   const danceProgress = getDanceProgress(dance.id);
 
+  // Safe string conversion - only allow actual strings
+  const safeString = (value: any): string => {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (typeof value === 'number') {
+      return String(value);
+    }
+    return '';
+  };
+
   useEffect(() => {
     setIsLoading(false);
   }, []);
@@ -39,6 +49,12 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   useEffect(() => {
     console.log(`Viewing dance: ${dance.name} (${dance.id})`);
   }, [dance.id, dance.name]);
+
+  // Safe meta values
+  const safeDanceName = safeString(dance?.name) || 'Dance';
+  const safeDanceOrigin = safeString(dance?.origin);
+  const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
+  const safeDanceKeywords = dance?.keyMoves?.map(m => safeString(m?.name)).filter(Boolean).join(', ') || '';
 
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
@@ -176,30 +192,12 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   return (
     <>
       <Helmet>
-        <title>{dance.name} - Learn {dance.origin} Dance</title>
-        <meta name="description" content={dance.description} />
-        <meta property="og:title" content={`Learn ${dance.name} - African Dance Tutorial`} />
-        <meta property="og:description" content={dance.description} />
+        <title>{safeDanceName} - Learn {safeDanceOrigin} Dance</title>
+        <meta name="description" content={safeDanceDescription} />
+        <meta property="og:title" content={`Learn ${safeDanceName} - African Dance Tutorial`} />
+        <meta property="og:description" content={safeDanceDescription} />
         <meta property="og:type" content="article" />
-        <meta name="keywords" content={`${dance.name.toLowerCase()}, ${dance.origin.toLowerCase()} dance, african dance tutorial, dance moves, ${dance.keyMoves?.map(m => m.name.toLowerCase()).join(', ')}`} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "HowTo",
-            "name": `How to Dance ${dance.name}`,
-            "description": dance.description,
-            "totalTime": "PT2H",
-            "step": dance.keyMoves?.map((move, index) => ({
-              "@type": "HowToStep",
-              "position": index + 1,
-              "name": move.name,
-              "itemListElement": move.steps.map(step => ({
-                "@type": "HowToDirection",
-                "text": step
-              }))
-            }))
-          })}
-        </script>
+        <meta name="keywords" content={`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`} />
       </Helmet>
 
       <Card 

@@ -57,7 +57,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Simple and safe string conversion - only allow actual strings
+  // Safe string conversion - only allow actual strings
   const safeString = (value: any): string => {
     if (typeof value === 'string') {
       return value;
@@ -69,15 +69,15 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   };
 
   // Create safe meta values
-  const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin);
-  const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
-  const safeDanceDifficulty = safeString(dance?.difficulty) || 'Beginner';
-  const safeDanceId = safeString(dance?.id) || 'dance';
+  const safeDanceName = safeString(dance?.name || 'Dance');
+  const safeDanceOrigin = safeString(dance?.origin || '');
+  const safeDanceDescription = safeString(dance?.description || 'Learn this amazing dance');
+  const safeDanceDifficulty = safeString(dance?.difficulty || 'Beginner');
+  const safeDanceId = safeString(dance?.id || 'dance');
 
   // Build meta values safely
   const metaTitle = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - Learn ${safeDanceDifficulty} Level | Afrobeats.party`;
-  const metaDescription = `🕺 Learn the ${safeDanceName} dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''}! ${safeDanceDescription} ${safeDanceDifficulty} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`;
+  const metaDescription = `Learn the ${safeDanceName} dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''}! ${safeDanceDescription} ${safeDanceDifficulty} difficulty level. Master African dance moves with our step-by-step tutorials.`;
   const canonicalUrl = `https://afrobeats.party/dance/${safeDanceId}`;
   
   // Use dance image for Open Graph, fallback to default
@@ -85,7 +85,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const ogImageAlt = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - ${safeDanceDifficulty} Level Tutorial`;
   
   // Enhanced keywords for better SEO
-  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(Boolean) || [];
+  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name || '')).filter(Boolean) || [];
   const seoKeywords = [
     safeDanceName.toLowerCase(),
     'african dance',
@@ -107,7 +107,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
@@ -123,7 +122,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta property="article:tag" content="Afrobeats" />
         {safeDanceOrigin && <meta property="article:tag" content={safeDanceOrigin} />}
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
@@ -132,14 +130,12 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={ogImageAlt} />
         
-        {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
         <meta name="keywords" content={seoKeywords} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#FFD600" />
         
-        {/* Geographic SEO */}
         {safeDanceOrigin && (
           <>
             <meta name="geo.region" content={safeDanceOrigin} />
@@ -159,7 +155,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             Back to Dances
           </Button>
           
-          {/* Banner image above the dance details */}
           {dance.image && (
             <div className="w-full mb-4 sm:mb-6">
               <AspectRatio ratio={21/9} className="bg-muted rounded-lg overflow-hidden">
