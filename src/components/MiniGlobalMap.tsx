@@ -142,7 +142,7 @@ export function MiniGlobalMap() {
         </div>
 
         {/* Map Content with fixed height */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative z-10">
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative">
           <MapContainer 
             center={[20, 0] as L.LatLngExpression}
             zoom={2} 
@@ -265,16 +265,44 @@ export function MiniGlobalMap() {
               ) : null
             ))}
           </MapContainer>
+
+          {/* Legend - positioned absolutely within the map container */}
+          <div className="absolute bottom-4 left-4 z-[1000]">
+            <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
+              <CardContent className="p-2">
+                <h4 className="text-xs font-semibold text-black mb-2">Legend</h4>
+                <div className="space-y-1">
+                  {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'community'].map(type => {
+                    const count = mapItems.filter(item => item.type === type).length;
+                    return (
+                      <div key={type} className="flex items-center gap-2">
+                        <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
+                        <span className="text-xs font-bold text-black min-w-[16px]">{count}</span>
+                        <span className="text-xs text-black/70 capitalize">{type}s</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        {/* Full Map CTA */}
-        <div className="text-center">
+        {/* Action Buttons */}
+        <div className="text-center flex gap-4 justify-center">
           <Button 
             onClick={() => navigate('/map')}
             size="lg"
             className="bg-afro-teal text-white hover:bg-afro-teal/90"
           >
             Explore Full Map
+          </Button>
+          <Button 
+            onClick={() => navigate('/chapters')}
+            size="lg"
+            className="bg-afro-yellow text-black hover:bg-afro-yellow/90"
+          >
+            Start Chapter
           </Button>
         </div>
       </div>

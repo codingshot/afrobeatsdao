@@ -38,9 +38,17 @@ iframe,
   z-index: 50 !important;
 }
 
-/* Fix for Leaflet popup content */
+/* Fix for Leaflet popup content - ensure popups show above map */
 .leaflet-popup-content {
   min-width: 200px;
+}
+
+.leaflet-popup {
+  z-index: 1000 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 1000 !important;
 }
 
 /* Fix for mobile display */
@@ -72,6 +80,11 @@ main {
   color: #000 !important;
 }
 
+/* Dance page title visibility fix */
+.page-dance h1 {
+  color: #FFD600 !important;
+}
+
 /* Ensure map containers have proper z-index but stay below audio player */
 .leaflet-container {
   z-index: 1 !important;
@@ -81,8 +94,8 @@ main {
   z-index: 10 !important;
 }
 
-/* Ensure map overlays stay below audio player */
+/* Ensure map overlays stay below audio player but above map */
 .leaflet-popup,
 .leaflet-popup-pane {
-  z-index: 20 !important;
+  z-index: 1000 !important;
 }
