@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ListView } from "./map/ListView";
@@ -64,7 +63,7 @@ export function MiniGlobalMap() {
   }
 
   return (
-    <section className="py-16 bg-white relative z-10">
+    <section className="py-16 bg-white relative z-0">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-heading font-bold mb-4 text-black">
@@ -75,22 +74,18 @@ export function MiniGlobalMap() {
           </p>
         </div>
 
-        {/* Map/List Content with fixed height */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative z-10">
-          {viewMode === 'map' ? (
-            <GlobalMapView 
-              items={filteredData} 
-              filters={filters}
-              onFiltersChange={setFilters}
-              isHomePage={true}
-            />
-          ) : (
-            <ListView items={filteredData} />
-          )}
+        {/* Map Content with fixed height */}
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative z-0">
+          <GlobalMapView 
+            items={filteredData} 
+            filters={filters}
+            onFiltersChange={setFilters}
+            isHomePage={true}
+          />
         </div>
 
         {/* Full Map CTA */}
-        <div className="text-center relative z-20">
+        <div className="text-center relative z-0">
           <Button 
             onClick={() => navigate('/map')}
             size="lg"

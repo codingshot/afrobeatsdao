@@ -167,8 +167,8 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
 
   return (
     <div className="relative">
-      {/* Map */}
-      <div className={`rounded-lg overflow-hidden border border-[#008751] w-full bg-[#FEF7CD]/50 relative ${
+      {/* Map with lower z-index to stay behind audio player */}
+      <div className={`rounded-lg overflow-hidden border border-[#008751] w-full bg-[#FEF7CD]/50 relative z-10 ${
         isHomePage ? 'h-full' : 'h-[70vh] md:h-[calc(100vh-250px)]'
       }`}>
         <MapContainer 
@@ -340,11 +340,11 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Only show overlays on full map page, not home page */}
+        {/* Only show overlays on full map page, not home page - with lower z-index than audio player */}
         {!isHomePage && (
           <>
             {/* Overlaid Stats */}
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-2">
                   <div className="space-y-1.5">
@@ -364,7 +364,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
             </div>
 
             {/* Overlaid Country Filters */}
-            <div className="absolute top-4 right-4 z-30 w-48">
+            <div className="absolute top-4 right-4 z-20 w-48">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-3">
                   <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>

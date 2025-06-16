@@ -1,4 +1,3 @@
-
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
@@ -73,7 +72,7 @@ const Index = () => {
         <FutureSection />
         <TeamSection />
         
-        {/* Partner CTA Section - Changed back to "Start Chapter" */}
+        {/* Partner CTA Section */}
         <section className="py-16 bg-afro-teal text-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-2xl mx-auto">
