@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -81,16 +82,40 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
   ].filter(Boolean).join(', ');
 
-  // Create structured data with proper null checks and sanitization
+  // Completely sanitize function to remove any problematic values
+  const sanitizeValue = (value: any): string => {
+    if (value === null || value === undefined || typeof value === 'symbol' || typeof value === 'function') {
+      return '';
+    }
+    if (typeof value === 'object') {
+      return JSON.stringify(value);
+    }
+    return String(value);
+  };
+
+  // Create structured data with complete sanitization
   const createStructuredData = () => {
     try {
-      const data = {
+      // Create a completely clean object with only safe string values
+      const cleanDance = {
+        name: sanitizeValue(dance?.name) || 'Dance Tutorial',
+        description: sanitizeValue(dance?.description) || metaDescription,
+        id: sanitizeValue(dance?.id) || 'dance',
+        keyMoves: Array.isArray(dance?.keyMoves) ? dance.keyMoves.filter(move => 
+          move && typeof move === 'object' && move.name && Array.isArray(move.steps)
+        ).map(move => ({
+          name: sanitizeValue(move.name),
+          steps: Array.isArray(move.steps) ? move.steps.map(step => sanitizeValue(step)).filter(Boolean) : []
+        })) : []
+      };
+
+      const structuredData = {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": `How to dance ${dance.name || 'this dance'}`,
-        "description": metaDescription,
-        "image": ogImage,
-        "url": canonicalUrl,
+        "name": `How to dance ${cleanDance.name}`,
+        "description": cleanDance.description,
+        "image": sanitizeValue(ogImage),
+        "url": sanitizeValue(canonicalUrl),
         "totalTime": "PT30M",
         "estimatedCost": {
           "@type": "MonetaryAmount",
@@ -113,12 +138,12 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             "name": "Music player"
           }
         ],
-        "step": dance.keyMoves?.filter(move => move && move.name).map((move, index) => ({
+        "step": cleanDance.keyMoves.map((move, index) => ({
           "@type": "HowToStep",
           "position": index + 1,
-          "name": String(move.name || `Step ${index + 1}`),
-          "text": Array.isArray(move.steps) ? move.steps.filter(Boolean).join('. ') : ''
-        })) || [],
+          "name": move.name || `Step ${index + 1}`,
+          "text": move.steps.join('. ')
+        })),
         "about": {
           "@type": "Thing",
           "name": "African Dance",
@@ -133,18 +158,19 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": canonicalUrl
+          "@id": sanitizeValue(canonicalUrl)
         }
       };
       
-      return JSON.stringify(data);
+      return JSON.stringify(structuredData);
     } catch (error) {
       console.error('Error creating structured data:', error);
+      // Return minimal safe structured data
       return JSON.stringify({
         "@context": "https://schema.org",
         "@type": "HowTo",
-        "name": `How to dance ${dance.name || 'this dance'}`,
-        "description": metaDescription
+        "name": "Dance Tutorial",
+        "description": "Learn to dance on Afrobeats.party"
       });
     }
   };
