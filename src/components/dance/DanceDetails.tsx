@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -56,111 +57,49 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Sanitize all values to ensure they are safe strings
+  // Simple and safe string conversion - only allow actual strings
   const safeString = (value: any): string => {
-    if (value === null || value === undefined || typeof value === 'symbol' || typeof value === 'function') {
-      return '';
+    if (typeof value === 'string') {
+      return value;
     }
-    if (typeof value === 'object') {
-      return '';
+    if (typeof value === 'number') {
+      return String(value);
     }
-    return String(value);
+    return '';
   };
 
-  // Enhanced SEO data with dynamic dance information - all values sanitized
-  const metaTitle = safeString(`${dance?.name || 'Dance'} Dance${dance?.origin ? ` from ${dance.origin}` : ''} - Learn ${dance?.difficulty || 'Beginner'} Level | Afrobeats.party`);
-  const metaDescription = safeString(`🕺 Learn the ${dance?.name || 'dance'} dance${dance?.origin ? ` from ${dance.origin}` : ''}! ${dance?.description || 'Learn this amazing dance'} ${dance?.difficulty || 'Beginner'} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`);
-  const canonicalUrl = safeString(`https://afrobeats.party/dance/${dance?.id || 'dance'}`);
+  // Create safe meta values
+  const safeDanceName = safeString(dance?.name) || 'Dance';
+  const safeDanceOrigin = safeString(dance?.origin);
+  const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
+  const safeDanceDifficulty = safeString(dance?.difficulty) || 'Beginner';
+  const safeDanceId = safeString(dance?.id) || 'dance';
+
+  // Build meta values safely
+  const metaTitle = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - Learn ${safeDanceDifficulty} Level | Afrobeats.party`;
+  const metaDescription = `🕺 Learn the ${safeDanceName} dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''}! ${safeDanceDescription} ${safeDanceDifficulty} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`;
+  const canonicalUrl = `https://afrobeats.party/dance/${safeDanceId}`;
   
-  // Use dance image for Open Graph, fallback to default - ensure full URL
-  const ogImage = safeString(dance?.image ? `https://afrobeats.party${dance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png");
-  const ogImageAlt = safeString(`${dance?.name || 'Dance'} Dance${dance?.origin ? ` from ${dance.origin}` : ''} - ${dance?.difficulty || 'Beginner'} Level Tutorial`);
+  // Use dance image for Open Graph, fallback to default
+  const ogImage = dance?.image ? `https://afrobeats.party${safeString(dance.image)}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
+  const ogImageAlt = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - ${safeDanceDifficulty} Level Tutorial`;
   
   // Enhanced keywords for better SEO
-  const seoKeywords = safeString([
-    dance?.name?.toLowerCase() || 'dance',
+  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(Boolean) || [];
+  const seoKeywords = [
+    safeDanceName.toLowerCase(),
     'african dance',
     'afrobeats dance',
-    dance?.origin?.toLowerCase() || '',
-    dance?.difficulty?.toLowerCase() || 'beginner',
+    safeDanceOrigin.toLowerCase(),
+    safeDanceDifficulty.toLowerCase(),
     'dance tutorial',
     'dance lessons',
     'afrobeats party',
     'african culture',
     'dance moves',
     'learn to dance',
-    ...(dance?.keyMoves?.map(move => move?.name?.toLowerCase()).filter(Boolean) || [])
-  ].filter(Boolean).join(', '));
-
-  // Create structured data with complete sanitization
-  const createStructuredData = () => {
-    try {
-      const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": safeString(`How to dance ${dance?.name || 'this dance'}`),
-        "description": metaDescription,
-        "image": ogImage,
-        "url": canonicalUrl,
-        "totalTime": "PT30M",
-        "estimatedCost": {
-          "@type": "MonetaryAmount",
-          "currency": "USD",
-          "value": "0"
-        },
-        "supply": [
-          {
-            "@type": "HowToSupply",
-            "name": "Comfortable clothing"
-          },
-          {
-            "@type": "HowToSupply", 
-            "name": "Open space to dance"
-          }
-        ],
-        "tool": [
-          {
-            "@type": "HowToTool",
-            "name": "Music player"
-          }
-        ],
-        "step": Array.isArray(dance?.keyMoves) ? dance.keyMoves.filter(move => 
-          move && move.name
-        ).map((move, index) => ({
-          "@type": "HowToStep",
-          "position": index + 1,
-          "name": safeString(move.name || `Step ${index + 1}`),
-          "text": safeString(Array.isArray(move.steps) ? move.steps.filter(Boolean).join('. ') : '')
-        })) : [],
-        "about": {
-          "@type": "Thing",
-          "name": "African Dance",
-          "description": "Traditional and modern African dance forms"
-        },
-        "inLanguage": "en",
-        "isPartOf": {
-          "@type": "WebSite",
-          "name": "Afrobeats.party",
-          "url": "https://afrobeats.party",
-          "description": "Global platform for African music and culture"
-        },
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": canonicalUrl
-        }
-      };
-      
-      return JSON.stringify(structuredData);
-    } catch (error) {
-      console.error('Error creating structured data:', error);
-      return JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": "Dance Tutorial",
-        "description": "Learn to dance on Afrobeats.party"
-      });
-    }
-  };
+    ...keyMovesKeywords.map(k => k.toLowerCase())
+  ].filter(Boolean).join(', ');
 
   return (
     <>
@@ -182,7 +121,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta property="article:section" content="Dance" />
         <meta property="article:tag" content="African Dance" />
         <meta property="article:tag" content="Afrobeats" />
-        {dance?.origin && <meta property="article:tag" content={safeString(dance.origin)} />}
+        {safeDanceOrigin && <meta property="article:tag" content={safeDanceOrigin} />}
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -201,17 +140,12 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         <meta name="theme-color" content="#FFD600" />
         
         {/* Geographic SEO */}
-        {dance?.origin && (
+        {safeDanceOrigin && (
           <>
-            <meta name="geo.region" content={safeString(dance.origin)} />
-            <meta name="geo.placename" content={safeString(dance.origin)} />
+            <meta name="geo.region" content={safeDanceOrigin} />
+            <meta name="geo.placename" content={safeDanceOrigin} />
           </>
         )}
-        
-        {/* Schema.org structured data */}
-        <script type="application/ld+json">
-          {createStructuredData()}
-        </script>
       </Helmet>
       
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
