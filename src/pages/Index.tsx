@@ -1,3 +1,4 @@
+
 import { EventsSection } from "@/components/EventsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { MusicSection } from "@/components/MusicSection";
@@ -18,10 +19,22 @@ import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { playNow, currentSong } = useGlobalAudioPlayer();
+  
+  // Safely access the audio player context
+  let audioPlayerContext;
+  try {
+    audioPlayerContext = useGlobalAudioPlayer();
+  } catch (error) {
+    console.warn("GlobalAudioPlayer context not available:", error);
+    audioPlayerContext = null;
+  }
+  
+  const { playNow, currentSong } = audioPlayerContext || {};
 
   // Auto-play a random vibe when the page loads and no song is currently playing
   useEffect(() => {
+    if (!audioPlayerContext || !playNow) return;
+    
     // Check localStorage first for any saved song
     const savedSong = localStorage.getItem('afrobeats_current_song');
     
@@ -42,7 +55,7 @@ const Index = () => {
       // Play the Vibe of the Day video
       playNow(defaultSong);
     }
-  }, [playNow, currentSong]);
+  }, [playNow, currentSong, audioPlayerContext]);
 
   return (
     <div className="min-h-screen font-sans pb-[100px]">
