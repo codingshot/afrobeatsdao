@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -25,6 +24,17 @@ const ArtistProfile = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  // Safe string conversion utility
+  const safeString = (value: any): string => {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (typeof value === 'number') {
+      return String(value);
+    }
+    return '';
+  };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
@@ -210,40 +220,46 @@ const ArtistProfile = () => {
     );
   }
 
+  // Safe meta values with proper string conversion
+  const safeArtistName = safeString(artist.name);
+  const safeArtistCountry = safeString(artist.country);
+  const safeArtistGenre = safeString(artist.genre);
+  const safeArtistId = safeString(artist.id);
+
   // Enhanced SEO data with dynamic artist information
-  const metaTitle = `${artist.name}${artist.country ? ` - ${artist.country}` : ''} ${artist.genre ? `${artist.genre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
-  const metaDescription = `🎵 Discover ${artist.name}'s music on Afrobeats.party! ${artist.country ? `This ${artist.country} artist ` : 'Listen to '}${artist.top_songs.length} top songs including their biggest hits. ${artist.genre ? `Experience the best of ${artist.genre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${artist.id}`;
+  const metaTitle = `${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} ${safeArtistGenre ? `${safeArtistGenre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
+  const metaDescription = `🎵 Discover ${safeArtistName}'s music on Afrobeats.party! ${safeArtistCountry ? `This ${safeArtistCountry} artist ` : 'Listen to '}${artist.top_songs.length} top songs including their biggest hits. ${safeArtistGenre ? `Experience the best of ${safeArtistGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
+  const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}`;
   
   // Use artist image for Open Graph, ensure it's a full URL
-  const ogImage = artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
-  const ogImageAlt = `${artist.name} - ${artist.country ? `${artist.country} ` : ''}${artist.genre || 'Afrobeats'} Artist Profile`;
+  const ogImage = artist.image ? `https://afrobeats.party${safeString(artist.image)}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImageAlt = `${safeArtistName} - ${safeArtistCountry ? `${safeArtistCountry} ` : ''}${safeArtistGenre || 'Afrobeats'} Artist Profile`;
   
   // Enhanced keywords for better SEO
   const seoKeywords = [
-    artist.name.toLowerCase(),
+    safeArtistName.toLowerCase(),
     'afrobeats artist',
     'african music',
-    artist.country?.toLowerCase(),
-    artist.genre?.toLowerCase(),
+    safeArtistCountry.toLowerCase(),
+    safeArtistGenre.toLowerCase(),
     'afrobeats party',
     'african culture',
     'music streaming',
     'afrobeats dao',
-    ...artist.top_songs.slice(0, 5).map(song => song.title.toLowerCase()),
+    ...artist.top_songs.slice(0, 5).map(song => safeString(song.title).toLowerCase()),
     'nigerian music',
     'ghana music',
     'south african music'
   ].filter(Boolean).join(', ');
   
-  // Get social media links for structured data
+  // Get social media links for structured data - ensure all are strings
   const socialLinks = [
-    artist.spotify,
-    artist.instagram,
-    artist.twitter,
-    artist.youtube,
-    artist.soundcloud,
-    artist.website
+    safeString(artist.spotify),
+    safeString(artist.instagram),
+    safeString(artist.twitter),
+    safeString(artist.youtube),
+    safeString(artist.soundcloud),
+    safeString(artist.website)
   ].filter(Boolean);
   
   return (
@@ -266,7 +282,7 @@ const ArtistProfile = () => {
         
         {/* Music specific Open Graph */}
         <meta property="music:musician" content={canonicalUrl} />
-        <meta property="music:song_count" content={artist.top_songs.length.toString()} />
+        <meta property="music:song_count" content={String(artist.top_songs.length)} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -285,46 +301,12 @@ const ArtistProfile = () => {
         <meta name="theme-color" content="#008751" />
         
         {/* Geographic SEO */}
-        {artist.country && (
+        {safeArtistCountry && (
           <>
-            <meta name="geo.region" content={artist.country} />
-            <meta name="geo.placename" content={artist.country} />
+            <meta name="geo.region" content={safeArtistCountry} />
+            <meta name="geo.placename" content={safeArtistCountry} />
           </>
         )}
-        
-        {/* Schema.org structured data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "MusicGroup",
-            "name": artist.name,
-            "description": metaDescription,
-            "image": ogImage,
-            "url": canonicalUrl,
-            "genre": artist.genre || "Afrobeats",
-            ...(artist.country && { "foundingLocation": artist.country }),
-            "sameAs": socialLinks,
-            "track": artist.top_songs.map(song => ({
-              "@type": "MusicRecording",
-              "name": song.title,
-              "url": song.youtube,
-              "byArtist": {
-                "@type": "MusicGroup",
-                "name": artist.name
-              }
-            })),
-            "isPartOf": {
-              "@type": "WebSite",
-              "name": "Afrobeats.party",
-              "url": "https://afrobeats.party",
-              "description": "Global platform for African music and Afrobeats culture"
-            },
-            "mainEntityOfPage": {
-              "@type": "WebPage",
-              "@id": canonicalUrl
-            }
-          })}
-        </script>
       </Helmet>
       
       <div className="min-h-screen bg-background">
