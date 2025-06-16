@@ -550,10 +550,10 @@ export const GlobalAudioPlayerProvider = ({
     isDragging
   }}>
       {children}
-      {/* Video player container - positioned flush with top of player on mobile */}
+      {/* Video player container - positioned flush with top of player above song title */}
       <div ref={playerContainerRef} className={`fixed z-[200] bg-black/95 border border-white/10 rounded-lg overflow-hidden shadow-xl ${
         isMobile 
-          ? 'bottom-[140px] right-4 left-4' 
+          ? 'bottom-[100px] right-4 left-4' 
           : 'bottom-[80px] right-4'
       }`} style={{
         display: expandedView ? 'block' : 'none',
@@ -625,10 +625,10 @@ export const GlobalAudioPlayerProvider = ({
                   </span>
                 </div>
 
-                {/* Controls Row */}
+                {/* Main Controls Row - Play/Pause, Previous, Next, Repeat, Volume, Video */}
                 <div className="flex items-center justify-center gap-4">
                   <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
-                    <SkipBack className="h-5 w-5" />
+                    <SkipBack className="h-4 w-4" />
                   </Button>
                   
                   <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
@@ -636,16 +636,13 @@ export const GlobalAudioPlayerProvider = ({
                   </Button>
                   
                   <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
-                    <SkipForward className="h-5 w-5" />
+                    <SkipForward className="h-4 w-4" />
                   </Button>
                   
                   <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
-                    {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
+                    {repeat ? <Repeat1 className="h-4 w-4" /> : <Repeat className="h-4 w-4" />}
                   </Button>
-                </div>
 
-                {/* Volume and Video Controls Row */}
-                <div className="flex items-center justify-center gap-4">
                   {/* Volume Control with Vertical Popup */}
                   <div className="relative">
                     <Button 
@@ -656,7 +653,7 @@ export const GlobalAudioPlayerProvider = ({
                       onMouseLeave={() => setShowVolumeSlider(false)}
                       onClick={() => setVolume(volume === 0 ? 100 : 0)}
                     >
-                      {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                      {volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                     </Button>
                     {showVolumeSlider && (
                       <div 
@@ -664,7 +661,7 @@ export const GlobalAudioPlayerProvider = ({
                         onMouseEnter={() => setShowVolumeSlider(true)}
                         onMouseLeave={() => setShowVolumeSlider(false)}
                       >
-                        <div className="h-24 w-8 flex items-center justify-center">
+                        <div className="h-20 w-6 flex items-center justify-center">
                           <Slider 
                             value={[volume]} 
                             min={0} 
@@ -672,7 +669,7 @@ export const GlobalAudioPlayerProvider = ({
                             step={1} 
                             orientation="vertical"
                             onValueChange={([value]) => updateVolume(value)} 
-                            className="cursor-pointer h-20" 
+                            className="cursor-pointer h-16" 
                           />
                         </div>
                       </div>
@@ -680,7 +677,7 @@ export const GlobalAudioPlayerProvider = ({
                   </div>
                   
                   <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
-                    {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                    {videoVisible ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
