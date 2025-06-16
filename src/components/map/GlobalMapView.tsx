@@ -112,26 +112,21 @@ const createCustomIcon = (type: MapItemType) => {
   });
 };
 
-// Helper function to properly format YouTube URLs
 const formatYouTubeUrl = (url: string): string => {
   if (!url) return '';
   
-  // If it already starts with http/https, use as is
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
   
-  // If it already contains youtube.com, just add https://
   if (url.includes('youtube.com')) {
     return `https://${url}`;
   }
   
-  // If it's just a username or channel path, build the full URL
   if (url.startsWith('@') || url.startsWith('/')) {
     return `https://youtube.com${url.startsWith('@') ? '/' + url : url}`;
   }
   
-  // Otherwise, assume it's a username and build the URL
   return `https://youtube.com/${url}`;
 };
 
@@ -348,7 +343,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
         {/* Only show overlays on full map page, not home page */}
         {!isHomePage && (
           <>
-            {/* Overlaid Stats - Mid Left with lower z-index than audio player */}
+            {/* Overlaid Stats */}
             <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-2">
@@ -368,7 +363,7 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
               </Card>
             </div>
 
-            {/* Overlaid Country Filters - Top Right with lower z-index than audio player */}
+            {/* Overlaid Country Filters */}
             <div className="absolute top-4 right-4 z-30 w-48">
               <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
                 <CardContent className="p-3">

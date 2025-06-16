@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ListView } from "./map/ListView";
 import { GlobalMapView } from "./map/GlobalMapView";
 import { useMapData } from "@/hooks/use-map-data";
-import { Map as MapIcon, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MapFilters as MapFiltersType } from "@/types/map";
 
@@ -52,12 +51,6 @@ export function MiniGlobalMap() {
     return true;
   });
 
-  // Calculate total counts for each type
-  const totalCounts = mapItems.reduce((acc, item) => {
-    acc[item.type] = (acc[item.type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
   if (isLoading) {
     return (
       <section className="py-16 bg-white">
@@ -71,7 +64,7 @@ export function MiniGlobalMap() {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white relative z-10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-heading font-bold mb-4 text-black">
@@ -82,32 +75,8 @@ export function MiniGlobalMap() {
           </p>
         </div>
 
-        {/* Simple View Toggle - No filters on home page */}
-        <div className="mb-6 flex justify-center">
-          <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white">
-            <Button
-              variant={viewMode === 'map' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('map')}
-              className={viewMode === 'map' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
-            >
-              <MapIcon className="h-4 w-4 mr-1" />
-              Map
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className={viewMode === 'list' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
-            >
-              <List className="h-4 w-4 mr-1" />
-              List
-            </Button>
-          </div>
-        </div>
-
-        {/* Map/List Content with fixed height to prevent overlapping */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden">
+        {/* Map/List Content with fixed height */}
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden relative z-10">
           {viewMode === 'map' ? (
             <GlobalMapView 
               items={filteredData} 
@@ -121,7 +90,7 @@ export function MiniGlobalMap() {
         </div>
 
         {/* Full Map CTA */}
-        <div className="text-center">
+        <div className="text-center relative z-20">
           <Button 
             onClick={() => navigate('/map')}
             size="lg"
