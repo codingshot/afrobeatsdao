@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapItem, MapItemType, MapFilters } from '@/types/map';
@@ -14,6 +13,7 @@ interface GlobalMapViewProps {
   items: MapItem[];
   filters: MapFilters;
   onFiltersChange: (filters: MapFilters) => void;
+  isHomePage?: boolean;
 }
 
 const MapController = ({ items }: { items: MapItem[] }) => {
@@ -140,7 +140,7 @@ const COUNTRIES = [
   'Canada', 'France', 'Germany', 'Netherlands', 'Thailand', 'Ireland', 'Portugal', 'Morocco', 'Vietnam'
 ];
 
-export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, onFiltersChange }) => {
+export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, onFiltersChange, isHomePage = false }) => {
   const isMobile = useIsMobile();
   const defaultCenter = [20, 0] as [number, number];
   const defaultZoom = isMobile ? 1 : 2;
@@ -173,13 +173,14 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
   return (
     <div className="relative">
       {/* Map */}
-      <div className="rounded-lg overflow-hidden border border-[#008751] h-[70vh] md:h-[calc(100vh-250px)] w-full bg-[#FEF7CD]/50 relative z-0">
+      <div className={`rounded-lg overflow-hidden border border-[#008751] w-full bg-[#FEF7CD]/50 relative ${
+        isHomePage ? 'h-full' : 'h-[70vh] md:h-[calc(100vh-250px)]'
+      }`}>
         <MapContainer 
           center={defaultCenter as L.LatLngExpression}
           zoom={defaultZoom} 
-          style={{ height: '100%', width: '100%', zIndex: 0 }}
+          style={{ height: '100%', width: '100%' }}
           scrollWheelZoom={true}
-          className="z-0"
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -344,51 +345,56 @@ export const GlobalMapView: React.FC<GlobalMapViewProps> = ({ items, filters, on
           ))}
         </MapContainer>
 
-        {/* Overlaid Stats - Mid Left with lower z-index than audio player */}
-        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
-          <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
-            <CardContent className="p-2">
-              <div className="space-y-1.5">
-                {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'community'].map(type => {
-                  const count = items.filter(item => item.type === type).length;
-                  return (
-                    <div key={type} className="flex items-center gap-2">
-                      <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
-                      <span className="text-xs font-bold text-black min-w-[16px]">{count}</span>
-                      <span className="text-xs text-black/70 capitalize">{type}s</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Only show overlays on full map page, not home page */}
+        {!isHomePage && (
+          <>
+            {/* Overlaid Stats - Mid Left with lower z-index than audio player */}
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
+              <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
+                <CardContent className="p-2">
+                  <div className="space-y-1.5">
+                    {['artist', 'club', 'event', 'dancer', 'influencer', 'agency', 'group', 'community'].map(type => {
+                      const count = items.filter(item => item.type === type).length;
+                      return (
+                        <div key={type} className="flex items-center gap-2">
+                          <span className="text-xs">{getTypeIcon(type as MapItemType)}</span>
+                          <span className="text-xs font-bold text-black min-w-[16px]">{count}</span>
+                          <span className="text-xs text-black/70 capitalize">{type}s</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-        {/* Overlaid Country Filters - Top Right with lower z-index than audio player */}
-        <div className="absolute top-4 right-4 z-30 w-48">
-          <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
-            <CardContent className="p-3">
-              <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>
-              <div className="max-h-32 overflow-y-auto space-y-1">
-                {COUNTRIES.map((country) => (
-                  <Badge
-                    key={country}
-                    variant={filters.countries.includes(country) ? "default" : "outline"}
-                    className={`cursor-pointer transition-colors text-xs w-full justify-start hover:shadow-sm ${
-                      filters.countries.includes(country)
-                        ? "bg-[#008751] text-white hover:bg-[#008751]/90 shadow-sm"
-                        : "text-black border-[#008751]/30 hover:bg-[#008751]/10 hover:border-[#008751]/50"
-                    }`}
-                    onClick={() => toggleCountry(country)}
-                  >
-                    <span className="mr-2">{getCountryFlag(country)}</span>
-                    <span className="truncate">{country}</span>
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            {/* Overlaid Country Filters - Top Right with lower z-index than audio player */}
+            <div className="absolute top-4 right-4 z-30 w-48">
+              <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
+                <CardContent className="p-3">
+                  <h4 className="text-sm font-semibold text-black mb-2">Filter by Country</h4>
+                  <div className="max-h-32 overflow-y-auto space-y-1">
+                    {COUNTRIES.map((country) => (
+                      <Badge
+                        key={country}
+                        variant={filters.countries.includes(country) ? "default" : "outline"}
+                        className={`cursor-pointer transition-colors text-xs w-full justify-start hover:shadow-sm ${
+                          filters.countries.includes(country)
+                            ? "bg-[#008751] text-white hover:bg-[#008751]/90 shadow-sm"
+                            : "text-black border-[#008751]/30 hover:bg-[#008751]/10 hover:border-[#008751]/50"
+                        }`}
+                        onClick={() => toggleCountry(country)}
+                      >
+                        <span className="mr-2">{getCountryFlag(country)}</span>
+                        <span className="truncate">{country}</span>
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

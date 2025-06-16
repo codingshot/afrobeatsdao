@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MapFilters } from "./map/MapFilters";
 import { ListView } from "./map/ListView";
 import { GlobalMapView } from "./map/GlobalMapView";
 import { useMapData } from "@/hooks/use-map-data";
@@ -61,7 +60,7 @@ export function MiniGlobalMap() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-white relative z-10">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <p className="text-xl text-gray-700">Loading map data...</p>
@@ -72,7 +71,7 @@ export function MiniGlobalMap() {
   }
 
   return (
-    <section className="py-16 bg-white relative z-10">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-heading font-bold mb-4 text-black">
@@ -83,23 +82,38 @@ export function MiniGlobalMap() {
           </p>
         </div>
 
-        {/* Filters with proper z-index to stay behind audio player */}
-        <div className="mb-6 relative z-20">
-          <MapFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-          />
+        {/* Simple View Toggle - No filters on home page */}
+        <div className="mb-6 flex justify-center">
+          <div className="flex rounded-lg border border-[#008751]/30 p-1 bg-white">
+            <Button
+              variant={viewMode === 'map' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('map')}
+              className={viewMode === 'map' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
+            >
+              <MapIcon className="h-4 w-4 mr-1" />
+              Map
+            </Button>
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className={viewMode === 'list' ? 'bg-[#008751] text-white' : 'text-black hover:bg-[#008751]/10'}
+            >
+              <List className="h-4 w-4 mr-1" />
+              List
+            </Button>
+          </div>
         </div>
 
-        {/* Map/List Content with proper z-index */}
-        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 relative z-20">
+        {/* Map/List Content with fixed height to prevent overlapping */}
+        <div className="bg-gray-50 rounded-lg p-4 h-96 mb-6 overflow-hidden">
           {viewMode === 'map' ? (
             <GlobalMapView 
               items={filteredData} 
               filters={filters}
               onFiltersChange={setFilters}
+              isHomePage={true}
             />
           ) : (
             <ListView items={filteredData} />
@@ -107,7 +121,7 @@ export function MiniGlobalMap() {
         </div>
 
         {/* Full Map CTA */}
-        <div className="text-center relative z-20">
+        <div className="text-center">
           <Button 
             onClick={() => navigate('/map')}
             size="lg"

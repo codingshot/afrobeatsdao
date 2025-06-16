@@ -73,22 +73,22 @@ const Index = () => {
         <FutureSection />
         <TeamSection />
         
-        {/* Partner CTA Section */}
+        {/* Partner CTA Section - Changed back to "Start Chapter" */}
         <section className="py-16 bg-afro-teal text-white">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-2xl mx-auto">
               <h2 className="text-4xl font-heading font-bold mb-4">
-                Ready to Partner with Us?
+                Ready to Start a Chapter?
               </h2>
               <p className="text-xl mb-8">
-                Join the global Afrobeats movement and collaborate with the world's leading Afrobeats hub.
+                Join the global Afrobeats movement and start an Afrobeats DAO chapter at your university.
               </p>
               <Button 
                 size="lg" 
                 className="bg-afro-yellow text-black hover:bg-afro-yellow/90 font-heading text-xl rounded-full px-8 py-6 h-auto"
-                onClick={() => navigate('/partner')}
+                onClick={() => navigate('/chapters')}
               >
-                Partner
+                Start Chapter
               </Button>
             </div>
           </div>
