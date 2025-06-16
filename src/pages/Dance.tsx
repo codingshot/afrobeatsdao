@@ -53,6 +53,17 @@ const DancePage = () => {
     setIsLoading(false);
   }, []);
 
+  // Safe string conversion - only allow actual strings
+  const safeString = (value: any): string => {
+    if (typeof value === 'string') {
+      return value;
+    }
+    if (typeof value === 'number') {
+      return String(value);
+    }
+    return '';
+  };
+
   const handleDanceSelect = (dance: any) => {
     // Mark the dance as started when selected
     startDance(dance.id);
@@ -115,46 +126,31 @@ const DancePage = () => {
 
   const filteredDances = filterDances();
   const genreCount = filteredDances.length;
-  const metaDescription = `Learn ${genreCount} authentic ${selectedGenre === "all" ? "African" : selectedGenre} dances from beginner to advanced levels. Interactive tutorials, cultural context, and music recommendations included.`;
-
+  
+  // Safe meta values using safeString function
+  const safeGenre = safeString(selectedGenre === "all" ? "African" : selectedGenre);
+  const safeGenreCount = safeString(genreCount);
+  const safeDifficulties = difficulties.map(d => safeString(d)).filter(Boolean).join(', ');
+  
+  const metaDescription = `Learn ${safeGenreCount} authentic ${safeGenre} dances from beginner to advanced levels. Interactive tutorials, cultural context, and music recommendations included.`;
+  const metaTitle = `African Dance Curriculum - Learn ${safeGenre} Dances`;
+  const metaKeywords = `african dance, ${safeString(selectedGenre)}, dance tutorial, dance curriculum, ${safeDifficulties} level`;
+  
   const clearFilters = () => {
     setSelectedCountry("all");  // Changed from "" to "all"
     setSelectedDifficulty("all");  // Changed from "" to "all"
   };
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    "name": `African Dance Curriculum - ${selectedGenre === "all" ? "African" : selectedGenre}`,
-    "description": metaDescription,
-    "provider": {
-      "@type": "Organization",
-      "name": "Afrobeats DAO",
-      "sameAs": "https://afrobeats.party"
-    },
-    "coursePrerequisites": "No prior dance experience required",
-    "numberOfLessons": genreCount,
-    "educationalLevel": difficulties.join(', '),
-    "hasCourseInstance": {
-      "@type": "CourseInstance",
-      "courseMode": "online"
-    }
-  };
-
   return (
     <>
       <Helmet>
-        <title>African Dance Curriculum - Learn {selectedGenre === "all" ? "African" : selectedGenre} Dances</title>
+        <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={`Learn ${selectedGenre === "all" ? "African" : selectedGenre} Dance - Interactive Tutorials`} />
+        <meta property="og:title" content={`Learn ${safeGenre} Dance - Interactive Tutorials`} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content={`african dance, ${selectedGenre}, dance tutorial, dance curriculum, ${difficulties.join(', ')} level`} />
-        <link rel="canonical" href={window.location.href} />
-        <script 
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <meta name="keywords" content={metaKeywords} />
+        <link rel="canonical" href="https://afrobeats.party/dance" />
       </Helmet>
 
       <div 
