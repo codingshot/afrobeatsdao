@@ -31,15 +31,30 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const { startDance, markModuleComplete, getDanceProgress } = useDanceProgress();
   const danceProgress = getDanceProgress(dance.id);
 
-  // Safe string conversion - only allow actual strings
+  // Enhanced safe string conversion that handles all data types
   const safeString = (value: any): string => {
+    if (value === null || value === undefined) {
+      return '';
+    }
     if (typeof value === 'string') {
       return value;
     }
     if (typeof value === 'number') {
       return String(value);
     }
-    return '';
+    if (typeof value === 'boolean') {
+      return String(value);
+    }
+    // Handle Symbols and other complex types
+    if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'object') {
+      return '';
+    }
+    // Fallback for any other type
+    try {
+      return String(value);
+    } catch {
+      return '';
+    }
   };
 
   useEffect(() => {
@@ -50,9 +65,9 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     console.log(`Viewing dance: ${dance.name} (${dance.id})`);
   }, [dance.id, dance.name]);
 
-  // Safe meta values
+  // Safe meta values with enhanced sanitization
   const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin);
+  const safeDanceOrigin = safeString(dance?.origin) || '';
   const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
   const safeDanceKeywords = dance?.keyMoves?.map(m => safeString(m?.name)).filter(Boolean).join(', ') || '';
 

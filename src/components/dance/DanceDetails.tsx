@@ -57,25 +57,40 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Safe string conversion - only allow actual strings
+  // Enhanced safe string conversion that handles all data types
   const safeString = (value: any): string => {
+    if (value === null || value === undefined) {
+      return '';
+    }
     if (typeof value === 'string') {
       return value;
     }
     if (typeof value === 'number') {
       return String(value);
     }
-    return '';
+    if (typeof value === 'boolean') {
+      return String(value);
+    }
+    // Handle Symbols and other complex types
+    if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'object') {
+      return '';
+    }
+    // Fallback for any other type
+    try {
+      return String(value);
+    } catch {
+      return '';
+    }
   };
 
-  // Create safe meta values
-  const safeDanceName = safeString(dance?.name || 'Dance');
-  const safeDanceOrigin = safeString(dance?.origin || '');
-  const safeDanceDescription = safeString(dance?.description || 'Learn this amazing dance');
-  const safeDanceDifficulty = safeString(dance?.difficulty || 'Beginner');
-  const safeDanceId = safeString(dance?.id || 'dance');
+  // Create safe meta values with fallbacks
+  const safeDanceName = safeString(dance?.name) || 'Dance';
+  const safeDanceOrigin = safeString(dance?.origin) || '';
+  const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
+  const safeDanceDifficulty = safeString(dance?.difficulty) || 'Beginner';
+  const safeDanceId = safeString(dance?.id) || 'dance';
 
-  // Build meta values safely
+  // Build meta values safely with proper fallbacks
   const metaTitle = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - Learn ${safeDanceDifficulty} Level | Afrobeats.party`;
   const metaDescription = `Learn the ${safeDanceName} dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''}! ${safeDanceDescription} ${safeDanceDifficulty} difficulty level. Master African dance moves with our step-by-step tutorials.`;
   const canonicalUrl = `https://afrobeats.party/dance/${safeDanceId}`;
@@ -85,7 +100,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const ogImageAlt = `${safeDanceName} Dance${safeDanceOrigin ? ` from ${safeDanceOrigin}` : ''} - ${safeDanceDifficulty} Level Tutorial`;
   
   // Enhanced keywords for better SEO
-  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name || '')).filter(Boolean) || [];
+  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(Boolean) || [];
   const seoKeywords = [
     safeDanceName.toLowerCase(),
     'african dance',
