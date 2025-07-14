@@ -25,6 +25,7 @@ import Map from "./pages/Map";
 import Partner from "./pages/Partner";
 import Chapters from "./pages/Chapters";
 import Join from "./pages/Join";
+import ArtistJoin from "./pages/ArtistJoin";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
 
 const App = () => {
@@ -59,6 +60,7 @@ const App = () => {
                   <Route path="/partner" element={<div className="page-partner"><Partner /></div>} />
                   <Route path="/chapters" element={<div className="page-chapters"><Chapters /></div>} />
                   <Route path="/join" element={<div className="page-join"><Join /></div>} />
+                  <Route path="/artist-join" element={<div className="page-join"><ArtistJoin /></div>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
