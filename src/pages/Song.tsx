@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -27,6 +28,41 @@ const Song = () => {
       s.title.toLowerCase().includes(songSlug.replace(/-/g, ' '))
     );
   }
+
+  // Ultra-safe string conversion that completely prevents Symbol issues
+  const safeString = (value: any): string => {
+    try {
+      // Handle null/undefined first
+      if (value === null || value === undefined) {
+        return '';
+      }
+      
+      // Handle primitives safely
+      if (typeof value === 'string') {
+        return value;
+      }
+      
+      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
+        return value.toString();
+      }
+      
+      if (typeof value === 'boolean') {
+        return value.toString();
+      }
+      
+      // Explicitly reject problematic types
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint' || typeof value === 'object') {
+        console.warn('safeString: Rejecting non-string type:', typeof value);
+        return '';
+      }
+      
+      // Final fallback
+      return '';
+    } catch (error) {
+      console.error('Error in safeString conversion:', error);
+      return '';
+    }
+  };
 
   if (!artist || !song) {
     console.log('Debug: Artist found:', !!artist);
@@ -80,24 +116,32 @@ const Song = () => {
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   const standardThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   
+  // Build safe meta values with guaranteed string outputs
+  const safeSongTitle = safeString(song.title) || 'Song';
+  const safeArtistName = safeString(artist.name) || 'Artist';
+  const safeArtistCountry = safeString(artist.country) || '';
+  const safeArtistGenre = safeString(artist.genre) || 'Afrobeats';
+  const safeArtistId = safeString(artistId) || '';
+  const safeSongSlug = safeString(songSlug) || '';
+
   // Enhanced SEO meta data with dynamic content
-  const metaTitle = `${song.title} by ${artist.name}${artist.country ? ` - ${artist.country}` : ''} | Afrobeats.party`;
-  const metaDescription = `🎵 Listen to "${song.title}" by ${artist.name} on Afrobeats.party. ${artist.country ? `Discover this ${artist.country} artist's ` : 'Explore '}${artist.genre || 'Afrobeats'} music and join the global African music community. Stream now!`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
+  const metaTitle = `${safeSongTitle} by ${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} | Afrobeats.party`;
+  const metaDescription = `🎵 Listen to "${safeSongTitle}" by ${safeArtistName} on Afrobeats.party. ${safeArtistCountry ? `Discover this ${safeArtistCountry} artist's ` : 'Explore '}${safeArtistGenre} music and join the global African music community. Stream now!`;
+  const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}/${safeSongSlug}`;
   
   // Use YouTube thumbnail as primary OG image, ensure it's a full URL
   const ogImage = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
                  (artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
-  const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video`;
+  const ogImageAlt = `${safeSongTitle} by ${safeArtistName} - ${safeArtistGenre} Music Video`;
   
   // Enhanced keywords for better SEO
-  const seoKeywords = [
-    song.title.toLowerCase(),
-    artist.name.toLowerCase(),
+  const keywordsList = [
+    safeSongTitle.toLowerCase(),
+    safeArtistName.toLowerCase(),
     'afrobeats',
     'african music',
-    artist.country?.toLowerCase(),
-    artist.genre?.toLowerCase(),
+    safeArtistCountry.toLowerCase(),
+    safeArtistGenre.toLowerCase(),
     'afrobeats party',
     'music streaming',
     'african artists',
@@ -105,7 +149,9 @@ const Song = () => {
     'nigerian music',
     'ghana music',
     'south african music'
-  ].filter(Boolean).join(', ');
+  ].filter(keyword => keyword && keyword.length > 0);
+  
+  const seoKeywords = keywordsList.join(', ');
   
   const handlePlay = () => {
     playNow({
@@ -155,26 +201,26 @@ const Song = () => {
       const data = {
         "@context": "https://schema.org",
         "@type": "MusicRecording",
-        "name": String(song.title || ''),
+        "name": safeSongTitle,
         "description": metaDescription,
         "url": canonicalUrl,
         "image": ogImage,
-        "genre": String(artist.genre || "Afrobeats"),
+        "genre": safeArtistGenre,
         "datePublished": new Date().toISOString().split('T')[0],
         "inLanguage": "en",
         "byArtist": {
           "@type": "MusicGroup",
-          "name": String(artist.name || ''),
+          "name": safeArtistName,
           "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
-          "genre": String(artist.genre || "Afrobeats"),
-          ...(artist.country && { "foundingLocation": String(artist.country) }),
-          "url": `https://afrobeats.party/music/artist/${artistId}`,
+          "genre": safeArtistGenre,
+          ...(safeArtistCountry && { "foundingLocation": safeArtistCountry }),
+          "url": `https://afrobeats.party/music/artist/${safeArtistId}`,
           "sameAs": [
-            artist.spotify,
-            artist.instagram,
-            artist.twitter,
-            artist.youtube
-          ].filter(Boolean).map(url => String(url))
+            safeString(artist.spotify),
+            safeString(artist.instagram),
+            safeString(artist.twitter),
+            safeString(artist.youtube)
+          ].filter(url => url && url.length > 0)
         },
         "isPartOf": {
           "@type": "WebSite",
@@ -184,7 +230,7 @@ const Song = () => {
         },
         "potentialAction": {
           "@type": "ListenAction",
-          "target": String(song.youtube || ''),
+          "target": safeString(song.youtube) || '',
           "expectsAcceptanceOf": {
             "@type": "Offer",
             "category": "free"
@@ -198,7 +244,7 @@ const Song = () => {
       return JSON.stringify({
         "@context": "https://schema.org",
         "@type": "MusicRecording",
-        "name": String(song.title || ''),
+        "name": safeSongTitle,
         "description": metaDescription
       });
     }
@@ -220,7 +266,6 @@ const Song = () => {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="music.song" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
@@ -232,13 +277,11 @@ const Song = () => {
         <meta property="og:site_name" content="Afrobeats.party" />
         <meta property="og:locale" content="en_US" />
         
-        {/* Music specific Open Graph */}
         <meta property="music:song" content={canonicalUrl} />
-        <meta property="music:musician" content={`https://afrobeats.party/music/artist/${artist.id}`} />
-        <meta property="music:album" content={artist.name} />
+        <meta property="music:musician" content={`https://afrobeats.party/music/artist/${safeArtistId}`} />
+        <meta property="music:album" content={safeArtistName} />
         <meta property="music:duration" content="180" />
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
@@ -247,22 +290,19 @@ const Song = () => {
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={ogImageAlt} />
         
-        {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
         <meta name="keywords" content={seoKeywords} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#008751" />
         
-        {/* Geographic SEO */}
-        {artist.country && (
+        {safeArtistCountry && (
           <>
-            <meta name="geo.region" content={artist.country} />
-            <meta name="geo.placename" content={artist.country} />
+            <meta name="geo.region" content={safeArtistCountry} />
+            <meta name="geo.placename" content={safeArtistCountry} />
           </>
         )}
         
-        {/* Schema.org structured data */}
         <script type="application/ld+json">
           {createStructuredData()}
         </script>

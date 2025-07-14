@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -25,35 +26,37 @@ const ArtistProfile = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Enhanced safe string conversion utility
+  // Ultra-safe string conversion that completely prevents Symbol issues
   const safeString = (value: any): string => {
-    // Explicitly handle problematic types
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'symbol') {
-      return '';
-    }
-    if (typeof value === 'function') {
-      return '';
-    }
-    if (typeof value === 'object') {
-      return '';
-    }
-    if (typeof value === 'string') {
-      return value;
-    }
-    if (typeof value === 'number') {
-      return String(value);
-    }
-    if (typeof value === 'boolean') {
-      return String(value);
-    }
-    // Fallback for any other edge cases
     try {
-      return String(value);
+      // Handle null/undefined first
+      if (value === null || value === undefined) {
+        return '';
+      }
+      
+      // Handle primitives safely
+      if (typeof value === 'string') {
+        return value;
+      }
+      
+      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
+        return value.toString();
+      }
+      
+      if (typeof value === 'boolean') {
+        return value.toString();
+      }
+      
+      // Explicitly reject problematic types
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint' || typeof value === 'object') {
+        console.warn('safeString: Rejecting non-string type:', typeof value);
+        return '';
+      }
+      
+      // Final fallback
+      return '';
     } catch (error) {
-      console.warn('Failed to convert value to string:', value, error);
+      console.error('Error in safeString conversion:', error);
       return '';
     }
   };
@@ -242,48 +245,47 @@ const ArtistProfile = () => {
     );
   }
 
-  // Safe meta values with enhanced string conversion and validation
-  const safeArtistName = safeString(artist?.name) || 'Unknown Artist';
-  const safeArtistCountry = safeString(artist?.country) || '';
-  const safeArtistGenre = safeString(artist?.genre) || 'Afrobeats';
-  const safeArtistId = safeString(artist?.id) || '';
+  // Build safe meta values with guaranteed string outputs
+  const safeName = safeString(artist.name) || 'Unknown Artist';
+  const safeCountry = safeString(artist.country) || '';
+  const safeGenre = safeString(artist.genre) || 'Afrobeats';
+  const safeId = safeString(artist.id) || '';
+  const safeImage = safeString(artist.image) || '';
 
-  // Enhanced SEO data with dynamic artist information
-  const metaTitle = `${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} ${safeArtistGenre ? `${safeArtistGenre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
-  const metaDescription = `🎵 Discover ${safeArtistName}'s music on Afrobeats.party! ${safeArtistCountry ? `This ${safeArtistCountry} artist ` : 'Listen to '}${artist?.top_songs?.length || 0} top songs including their biggest hits. ${safeArtistGenre ? `Experience the best of ${safeArtistGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}`;
+  // Build meta strings with safe concatenation
+  const metaTitle = `${safeName}${safeCountry ? ` - ${safeCountry}` : ''} ${safeGenre} Artist | Afrobeats.party`;
+  const metaDescription = `🎵 Discover ${safeName}'s music on Afrobeats.party! ${safeCountry ? `This ${safeCountry} artist ` : 'Listen to '}${artist.top_songs?.length || 0} top songs including their biggest hits. ${safeGenre ? `Experience the best of ${safeGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
+  const canonicalUrl = `https://afrobeats.party/music/artist/${safeId}`;
+  const ogImage = safeImage ? `https://afrobeats.party${safeImage}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImageAlt = `${safeName} - ${safeCountry ? `${safeCountry} ` : ''}${safeGenre} Artist Profile`;
   
-  // Use artist image for Open Graph, ensure it's a full URL with proper fallback
-  const artistImageSafe = safeString(artist?.image);
-  const ogImage = artistImageSafe ? `https://afrobeats.party${artistImageSafe}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
-  const ogImageAlt = `${safeArtistName} - ${safeArtistCountry ? `${safeArtistCountry} ` : ''}${safeArtistGenre} Artist Profile`;
-  
-  // Enhanced keywords for better SEO with safe string conversion
-  const seoKeywords = [
-    safeArtistName.toLowerCase(),
+  // Build keywords safely
+  const keywordsList = [
+    safeName.toLowerCase(),
     'afrobeats artist',
     'african music',
-    safeArtistCountry.toLowerCase(),
-    safeArtistGenre.toLowerCase(),
+    safeCountry.toLowerCase(),
+    safeGenre.toLowerCase(),
     'afrobeats party',
     'african culture',
     'music streaming',
     'afrobeats dao',
-    ...(artist?.top_songs?.slice(0, 5).map(song => safeString(song?.title).toLowerCase()).filter(Boolean) || []),
     'nigerian music',
     'ghana music',
     'south african music'
-  ].filter(Boolean).join(', ');
+  ].filter(keyword => keyword && keyword.length > 0);
   
-  // Get social media links for structured data with safe string conversion
+  const seoKeywords = keywordsList.join(', ');
+  
+  // Build social links safely 
   const socialLinks = [
-    safeString(artist?.spotify),
-    safeString(artist?.instagram),
-    safeString(artist?.twitter),
-    safeString(artist?.youtube),
-    safeString(artist?.soundcloud),
-    safeString(artist?.website)
-  ].filter(Boolean);
+    safeString(artist.spotify),
+    safeString(artist.instagram),
+    safeString(artist.twitter),
+    safeString(artist.youtube),
+    safeString(artist.soundcloud),
+    safeString(artist.website)
+  ].filter(link => link && link.length > 0);
   
   return (
     <>
@@ -291,7 +293,6 @@ const ArtistProfile = () => {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="profile" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
@@ -303,11 +304,9 @@ const ArtistProfile = () => {
         <meta property="og:site_name" content="Afrobeats.party" />
         <meta property="og:locale" content="en_US" />
         
-        {/* Music specific Open Graph */}
         <meta property="music:musician" content={canonicalUrl} />
-        <meta property="music:song_count" content={String(artist?.top_songs?.length || 0)} />
+        <meta property="music:song_count" content={String(artist.top_songs?.length || 0)} />
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
@@ -316,18 +315,16 @@ const ArtistProfile = () => {
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={ogImageAlt} />
         
-        {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
         <meta name="keywords" content={seoKeywords} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#008751" />
         
-        {/* Geographic SEO */}
-        {safeArtistCountry && (
+        {safeCountry && (
           <>
-            <meta name="geo.region" content={safeArtistCountry} />
-            <meta name="geo.placename" content={safeArtistCountry} />
+            <meta name="geo.region" content={safeCountry} />
+            <meta name="geo.placename" content={safeCountry} />
           </>
         )}
       </Helmet>
