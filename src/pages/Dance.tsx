@@ -53,15 +53,70 @@ const DancePage = () => {
     setIsLoading(false);
   }, []);
 
-  // Safe string conversion - only allow actual strings
+  // Ultra-safe string conversion that explicitly handles ALL edge cases
   const safeString = (value: any): string => {
-    if (typeof value === 'string') {
-      return value;
+    try {
+      // Handle null/undefined first
+      if (value === null || value === undefined) {
+        return '';
+      }
+      
+      // Handle primitives
+      if (typeof value === 'string') {
+        return value;
+      }
+      
+      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
+        return String(value);
+      }
+      
+      if (typeof value === 'boolean') {
+        return String(value);
+      }
+      
+      // Explicitly reject ALL non-serializable types
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
+        console.warn('Dance.tsx safeString: Rejecting non-serializable type:', typeof value);
+        return '';
+      }
+      
+      // Handle objects and arrays (convert to empty string to avoid issues)
+      if (typeof value === 'object') {
+        console.warn('Dance.tsx safeString: Rejecting object type:', value);
+        return '';
+      }
+      
+      // Final fallback - should never reach here
+      console.warn('Dance.tsx safeString: Unknown type encountered:', typeof value, value);
+      return '';
+    } catch (error) {
+      console.error('Error in Dance.tsx safeString conversion:', error, value);
+      return '';
     }
-    if (typeof value === 'number') {
-      return String(value);
+  };
+
+  // Safe meta value builder with validation
+  const buildSafeMetaValue = (template: string, ...values: any[]): string => {
+    try {
+      // Convert all values to safe strings and filter out empty ones
+      const safeValues = values.map(v => safeString(v)).filter(v => v.length > 0);
+      let result = template;
+      
+      // Replace placeholders with safe values
+      safeValues.forEach((value, index) => {
+        result = result.replace(`{${index}}`, value);
+      });
+      
+      // Clean up any remaining placeholders
+      result = result.replace(/\{[0-9]+\}/g, '');
+      
+      // Final safety check
+      const finalResult = safeString(result);
+      return finalResult || 'African Dance - Afrobeats.party';
+    } catch (error) {
+      console.error('Error building safe meta value:', error);
+      return 'African Dance - Afrobeats.party';
     }
-    return '';
   };
 
   const handleDanceSelect = (dance: any) => {
@@ -127,15 +182,29 @@ const DancePage = () => {
   const filteredDances = filterDances();
   const genreCount = filteredDances.length;
   
-  // Safe meta values using safeString function
+  // Build safe meta values using the enhanced utility
   const safeGenre = safeString(selectedGenre === "all" ? "African" : selectedGenre);
   const safeGenreCount = safeString(genreCount);
   const safeDifficulties = difficulties.map(d => safeString(d)).filter(Boolean).join(', ');
   
-  const metaDescription = `Learn ${safeGenreCount} authentic ${safeGenre} dances from beginner to advanced levels. Interactive tutorials, cultural context, and music recommendations included.`;
-  const metaTitle = `African Dance Curriculum - Learn ${safeGenre} Dances`;
-  const metaKeywords = `african dance, ${safeString(selectedGenre)}, dance tutorial, dance curriculum, ${safeDifficulties} level`;
+  const metaDescription = buildSafeMetaValue(
+    'Learn {0} authentic {1} dances from beginner to advanced levels. Interactive tutorials, cultural context, and music recommendations included.',
+    safeGenreCount,
+    safeGenre
+  );
+  const metaTitle = buildSafeMetaValue('African Dance Curriculum - Learn {0} Dances', safeGenre);
+  const metaKeywords = buildSafeMetaValue('african dance, {0}, dance tutorial, dance curriculum, {1} level', safeString(selectedGenre), safeDifficulties);
   
+  // Final validation for Helmet - ensure no Symbols can pass through
+  const validateForHelmet = (value: any, fallback: string = 'African Dance - Afrobeats.party'): string => {
+    const safe = safeString(value);
+    if (typeof safe !== 'string' || safe.length === 0) {
+      console.warn('Dance.tsx validateForHelmet: Invalid value, using fallback:', value);
+      return fallback;
+    }
+    return safe;
+  };
+
   const clearFilters = () => {
     setSelectedCountry("all");  // Changed from "" to "all"
     setSelectedDifficulty("all");  // Changed from "" to "all"
@@ -144,12 +213,12 @@ const DancePage = () => {
   return (
     <>
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:title" content={`Learn ${safeGenre} Dance - Interactive Tutorials`} />
-        <meta property="og:description" content={metaDescription} />
+        <title>{validateForHelmet(metaTitle)}</title>
+        <meta name="description" content={validateForHelmet(metaDescription)} />
+        <meta property="og:title" content={validateForHelmet(`Learn ${safeGenre} Dance - Interactive Tutorials`)} />
+        <meta property="og:description" content={validateForHelmet(metaDescription)} />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content={metaKeywords} />
+        <meta name="keywords" content={validateForHelmet(metaKeywords)} />
         <link rel="canonical" href="https://afrobeats.party/dance" />
       </Helmet>
 
