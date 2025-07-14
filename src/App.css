@@ -22,12 +22,12 @@ iframe,
   position: relative;
 }
 
-/* Global audio player should always be on top */
+/* Global audio player should always be on top of everything */
 .global-audio-player {
-  z-index: 100 !important;
+  z-index: 9999 !important;
 }
 
-/* Ensure proper z-index for dropdown menus */
+/* Ensure proper z-index for dropdown menus but below audio player */
 .selectContent,
 .popoverContent,
 .menuContent,
@@ -38,7 +38,7 @@ iframe,
   z-index: 50 !important;
 }
 
-/* Fix for Leaflet popup content - ensure popups show above map */
+/* Fix for Leaflet popup content - ensure popups show above map but below audio player */
 .leaflet-popup-content {
   min-width: 200px;
 }
@@ -98,4 +98,9 @@ main {
 .leaflet-popup,
 .leaflet-popup-pane {
   z-index: 1000 !important;
+}
+
+/* Map legend should be below audio player */
+.map-legend {
+  z-index: 100 !important;
 }

@@ -57,132 +57,182 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Enhanced SEO data with dynamic dance information
-  const metaTitle = `${dance.name} Dance${dance.origin ? ` from ${dance.origin}` : ''} - Learn ${dance.difficulty} Level | Afrobeats.party`;
-  const metaDescription = `🕺 Learn the ${dance.name} dance${dance.origin ? ` from ${dance.origin}` : ''}! ${dance.description} ${dance.difficulty} difficulty level. Master African dance moves with our step-by-step tutorials on Afrobeats.party.`;
-  const canonicalUrl = `https://afrobeats.party/dance/${dance.id}`;
+  // Ultra-safe string conversion that handles ALL edge cases including Symbols
+  const safeString = (value: any): string => {
+    try {
+      // Handle null/undefined first
+      if (value === null || value === undefined) {
+        return '';
+      }
+      
+      // Handle primitives
+      if (typeof value === 'string') {
+        return value;
+      }
+      
+      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
+        return String(value);
+      }
+      
+      if (typeof value === 'boolean') {
+        return String(value);
+      }
+      
+      // Explicitly reject Symbols and other problematic types
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
+        console.warn('safeString: Rejecting non-serializable type:', typeof value);
+        return '';
+      }
+      
+      // Handle objects and arrays (convert to empty string to avoid issues)
+      if (typeof value === 'object') {
+        console.warn('safeString: Rejecting object type:', value);
+        return '';
+      }
+      
+      // Final fallback - should never reach here
+      console.warn('safeString: Unknown type encountered:', typeof value, value);
+      return '';
+    } catch (error) {
+      console.error('Error in safeString conversion:', error, value);
+      return '';
+    }
+  };
+
+  // Safely extract and validate all dance properties with extra logging
+  const safeDanceName = safeString(dance?.name) || 'Dance';
+  const safeDanceOrigin = safeString(dance?.origin) || '';
+  const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
+  const safeDanceDifficulty = safeString(dance?.difficulty) || 'Beginner';
+  const safeDanceId = safeString(dance?.id) || 'dance';
+  const safeDanceImage = safeString(dance?.image) || '';
+
+  console.log('DanceDetails - Individual safe values:', {
+    safeDanceName,
+    safeDanceOrigin,
+    safeDanceDescription,
+    safeDanceDifficulty,
+    safeDanceId,
+    safeDanceImage
+  });
+
+  // Build meta values with completely safe strings and extra validation
+  const buildSafeMetaValue = (template: string, ...values: any[]): string => {
+    try {
+      const safeValues = values.map(v => safeString(v)).filter(v => v.length > 0);
+      let result = template;
+      safeValues.forEach((value, index) => {
+        result = result.replace(`{${index}}`, value);
+      });
+      // Clean up any remaining placeholders
+      result = result.replace(/\{[0-9]+\}/g, '');
+      return safeString(result);
+    } catch (error) {
+      console.error('Error building safe meta value:', error);
+      return 'Afrobeats.party - Learn African Dance';
+    }
+  };
+
+  const metaTitle = buildSafeMetaValue(
+    '{0} Dance{1} - Learn {2} Level | Afrobeats.party',
+    safeDanceName,
+    safeDanceOrigin ? ` from ${safeDanceOrigin}` : '',
+    safeDanceDifficulty
+  );
+
+  const metaDescription = buildSafeMetaValue(
+    'Learn the {0} dance{1}! {2} {3} difficulty level. Master African dance moves with our step-by-step tutorials.',
+    safeDanceName,
+    safeDanceOrigin ? ` from ${safeDanceOrigin}` : '',
+    safeDanceDescription,
+    safeDanceDifficulty
+  );
+
+  const canonicalUrl = `https://afrobeats.party/dance/${safeDanceId}`;
+  const ogImage = safeDanceImage ? `https://afrobeats.party${safeDanceImage}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
+  const ogImageAlt = buildSafeMetaValue(
+    '{0} Dance{1} - {2} Level Tutorial',
+    safeDanceName,
+    safeDanceOrigin ? ` from ${safeDanceOrigin}` : '',
+    safeDanceDifficulty
+  );
   
-  // Use dance image for Open Graph, fallback to default - ensure full URL
-  const ogImage = dance.image ? `https://afrobeats.party${dance.image}` : "https://afrobeats.party/AfrobeatsDAOMeta.png";
-  const ogImageAlt = `${dance.name} Dance${dance.origin ? ` from ${dance.origin}` : ''} - ${dance.difficulty} Level Tutorial`;
-  
-  // Enhanced keywords for better SEO
+  // Enhanced keywords for better SEO - safely extract key moves
+  const keyMovesKeywords = dance?.keyMoves?.map(move => safeString(move?.name)).filter(name => name.length > 0) || [];
   const seoKeywords = [
-    dance.name.toLowerCase(),
+    safeDanceName.toLowerCase(),
     'african dance',
     'afrobeats dance',
-    dance.origin?.toLowerCase(),
-    dance.difficulty.toLowerCase(),
+    safeDanceOrigin.toLowerCase(),
+    safeDanceDifficulty.toLowerCase(),
     'dance tutorial',
     'dance lessons',
     'afrobeats party',
     'african culture',
     'dance moves',
     'learn to dance',
-    ...(dance.keyMoves?.map(move => move.name.toLowerCase()) || [])
-  ].filter(Boolean).join(', ');
+    ...keyMovesKeywords.map(k => safeString(k).toLowerCase())
+  ].filter(keyword => keyword.length > 0).join(', ');
+
+  console.log('DanceDetails - Final meta values:', {
+    metaTitle,
+    metaDescription,
+    canonicalUrl,
+    ogImage,
+    ogImageAlt,
+    seoKeywords
+  });
+
+  // Validate all meta values before rendering
+  const validateMetaValue = (value: any, name: string): string => {
+    const safe = safeString(value);
+    if (safe.length === 0) {
+      console.warn(`Empty meta value for ${name}, using fallback`);
+    }
+    return safe || 'Afrobeats.party';
+  };
 
   return (
     <>
       <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+        <title>{validateMetaValue(metaTitle, 'title')}</title>
+        <meta name="description" content={validateMetaValue(metaDescription, 'description')} />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content={ogImageAlt} />
+        <meta property="og:title" content={validateMetaValue(metaTitle, 'og:title')} />
+        <meta property="og:description" content={validateMetaValue(metaDescription, 'og:description')} />
+        <meta property="og:image" content={validateMetaValue(ogImage, 'og:image')} />
+        <meta property="og:image:alt" content={validateMetaValue(ogImageAlt, 'og:image:alt')} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:url" content={validateMetaValue(canonicalUrl, 'og:url')} />
         <meta property="og:site_name" content="Afrobeats.party" />
         <meta property="og:locale" content="en_US" />
         <meta property="article:section" content="Dance" />
         <meta property="article:tag" content="African Dance" />
         <meta property="article:tag" content="Afrobeats" />
-        {dance.origin && <meta property="article:tag" content={dance.origin} />}
+        {safeDanceOrigin && <meta property="article:tag" content={validateMetaValue(safeDanceOrigin, 'article:tag')} />}
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
-        <meta name="twitter:title" content={metaTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:image:alt" content={ogImageAlt} />
+        <meta name="twitter:title" content={validateMetaValue(metaTitle, 'twitter:title')} />
+        <meta name="twitter:description" content={validateMetaValue(metaDescription, 'twitter:description')} />
+        <meta name="twitter:image" content={validateMetaValue(ogImage, 'twitter:image')} />
+        <meta name="twitter:image:alt" content={validateMetaValue(ogImageAlt, 'twitter:image:alt')} />
         
-        {/* Additional SEO */}
-        <link rel="canonical" href={canonicalUrl} />
-        <meta name="keywords" content={seoKeywords} />
+        <link rel="canonical" href={validateMetaValue(canonicalUrl, 'canonical')} />
+        <meta name="keywords" content={validateMetaValue(seoKeywords, 'keywords')} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#FFD600" />
         
-        {/* Geographic SEO */}
-        {dance.origin && (
+        {safeDanceOrigin && (
           <>
-            <meta name="geo.region" content={dance.origin} />
-            <meta name="geo.placename" content={dance.origin} />
+            <meta name="geo.region" content={validateMetaValue(safeDanceOrigin, 'geo.region')} />
+            <meta name="geo.placename" content={validateMetaValue(safeDanceOrigin, 'geo.placename')} />
           </>
         )}
-        
-        {/* Schema.org structured data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "HowTo",
-            "name": `How to dance ${dance.name}`,
-            "description": metaDescription,
-            "image": ogImage,
-            "url": canonicalUrl,
-            "totalTime": "PT30M",
-            "estimatedCost": {
-              "@type": "MonetaryAmount",
-              "currency": "USD",
-              "value": "0"
-            },
-            "supply": [
-              {
-                "@type": "HowToSupply",
-                "name": "Comfortable clothing"
-              },
-              {
-                "@type": "HowToSupply", 
-                "name": "Open space to dance"
-              }
-            ],
-            "tool": [
-              {
-                "@type": "HowToTool",
-                "name": "Music player"
-              }
-            ],
-            "step": dance.keyMoves?.map((move, index) => ({
-              "@type": "HowToStep",
-              "position": index + 1,
-              "name": move.name,
-              "text": move.steps.join('. ')
-            })) || [],
-            "about": {
-              "@type": "Thing",
-              "name": "African Dance",
-              "description": "Traditional and modern African dance forms"
-            },
-            "inLanguage": "en",
-            "isPartOf": {
-              "@type": "WebSite",
-              "name": "Afrobeats.party",
-              "url": "https://afrobeats.party",
-              "description": "Global platform for African music and culture"
-            },
-            "mainEntityOfPage": {
-              "@type": "WebPage",
-              "@id": canonicalUrl
-            }
-          })}
-        </script>
       </Helmet>
       
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
@@ -196,7 +246,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             Back to Dances
           </Button>
           
-          {/* Banner image above the dance details */}
           {dance.image && (
             <div className="w-full mb-4 sm:mb-6">
               <AspectRatio ratio={21/9} className="bg-muted rounded-lg overflow-hidden">
