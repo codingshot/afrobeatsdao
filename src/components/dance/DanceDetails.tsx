@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react";
 import { DanceContent } from "./DanceContent";
 import { useCountryFlags } from "@/hooks/use-country-flags";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Helmet } from "react-helmet";
 
 export interface Dance {
   id: string;
@@ -57,50 +56,6 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
 
-  // Ultra-safe string conversion that handles ALL edge cases including Symbols
-  const safeString = (value: any): string => {
-    try {
-      // Handle null/undefined first
-      if (value === null || value === undefined) {
-        return '';
-      }
-      
-      // Handle primitives
-      if (typeof value === 'string') {
-        return value;
-      }
-      
-      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
-        return String(value);
-      }
-      
-      if (typeof value === 'boolean') {
-        return String(value);
-      }
-      
-      // Explicitly reject Symbols and other problematic types
-      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
-        console.warn('DanceDetails safeString: Rejecting non-serializable type:', typeof value);
-        return '';
-      }
-      
-      // Handle objects and arrays (convert to empty string to avoid issues)
-      if (typeof value === 'object') {
-        console.warn('DanceDetails safeString: Rejecting object type:', value);
-        return '';
-      }
-      
-      // Final fallback - should never reach here
-      console.warn('DanceDetails safeString: Unknown type encountered:', typeof value, value);
-      return '';
-    } catch (error) {
-      console.error('Error in DanceDetails safeString conversion:', error, value);
-      return '';
-    }
-  };
-
-  // Temporarily disable Helmet to see if that fixes the issue
-  // We'll return a simple version without meta tags for now
   if (!dance) {
     return (
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
@@ -136,7 +91,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             <AspectRatio ratio={21/9} className="bg-muted rounded-lg overflow-hidden">
               <img
                 src={dance.image}
-                alt={safeString(dance.name)}
+                alt={dance.name || 'Dance'}
                 className="w-full h-full object-cover"
               />
             </AspectRatio>
@@ -145,26 +100,26 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
         
         <div className="mb-4 sm:mb-6 bg-[#FFD600] rounded-lg p-3 sm:p-6 shadow-lg">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h1 className="text-xl sm:text-4xl font-bold font-heading text-black" style={{ color: 'black !important' }}>
-              {safeString(dance.name)}
+            <h1 className="text-xl sm:text-4xl font-bold font-heading text-black">
+              {dance.name || 'Dance'}
             </h1>
             {dance.origin && getFlag(dance.origin) && (
               <img 
                 src={getFlag(dance.origin)} 
-                alt={safeString(dance.origin)} 
+                alt={dance.origin || 'Country'} 
                 className="w-6 h-4 sm:w-10 sm:h-7"
-                title={safeString(dance.origin)}
+                title={dance.origin || 'Country'}
               />
             )}
           </div>
-          <p className="text-black text-base sm:text-lg mt-2">{safeString(dance.description)}</p>
+          <p className="text-black text-base sm:text-lg mt-2">{dance.description || ''}</p>
           <div className="flex items-center mt-3 sm:mt-4 flex-wrap gap-2">
             <span className="text-xs sm:text-sm bg-black text-[#FFD600] px-2 py-0.5 rounded-full font-medium">
-              {safeString(dance.difficulty)}
+              {dance.difficulty || 'Beginner'}
             </span>
             {dance.origin && (
               <span className="text-xs sm:text-sm text-black">
-                Origin: {safeString(dance.origin)}
+                Origin: {dance.origin}
               </span>
             )}
           </div>
