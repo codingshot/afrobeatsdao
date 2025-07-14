@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,48 +32,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const { startDance, markModuleComplete, getDanceProgress } = useDanceProgress();
   const danceProgress = getDanceProgress(dance.id);
 
-  // Ultra-safe string conversion that handles ALL edge cases including Symbols
-  const safeString = (value: any): string => {
-    try {
-      // Handle null/undefined first
-      if (value === null || value === undefined) {
-        return '';
-      }
-      
-      // Handle primitives
-      if (typeof value === 'string') {
-        return value;
-      }
-      
-      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
-        return String(value);
-      }
-      
-      if (typeof value === 'boolean') {
-        return String(value);
-      }
-      
-      // Explicitly reject Symbols and other problematic types
-      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
-        console.warn('DanceContent safeString: Rejecting non-serializable type:', typeof value);
-        return '';
-      }
-      
-      // Handle objects and arrays (convert to empty string to avoid issues)
-      if (typeof value === 'object') {
-        console.warn('DanceContent safeString: Rejecting object type:', value);
-        return '';
-      }
-      
-      // Final fallback - should never reach here
-      console.warn('DanceContent safeString: Unknown type encountered:', typeof value, value);
-      return '';
-    } catch (error) {
-      console.error('Error in DanceContent safeString conversion:', error, value);
-      return '';
-    }
-  };
-
   useEffect(() => {
     setIsLoading(false);
   }, []);
@@ -80,51 +39,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   useEffect(() => {
     console.log(`Viewing dance: ${dance.name} (${dance.id})`);
   }, [dance.id, dance.name]);
-
-  // Safely extract and validate all dance properties for meta tags with additional validation
-  const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin) || '';
-  const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
-
-  // Extra safe keyword extraction
-  const safeDanceKeywords = dance?.keyMoves?.map(m => {
-    const moveName = safeString(m?.name);
-    return moveName.length > 0 ? moveName : null;
-  }).filter(name => name !== null).join(', ') || '';
-
-  console.log('DanceContent - Safe values check:', {
-    safeDanceName,
-    safeDanceOrigin,
-    safeDanceDescription,
-    safeDanceKeywords,
-    nameType: typeof safeDanceName,
-    originType: typeof safeDanceOrigin,
-    descriptionType: typeof safeDanceDescription,
-    keywordsType: typeof safeDanceKeywords
-  });
-
-  // Validate meta values before using in Helmet
-  const validateForHelmet = (value: any, fallback: string = ''): string => {
-    const safe = safeString(value);
-    if (typeof safe !== 'string') {
-      console.error('validateForHelmet: Non-string value detected:', safe, typeof safe);
-      return fallback;
-    }
-    return safe;
-  };
-
-  const helmetTitle = validateForHelmet(`${safeDanceName} - Learn ${safeDanceOrigin} Dance`, 'Learn African Dance - Afrobeats.party');
-  const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
-  const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
-
-  console.log('DanceContent - Final Helmet values:', {
-    helmetTitle,
-    helmetDescription,
-    helmetKeywords,
-    titleType: typeof helmetTitle,
-    descriptionType: typeof helmetDescription,
-    keywordsType: typeof helmetKeywords
-  });
 
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
@@ -262,12 +176,30 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   return (
     <>
       <Helmet>
-        <title>{helmetTitle}</title>
-        <meta name="description" content={helmetDescription} />
-        <meta property="og:title" content={`Learn ${safeDanceName} - African Dance Tutorial`} />
-        <meta property="og:description" content={helmetDescription} />
+        <title>{dance.name} - Learn {dance.origin} Dance</title>
+        <meta name="description" content={dance.description} />
+        <meta property="og:title" content={`Learn ${dance.name} - African Dance Tutorial`} />
+        <meta property="og:description" content={dance.description} />
         <meta property="og:type" content="article" />
-        <meta name="keywords" content={helmetKeywords} />
+        <meta name="keywords" content={`${dance.name.toLowerCase()}, ${dance.origin.toLowerCase()} dance, african dance tutorial, dance moves, ${dance.keyMoves?.map(m => m.name.toLowerCase()).join(', ')}`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            "name": `How to Dance ${dance.name}`,
+            "description": dance.description,
+            "totalTime": "PT2H",
+            "step": dance.keyMoves?.map((move, index) => ({
+              "@type": "HowToStep",
+              "position": index + 1,
+              "name": move.name,
+              "itemListElement": move.steps.map(step => ({
+                "@type": "HowToDirection",
+                "text": step
+              }))
+            }))
+          })}
+        </script>
       </Helmet>
 
       <Card 

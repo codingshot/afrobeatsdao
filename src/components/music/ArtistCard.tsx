@@ -25,38 +25,17 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
   const getVideoId = (url: string): string => {
     if (!url) return '';
     
-    console.log('Original URL:', url);
-    
-    // Handle different YouTube URL formats
-    let videoId = '';
-    
-    if (url.includes('youtube.com/watch?v=')) {
-      videoId = url.split('v=')[1]?.split('&')[0] || '';
+    if (url.includes('v=')) {
+      return url.split('v=')[1]?.split('&')[0] || '';
     } else if (url.includes('youtu.be/')) {
-      videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
-    } else if (url.includes('youtube.com/embed/')) {
-      videoId = url.split('embed/')[1]?.split('?')[0] || '';
-    } else {
-      // If it's already just a video ID
-      videoId = url;
+      return url.split('youtu.be/')[1]?.split('?')[0] || '';
     }
     
-    console.log('Extracted video ID:', videoId);
-    return videoId;
+    return url;
   };
   
   const playSong = (song: Song) => {
     const videoId = getVideoId(song.youtube);
-    
-    console.log('Playing song:', song.title, 'with video ID:', videoId);
-    
-    if (!videoId) {
-      toast({
-        title: "Error",
-        description: "Invalid YouTube URL for this song"
-      });
-      return;
-    }
     
     playNow({
       id: `${artist.id}-${song.title}`,
@@ -73,14 +52,6 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
   
   const addSongToQueue = (song: Song) => {
     const videoId = getVideoId(song.youtube);
-    
-    if (!videoId) {
-      toast({
-        title: "Error",
-        description: "Invalid YouTube URL for this song"
-      });
-      return;
-    }
     
     addToQueue({
       id: `${artist.id}-${song.title}`,

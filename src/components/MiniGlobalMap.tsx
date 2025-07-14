@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -265,8 +266,8 @@ export function MiniGlobalMap() {
             ))}
           </MapContainer>
 
-          {/* Legend - positioned absolutely with proper z-index below audio player */}
-          <div className="absolute bottom-4 left-4 map-legend">
+          {/* Legend - positioned absolutely within the map container */}
+          <div className="absolute bottom-4 left-4 z-[1000]">
             <Card className="bg-white/95 backdrop-blur-sm border-[#008751] shadow-lg">
               <CardContent className="p-2">
                 <h4 className="text-xs font-semibold text-black mb-2">Legend</h4>

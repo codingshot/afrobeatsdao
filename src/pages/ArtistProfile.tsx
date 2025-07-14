@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -24,39 +25,6 @@ const ArtistProfile = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
-
-  // Enhanced safe string conversion utility
-  const safeString = (value: any): string => {
-    // Explicitly handle problematic types
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (typeof value === 'symbol') {
-      return '';
-    }
-    if (typeof value === 'function') {
-      return '';
-    }
-    if (typeof value === 'object') {
-      return '';
-    }
-    if (typeof value === 'string') {
-      return value;
-    }
-    if (typeof value === 'number') {
-      return String(value);
-    }
-    if (typeof value === 'boolean') {
-      return String(value);
-    }
-    // Fallback for any other edge cases
-    try {
-      return String(value);
-    } catch (error) {
-      console.warn('Failed to convert value to string:', value, error);
-      return '';
-    }
-  };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
@@ -242,47 +210,40 @@ const ArtistProfile = () => {
     );
   }
 
-  // Safe meta values with enhanced string conversion and validation
-  const safeArtistName = safeString(artist?.name) || 'Unknown Artist';
-  const safeArtistCountry = safeString(artist?.country) || '';
-  const safeArtistGenre = safeString(artist?.genre) || 'Afrobeats';
-  const safeArtistId = safeString(artist?.id) || '';
-
   // Enhanced SEO data with dynamic artist information
-  const metaTitle = `${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} ${safeArtistGenre ? `${safeArtistGenre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
-  const metaDescription = `🎵 Discover ${safeArtistName}'s music on Afrobeats.party! ${safeArtistCountry ? `This ${safeArtistCountry} artist ` : 'Listen to '}${artist?.top_songs?.length || 0} top songs including their biggest hits. ${safeArtistGenre ? `Experience the best of ${safeArtistGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}`;
+  const metaTitle = `${artist.name}${artist.country ? ` - ${artist.country}` : ''} ${artist.genre ? `${artist.genre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
+  const metaDescription = `🎵 Discover ${artist.name}'s music on Afrobeats.party! ${artist.country ? `This ${artist.country} artist ` : 'Listen to '}${artist.top_songs.length} top songs including their biggest hits. ${artist.genre ? `Experience the best of ${artist.genre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
+  const canonicalUrl = `https://afrobeats.party/music/artist/${artist.id}`;
   
-  // Use artist image for Open Graph, ensure it's a full URL with proper fallback
-  const artistImageSafe = safeString(artist?.image);
-  const ogImage = artistImageSafe ? `https://afrobeats.party${artistImageSafe}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
-  const ogImageAlt = `${safeArtistName} - ${safeArtistCountry ? `${safeArtistCountry} ` : ''}${safeArtistGenre} Artist Profile`;
+  // Use artist image for Open Graph, ensure it's a full URL
+  const ogImage = artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImageAlt = `${artist.name} - ${artist.country ? `${artist.country} ` : ''}${artist.genre || 'Afrobeats'} Artist Profile`;
   
-  // Enhanced keywords for better SEO with safe string conversion
+  // Enhanced keywords for better SEO
   const seoKeywords = [
-    safeArtistName.toLowerCase(),
+    artist.name.toLowerCase(),
     'afrobeats artist',
     'african music',
-    safeArtistCountry.toLowerCase(),
-    safeArtistGenre.toLowerCase(),
+    artist.country?.toLowerCase(),
+    artist.genre?.toLowerCase(),
     'afrobeats party',
     'african culture',
     'music streaming',
     'afrobeats dao',
-    ...(artist?.top_songs?.slice(0, 5).map(song => safeString(song?.title).toLowerCase()).filter(Boolean) || []),
+    ...artist.top_songs.slice(0, 5).map(song => song.title.toLowerCase()),
     'nigerian music',
     'ghana music',
     'south african music'
   ].filter(Boolean).join(', ');
   
-  // Get social media links for structured data with safe string conversion
+  // Get social media links for structured data
   const socialLinks = [
-    safeString(artist?.spotify),
-    safeString(artist?.instagram),
-    safeString(artist?.twitter),
-    safeString(artist?.youtube),
-    safeString(artist?.soundcloud),
-    safeString(artist?.website)
+    artist.spotify,
+    artist.instagram,
+    artist.twitter,
+    artist.youtube,
+    artist.soundcloud,
+    artist.website
   ].filter(Boolean);
   
   return (
@@ -305,7 +266,7 @@ const ArtistProfile = () => {
         
         {/* Music specific Open Graph */}
         <meta property="music:musician" content={canonicalUrl} />
-        <meta property="music:song_count" content={String(artist?.top_songs?.length || 0)} />
+        <meta property="music:song_count" content={artist.top_songs.length.toString()} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -324,12 +285,46 @@ const ArtistProfile = () => {
         <meta name="theme-color" content="#008751" />
         
         {/* Geographic SEO */}
-        {safeArtistCountry && (
+        {artist.country && (
           <>
-            <meta name="geo.region" content={safeArtistCountry} />
-            <meta name="geo.placename" content={safeArtistCountry} />
+            <meta name="geo.region" content={artist.country} />
+            <meta name="geo.placename" content={artist.country} />
           </>
         )}
+        
+        {/* Schema.org structured data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicGroup",
+            "name": artist.name,
+            "description": metaDescription,
+            "image": ogImage,
+            "url": canonicalUrl,
+            "genre": artist.genre || "Afrobeats",
+            ...(artist.country && { "foundingLocation": artist.country }),
+            "sameAs": socialLinks,
+            "track": artist.top_songs.map(song => ({
+              "@type": "MusicRecording",
+              "name": song.title,
+              "url": song.youtube,
+              "byArtist": {
+                "@type": "MusicGroup",
+                "name": artist.name
+              }
+            })),
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and Afrobeats culture"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonicalUrl
+            }
+          })}
+        </script>
       </Helmet>
       
       <div className="min-h-screen bg-background">

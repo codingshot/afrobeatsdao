@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -149,61 +150,6 @@ const Song = () => {
     e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
   };
 
-  // Create structured data with proper sanitization
-  const createStructuredData = () => {
-    try {
-      const data = {
-        "@context": "https://schema.org",
-        "@type": "MusicRecording",
-        "name": String(song.title || ''),
-        "description": metaDescription,
-        "url": canonicalUrl,
-        "image": ogImage,
-        "genre": String(artist.genre || "Afrobeats"),
-        "datePublished": new Date().toISOString().split('T')[0],
-        "inLanguage": "en",
-        "byArtist": {
-          "@type": "MusicGroup",
-          "name": String(artist.name || ''),
-          "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
-          "genre": String(artist.genre || "Afrobeats"),
-          ...(artist.country && { "foundingLocation": String(artist.country) }),
-          "url": `https://afrobeats.party/music/artist/${artistId}`,
-          "sameAs": [
-            artist.spotify,
-            artist.instagram,
-            artist.twitter,
-            artist.youtube
-          ].filter(Boolean).map(url => String(url))
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "name": "Afrobeats.party",
-          "url": "https://afrobeats.party",
-          "description": "Global platform for African music and Afrobeats culture"
-        },
-        "potentialAction": {
-          "@type": "ListenAction",
-          "target": String(song.youtube || ''),
-          "expectsAcceptanceOf": {
-            "@type": "Offer",
-            "category": "free"
-          }
-        }
-      };
-      
-      return JSON.stringify(data);
-    } catch (error) {
-      console.error('Error creating structured data:', error);
-      return JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "MusicRecording",
-        "name": String(song.title || ''),
-        "description": metaDescription
-      });
-    }
-  };
-
   // Get related songs from the same artist (excluding current song)
   const relatedSongs = artist.top_songs.filter(s => s.title !== song.title);
 
@@ -264,7 +210,45 @@ const Song = () => {
         
         {/* Schema.org structured data */}
         <script type="application/ld+json">
-          {createStructuredData()}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicRecording",
+            "name": song.title,
+            "description": metaDescription,
+            "url": canonicalUrl,
+            "image": ogImage,
+            "genre": artist.genre || "Afrobeats",
+            "datePublished": new Date().toISOString().split('T')[0],
+            "inLanguage": "en",
+            "byArtist": {
+              "@type": "MusicGroup",
+              "name": artist.name,
+              "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
+              "genre": artist.genre || "Afrobeats",
+              ...(artist.country && { "foundingLocation": artist.country }),
+              "url": `https://afrobeats.party/music/artist/${artist.id}`,
+              "sameAs": [
+                artist.spotify,
+                artist.instagram,
+                artist.twitter,
+                artist.youtube
+              ].filter(Boolean)
+            },
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Afrobeats.party",
+              "url": "https://afrobeats.party",
+              "description": "Global platform for African music and Afrobeats culture"
+            },
+            "potentialAction": {
+              "@type": "ListenAction",
+              "target": song.youtube,
+              "expectsAcceptanceOf": {
+                "@type": "Offer",
+                "category": "free"
+              }
+            }
+          })}
         </script>
       </Helmet>
       
