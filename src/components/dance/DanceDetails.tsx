@@ -80,26 +80,26 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
       
       // Explicitly reject Symbols and other problematic types
       if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
-        console.warn('safeString: Rejecting non-serializable type:', typeof value);
+        console.warn('DanceDetails safeString: Rejecting non-serializable type:', typeof value);
         return '';
       }
       
       // Handle objects and arrays (convert to empty string to avoid issues)
       if (typeof value === 'object') {
-        console.warn('safeString: Rejecting object type:', value);
+        console.warn('DanceDetails safeString: Rejecting object type:', value);
         return '';
       }
       
       // Final fallback - should never reach here
-      console.warn('safeString: Unknown type encountered:', typeof value, value);
+      console.warn('DanceDetails safeString: Unknown type encountered:', typeof value, value);
       return '';
     } catch (error) {
-      console.error('Error in safeString conversion:', error, value);
+      console.error('Error in DanceDetails safeString conversion:', error, value);
       return '';
     }
   };
 
-  // Safely extract and validate all dance properties with extra logging
+  // Safely extract and validate all dance properties
   const safeDanceName = safeString(dance?.name) || 'Dance';
   const safeDanceOrigin = safeString(dance?.origin) || '';
   const safeDanceDescription = safeString(dance?.description) || 'Learn this amazing dance';
@@ -107,16 +107,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   const safeDanceId = safeString(dance?.id) || 'dance';
   const safeDanceImage = safeString(dance?.image) || '';
 
-  console.log('DanceDetails - Individual safe values:', {
-    safeDanceName,
-    safeDanceOrigin,
-    safeDanceDescription,
-    safeDanceDifficulty,
-    safeDanceId,
-    safeDanceImage
-  });
-
-  // Build meta values with completely safe strings and extra validation
+  // Build meta values with completely safe strings
   const buildSafeMetaValue = (template: string, ...values: any[]): string => {
     try {
       const safeValues = values.map(v => safeString(v)).filter(v => v.length > 0);
@@ -126,7 +117,8 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
       });
       // Clean up any remaining placeholders
       result = result.replace(/\{[0-9]+\}/g, '');
-      return safeString(result);
+      const finalResult = safeString(result);
+      return finalResult || 'Afrobeats.party - Learn African Dance';
     } catch (error) {
       console.error('Error building safe meta value:', error);
       return 'Afrobeats.party - Learn African Dance';
@@ -174,63 +166,55 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     ...keyMovesKeywords.map(k => safeString(k).toLowerCase())
   ].filter(keyword => keyword.length > 0).join(', ');
 
-  console.log('DanceDetails - Final meta values:', {
-    metaTitle,
-    metaDescription,
-    canonicalUrl,
-    ogImage,
-    ogImageAlt,
-    seoKeywords
-  });
-
-  // Validate all meta values before rendering
-  const validateMetaValue = (value: any, name: string): string => {
+  // Final validation for Helmet - ensure no Symbols can pass through
+  const validateForHelmet = (value: any, fallback: string = 'Afrobeats.party'): string => {
     const safe = safeString(value);
-    if (safe.length === 0) {
-      console.warn(`Empty meta value for ${name}, using fallback`);
+    if (typeof safe !== 'string' || safe.length === 0) {
+      console.warn('DanceDetails validateForHelmet: Invalid value, using fallback:', value);
+      return fallback;
     }
-    return safe || 'Afrobeats.party';
+    return safe;
   };
 
   return (
     <>
       <Helmet>
-        <title>{validateMetaValue(metaTitle, 'title')}</title>
-        <meta name="description" content={validateMetaValue(metaDescription, 'description')} />
+        <title>{validateForHelmet(metaTitle, 'Dance Tutorial - Afrobeats.party')}</title>
+        <meta name="description" content={validateForHelmet(metaDescription, 'Learn African dance moves with our step-by-step tutorials')} />
         
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={validateMetaValue(metaTitle, 'og:title')} />
-        <meta property="og:description" content={validateMetaValue(metaDescription, 'og:description')} />
-        <meta property="og:image" content={validateMetaValue(ogImage, 'og:image')} />
-        <meta property="og:image:alt" content={validateMetaValue(ogImageAlt, 'og:image:alt')} />
+        <meta property="og:title" content={validateForHelmet(metaTitle, 'Dance Tutorial - Afrobeats.party')} />
+        <meta property="og:description" content={validateForHelmet(metaDescription, 'Learn African dance moves with our step-by-step tutorials')} />
+        <meta property="og:image" content={validateForHelmet(ogImage, 'https://afrobeats.party/AfrobeatsDAOMeta.png')} />
+        <meta property="og:image:alt" content={validateForHelmet(ogImageAlt, 'Dance Tutorial')} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:url" content={validateMetaValue(canonicalUrl, 'og:url')} />
+        <meta property="og:url" content={validateForHelmet(canonicalUrl, 'https://afrobeats.party/dance')} />
         <meta property="og:site_name" content="Afrobeats.party" />
         <meta property="og:locale" content="en_US" />
         <meta property="article:section" content="Dance" />
         <meta property="article:tag" content="African Dance" />
         <meta property="article:tag" content="Afrobeats" />
-        {safeDanceOrigin && <meta property="article:tag" content={validateMetaValue(safeDanceOrigin, 'article:tag')} />}
+        {safeDanceOrigin && <meta property="article:tag" content={validateForHelmet(safeDanceOrigin, 'Africa')} />}
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
-        <meta name="twitter:title" content={validateMetaValue(metaTitle, 'twitter:title')} />
-        <meta name="twitter:description" content={validateMetaValue(metaDescription, 'twitter:description')} />
-        <meta name="twitter:image" content={validateMetaValue(ogImage, 'twitter:image')} />
-        <meta name="twitter:image:alt" content={validateMetaValue(ogImageAlt, 'twitter:image:alt')} />
+        <meta name="twitter:title" content={validateForHelmet(metaTitle, 'Dance Tutorial - Afrobeats.party')} />
+        <meta name="twitter:description" content={validateForHelmet(metaDescription, 'Learn African dance moves with our step-by-step tutorials')} />
+        <meta name="twitter:image" content={validateForHelmet(ogImage, 'https://afrobeats.party/AfrobeatsDAOMeta.png')} />
+        <meta name="twitter:image:alt" content={validateForHelmet(ogImageAlt, 'Dance Tutorial')} />
         
-        <link rel="canonical" href={validateMetaValue(canonicalUrl, 'canonical')} />
-        <meta name="keywords" content={validateMetaValue(seoKeywords, 'keywords')} />
+        <link rel="canonical" href={validateForHelmet(canonicalUrl, 'https://afrobeats.party/dance')} />
+        <meta name="keywords" content={validateForHelmet(seoKeywords, 'african dance, afrobeats, dance tutorial')} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#FFD600" />
         
         {safeDanceOrigin && (
           <>
-            <meta name="geo.region" content={validateMetaValue(safeDanceOrigin, 'geo.region')} />
-            <meta name="geo.placename" content={validateMetaValue(safeDanceOrigin, 'geo.placename')} />
+            <meta name="geo.region" content={validateForHelmet(safeDanceOrigin, 'Africa')} />
+            <meta name="geo.placename" content={validateForHelmet(safeDanceOrigin, 'Africa')} />
           </>
         )}
       </Helmet>
