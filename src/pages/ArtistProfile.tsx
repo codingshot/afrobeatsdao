@@ -25,15 +25,37 @@ const ArtistProfile = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Safe string conversion utility
+  // Enhanced safe string conversion utility
   const safeString = (value: any): string => {
+    // Explicitly handle problematic types
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === 'symbol') {
+      return '';
+    }
+    if (typeof value === 'function') {
+      return '';
+    }
+    if (typeof value === 'object') {
+      return '';
+    }
     if (typeof value === 'string') {
       return value;
     }
     if (typeof value === 'number') {
       return String(value);
     }
-    return '';
+    if (typeof value === 'boolean') {
+      return String(value);
+    }
+    // Fallback for any other edge cases
+    try {
+      return String(value);
+    } catch (error) {
+      console.warn('Failed to convert value to string:', value, error);
+      return '';
+    }
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -220,22 +242,23 @@ const ArtistProfile = () => {
     );
   }
 
-  // Safe meta values with proper string conversion
-  const safeArtistName = safeString(artist.name);
-  const safeArtistCountry = safeString(artist.country);
-  const safeArtistGenre = safeString(artist.genre);
-  const safeArtistId = safeString(artist.id);
+  // Safe meta values with enhanced string conversion and validation
+  const safeArtistName = safeString(artist?.name) || 'Unknown Artist';
+  const safeArtistCountry = safeString(artist?.country) || '';
+  const safeArtistGenre = safeString(artist?.genre) || 'Afrobeats';
+  const safeArtistId = safeString(artist?.id) || '';
 
   // Enhanced SEO data with dynamic artist information
   const metaTitle = `${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} ${safeArtistGenre ? `${safeArtistGenre} ` : 'Afrobeats '}Artist | Afrobeats.party`;
-  const metaDescription = `🎵 Discover ${safeArtistName}'s music on Afrobeats.party! ${safeArtistCountry ? `This ${safeArtistCountry} artist ` : 'Listen to '}${artist.top_songs.length} top songs including their biggest hits. ${safeArtistGenre ? `Experience the best of ${safeArtistGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
+  const metaDescription = `🎵 Discover ${safeArtistName}'s music on Afrobeats.party! ${safeArtistCountry ? `This ${safeArtistCountry} artist ` : 'Listen to '}${artist?.top_songs?.length || 0} top songs including their biggest hits. ${safeArtistGenre ? `Experience the best of ${safeArtistGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
   const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}`;
   
-  // Use artist image for Open Graph, ensure it's a full URL
-  const ogImage = artist.image ? `https://afrobeats.party${safeString(artist.image)}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
-  const ogImageAlt = `${safeArtistName} - ${safeArtistCountry ? `${safeArtistCountry} ` : ''}${safeArtistGenre || 'Afrobeats'} Artist Profile`;
+  // Use artist image for Open Graph, ensure it's a full URL with proper fallback
+  const artistImageSafe = safeString(artist?.image);
+  const ogImage = artistImageSafe ? `https://afrobeats.party${artistImageSafe}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImageAlt = `${safeArtistName} - ${safeArtistCountry ? `${safeArtistCountry} ` : ''}${safeArtistGenre} Artist Profile`;
   
-  // Enhanced keywords for better SEO
+  // Enhanced keywords for better SEO with safe string conversion
   const seoKeywords = [
     safeArtistName.toLowerCase(),
     'afrobeats artist',
@@ -246,20 +269,20 @@ const ArtistProfile = () => {
     'african culture',
     'music streaming',
     'afrobeats dao',
-    ...artist.top_songs.slice(0, 5).map(song => safeString(song.title).toLowerCase()),
+    ...(artist?.top_songs?.slice(0, 5).map(song => safeString(song?.title).toLowerCase()).filter(Boolean) || []),
     'nigerian music',
     'ghana music',
     'south african music'
   ].filter(Boolean).join(', ');
   
-  // Get social media links for structured data - ensure all are strings
+  // Get social media links for structured data with safe string conversion
   const socialLinks = [
-    safeString(artist.spotify),
-    safeString(artist.instagram),
-    safeString(artist.twitter),
-    safeString(artist.youtube),
-    safeString(artist.soundcloud),
-    safeString(artist.website)
+    safeString(artist?.spotify),
+    safeString(artist?.instagram),
+    safeString(artist?.twitter),
+    safeString(artist?.youtube),
+    safeString(artist?.soundcloud),
+    safeString(artist?.website)
   ].filter(Boolean);
   
   return (
@@ -282,7 +305,7 @@ const ArtistProfile = () => {
         
         {/* Music specific Open Graph */}
         <meta property="music:musician" content={canonicalUrl} />
-        <meta property="music:song_count" content={String(artist.top_songs.length)} />
+        <meta property="music:song_count" content={String(artist?.top_songs?.length || 0)} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
