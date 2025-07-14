@@ -29,7 +29,7 @@ const Song = () => {
     );
   }
 
-  // Ultra-safe string conversion that completely prevents Symbol issues
+  // Enhanced safe string conversion that handles all edge cases
   const safeString = (value: any): string => {
     try {
       // Handle null/undefined first
@@ -50,13 +50,20 @@ const Song = () => {
         return value.toString();
       }
       
-      // Explicitly reject problematic types
-      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint' || typeof value === 'object') {
-        console.warn('safeString: Rejecting non-string type:', typeof value);
+      // Explicitly reject problematic types including Symbol
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
+        console.warn('safeString: Rejecting problematic type:', typeof value);
         return '';
       }
       
-      // Final fallback
+      // Handle objects carefully
+      if (typeof value === 'object') {
+        // Don't try to convert objects to strings as they might contain Symbols
+        console.warn('safeString: Rejecting object type');
+        return '';
+      }
+      
+      // Final fallback - return empty string instead of attempting conversion
       return '';
     } catch (error) {
       console.error('Error in safeString conversion:', error);
@@ -124,15 +131,15 @@ const Song = () => {
   const safeArtistId = safeString(artistId) || '';
   const safeSongSlug = safeString(songSlug) || '';
 
-  // Enhanced SEO meta data with dynamic content
-  const metaTitle = `${safeSongTitle} by ${safeArtistName}${safeArtistCountry ? ` - ${safeArtistCountry}` : ''} | Afrobeats.party`;
-  const metaDescription = `🎵 Listen to "${safeSongTitle}" by ${safeArtistName} on Afrobeats.party. ${safeArtistCountry ? `Discover this ${safeArtistCountry} artist's ` : 'Explore '}${safeArtistGenre} music and join the global African music community. Stream now!`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${safeArtistId}/${safeSongSlug}`;
+  // Enhanced SEO meta data with safe concatenation - avoid template literals
+  const metaTitle = safeSongTitle + ' by ' + safeArtistName + (safeArtistCountry ? ' - ' + safeArtistCountry : '') + ' | Afrobeats.party';
+  const metaDescription = '🎵 Listen to "' + safeSongTitle + '" by ' + safeArtistName + ' on Afrobeats.party. ' + (safeArtistCountry ? 'Discover this ' + safeArtistCountry + ' artist\'s ' : 'Explore ') + safeArtistGenre + ' music and join the global African music community. Stream now!';
+  const canonicalUrl = 'https://afrobeats.party/music/artist/' + safeArtistId + '/' + safeSongSlug;
   
   // Use YouTube thumbnail as primary OG image, ensure it's a full URL
-  const ogImage = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
-                 (artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
-  const ogImageAlt = `${safeSongTitle} by ${safeArtistName} - ${safeArtistGenre} Music Video`;
+  const ogImage = videoId ? 'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg' : 
+                 (artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
+  const ogImageAlt = safeSongTitle + ' by ' + safeArtistName + ' - ' + safeArtistGenre + ' Music Video';
   
   // Enhanced keywords for better SEO
   const keywordsList = [
@@ -211,10 +218,10 @@ const Song = () => {
         "byArtist": {
           "@type": "MusicGroup",
           "name": safeArtistName,
-          "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
+          "image": artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
           "genre": safeArtistGenre,
           ...(safeArtistCountry && { "foundingLocation": safeArtistCountry }),
-          "url": `https://afrobeats.party/music/artist/${safeArtistId}`,
+          "url": 'https://afrobeats.party/music/artist/' + safeArtistId,
           "sameAs": [
             safeString(artist.spotify),
             safeString(artist.instagram),
@@ -278,7 +285,7 @@ const Song = () => {
         <meta property="og:locale" content="en_US" />
         
         <meta property="music:song" content={canonicalUrl} />
-        <meta property="music:musician" content={`https://afrobeats.party/music/artist/${safeArtistId}`} />
+        <meta property="music:musician" content={'https://afrobeats.party/music/artist/' + safeArtistId} />
         <meta property="music:album" content={safeArtistName} />
         <meta property="music:duration" content="180" />
         

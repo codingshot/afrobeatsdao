@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -26,7 +25,7 @@ const ArtistProfile = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Ultra-safe string conversion that completely prevents Symbol issues
+  // Enhanced safe string conversion that handles all edge cases
   const safeString = (value: any): string => {
     try {
       // Handle null/undefined first
@@ -47,13 +46,20 @@ const ArtistProfile = () => {
         return value.toString();
       }
       
-      // Explicitly reject problematic types
-      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint' || typeof value === 'object') {
-        console.warn('safeString: Rejecting non-string type:', typeof value);
+      // Explicitly reject problematic types including Symbol
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
+        console.warn('safeString: Rejecting problematic type:', typeof value);
         return '';
       }
       
-      // Final fallback
+      // Handle objects carefully
+      if (typeof value === 'object') {
+        // Don't try to convert objects to strings as they might contain Symbols
+        console.warn('safeString: Rejecting object type');
+        return '';
+      }
+      
+      // Final fallback - return empty string instead of attempting conversion
       return '';
     } catch (error) {
       console.error('Error in safeString conversion:', error);
@@ -252,12 +258,12 @@ const ArtistProfile = () => {
   const safeId = safeString(artist.id) || '';
   const safeImage = safeString(artist.image) || '';
 
-  // Build meta strings with safe concatenation
-  const metaTitle = `${safeName}${safeCountry ? ` - ${safeCountry}` : ''} ${safeGenre} Artist | Afrobeats.party`;
-  const metaDescription = `🎵 Discover ${safeName}'s music on Afrobeats.party! ${safeCountry ? `This ${safeCountry} artist ` : 'Listen to '}${artist.top_songs?.length || 0} top songs including their biggest hits. ${safeGenre ? `Experience the best of ${safeGenre} ` : 'Stream Afrobeats '}music and join the global African music community.`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${safeId}`;
-  const ogImage = safeImage ? `https://afrobeats.party${safeImage}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
-  const ogImageAlt = `${safeName} - ${safeCountry ? `${safeCountry} ` : ''}${safeGenre} Artist Profile`;
+  // Build meta strings with safe concatenation - avoid template literals
+  const metaTitle = safeName + (safeCountry ? ' - ' + safeCountry : '') + ' ' + safeGenre + ' Artist | Afrobeats.party';
+  const metaDescription = '🎵 Discover ' + safeName + '\'s music on Afrobeats.party! ' + (safeCountry ? 'This ' + safeCountry + ' artist ' : 'Listen to ') + (artist.top_songs?.length || 0) + ' top songs including their biggest hits. ' + (safeGenre ? 'Experience the best of ' + safeGenre + ' ' : 'Stream Afrobeats ') + 'music and join the global African music community.';
+  const canonicalUrl = 'https://afrobeats.party/music/artist/' + safeId;
+  const ogImage = safeImage ? 'https://afrobeats.party' + safeImage : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const ogImageAlt = safeName + ' - ' + (safeCountry ? safeCountry + ' ' : '') + safeGenre + ' Artist Profile';
   
   // Build keywords safely
   const keywordsList = [
@@ -276,16 +282,6 @@ const ArtistProfile = () => {
   ].filter(keyword => keyword && keyword.length > 0);
   
   const seoKeywords = keywordsList.join(', ');
-  
-  // Build social links safely 
-  const socialLinks = [
-    safeString(artist.spotify),
-    safeString(artist.instagram),
-    safeString(artist.twitter),
-    safeString(artist.youtube),
-    safeString(artist.soundcloud),
-    safeString(artist.website)
-  ].filter(link => link && link.length > 0);
   
   return (
     <>
