@@ -59,7 +59,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
     return (
       <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <Button 
+          <Button
             onClick={() => navigate("/dance")}
             variant="default"
             className="mb-4 sm:mb-6 bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium"
@@ -74,9 +74,9 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <Button 
+    <div className="min-h-screen bg-black pt-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto pb-44 sm:pb-24">
+        <Button
           onClick={() => navigate("/dance")}
           variant="default"
           className="mb-4 sm:mb-6 bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium"
@@ -84,40 +84,48 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dances
         </Button>
-        
+
         {dance.image && (
           <div className="w-full mb-4 sm:mb-6">
-            <AspectRatio ratio={21/9} className="bg-muted rounded-lg overflow-hidden">
+            <AspectRatio
+              ratio={21 / 9}
+              className="bg-muted rounded-lg overflow-hidden"
+            >
               <img
                 src={dance.image}
-                alt={dance.name || 'Dance'}
+                alt={dance.name || "Dance"}
                 className="w-full h-full object-cover"
               />
             </AspectRatio>
           </div>
         )}
-        
+
         <div className="mb-4 sm:mb-6 bg-[#FFD600] rounded-lg p-3 sm:p-6 shadow-lg">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h1 
-              className="text-xl sm:text-4xl font-bold font-heading !text-black" 
-              style={{ color: '#000000 !important', WebkitTextFillColor: '#000000' }}
+            <h1
+              className="text-xl sm:text-4xl font-bold font-heading !text-black"
+              style={{
+                color: "#000000 !important",
+                WebkitTextFillColor: "#000000",
+              }}
             >
-              {dance.name || 'Dance'}
+              {dance.name || "Dance"}
             </h1>
             {dance.origin && getFlag(dance.origin) && (
-              <img 
-                src={getFlag(dance.origin)} 
-                alt={dance.origin || 'Country'} 
+              <img
+                src={getFlag(dance.origin)}
+                alt={dance.origin || "Country"}
                 className="w-6 h-4 sm:w-10 sm:h-7"
-                title={dance.origin || 'Country'}
+                title={dance.origin || "Country"}
               />
             )}
           </div>
-          <p className="text-black text-base sm:text-lg mt-2">{dance.description || ''}</p>
+          <p className="text-black text-base sm:text-lg mt-2">
+            {dance.description || ""}
+          </p>
           <div className="flex items-center mt-3 sm:mt-4 flex-wrap gap-2">
             <span className="text-xs sm:text-sm bg-black text-[#FFD600] px-2 py-0.5 rounded-full font-medium">
-              {dance.difficulty || 'Beginner'}
+              {dance.difficulty || "Beginner"}
             </span>
             {dance.origin && (
               <span className="text-xs sm:text-sm text-black">
@@ -126,7 +134,7 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
             )}
           </div>
         </div>
-        
+
         <DanceContent dance={dance} />
       </div>
     </div>
