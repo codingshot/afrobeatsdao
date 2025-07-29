@@ -25,17 +25,14 @@ const Index = () => {
     console.warn("GlobalAudioPlayer context not available:", error);
     audioPlayerContext = null;
   }
-  const {
-    playNow,
-    currentSong
-  } = audioPlayerContext || {};
+  const { playNow, currentSong } = audioPlayerContext || {};
 
   // Auto-play a random vibe when the page loads and no song is currently playing
   useEffect(() => {
     if (!audioPlayerContext || !playNow) return;
 
     // Check localStorage first for any saved song
-    const savedSong = localStorage.getItem('afrobeats_current_song');
+    const savedSong = localStorage.getItem("afrobeats_current_song");
 
     // Only initialize if no song is currently playing and no song in local storage
     if (!currentSong && !savedSong) {
@@ -47,14 +44,15 @@ const Index = () => {
       // Create a song object from the Vibe of the Day
       const defaultSong = {
         id: `vibe-${vibeVideoId}`,
-        youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
+        youtube: vibeVideoId, // Only pass the video ID, titles will be fetched from YouTube
       };
 
       // Play the Vibe of the Day video
       playNow(defaultSong);
     }
   }, [playNow, currentSong, audioPlayerContext]);
-  return <div className="min-h-screen font-sans pb-[100px]">
+  return (
+    <div className="min-h-screen font-sans pb-[93px]">
       <main>
         <HeroSection />
         <NewsTicker />
@@ -67,11 +65,11 @@ const Index = () => {
         <DanceCarousel />
         <MiniGlobalMap />
         <TeamSection />
-        
+
         {/* Partner CTA Section */}
-        
       </main>
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default Index;
