@@ -127,66 +127,64 @@ export function Header() {
             </DropdownMenu>
           </div>}
 
-          <div className="md:hidden flex items-center space-x-4">
-            <div className="flex items-center gap-2">
-              {onDancePage && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="bg-white/90 border-black/10 text-black hover:bg-white">
-                      Progress {progress.started > 0 && <span className="ml-1">{progress.started}</span>}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 bg-white text-black border-black/10 z-[9999]">
-                    <div className="p-2 text-sm font-medium border-b border-black/10">
-                      Your Dance Progress
-                    </div>
-                    <div className="p-2">
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Started:</span>
-                        <span>{progress.started}</span>
-                      </div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Completed:</span>
-                        <span>{progress.completed}</span>
-                      </div>
-                    </div>
-                    <DropdownMenuItem asChild>
-                      <Link to="/dance" className="cursor-pointer">
-                        View All Dances
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-              
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-black">
-                    <Menu className="h-6 w-6" />
+          <div className="md:hidden flex items-center space-x-2">
+            {onDancePage && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="bg-white/90 border-black/10 text-black hover:bg-white text-xs px-2">
+                    Progress {progress.started > 0 && <span className="ml-1">{progress.started}</span>}
                   </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] bg-[#FFD600] p-0 z-[9999]">
-                  <nav className="flex flex-col h-full">
-                    <Link to="/dance" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/dance") && "bg-black/20")}>
-                      <Disc3 className="mr-3 h-5 w-5" />
-                      Dance
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-white text-black border-black/10 z-[9999] mr-2">
+                  <div className="p-2 text-sm font-medium border-b border-black/10">
+                    Your Dance Progress
+                  </div>
+                  <div className="p-2">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Started:</span>
+                      <span>{progress.started}</span>
+                    </div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Completed:</span>
+                      <span>{progress.completed}</span>
+                    </div>
+                  </div>
+                  <DropdownMenuItem asChild>
+                    <Link to="/dance" className="cursor-pointer">
+                      View All Dances
                     </Link>
-                    <Link to="/clubs" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/clubs") && "bg-black/20")}>
-                      <Users className="mr-3 h-5 w-5" />
-                      Clubs
-                    </Link>
-                    <Link to="/events" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/events") && "bg-black/20")}>
-                      <Calendar className="mr-3 h-5 w-5" />
-                      Events
-                    </Link>
-                    <Link to="/music" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/music") && "bg-black/20")}>
-                      <Music className="mr-3 h-5 w-5" />
-                      Music
-                    </Link>
-                  </nav>
-                </SheetContent>
-              </Sheet>
-            </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-black">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] bg-[#FFD600] p-0 z-[9999]">
+                <nav className="flex flex-col h-full">
+                  <Link to="/dance" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/dance") && "bg-black/20")}>
+                    <Disc3 className="mr-3 h-5 w-5" />
+                    Dance
+                  </Link>
+                  <Link to="/clubs" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/clubs") && "bg-black/20")}>
+                    <Users className="mr-3 h-5 w-5" />
+                    Clubs
+                  </Link>
+                  <Link to="/events" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/events") && "bg-black/20")}>
+                    <Calendar className="mr-3 h-5 w-5" />
+                    Events
+                  </Link>
+                  <Link to="/music" className={cn("flex items-center px-4 py-3 text-lg font-medium hover:bg-black/20 text-black", isRouteActive("/music") && "bg-black/20")}>
+                    <Music className="mr-3 h-5 w-5" />
+                    Music
+                  </Link>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>

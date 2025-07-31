@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, List } from "lucide-react";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
@@ -14,13 +14,8 @@ interface Song {
   youtube: string;
 }
 const MusicCarousel: React.FC = () => {
-  const {
-    playNow,
-    addToQueue
-  } = useGlobalAudioPlayer();
-  const {
-    toast
-  } = useToast();
+  const { playNow, addToQueue } = useGlobalAudioPlayer();
+  const { toast } = useToast();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -32,21 +27,21 @@ const MusicCarousel: React.FC = () => {
   // Get all songs from artists data and randomize them
   const allSongs = useMemo(() => {
     const songs: Song[] = [];
-    ARTISTS.forEach(artist => {
+    ARTISTS.forEach((artist) => {
       artist.top_songs.forEach((song, index) => {
         // Extract YouTube video ID from URL
         let youtubeId = song.youtube;
-        if (song.youtube.includes('youtube.com/watch?v=')) {
-          youtubeId = song.youtube.split('v=')[1]?.split('&')[0] || '';
-        } else if (song.youtube.includes('youtu.be/')) {
-          youtubeId = song.youtube.split('youtu.be/')[1]?.split('?')[0] || '';
+        if (song.youtube.includes("youtube.com/watch?v=")) {
+          youtubeId = song.youtube.split("v=")[1]?.split("&")[0] || "";
+        } else if (song.youtube.includes("youtu.be/")) {
+          youtubeId = song.youtube.split("youtu.be/")[1]?.split("?")[0] || "";
         }
         songs.push({
           id: `${artist.id}-${index}`,
           title: song.title,
           artist: artist.name,
           artistId: artist.id,
-          youtube: youtubeId
+          youtube: youtubeId,
         });
       });
     });
@@ -64,7 +59,7 @@ const MusicCarousel: React.FC = () => {
   useEffect(() => {
     if (!isPaused && !isDragging && containerRef.current) {
       const animate = () => {
-        setCurrentTranslateX(prev => {
+        setCurrentTranslateX((prev) => {
           const itemWidth = 324; // 300px width + 24px gap
           const totalWidth = allSongs.length * itemWidth;
           const newValue = prev - 0.5; // Adjust speed here
@@ -90,7 +85,7 @@ const MusicCarousel: React.FC = () => {
       id: song.id,
       youtube: song.youtube,
       title: song.title,
-      artist: song.artist
+      artist: song.artist,
     });
   };
   const handleAddToQueue = (song: Song) => {
@@ -98,11 +93,11 @@ const MusicCarousel: React.FC = () => {
       id: song.id,
       youtube: song.youtube,
       title: song.title,
-      artist: song.artist
+      artist: song.artist,
     });
     toast({
       title: "Added to queue",
-      description: `${song.title} by ${song.artist} will play next`
+      description: `${song.title} by ${song.artist} will play next`,
     });
   };
   const getVideoThumbnail = (videoId: string) => {
@@ -137,58 +132,105 @@ const MusicCarousel: React.FC = () => {
     setIsPaused(false);
     setIsDragging(false);
   };
-  return <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative px-6 z-[50]">
-      <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <div ref={containerRef} className={`flex gap-6 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} overflow-x-hidden`} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} style={{
-        userSelect: 'none',
-        width: 'fit-content'
-      }}>
+  return (
+    <div className="bg-white py-6 overflow-hidden border-b-2 border-black relative px-6 z-[50]">
+      <div
+        className="relative"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div
+          ref={containerRef}
+          className={`flex gap-6 ${
+            isDragging ? "cursor-grabbing" : "cursor-grab"
+          } overflow-x-hidden`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          style={{
+            userSelect: "none",
+            width: "fit-content",
+          }}
+        >
           {/* Create seamless loop by tripling the songs */}
-          {[...allSongs, ...allSongs, ...allSongs].map((song, index) => <div key={`${song.id}-${index}`} className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3 flex-shrink-0" style={{
-          transform: `translateX(${currentTranslateX}px)`,
-          transition: isDragging ? 'none' : 'transform 0.1s linear'
-        }}>
+          {[...allSongs, ...allSongs, ...allSongs].map((song, index) => (
+            <div
+              key={`${song.id}-${index}`}
+              className="flex items-center bg-gray-50 rounded-lg p-3 min-w-[300px] border hover:bg-gray-100 transition-colors gap-3 flex-shrink-0"
+              style={{
+                transform: `translateX(${currentTranslateX}px)`,
+                transition: isDragging ? "none" : "transform 0.1s linear",
+              }}
+            >
               {/* Song thumbnail */}
-              <Link to={`/music/artist/${song.artistId}/${slugify(song.title)}`} className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md hover:opacity-80 transition-opacity" onClick={e => isDragging && e.preventDefault()}>
-                <img src={getVideoThumbnail(song.youtube)} alt={song.title} className="h-full w-full object-cover" onError={handleImageError} />
+              <Link
+                to={`/music/artist/${song.artistId}/${slugify(song.title)}`}
+                className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md hover:opacity-80 transition-opacity"
+                onClick={(e) => isDragging && e.preventDefault()}
+              >
+                <img
+                  src={getVideoThumbnail(song.youtube)}
+                  alt={song.title}
+                  className="h-full w-full object-cover"
+                  onError={handleImageError}
+                />
               </Link>
 
               {/* Song info next to thumbnail */}
               <div className="flex-1 min-w-0 h-12 flex flex-col justify-center">
-                <Link to={`/music/artist/${song.artistId}/${slugify(song.title)}`} className="font-semibold text-sm text-black truncate leading-tight hover:text-[#008751] transition-colors" title={song.title} onClick={e => isDragging && e.preventDefault()}>
+                <Link
+                  to={`/music/artist/${song.artistId}/${slugify(song.title)}`}
+                  className="font-semibold text-sm text-black truncate leading-tight hover:text-[#008751] transition-colors"
+                  title={song.title}
+                  onClick={(e) => isDragging && e.preventDefault()}
+                >
                   {song.title}
                 </Link>
-                <Link to={`/music/artist/${song.artistId}`} className="text-xs text-gray-600 truncate leading-tight hover:text-[#008751] transition-colors" onClick={e => isDragging && e.preventDefault()}>
+                <Link
+                  to={`/music/artist/${song.artistId}`}
+                  className="text-xs text-gray-600 truncate leading-tight hover:text-[#008751] transition-colors"
+                  onClick={(e) => isDragging && e.preventDefault()}
+                >
                   {song.artist}
                 </Link>
               </div>
 
               {/* Controls */}
               <div className="flex items-center gap-1 ml-auto">
-                <Button variant="ghost" size="icon" onClick={e => {
-              e.preventDefault();
-              handlePlay(song);
-            }} className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePlay(song);
+                  }}
+                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                >
                   <Play className="h-4 w-4" />
                 </Button>
-                
-                <Button variant="ghost" size="icon" onClick={e => {
-              e.preventDefault();
-              handleAddToQueue(song);
-            }} className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10">
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToQueue(song);
+                  }}
+                  className="h-8 w-8 text-[#008751] hover:text-[#008751]/90 hover:bg-[#008751]/10"
+                >
                   <List className="h-4 w-4" />
                 </Button>
               </div>
-            </div>)}
+            </div>
+          ))}
         </div>
       </div>
-      
+
       {/* See Songs Button positioned slightly above the border */}
       <div className="absolute -bottom-1 right-6 z-[9999]">
-        <Link to="/music?tab=songs">
-          
-        </Link>
+        <Link to="/music?tab=songs"></Link>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default MusicCarousel;

@@ -1,332 +1,152 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { MapItem } from '@/types/map';
-import { CLUBS } from '@/data/clubs';
 import { ARTISTS } from '@/data/artists';
-
-// Get events data from the events page data
-const getEventsData = () => {
-  return [
-    {
-      id: 'event-afronation-2024',
-      name: 'Afro Nation Portugal 2024',
-      location: 'Portimão, Portugal',
-      coordinates: [-8.7613, 40.2033] as [number, number],
-      date: '2024-07-03',
-      endDate: '2024-07-06',
-      venue: 'Praia da Rocha',
-      image: '/afornationportugal.jpg'
-    },
-    {
-      id: 'event-detty-december',
-      name: 'Detty December Lagos',
-      location: 'Lagos, Nigeria', 
-      coordinates: [3.3792, 6.5244] as [number, number],
-      date: '2024-12-25',
-      endDate: '2024-12-31',
-      venue: 'Eko Atlantic'
-    },
-    {
-      id: 'event-afrofuture-detroit',
-      name: 'Afrofuture Detroit',
-      location: 'Detroit, United States',
-      coordinates: [-83.0458, 42.3314] as [number, number],
-      date: '2024-08-24',
-      endDate: '2024-08-25',
-      venue: 'Hart Plaza',
-      image: '/afrofuture detroit.jpeg'
-    },
-    {
-      id: 'event-mawazine-morocco',
-      name: 'Mawazine Festival',
-      location: 'Rabat, Morocco',
-      coordinates: [-6.8326, 34.0209] as [number, number],
-      date: '2024-06-21',
-      endDate: '2024-06-29',
-      venue: 'Multiple Venues',
-      image: '/mawazine.webp'
-    },
-    {
-      id: 'event-afrobeats-london',
-      name: 'Afrobeats in the Park London',
-      location: 'London, United Kingdom',
-      coordinates: [-0.1276, 51.5074] as [number, number],
-      date: '2024-09-15',
-      venue: 'Hyde Park'
-    }
-  ];
-};
-
-// Convert existing club data
-const getClubMapItems = (): MapItem[] => {
-  return CLUBS.map(club => ({
-    id: `club-${club.name.toLowerCase().replace(/\s+/g, '-')}`,
-    name: club.name,
-    type: 'club' as const,
-    coordinates: club.coordinates,
-    country: getCountryFromCity(club.city),
-    city: club.city,
-    description: club.general_rating,
-    website: club.website,
-    openingHours: club.hours,
-    musicStyle: club.music
-  }));
-};
-
-// Improved helper to spread coordinates in a country with better distribution
-const spreadCoordinatesInCountry = (baseCoords: [number, number], index: number, total: number): [number, number] => {
-  if (total === 1) return baseCoords;
-  
-  // Create a more varied spread pattern
-  const spreadRadius = Math.min(1.0, 0.3 + (total * 0.05)); // Larger spread for more artists
-  const layers = Math.ceil(Math.sqrt(total)); // Create circular layers
-  const layer = Math.floor(index / layers);
-  const positionInLayer = index % layers;
-  const angleIncrement = (2 * Math.PI) / Math.max(1, layers);
-  
-  const angle = angleIncrement * positionInLayer + (layer * Math.PI / 4); // Offset each layer
-  const radius = spreadRadius * (0.3 + (layer * 0.2)); // Increase radius for outer layers
-  
-  const offsetLng = Math.cos(angle) * radius;
-  const offsetLat = Math.sin(angle) * radius;
-  
-  return [
-    baseCoords[0] + offsetLng,
-    baseCoords[1] + offsetLat
-  ];
-};
-
-// Convert existing artist data with proper coordinates and improved spread
-const getArtistMapItems = (): MapItem[] => {
-  // Group artists by country first
-  const artistsByCountry: Record<string, typeof ARTISTS> = {};
-  
-  ARTISTS.forEach(artist => {
-    const country = getArtistCountry(artist.name);
-    if (!artistsByCountry[country]) {
-      artistsByCountry[country] = [];
-    }
-    artistsByCountry[country].push(artist);
-  });
-
-  // Now create map items with improved spread coordinates
-  const mapItems: MapItem[] = [];
-  
-  Object.entries(artistsByCountry).forEach(([country, artists]) => {
-    const baseCoords = getArtistCoordinates(country);
-    
-    artists.forEach((artist, index) => {
-      const spreadCoords = spreadCoordinatesInCountry(baseCoords, index, artists.length);
-      
-      mapItems.push({
-        id: `artist-${artist.id}`,
-        name: artist.name,
-        type: 'artist' as const,
-        coordinates: spreadCoords,
-        country: country,
-        description: `${artist.name} - Afrobeats Artist`,
-        image: artist.image,
-        socialLinks: {
-          spotify: artist.spotify,
-          instagram: artist.instagram,
-          twitter: artist.twitter,
-          youtube: artist.youtube
-        },
-        genre: 'Afrobeats'
-      });
-    });
-  });
-
-  return mapItems;
-};
-
-// Convert events data
-const getEventMapItems = (): MapItem[] => {
-  const events = getEventsData();
-  
-  return events.map(event => ({
-    id: event.id,
-    name: event.name,
-    type: 'event' as const,
-    coordinates: event.coordinates,
-    country: event.location.split(', ')[1] || event.location,
-    city: event.location.split(', ')[0],
-    description: `Afrobeats event at ${event.venue}`,
-    eventDate: event.date,
-    eventEndDate: event.endDate,
-    venue: event.venue,
-    image: event.image
-  }));
-};
-
-// Helper function to get country from city
-const getCountryFromCity = (city: string): string => {
-  const cityToCountry: Record<string, string> = {
-    'London': 'United Kingdom',
-    'Bangkok': 'Thailand', 
-    'Dublin': 'Ireland',
-    'Amsterdam': 'Netherlands'
-  };
-  return cityToCountry[city] || city;
-};
-
-// Updated and verified artist country mapping based on research
-const getArtistCountry = (artistName: string): string => {
-  const artistCountryMap: Record<string, string> = {
-    // Nigerian Artists
-    'Burna Boy': 'Nigeria',
-    'Wizkid': 'Nigeria', 
-    'Davido': 'Nigeria',
-    'Tems': 'Nigeria',
-    'Asake': 'Nigeria',
-    'Rema': 'Nigeria',
-    'Ayra Starr': 'Nigeria',
-    'Omah Lay': 'Nigeria',
-    'Fireboy DML': 'Nigeria',
-    'Joeboy': 'Nigeria',
-    'Ruger': 'Nigeria',
-    'BNXN': 'Nigeria',
-    'Oxlade': 'Nigeria',
-    'CKay': 'Nigeria',
-    'Kizz Daniel': 'Nigeria',
-    'Victony': 'Nigeria',
-    'Seyi Vibez': 'Nigeria',
-    'Shallipopi': 'Nigeria',
-    'Young Jonn': 'Nigeria',
-    'Skiibii': 'Nigeria',
-    'Spyro': 'Nigeria',
-    'Llona': 'Nigeria',
-    'Qing Madi': 'Nigeria',
-    'Cruel Santino': 'Nigeria',
-    'Lojay': 'Nigeria',
-    'Mr Eazi': 'Nigeria',
-    'Tekno': 'Nigeria',
-    'DJ Tunez': 'Nigeria',
-    'Tempoe': 'Nigeria',
-    'Azanti': 'Nigeria',
-    'Kcee': 'Nigeria',
-    'Adekunle Gold': 'Nigeria',
-    'Odeal': 'Nigeria',
-    'Olamide': 'Nigeria',
-    'SPINALL': 'Nigeria',
-    'Ayo Maff': 'Nigeria',
-    '1da Banton': 'Nigeria',
-    'Swizz Panache': 'Nigeria',
-    'Phyno': 'Nigeria',
-    'Tiwa Savage': 'Nigeria',
-    'MOLIY': 'Nigeria',
-    
-    // Ghanaian Artists
-    'King Promise': 'Ghana',
-    'Black Sherif': 'Ghana',
-    
-    // South African Artists
-    'Tyla': 'South Africa',
-    'Focalistic': 'South Africa',
-    'Costa Titch': 'South Africa',
-    
-    // UK-based Artists (many of Nigerian/African heritage but UK-based)
-    'J Hus': 'United Kingdom',
-    'NSG': 'United Kingdom',
-    'Not3s': 'United Kingdom', 
-    'Darkoo': 'United Kingdom',
-    'Yxng Bane': 'United Kingdom',
-    'B Young': 'United Kingdom',
-    'ZieZie': 'United Kingdom',
-    'Young T & Bugsey': 'United Kingdom',
-    'Kojo Funds': 'United Kingdom',
-    'Teejay': 'United Kingdom'
-  };
-  
-  return artistCountryMap[artistName] || 'Nigeria';
-};
-
-// Helper function to get coordinates for artists based on country
-const getArtistCoordinates = (country: string): [number, number] => {
-  const countryCoordinates: Record<string, [number, number]> = {
-    'Nigeria': [7.3775, 9.0765], // Center of Nigeria
-    'Ghana': [-1.0232, 7.9465], // Center of Ghana
-    'South Africa': [22.9375, -30.5595], // Center of South Africa
-    'United Kingdom': [-3.4360, 55.3781], // Center of UK
-    'United States': [-95.7129, 37.0902],
-    'Canada': [-106.3468, 56.1304],
-    'France': [2.2137, 46.2276],
-    'Germany': [10.4515, 51.1657]
-  };
-  return countryCoordinates[country] || [7.3775, 9.0765];
-};
-
-// Sample additional data for other types
-const getAdditionalMapItems = (): MapItem[] => {
-  return [
-    // Sample Dancers
-    {
-      id: 'dancer-poco-lee',
-      name: 'Poco Lee',
-      type: 'dancer',
-      coordinates: [3.3792, 6.5244],
-      country: 'Nigeria',
-      city: 'Lagos',
-      description: 'Famous Afrobeats dancer and choreographer',
-      socialLinks: {
-        instagram: '@poco_lee'
-      }
-    },
-    // Sample Influencers
-    {
-      id: 'influencer-korty-eo',
-      name: 'Korty EO',
-      type: 'influencer',
-      coordinates: [3.3792, 6.5244],
-      country: 'Nigeria',
-      city: 'Lagos',
-      description: 'Content creator and Afrobeats culture influencer',
-      socialLinks: {
-        youtube: '@KortyEO',
-        instagram: '@korty_eo'
-      }
-    },
-    // Sample Agencies
-    {
-      id: 'agency-mavin-records',
-      name: 'Mavin Records',
-      type: 'agency',
-      coordinates: [3.3792, 6.5244],
-      country: 'Nigeria',
-      city: 'Lagos',
-      description: 'Leading Nigerian record label',
-      website: 'https://mavinrecords.com'
-    },
-    // Sample Groups
-    {
-      id: 'group-afrobeats-london',
-      name: 'Afrobeats London Community',
-      type: 'group',
-      coordinates: [-0.1276, 51.5074],
-      country: 'United Kingdom',
-      city: 'London',
-      description: 'London-based Afrobeats music community and events organizer'
-    }
-  ];
-};
+import { CLUBS } from '@/data/clubs';
+import eventsData from '@/data/events.json';
+import communityData from '@/data/community.json';
 
 export const useMapData = () => {
   return useQuery({
     queryKey: ['map-data'],
     queryFn: async (): Promise<MapItem[]> => {
-      const clubs = getClubMapItems();
-      const artists = getArtistMapItems();
-      const events = getEventMapItems();
-      const additional = getAdditionalMapItems();
-      
-      console.log('Map data loaded:', {
-        clubs: clubs.length,
-        artists: artists.length,
-        events: events.length,
-        additional: additional.length
+      const mapItems: MapItem[] = [];
+
+      // Add artists
+      ARTISTS.forEach(artist => {
+        // Create coordinates from country (basic mapping for now)
+        let coordinates: [number, number] | undefined;
+        
+        // Map countries to approximate coordinates
+        const countryCoords: Record<string, [number, number]> = {
+          'Nigeria': [7.3775, 9.0820],
+          'Ghana': [-1.0232, 7.9465],
+          'South Africa': [24.7136, -28.7282],
+          'UK': [-3.4360, 55.3781],
+          'United Kingdom': [-3.4360, 55.3781],
+          'United States': [-95.7129, 37.0902],
+          'Canada': [-106.3468, 56.1304]
+        };
+
+        if (artist.country && countryCoords[artist.country]) {
+          coordinates = countryCoords[artist.country];
+        }
+
+        if (coordinates) {
+          mapItems.push({
+            id: `artist-${artist.id}`,
+            name: artist.name,
+            type: 'artist',
+            coordinates,
+            country: artist.country || 'Unknown',
+            description: artist.genre ? `${artist.genre} artist` : undefined,
+            image: artist.image,
+            socialLinks: {
+              instagram: artist.instagram?.replace('https://www.instagram.com/', ''),
+              twitter: artist.twitter?.replace('https://x.com/', '').replace('https://twitter.com/', ''),
+              youtube: artist.youtube,
+              spotify: artist.spotify
+            },
+            genre: artist.genre,
+            website: artist.website
+          });
+        }
       });
-      
-      return [...clubs, ...artists, ...events, ...additional];
+
+      // Add clubs
+      CLUBS.forEach(club => {
+        if (club.coordinates && club.coordinates.length === 2) {
+          mapItems.push({
+            id: `club-${club.name.replace(/\s+/g, '-').toLowerCase()}`,
+            name: club.name,
+            type: 'club',
+            coordinates: [club.coordinates[0], club.coordinates[1]] as [number, number],
+            country: club.city === 'London' ? 'United Kingdom' : 
+                     club.city === 'Bangkok' ? 'Thailand' :
+                     club.city === 'Dublin' ? 'Ireland' :
+                     club.city === 'Amsterdam' ? 'Netherlands' : 'Unknown',
+            city: club.city,
+            description: club.type,
+            openingHours: club.hours,
+            musicStyle: club.music,
+            website: club.website
+          });
+        }
+      });
+
+      // Add events (convert object to array)
+      const eventsArray = Object.entries(eventsData);
+      eventsArray.forEach(([eventName, event]) => {
+        // Map event locations to coordinates
+        const locationCoords: Record<string, [number, number]> = {
+          'Portimão, Portugal': [-8.5376, 37.1364],
+          'Detroit, MI, USA': [-83.0458, 42.3314],
+          'Accra, Ghana': [-0.1969, 5.6037],
+          'Lagos, Nigeria': [3.3792, 6.5244],
+          'Rabat, Morocco': [-6.8326, 34.0209],
+          'Ain Dubai, Bluewaters Island, Dubai, United Arab Emirates': [55.1200, 25.2100],
+          'Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK': [-0.1928, 51.9500],
+          'Playa del Inglés, Gran Canaria, Spain': [-15.5500, 27.7600],
+          'The Palladium Club, Bideford, England, UK': [-4.2026, 51.0200],
+          'Brisbane, Australia (venue TBA)': [153.0251, -27.4705],
+          'SOB\'s, 204 Varick Street, New York City, USA': [-74.0060, 40.7128],
+          'Studio 338, 388 Boord Street, London, UK': [-0.0307, 51.5074],
+          'Hart Plaza | Detroit, MI, USA': [-83.0458, 42.3314]
+        };
+
+        const coordinates = locationCoords[event.location];
+        if (coordinates) {
+          mapItems.push({
+            id: `event-${eventName.replace(/\s+/g, '-').toLowerCase()}`,
+            name: eventName,
+            type: 'event',
+            coordinates,
+            country: event.location.includes('Portugal') ? 'Portugal' :
+                     event.location.includes('USA') ? 'United States' :
+                     event.location.includes('Ghana') ? 'Ghana' :
+                     event.location.includes('Nigeria') ? 'Nigeria' :
+                     event.location.includes('Morocco') ? 'Morocco' :
+                     event.location.includes('Dubai') ? 'United Arab Emirates' :
+                     event.location.includes('UK') ? 'United Kingdom' :
+                     event.location.includes('Spain') ? 'Spain' :
+                     event.location.includes('Australia') ? 'Australia' : 'Unknown',
+            city: event.location.split(',')[0],
+            description: event.event_description,
+            image: event.image_url,
+            website: event.website,
+            eventDate: event.start_date,
+            eventEndDate: event.end_date,
+            venue: event.location
+          });
+        }
+      });
+
+      // Add community data
+      communityData.forEach(community => {
+        if (community.coordinates && community.coordinates.length === 2) {
+          mapItems.push({
+            id: `community-${community.id}`,
+            name: community.name,
+            type: 'community',
+            coordinates: [community.coordinates[0], community.coordinates[1]] as [number, number],
+            country: community.country,
+            city: community.city,
+            description: community.description,
+            image: community.image,
+            socialLinks: community.socialLinks,
+            verified: community.verified
+          });
+        }
+      });
+
+      console.info('Map data loaded:', {
+        clubs: CLUBS.length,
+        artists: ARTISTS.length,
+        events: eventsArray.length,
+        community: communityData.length,
+        total: mapItems.length
+      });
+
+      return mapItems;
     }
   });
 };

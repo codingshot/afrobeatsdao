@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Play, ArrowRight } from "lucide-react";
@@ -6,23 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { danceCurriculum } from "@/data/dance-curriculum";
 import { useCountryFlags } from "@/hooks/use-country-flags";
-import { 
+import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 // Helper function to get all dances from the curriculum
 const getAllDances = () => {
   const allDances: any[] = [];
-  Object.keys(danceCurriculum).forEach(genre => {
-    danceCurriculum[genre as keyof typeof danceCurriculum].forEach(dance => {
+  Object.keys(danceCurriculum).forEach((genre) => {
+    danceCurriculum[genre as keyof typeof danceCurriculum].forEach((dance) => {
       allDances.push({
         ...dance,
-        genre
+        genre,
       });
     });
   });
@@ -32,17 +31,17 @@ const getAllDances = () => {
 // Helper function to get difficulty color
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty.toLowerCase()) {
-    case 'easy':
-    case 'easy-medium':
-      return 'bg-green-200 text-green-800 border-green-300';
-    case 'medium':
-      return 'bg-yellow-200 text-yellow-800 border-yellow-300';
-    case 'medium-hard':
-      return 'bg-orange-200 text-orange-800 border-orange-300';
-    case 'hard':
-      return 'bg-red-200 text-red-800 border-red-300';
+    case "easy":
+    case "easy-medium":
+      return "bg-green-200 text-green-800 border-green-300";
+    case "medium":
+      return "bg-yellow-200 text-yellow-800 border-yellow-300";
+    case "medium-hard":
+      return "bg-orange-200 text-orange-800 border-orange-300";
+    case "hard":
+      return "bg-red-200 text-red-800 border-red-300";
     default:
-      return 'bg-gray-200 text-gray-800 border-gray-300';
+      return "bg-gray-200 text-gray-800 border-gray-300";
   }
 };
 
@@ -61,21 +60,24 @@ export function DanceCarousel() {
   };
 
   // Play dance tutorial
-  const handlePlayVideo = (event: React.MouseEvent<HTMLButtonElement>, danceId: string) => {
+  const handlePlayVideo = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    danceId: string
+  ) => {
     event.stopPropagation();
-    
+
     if (isPlaying === danceId) {
       setIsPlaying(null);
       return;
     }
-    
+
     // Stop any currently playing video
     if (isPlaying && videoRefs.current[isPlaying]) {
       const iframe = videoRefs.current[isPlaying];
       const src = iframe.src;
       iframe.src = src;
     }
-    
+
     setIsPlaying(danceId);
     setIsPaused(true);
   };
@@ -90,12 +92,13 @@ export function DanceCarousel() {
   // Get tutorial YouTube ID from the first tutorial link
   const getVideoId = (tutorials: any[]) => {
     if (!tutorials || tutorials.length === 0) return null;
-    
+
     const youtubeLink = tutorials[0]?.link;
     if (!youtubeLink) return null;
-    
+
     // Extract YouTube video ID
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const regex =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
     const match = youtubeLink.match(regex);
     return match ? match[1] : null;
   };
@@ -112,22 +115,22 @@ export function DanceCarousel() {
               Learn the hottest Afrobeats and Amapiano dance moves
             </p>
           </div>
-          <Button 
-            onClick={() => navigate('/dance')}
+          <Button
+            onClick={() => navigate("/dance")}
             className="bg-[#264653] hover:bg-blue-800 text-white font-heading px-6 py-2 rounded-full shadow-md flex items-center gap-2"
           >
             <span>See All</span>
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
-        
-        <Carousel 
+
+        <Carousel
           ref={carouselRef}
           className="w-full"
           opts={{
             align: "start",
             loop: true,
-            watchDrag: !isPlaying
+            watchDrag: !isPlaying,
           }}
         >
           <CarouselContent className="-ml-4">
@@ -135,8 +138,11 @@ export function DanceCarousel() {
               const videoId = getVideoId(dance.tutorials);
               const flagUrl = getFlag(dance.origin);
               return (
-                <CarouselItem key={dance.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                  <Card 
+                <CarouselItem
+                  key={dance.id}
+                  className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                >
+                  <Card
                     className="rounded-xl overflow-hidden shadow-lg border-none hover:shadow-xl transition-shadow duration-300 h-full flex flex-col"
                     onClick={() => handleDanceClick(dance.genre, dance.id)}
                   >
@@ -145,18 +151,22 @@ export function DanceCarousel() {
                       <div className="absolute top-2 left-2 z-10">
                         {flagUrl && (
                           <Badge className="bg-blue-100 text-blue-800 border-blue-300 flex items-center gap-1 shadow-sm w-fit px-2 py-1">
-                            <img 
-                              src={flagUrl} 
-                              alt={dance.origin} 
+                            <img
+                              src={flagUrl}
+                              alt={dance.origin}
                               className="w-4 h-3"
                             />
                             {dance.origin}
                           </Badge>
                         )}
                       </div>
-                      
+
                       <div className="absolute top-2 right-2 z-10">
-                        <Badge className={`${getDifficultyColor(dance.difficulty)} shadow-sm w-fit px-2 py-1`}>
+                        <Badge
+                          className={`${getDifficultyColor(
+                            dance.difficulty
+                          )} shadow-sm w-fit px-2 py-1`}
+                        >
                           {dance.difficulty}
                         </Badge>
                       </div>
@@ -173,7 +183,7 @@ export function DanceCarousel() {
                         ></iframe>
                       ) : (
                         <>
-                          <div 
+                          <div
                             className="w-full h-full bg-cover bg-center"
                             style={{ backgroundImage: `url(${dance.image})` }}
                           >
@@ -192,15 +202,17 @@ export function DanceCarousel() {
                       )}
                     </CardContent>
                     <CardFooter className="p-4 flex-1 flex flex-col items-center text-center">
-                      <h3 className="text-xl font-bold text-black">{dance.name}</h3>
+                      <h3 className="text-xl font-bold text-black">
+                        {dance.name}
+                      </h3>
                     </CardFooter>
                   </Card>
                 </CarouselItem>
               );
             })}
           </CarouselContent>
-          <CarouselPrevious className="left-2 lg:-left-12" />
-          <CarouselNext className="right-2 lg:-right-12" />
+          <CarouselPrevious className="left-1" />
+          <CarouselNext className="right-1" />
         </Carousel>
       </div>
     </section>

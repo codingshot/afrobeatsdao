@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 export function HeroSection() {
@@ -20,11 +21,11 @@ export function HeroSection() {
           </h1>
         </div>
         <p className="text-black text-2xl md:text-3xl max-w-2xl mx-auto hero-subtitle">the only hub for everything Afrobeats - music, DJs, events, clubs, dance + more</p>
-        <div className="space-x-6">
-          <Button size="lg" className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
-            Join the Movement
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
+          <Button size="lg" className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
+            Join
           </Button>
-          <Button size="lg" variant="outline" className="bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-xl rounded-full px-8 py-6 h-auto" onClick={scrollToVibe}>
+          <Button size="lg" variant="outline" className="bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto" onClick={scrollToVibe}>
             Vibe
           </Button>
         </div>

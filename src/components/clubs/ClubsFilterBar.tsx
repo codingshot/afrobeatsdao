@@ -1,12 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ClubFilters, ClubViewMode, SortOption } from '@/types/club';
-import { Map, List, Search } from 'lucide-react';
+import { Map, List, Search, Filter } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ClubsFilterBarProps {
   viewMode: ClubViewMode;
@@ -31,6 +32,9 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   musicTypes,
   clubTypes
 }) => {
+  const isMobile = useIsMobile();
+  const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFiltersChange({ ...filters, search: e.target.value });
   };
@@ -51,6 +55,10 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
     onFiltersChange({});
   };
 
+  const toggleFilters = () => {
+    setShowFiltersOnMobile(!showFiltersOnMobile);
+  };
+
   return (
     <Card className="mb-4">
       <CardContent className="p-4">
@@ -63,10 +71,10 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
             </p>
           </div>
 
-          {/* Search, Filters, and View Toggle Row */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+          {/* Search Row with Filter Toggle and View Toggle */}
+          <div className="flex gap-2 items-center">
             {/* Search Input */}
-            <div className="relative md:col-span-3">
+            <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search clubs..."
@@ -76,8 +84,32 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               />
             </div>
 
-            {/* Filters */}
-            <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-4 gap-2">
+            {/* Filter Toggle Button (Mobile Only) */}
+            {isMobile && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleFilters}
+                className={`${showFiltersOnMobile ? 'bg-[#008751] text-white' : 'text-black border-[#008751]'}`}
+              >
+                <Filter className="h-4 w-4" />
+              </Button>
+            )}
+
+            {/* View Toggle */}
+            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}>
+              <ToggleGroupItem value="map" aria-label="Map View">
+                <Map className="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="card" aria-label="Card View">
+                <List className="h-4 w-4" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+
+          {/* Filters - Hidden on mobile unless toggled */}
+          {(!isMobile || showFiltersOnMobile) && (
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
               <Select value={filters.city || "all"} onValueChange={handleCityChange}>
                 <SelectTrigger className="bg-white text-black">
                   <SelectValue placeholder="City" />
@@ -144,19 +176,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
                 </SelectContent>
               </Select>
             </div>
-
-            {/* View Toggle */}
-            <div className="md:col-span-2 flex justify-end">
-              <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}>
-                <ToggleGroupItem value="map" aria-label="Map View">
-                  <Map className="h-4 w-4" />
-                </ToggleGroupItem>
-                <ToggleGroupItem value="card" aria-label="Card View">
-                  <List className="h-4 w-4" />
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-          </div>
+          )}
 
           {/* Clear Filters */}
           {(filters.city || filters.type || filters.music || filters.search) && (
