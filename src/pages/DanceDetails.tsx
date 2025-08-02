@@ -5,7 +5,7 @@ import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceD
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 const DanceDetails = () => {
@@ -14,15 +14,10 @@ const DanceDetails = () => {
   const [dance, setDance] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
-  const previousIdRef = useRef<string | undefined>(id);
   
   useEffect(() => {
-    if (previousIdRef.current !== id) {
-      setIsLoading(true);
-      setDance(null);
-      setNotFound(false);
-      previousIdRef.current = id;
-    }
+    console.log("Dance Details - URL params:", { genre, id });
+    console.log("Dance Details - Current path:", window.location.pathname);
     
     const findDance = () => {
       let foundDance = null;
@@ -32,36 +27,45 @@ const DanceDetails = () => {
       const lastSegment = pathSegments[pathSegments.length - 1];
       const potentialId = id || lastSegment;
       
+      console.log("Searching for dance with ID:", potentialId);
+      
       // If we have both genre and id, try to find the dance in that specific genre
       if (genre && id) {
+        console.log("Searching in genre:", genre);
         if (danceCurriculum[genre as keyof typeof danceCurriculum]) {
           foundDance = danceCurriculum[genre as keyof typeof danceCurriculum].find(d => d.id === id);
+          console.log("Found in specific genre:", foundDance);
         }
       }
       
       // If not found or if we only have an id, search across all genres
       if (!foundDance) {
+        console.log("Searching across all genres for ID:", potentialId);
         for (const genreKey in danceCurriculum) {
           const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
             d => d.id === potentialId
           );
           if (found) {
             foundDance = found;
+            console.log("Found dance in genre", genreKey, ":", foundDance);
             break;
           }
         }
       }
       
       if (foundDance) {
+        console.log("Setting dance:", foundDance);
         setDance(foundDance);
         setNotFound(false);
       } else {
+        console.log("Dance not found");
         setNotFound(true);
       }
       
       setIsLoading(false);
     };
     
+    // Add a small delay to ensure routing is complete
     const timeoutId = setTimeout(() => {
       findDance();
     }, 100);

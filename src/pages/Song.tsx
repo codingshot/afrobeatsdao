@@ -29,6 +29,48 @@ const Song = () => {
     );
   }
 
+  // Enhanced safe string conversion that handles all edge cases
+  const safeString = (value: any): string => {
+    try {
+      // Handle null/undefined first
+      if (value === null || value === undefined) {
+        return '';
+      }
+      
+      // Handle primitives safely
+      if (typeof value === 'string') {
+        return value;
+      }
+      
+      if (typeof value === 'number' && !isNaN(value) && isFinite(value)) {
+        return value.toString();
+      }
+      
+      if (typeof value === 'boolean') {
+        return value.toString();
+      }
+      
+      // Explicitly reject problematic types including Symbol
+      if (typeof value === 'symbol' || typeof value === 'function' || typeof value === 'bigint') {
+        console.warn('safeString: Rejecting problematic type:', typeof value);
+        return '';
+      }
+      
+      // Handle objects carefully
+      if (typeof value === 'object') {
+        // Don't try to convert objects to strings as they might contain Symbols
+        console.warn('safeString: Rejecting object type');
+        return '';
+      }
+      
+      // Final fallback - return empty string instead of attempting conversion
+      return '';
+    } catch (error) {
+      console.error('Error in safeString conversion:', error);
+      return '';
+    }
+  };
+
   if (!artist || !song) {
     console.log('Debug: Artist found:', !!artist);
     console.log('Debug: Song found:', !!song);
@@ -81,24 +123,32 @@ const Song = () => {
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
   const standardThumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   
-  // Enhanced SEO meta data with dynamic content
-  const metaTitle = `${song.title} by ${artist.name}${artist.country ? ` - ${artist.country}` : ''} | Afrobeats.party`;
-  const metaDescription = `🎵 Listen to "${song.title}" by ${artist.name} on Afrobeats.party. ${artist.country ? `Discover this ${artist.country} artist's ` : 'Explore '}${artist.genre || 'Afrobeats'} music and join the global African music community. Stream now!`;
-  const canonicalUrl = `https://afrobeats.party/music/artist/${artistId}/${songSlug}`;
+  // Build safe meta values with guaranteed string outputs
+  const safeSongTitle = safeString(song.title) || 'Song';
+  const safeArtistName = safeString(artist.name) || 'Artist';
+  const safeArtistCountry = safeString(artist.country) || '';
+  const safeArtistGenre = safeString(artist.genre) || 'Afrobeats';
+  const safeArtistId = safeString(artistId) || '';
+  const safeSongSlug = safeString(songSlug) || '';
+
+  // Enhanced SEO meta data with safe concatenation - avoid template literals
+  const metaTitle = safeSongTitle + ' by ' + safeArtistName + (safeArtistCountry ? ' - ' + safeArtistCountry : '') + ' | Afrobeats.party';
+  const metaDescription = '🎵 Listen to "' + safeSongTitle + '" by ' + safeArtistName + ' on Afrobeats.party. ' + (safeArtistCountry ? 'Discover this ' + safeArtistCountry + ' artist\'s ' : 'Explore ') + safeArtistGenre + ' music and join the global African music community. Stream now!';
+  const canonicalUrl = 'https://afrobeats.party/music/artist/' + safeArtistId + '/' + safeSongSlug;
   
   // Use YouTube thumbnail as primary OG image, ensure it's a full URL
-  const ogImage = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : 
-                 (artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
-  const ogImageAlt = `${song.title} by ${artist.name} - ${artist.genre || 'Afrobeats'} Music Video`;
+  const ogImage = videoId ? 'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg' : 
+                 (artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
+  const ogImageAlt = safeSongTitle + ' by ' + safeArtistName + ' - ' + safeArtistGenre + ' Music Video';
   
   // Enhanced keywords for better SEO
-  const seoKeywords = [
-    song.title.toLowerCase(),
-    artist.name.toLowerCase(),
+  const keywordsList = [
+    safeSongTitle.toLowerCase(),
+    safeArtistName.toLowerCase(),
     'afrobeats',
     'african music',
-    artist.country?.toLowerCase(),
-    artist.genre?.toLowerCase(),
+    safeArtistCountry.toLowerCase(),
+    safeArtistGenre.toLowerCase(),
     'afrobeats party',
     'music streaming',
     'african artists',
@@ -106,7 +156,9 @@ const Song = () => {
     'nigerian music',
     'ghana music',
     'south african music'
-  ].filter(Boolean).join(', ');
+  ].filter(keyword => keyword && keyword.length > 0);
+  
+  const seoKeywords = keywordsList.join(', ');
   
   const handlePlay = () => {
     playNow({
@@ -150,6 +202,61 @@ const Song = () => {
     e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
   };
 
+  // Create structured data with proper sanitization
+  const createStructuredData = () => {
+    try {
+      const data = {
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "name": safeSongTitle,
+        "description": metaDescription,
+        "url": canonicalUrl,
+        "image": ogImage,
+        "genre": safeArtistGenre,
+        "datePublished": new Date().toISOString().split('T')[0],
+        "inLanguage": "en",
+        "byArtist": {
+          "@type": "MusicGroup",
+          "name": safeArtistName,
+          "image": artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
+          "genre": safeArtistGenre,
+          ...(safeArtistCountry && { "foundingLocation": safeArtistCountry }),
+          "url": 'https://afrobeats.party/music/artist/' + safeArtistId,
+          "sameAs": [
+            safeString(artist.spotify),
+            safeString(artist.instagram),
+            safeString(artist.twitter),
+            safeString(artist.youtube)
+          ].filter(url => url && url.length > 0)
+        },
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Afrobeats.party",
+          "url": "https://afrobeats.party",
+          "description": "Global platform for African music and Afrobeats culture"
+        },
+        "potentialAction": {
+          "@type": "ListenAction",
+          "target": safeString(song.youtube) || '',
+          "expectsAcceptanceOf": {
+            "@type": "Offer",
+            "category": "free"
+          }
+        }
+      };
+      
+      return JSON.stringify(data);
+    } catch (error) {
+      console.error('Error creating structured data:', error);
+      return JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "name": safeSongTitle,
+        "description": metaDescription
+      });
+    }
+  };
+
   // Get related songs from the same artist (excluding current song)
   const relatedSongs = artist.top_songs.filter(s => s.title !== song.title);
 
@@ -166,7 +273,6 @@ const Song = () => {
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
         
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="music.song" />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
@@ -178,13 +284,11 @@ const Song = () => {
         <meta property="og:site_name" content="Afrobeats.party" />
         <meta property="og:locale" content="en_US" />
         
-        {/* Music specific Open Graph */}
         <meta property="music:song" content={canonicalUrl} />
-        <meta property="music:musician" content={`https://afrobeats.party/music/artist/${artist.id}`} />
-        <meta property="music:album" content={artist.name} />
+        <meta property="music:musician" content={'https://afrobeats.party/music/artist/' + safeArtistId} />
+        <meta property="music:album" content={safeArtistName} />
         <meta property="music:duration" content="180" />
         
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />
         <meta name="twitter:creator" content="@afrobeatsdao" />
@@ -193,62 +297,21 @@ const Song = () => {
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:image:alt" content={ogImageAlt} />
         
-        {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
         <meta name="keywords" content={seoKeywords} />
         <meta name="author" content="Afrobeats.party" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="theme-color" content="#008751" />
         
-        {/* Geographic SEO */}
-        {artist.country && (
+        {safeArtistCountry && (
           <>
-            <meta name="geo.region" content={artist.country} />
-            <meta name="geo.placename" content={artist.country} />
+            <meta name="geo.region" content={safeArtistCountry} />
+            <meta name="geo.placename" content={safeArtistCountry} />
           </>
         )}
         
-        {/* Schema.org structured data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "MusicRecording",
-            "name": song.title,
-            "description": metaDescription,
-            "url": canonicalUrl,
-            "image": ogImage,
-            "genre": artist.genre || "Afrobeats",
-            "datePublished": new Date().toISOString().split('T')[0],
-            "inLanguage": "en",
-            "byArtist": {
-              "@type": "MusicGroup",
-              "name": artist.name,
-              "image": artist.image ? `https://afrobeats.party${artist.image}` : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
-              "genre": artist.genre || "Afrobeats",
-              ...(artist.country && { "foundingLocation": artist.country }),
-              "url": `https://afrobeats.party/music/artist/${artist.id}`,
-              "sameAs": [
-                artist.spotify,
-                artist.instagram,
-                artist.twitter,
-                artist.youtube
-              ].filter(Boolean)
-            },
-            "isPartOf": {
-              "@type": "WebSite",
-              "name": "Afrobeats.party",
-              "url": "https://afrobeats.party",
-              "description": "Global platform for African music and Afrobeats culture"
-            },
-            "potentialAction": {
-              "@type": "ListenAction",
-              "target": song.youtube,
-              "expectsAcceptanceOf": {
-                "@type": "Offer",
-                "category": "free"
-              }
-            }
-          })}
+          {createStructuredData()}
         </script>
       </Helmet>
       

@@ -1,10 +1,13 @@
-
 import React, { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { GlobalMapView } from '@/components/map/GlobalMapView';
+import { ListView } from '@/components/map/ListView';
 import { MapFilters } from '@/components/map/MapFilters';
 import { MapItemType, MapFilters as MapFiltersType } from '@/types/map';
 import { useMapData } from '@/hooks/use-map-data';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, Map as MapIcon, List } from 'lucide-react';
 
 const Map = () => {
   const [filters, setFilters] = useState<MapFiltersType>({
@@ -13,6 +16,8 @@ const Map = () => {
     searchQuery: '',
     dateRange: undefined
   });
+  
+  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
 
   const { data: mapItems, isLoading } = useMapData();
 
@@ -81,7 +86,12 @@ const Map = () => {
           </div>
 
           <div className="mb-4 md:mb-8">
-            <MapFilters filters={filters} onFiltersChange={setFilters} />
+            <MapFilters 
+              filters={filters} 
+              onFiltersChange={setFilters}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
           </div>
           
           <div>
@@ -89,8 +99,10 @@ const Map = () => {
               <div className="flex items-center justify-center h-64 md:h-96">
                 <div className="text-black text-sm md:text-base">Loading map data...</div>
               </div>
-            ) : (
+            ) : viewMode === 'map' ? (
               <GlobalMapView items={filteredItems} filters={filters} onFiltersChange={setFilters} />
+            ) : (
+              <ListView items={filteredItems} />
             )}
           </div>
         </div>
