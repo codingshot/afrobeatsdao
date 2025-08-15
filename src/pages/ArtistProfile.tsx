@@ -12,6 +12,7 @@ import {
   Twitter,
   Youtube,
   Music2,
+  Facebook,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
@@ -212,7 +213,7 @@ const ArtistProfile = () => {
       case "tiktok":
         return Music;
       case "facebook":
-        return ExternalLink;
+        return Facebook;
       case "linkedin":
         return ExternalLink;
       default:
@@ -393,6 +394,14 @@ const ArtistProfile = () => {
               <meta name="geo.placename" content={safeCountry} />
             </>
           )} */}
+          <meta
+            name="geo.region"
+            content={safeString(safeCountry) || undefined}
+          />
+          <meta
+            name="geo.placename"
+            content={safeString(safeCountry) || undefined}
+          />
         </Helmet>
       }
 
@@ -432,7 +441,7 @@ const ArtistProfile = () => {
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-4 rounded-xl shadow-md">
                 <h1 className="text-3xl font-bold text-black mb-2">
                   {artist.name}
                 </h1>
@@ -441,7 +450,7 @@ const ArtistProfile = () => {
                   <Badge className="bg-[#008751] px-3 py-1">
                     Afrobeats Artist
                   </Badge>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     {artist.website && (
                       <a
                         href={artist.website}

@@ -31,12 +31,15 @@ export const ARTISTS: Artist[] = [
     country: "Nigeria",
     instagram: "https://www.instagram.com/burnaboygram/",
     twitter: "https://x.com/burnaboy",
-    spotify: null,
-    youtube: null,
-    soundcloud: null,
-    tiktok: null,
-    facebook: null,
+    spotify:
+      "https://open.spotify.com/artist/3wcj11K77LjEY1PkEazffa?si=GK8NxyllR92rUCaXnLRG3w",
+    youtube:
+      "https://music.youtube.com/channel/UCr61sufuLt7_eB7ak1bXHIg?si=4oUT-VONMbxDuOqn",
+    tiktok:
+      "https://www.tiktok.com/@burnaboyofficial?is_from_webapp=1&sender_device=pc",
+    facebook: "https://web.facebook.com/Officialburnaboy/",
     linkedin: null,
+    soundcloud: null,
     top_songs: [
       {
         title: "Last Last",
@@ -48,7 +51,8 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "Tested, Approved & Trusted",
-        youtube: "https://youtu.be/QnaL31BTjdU?si=V0w09f6WHOvffilk",
+        youtube:
+          "https://music.youtube.com/watch?v=UbrLtfvTZSg&si=usNFhAyC_qKAZIFA",
       },
       {
         title: "Ye",
@@ -60,15 +64,242 @@ export const ARTISTS: Artist[] = [
       },
       {
         title: "Gbona",
-        youtube: "https://www.youtube.com/watch?v=h7WfPHHXCAY",
+        youtube:
+          "https://music.youtube.com/watch?v=a7MY8ls0NKc&si=YbeLkbO9fyfl4gkJ",
       },
       {
         title: "It's Plenty",
-        youtube: "https://www.youtube.com/watch?v=F8bZVnynDdc",
+        youtube:
+          "https://music.youtube.com/watch?v=PsBdgtiFQXE&si=B9SkGsRclMhcIqDP",
       },
       {
         title: "Jagele",
         youtube: "https://youtu.be/-UfEhUTxct0?si=wkNkTgs5T2iOEMWQ",
+      },
+      {
+        title: "For My Hand (feat. Ed Sheeran)",
+        youtube:
+          "https://music.youtube.com/watch?v=PbOeM1FF3Uc&si=wN2UwqS62acwyBeb",
+      },
+      {
+        title: "Common Person",
+        youtube:
+          "https://music.youtube.com/watch?v=ZmZi1ZuPB9A&si=27EEXMiUiJvT48X5",
+      },
+      {
+        title: "Alone",
+        youtube:
+          "https://music.youtube.com/watch?v=m7MJFRayEkM&si=5cRG2CXomJ9irP3s",
+      },
+      {
+        title: "Dem Dey",
+        youtube:
+          "https://music.youtube.com/watch?v=zMg90HoIwoQ&si=xou0WE2BkI_dm8gS",
+      },
+      {
+        title: "Anybody",
+        youtube:
+          "https://music.youtube.com/watch?v=_hUwdn1Smdo&si=BPexlErOpRZJx5E9",
+      },
+      {
+        title: "Update",
+        youtube:
+          "https://music.youtube.com/watch?v=7BWYUZ1DOUE&si=8hDCiih-rL9Zr0qH",
+      },
+      {
+        title: "Kilometer",
+        youtube:
+          "https://music.youtube.com/watch?v=l_4ft71rhPw&si=HFk1dkj87ztIiNsv",
+      },
+      {
+        title: "23",
+        youtube:
+          "https://music.youtube.com/watch?v=nWSUoqatwKM&si=Z9nix4pak4wMfN0Q",
+      },
+      {
+        title: "Bundle by Bundle",
+        youtube:
+          "https://music.youtube.com/watch?v=R9NV0Zm1stc&si=jlJk8vsfPIYt7dgI",
+      },
+      {
+        title: "Bank On It",
+        youtube:
+          "https://music.youtube.com/watch?v=tZEFazqEYqY&si=Ox9m06fGcVDk5oin",
+      },
+      {
+        title: "Killin Dem (feat. Zlatan)",
+        youtube:
+          "https://music.youtube.com/watch?v=QvY03hNu60s&si=GanmuU2i2aWo87a2",
+      },
+      {
+        title: "Hallelujah",
+        youtube:
+          "https://music.youtube.com/watch?v=qbk0COyAIo0&si=j6DiObsMWvrfkAr4",
+      },
+      {
+        title: "No Panic",
+        youtube:
+          "https://music.youtube.com/watch?v=04T5ruuMVqA&si=YHsGGXYs20AOeqpH",
+      },
+      {
+        title: "No Sign of Weakness",
+        youtube:
+          "https://music.youtube.com/watch?v=poY4czC8h3o&si=ePt5vDA1r8Jd5orE",
+      },
+      {
+        title: "Buy You Life",
+        youtube:
+          "https://music.youtube.com/watch?v=bIgNKKU7bpw&si=Kb4oTOow1sTwu_1q",
+      },
+      {
+        title: "Love",
+        youtube:
+          "https://music.youtube.com/watch?v=twDtPs5NCjA&si=py9ZePyKXkDpQZPB",
+      },
+      {
+        title: "TaTaTa",
+        youtube:
+          "https://music.youtube.com/watch?v=Uj1g5oumzWY&si=TQHFScXl3s4z7IW-",
+      },
+      {
+        title: "Come Gimme",
+        youtube:
+          "https://music.youtube.com/watch?v=tBa5iUSxvPs&si=AZqzaeT4wdQrbdJ2",
+      },
+      {
+        title: "Sweet Love",
+        youtube:
+          "https://music.youtube.com/watch?v=Z-jTmVfi33Q&si=Fdpp6KTWkZkC9W_O",
+      },
+      {
+        title: "28 grams",
+        youtube:
+          "https://music.youtube.com/watch?v=6osB5y_-1Ao&si=sm7wgZzjbrGx3U-g",
+      },
+      {
+        title: "Kabiyesi",
+        youtube:
+          "https://music.youtube.com/watch?v=OCekxDXbmQE&si=iKZmRQ20Yr5eiPtO",
+      },
+      {
+        title: "Empty Chairs (feat. Mick Jagger)",
+        youtube:
+          "https://music.youtube.com/watch?v=uM-FYEuLJC8&si=4usYUrt_zOWSVCYC",
+      },
+      {
+        title: "Pardon",
+        youtube:
+          "https://music.youtube.com/watch?v=UJgPYwlUGTs&si=erJnpjSnJNmmz74n",
+      },
+      {
+        title: "Change Your Mind (feat. Shaboozey)",
+        youtube:
+          "https://music.youtube.com/watch?v=7dDJi9WI_3Y&si=MbfXW0fnj7RQi_ik",
+      },
+      {
+        title: "Born Winner",
+        youtube:
+          "https://music.youtube.com/watch?v=0DlCqC4iloY&si=R0i_fCsvI2r8nTZj",
+      },
+      {
+        title: "I Told Them (feat. GZA)",
+        youtube:
+          "https://music.youtube.com/watch?v=cknp0H6P7Mo&si=0fzUzNI-YVUFATWT",
+      },
+      {
+        title: "Normal",
+        youtube:
+          "https://music.youtube.com/watch?v=ab-0GReSZ4E&si=yr3cfLcSo7HpbNf-",
+      },
+      {
+        title: "On Form",
+        youtube:
+          "https://music.youtube.com/watch?v=c0uvqtfDMvk&si=6Gk-PPFJN4XjJ3_h",
+      },
+      {
+        title: "Sittin' On Top Of The World (feat. 21 Savage)",
+        youtube:
+          "https://music.youtube.com/watch?v=mMJ3Gogi2Qk&si=vqD-9XLouKR9iFWO",
+      },
+      {
+        title: "Tested, Approved & Trusted",
+        youtube:
+          "https://music.youtube.com/watch?v=bGsKQxIwEeQ&si=fh5FE--l2PfMkhu7",
+      },
+      {
+        title: "Cheat On Me(feat. Dave)",
+        youtube:
+          "https://music.youtube.com/watch?v=qgHV_nv8u3E&si=x2zU0o_3E3W9Z8x-",
+      },
+      {
+        title: "Virgil",
+        youtube:
+          "https://music.youtube.com/watch?v=v9feT7K27HM&si=mqB1iap5qCI74XiZ",
+      },
+      {
+        title: "Big 7",
+        youtube:
+          "https://music.youtube.com/watch?v=6GATRApPww8&si=OjNW0xi55yi51Wl3",
+      },
+      {
+        title: "Dey Play",
+        youtube:
+          "https://music.youtube.com/watch?v=73WvAWUrKPw&si=Q61O4RYX2QHBQRsE",
+      },
+      {
+        title: "Giza (feat. Seyi Vibez)",
+        youtube:
+          "https://music.youtube.com/watch?v=bWxyVF1LJAo&si=4M4fuGP99m104nEf",
+      },
+      {
+        title: "12 Jewels (feat. RZA)",
+        youtube:
+          "https://music.youtube.com/watch?v=mG5MjELJN9U&si=6R_1tFhazwRICEtv",
+      },
+      {
+        title: "If I'm Lying",
+        youtube:
+          "https://music.youtube.com/watch?v=Hs3i-IEK5h0&si=mEXT95hiJTgv8zrL",
+      },
+      {
+        title: "Thanks(feat. J.Cole)",
+        youtube:
+          "https://music.youtube.com/watch?v=V0OkzP72qPs&si=PwZfWi07R7G5LczZ",
+      },
+      {
+        title: "Talibans II (Bonus Track)",
+        youtube:
+          "https://music.youtube.com/watch?v=vrUGcGkPxP0&si=cONGJZunaTIq3Zar",
+      },
+      {
+        title: "Vanilla",
+        youtube:
+          "https://music.youtube.com/watch?v=wNYl4ZCZDAI&si=CwXSLLmgBfLuOla4",
+      },
+      {
+        title: "Rollercoaster (feat. J Balvin)",
+        youtube:
+          "https://music.youtube.com/watch?v=ZyVVGW-5ITw&si=kIImwXdV1n4utTdy",
+      },
+      {
+        title: "Wonderful",
+        youtube:
+          "https://music.youtube.com/watch?v=k33o1IgtUEM&si=uOQxEEwIZTzUNySy",
+      },
+      {
+        title: "Onyeka (Baby)",
+        youtube:
+          "https://music.youtube.com/watch?v=dW5y-4gKnIE&si=g8UEBK4vKWFKtrsu",
+      },
+      {
+        title: "Wonderful",
+        youtube:
+          "https://music.youtube.com/watch?v=wy_j--ljb9w&si=tFUa4f7otrcKzNmW",
+      },
+      {
+        title: "Real Life (feat. Stormzy)",
+        youtube:
+          "https://music.youtube.com/watch?v=dXeOBkKdiAg&si=3SNuBsWQhao2p18O",
       },
     ],
   },
@@ -101,11 +332,19 @@ export const ARTISTS: Artist[] = [
   {
     id: "davido",
     name: "Davido",
-    website: "https://www.iamdavido.com",
-    youtube: "https://www.youtube.com/channel/UCkBV3nBa0iRdxEGc4DUS3xA",
     image: "/artists/davido.jpg",
     genre: "Afrobeats",
     country: "Nigeria",
+    website: "https://www.iamdavido.com",
+    youtube: "https://www.youtube.com/channel/UCkBV3nBa0iRdxEGc4DUS3xA",
+    instagram: "https://www.instagram.com/davido/",
+    twitter: "https://x.com/davido",
+    spotify:
+      "https://open.spotify.com/artist/0Y3agQaa6g2r0YmHPOO9rh?si=wRoAc2zESQ2w7NsDDhpprQ",
+    tiktok: "https://www.tiktok.com/@davido?is_from_webapp=1&sender_device=pc",
+    facebook: "https://web.facebook.com/davidoofficial2",
+    soundcloud: null,
+    linkedin: null,
     top_songs: [
       {
         title: "Fall",
@@ -132,6 +371,16 @@ export const ARTISTS: Artist[] = [
       {
         title: "If",
         youtube: "https://www.youtube.com/watch?v=helEv0kGHd4",
+      },
+      {
+        title: "FEM",
+        youtube:
+          "https://music.youtube.com/watch?v=lta5go9P-go&si=Ksy4w0phdP4b8JnR",
+      },
+      {
+        title: "Skelewu",
+        youtube:
+          "https://music.youtube.com/watch?v=201Key-GFZE&si=R1ROayY6130nMezJ",
       },
       {
         title: "FIA",
@@ -231,6 +480,207 @@ export const ARTISTS: Artist[] = [
         title: "Champion Sound",
         youtube:
           "https://music.youtube.com/watch?v=uG6Rz62ulqQ&si=DY0QVC8YS4XcSW0r",
+      },
+      {
+        title: "Anything",
+        youtube:
+          "https://music.youtube.com/watch?v=MhQhczDRD1c&si=4vfYsRa_2WsFkTu_",
+      },
+      {
+        title: "Be There Still",
+        youtube:
+          "https://music.youtube.com/watch?v=dAD73UeU6Dw&si=NeZJBAUwVv-Qp6mu",
+      },
+      {
+        title: "CFMF",
+        youtube:
+          "https://music.youtube.com/watch?v=gWxnoiwrSNI&si=PuJTVf0oTAGhC5nu",
+      },
+      {
+        title: "Don't Know",
+        youtube:
+          "https://music.youtube.com/watch?v=Jj3PBdPN1PQ&si=0kSEYCS0vg0lvkLF",
+      },
+      {
+        title: "R&B (feat. Shenseea & 450)",
+        youtube:
+          "https://music.youtube.com/watch?v=SOh--nzeFtY&si=-AXem6iUcQqPmkOu",
+      },
+      {
+        title: "Nuttin Dey",
+        youtube:
+          "https://music.youtube.com/watch?v=Xz9xnQsf1FY&si=Iv7CmRojP_2J5m8l",
+      },
+      {
+        title: "Lately",
+        youtube:
+          "https://music.youtube.com/watch?v=bhOqx2m-peQ&si=JW8YnbiX5EnZ0ZpF",
+      },
+      {
+        title: "Tek (feat. Becky G)",
+        youtube:
+          "https://music.youtube.com/watch?v=tD3Rp3Kcfos&si=pTL_BIfK1jpNh7_o",
+      },
+      {
+        title: "Lover Boy (feat. Tayc & Dadju)",
+        youtube:
+          "https://music.youtube.com/watch?v=dWuRYkH_dgU&si=eoXXNjvz46kX4fTp",
+      },
+      {
+        title: "OVER DEM",
+        youtube:
+          "https://music.youtube.com/watch?v=xy1VEf8NiPk&si=SixlSK6cm4Ob9IjH",
+      },
+      {
+        title: "IN THE GARDEN (feat. Morravey)",
+        youtube:
+          "https://music.youtube.com/watch?v=eFStBh7AMZQ&si=o_ogPTyIIevlLdjn",
+      },
+      {
+        title: "GODFATHER",
+        youtube:
+          "https://music.youtube.com/watch?v=zXwfKTvJ6lY&si=emkv4wJ3fpnCbj9I",
+      },
+      {
+        title: "BOP (feat. Dexta Daps)",
+        youtube:
+          "https://music.youtube.com/watch?v=k3KtJXSBdH4&si=GC7HzPF_3ulMqRBP",
+      },
+      {
+        title: "E PAIN ME",
+        youtube:
+          "https://music.youtube.com/watch?v=7NBSzoEJEBQ&si=MVH5dMqkdh0nrFAZ",
+      },
+      {
+        title: "PRECISION",
+        youtube:
+          "https://music.youtube.com/watch?v=zNiwjQ7ioyk&si=aiZQiXhSRN_hEHEP",
+      },
+      {
+        title: "U (JUJU) (feat. Skepta)",
+        youtube:
+          "https://music.youtube.com/watch?v=nEsEQJa43l0&si=ZmBx42KPG8TBEftv",
+      },
+      {
+        title: "LCND",
+        youtube:
+          "https://music.youtube.com/watch?v=QkHTd2kCcj8&si=eETZ0piFX2t-8e7L",
+      },
+      {
+        title: "Something Fishy",
+        youtube:
+          "https://music.youtube.com/watch?v=f3n7qG8f0oQ&si=ReL_obRouCld_qye",
+      },
+      {
+        title: "Holy Ground (feat. Nicki Minaj)",
+        youtube:
+          "https://music.youtube.com/watch?v=JtEv_3Rwn1o&si=jUqI4d3Rz8a8Rkd1",
+      },
+      {
+        title: "Heaven",
+        youtube:
+          "https://music.youtube.com/watch?v=5Xl0kAVywDo&si=pPNYHUWEij4wFhxn",
+      },
+      {
+        title: "Very Special",
+        youtube:
+          "https://music.youtube.com/watch?v=5rsYTFfA2fA&si=MocPYGZQZf3vCKja",
+      },
+      {
+        title: "The Best (feat. Mayorkun)",
+        youtube:
+          "https://music.youtube.com/watch?v=91D1H29rToQ&si=X05wcf9LJ8AKPG6_",
+      },
+      {
+        title: "Shopping Spree (feat. Chris Brown & Young Thug)",
+        youtube:
+          "https://music.youtube.com/watch?v=vKR0Drgf6vc&si=4P7ADJIPzrtSc_e1",
+      },
+      {
+        title: "Sunlight",
+        youtube:
+          "https://music.youtube.com/watch?v=1_NT6L_Hx_Y&si=5lf-rUoEgX8c9FZz",
+      },
+      {
+        title: "Tanana (feat. Tiwa Savage)",
+        youtube:
+          "https://music.youtube.com/watch?v=VUMae7HT3TY&si=piYpyVYgwxXZ1PG7",
+      },
+      {
+        title: "Mebe (feat. MUGEEZ)",
+        youtube:
+          "https://music.youtube.com/watch?v=pjl3FaElICc&si=K7s6OgqyBm0AxUPG",
+      },
+      {
+        title: "La La (feat. Ckay)",
+        youtube:
+          "https://music.youtube.com/watch?v=NM8cY2VzqkI&si=P_HqkLEzjp73Ofga",
+      },
+      {
+        title: "So Crazy (feat. Lil Baby)",
+        youtube:
+          "https://music.youtube.com/watch?v=8xjE0cGsFHY&si=Jydwgs-vC6UR5ltP",
+      },
+      {
+        title: "Shopping Spree (feat. Chris Brown & Young Thug)",
+        youtube:
+          "https://music.youtube.com/watch?v=vKR0Drgf6vc&si=4P7ADJIPzrtSc_e1",
+      },
+      {
+        title: "Birthday Cake (feat. Nas & Hitboy)",
+        youtube:
+          "https://music.youtube.com/watch?v=HZgbmo5f3d0&si=MTQCRA7KRCwyxu8Y",
+      },
+      {
+        title: "I Got a Friend (feat. Mayorkun & Sho Madjozi)",
+        youtube:
+          "https://music.youtube.com/watch?v=3FJCASAOmts&si=4xxqDFbpCPJh5mea",
+      },
+      {
+        title: "Fade (feat. Bella Shmurda)",
+        youtube:
+          "https://music.youtube.com/watch?v=9y9a8adcL00&si=IuqWwHTzwOoJG9Xf",
+      },
+      {
+        title: "On My Way (feat. Sauti Sol)",
+        youtube:
+          "https://music.youtube.com/watch?v=aHUwnGUlAog&si=qsqaOpRrLL1TN4Fp",
+      },
+      {
+        title: "1 Milli",
+        youtube:
+          "https://music.youtube.com/watch?v=1x5tIv6GC1o&si=HH_xoEoVI6R056Dd",
+      },
+      {
+        title: "Disturbance (feat. Peruzzi)",
+        youtube:
+          "https://music.youtube.com/watch?v=d9OL9NgE8JA&si=8K4v6dpPRVGr9fkr",
+      },
+      {
+        title: "Sweet in the Middle (feat. Wurld, Naira Marley & Zlatan)",
+        youtube:
+          "https://music.youtube.com/watch?v=UVte8a_2q80&si=o5AQe38X4kV4xwRL",
+      },
+      {
+        title: "Dami Duro",
+        youtube:
+          "https://music.youtube.com/watch?v=6CyUo6rQ2rU&si=KtZJtF_l6XGohRME",
+      },
+      {
+        title: "Back When (feat. Naeto C)",
+        youtube:
+          "https://music.youtube.com/watch?v=0rA4gE_Dtsw&si=_-IX7w8W5WP8LOLp",
+      },
+      {
+        title:
+          "Davido - All of You (Official Video) (feat. Young Thug & Rae Sremmurd)",
+        youtube:
+          "https://music.youtube.com/watch?v=A8h0G3wrH7s&si=vMruMlWVwtgXWVES",
+      },
+      {
+        title: "Stand Strong (feat. Sunday Service Choir)",
+        youtube:
+          "https://music.youtube.com/watch?v=vtWjk_CiSQI&si=84Hzi6G3J1Vmjp64",
       },
     ],
   },
