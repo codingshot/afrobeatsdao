@@ -1135,17 +1135,19 @@ export const ARTISTS: Artist[] = [
   {
     id: "wizkid",
     name: "Wizkid",
-    website: null,
+    website: "https://www.wizkidofficial.com/",
     image: "/artists/wizkid.jpg",
     genre: "Afrobeats",
     country: "Nigeria",
-    instagram: null,
-    twitter: null,
-    spotify: null,
-    youtube: null,
+    instagram: "https://www.instagram.com/wizkidayo/",
+    twitter: "https://x.com/wizkidayo",
+    spotify:
+      "https://open.spotify.com/artist/3tVQdUvClmAT7URs9V3rsp?si=kd0IBcDwQ16ectjyrL3uig",
+    youtube: "https://www.youtube.com/channel/UCi7Cbr-F3zFQjwafFh5RWJA",
+    tiktok:
+      "https://www.tiktok.com/@wizkidayo?is_from_webapp=1&sender_device=pc",
+    facebook: "https://web.facebook.com/wizkidmusic",
     soundcloud: null,
-    tiktok: null,
-    facebook: null,
     linkedin: null,
     top_songs: [
       {
@@ -1169,20 +1171,523 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=YSy2lBZ1QrA",
       },
       {
+        title: "Come Closer (feat. Drake)",
+        youtube:
+          "https://music.youtube.com/watch?v=vqW18C4plZ8&si=XzFOkCGhaNF9n7p4",
+      },
+      {
         title: "KANTE",
         youtube: "https://www.youtube.com/watch?v=3bFPDfWReN0",
       },
       {
-        title: "",
-        youtube: "",
+        title: "Kese (Dance)",
+        youtube:
+          "https://music.youtube.com/watch?v=HLnf2Hz7uNQ&si=YYPIzt2jhUvu-8hW",
       },
       {
-        title: "",
-        youtube: "",
+        title: "Daddy Yo",
+        youtube:
+          "https://music.youtube.com/watch?v=_2uqOvEo2bQ&si=Qjx0dqoddzQ9eOw8",
       },
       {
-        title: "",
-        youtube: "",
+        title: "Piece of My Heart (feat. Brent Faiyaz)",
+        youtube:
+          "https://music.youtube.com/watch?v=zr_sTaYTCnU&si=lyiuGqO7DtbEgX2K",
+      },
+      {
+        title: "Troubled Mind",
+        youtube:
+          "https://music.youtube.com/watch?v=yQqgmnm7FYQ&si=WcnxD-kLO9-tCJWG",
+      },
+      {
+        title: "Karamo",
+        youtube:
+          "https://music.youtube.com/watch?v=_hVqCmQnjVI&si=PhZIit_Lhz6_svs5",
+      },
+      {
+        title: "Bad Girl (feat. Asake)",
+        youtube:
+          "https://music.youtube.com/watch?v=_yBN8oPTYw8&si=V8cacjpVEc2HWs_b",
+      },
+      {
+        title: "Time",
+        youtube:
+          "https://music.youtube.com/watch?v=W9fnpW4gj2c&si=83-uN1q0Qacab_oa",
+      },
+      {
+        title: "Break Me Down",
+        youtube:
+          "https://music.youtube.com/watch?v=4X99ILim7lY&si=bntwOP03otTrkZ0m",
+      },
+      {
+        title: "Bend",
+        youtube:
+          "https://music.youtube.com/watch?v=ysCEMY5xji8&si=vX12CQFLDW1zXRre",
+      },
+      {
+        title: "A Million Blessings",
+        youtube:
+          "https://music.youtube.com/watch?v=ZJK2PGATcks&si=DYO5vth-ilS3jTNK",
+      },
+      {
+        title: "Après Minuit (feat. Tiakola)",
+        youtube:
+          "https://music.youtube.com/watch?v=8P9OTwq56nA&si=6HspknhF7BetHous",
+      },
+      {
+        title: "Bad For You (feat. Jazmine Sullivan)",
+        youtube:
+          "https://music.youtube.com/watch?v=4xuIeEbKMxg&si=Ae0xInHhOXXmjnui",
+      },
+      {
+        title: "Soji",
+        youtube:
+          "https://music.youtube.com/watch?v=4qcx3fDRPMY&si=RPrGTxGwsghZDYy4",
+      },
+      {
+        title: "Don't Care",
+        youtube:
+          "https://music.youtube.com/watch?v=lqzWCQbp5IY&si=rA0pCT7_g6y18JYK",
+      },
+      {
+        title: "Slow (feat. Anaïs Cardot)",
+        youtube:
+          "https://music.youtube.com/watch?v=eLpDOvpQ_Bg&si=8v58C4tDm8F4LX72",
+      },
+      {
+        title: "Lose",
+        youtube:
+          "https://music.youtube.com/watch?v=7QTZ0UXuHMo&si=CTQLCYk2r0eKRbzd",
+      },
+      {
+        title: "Pray",
+        youtube:
+          "https://music.youtube.com/watch?v=Q3RwMNTYQ4M&si=7jP5Kv40_ueQNH3z",
+      },
+      {
+        title: "Money & Love",
+        youtube:
+          "https://music.youtube.com/watch?v=rEEZD5hXgrQ&si=4b5aiK_strZx56O6",
+      },
+      {
+        title: "Balance",
+        youtube:
+          "https://music.youtube.com/watch?v=nuWA-Gz2XJE&si=w9ogrdjVu4gKE6GC",
+      },
+      {
+        title: "Everyday",
+        youtube:
+          "https://music.youtube.com/watch?v=9N1KuCtPymQ&si=N540Dm8sxww7-vbl",
+      },
+      {
+        title: "Slip N Slide (feat. Skillibeng & Shenseea)",
+        youtube:
+          "https://music.youtube.com/watch?v=rfXpczaipOE&si=pLMtB7hzS399b42n",
+      },
+      {
+        title: "Deep",
+        youtube:
+          "https://music.youtube.com/watch?v=00vI7Bfr7Zc&si=55bFa-VozzFIoSB_",
+      },
+      {
+        title: "Flower Pads",
+        youtube:
+          "https://music.youtube.com/watch?v=0IgAZ6LS-30&si=vDlIFQL-crYUc1gZ",
+      },
+      {
+        title: "Wow (feat. Skepta & Naira Marley)",
+        youtube:
+          "https://music.youtube.com/watch?v=-O-APTagYKw&si=15R1DkWnjS6S8u6b",
+      },
+      {
+        title: "Pressure",
+        youtube:
+          "https://music.youtube.com/watch?v=bycVtHqd_XU&si=ezPkdl9miLuEFFjF",
+      },
+      {
+        title: "Plenty Loving",
+        youtube:
+          "https://music.youtube.com/watch?v=9qyWiofvzpA&si=4E9cuFbkh4rvZcm0",
+      },
+      {
+        title: "Special (feat. Don Toliver)",
+        youtube:
+          "https://music.youtube.com/watch?v=O5u8syC6xOo&si=h80L2elOnT4IGwfP",
+      },
+      {
+        title: "Frames (Who's Gonna Know)",
+        youtube:
+          "https://music.youtube.com/watch?v=Pva6HclLqkI&si=-kYFjWgyYzDYnPfW",
+      },
+      {
+        title: "Reckless",
+        youtube:
+          "https://music.youtube.com/watch?v=qEEsc8j-FVI&si=CqEIJRyQr5mzpMt7",
+      },
+      {
+        title: "Longtime (feat. Skepta)",
+        youtube:
+          "https://music.youtube.com/watch?v=RPxw0nR9HXU&si=SWZ5AaxdAJXfiiJP",
+      },
+      {
+        title: "Mighty Wine",
+        youtube:
+          "https://music.youtube.com/watch?v=_KXHTdq9URg&si=p_jusLWvHgF_csGU",
+      },
+      {
+        title: "Blessed (feat. Damian Marley)",
+        youtube:
+          "https://music.youtube.com/watch?v=QUSc5al8JpY&si=9tFlGbxFdNJrLC68",
+      },
+      {
+        title: "Smile (feat. H.E.R.)",
+        youtube:
+          "https://music.youtube.com/watch?v=4oseK1D6ru0&si=ChiyvWZwfqKlCwjp",
+      },
+      {
+        title: "Piece of Me (feat. Ella Mai)",
+        youtube:
+          "https://music.youtube.com/watch?v=dMlShGP7TfY&si=GaJU90mZbQEsqMP5",
+      },
+      {
+        title: "No Stress",
+        youtube:
+          "https://music.youtube.com/watch?v=veIK9yEabNc&si=leHseeKUmf29kcyb",
+      },
+      {
+        title: "True Love (feat. Tay Iwar & Projexx)",
+        youtube:
+          "https://music.youtube.com/watch?v=RstK5waga3o&si=JCw1arTAPHSv0u32",
+      },
+      {
+        title: "Sweet One",
+        youtube:
+          "https://music.youtube.com/watch?v=b-K6O8yxXpg&si=kphPPL5eyjOEbcxf",
+      },
+      {
+        title: "Roma (feat. Terri)",
+        youtube:
+          "https://music.youtube.com/watch?v=J_pYbRiFwJM&si=nI6QCU9PfHQu1eyQ",
+      },
+      {
+        title: "Gyrate",
+        youtube:
+          "https://music.youtube.com/watch?v=L0ZB_UvVAuI&si=bq9a1v2fFcIajKO3",
+      },
+      {
+        title: "Grace",
+        youtube:
+          "https://music.youtube.com/watch?v=wInDaQ1Hj6A&si=4nYilMj6Pmjva181",
+      },
+      {
+        title: "Anoti",
+        youtube:
+          "https://music.youtube.com/watch?v=6OCkvnz4_Tc&si=syoWZP4pc6gIZ4ok",
+      },
+      {
+        title: "Mood (feat. BNXN)",
+        youtube:
+          "https://music.youtube.com/watch?v=r-Q6UrrxF4U&si=OcK9fHL-5pnzqLh6",
+      },
+      {
+        title: "Steady",
+        youtube:
+          "https://music.youtube.com/watch?v=3YFz0CDeHMQ&si=2UX18RPkrwRPMmYW",
+      },
+      {
+        title: "Essence (feat. Justin Bieber & Tems)",
+        youtube:
+          "https://music.youtube.com/watch?v=WYSQ5nyRQ9Q&si=hMFzOutbZ9Zh58MA",
+      },
+      {
+        title: "Shabba",
+        youtube:
+          "https://music.youtube.com/watch?v=h-EUPC7SGaw&si=eg4sZ2XjVYIi8RMp",
+      },
+      {
+        title: "Wad Up",
+        youtube:
+          "https://music.youtube.com/watch?v=QaGqsV5VV-k&si=YWiv2Cd5FIxyUNeS",
+      },
+      {
+        title: "For You",
+        youtube:
+          "https://music.youtube.com/watch?v=3Us0oEwRwu0&si=EQ9C1uZTH-WY_t2K",
+      },
+      {
+        title: "Slow Whine",
+        youtube:
+          "https://music.youtube.com/watch?v=JVf7zIdhz34&si=Yy_V6wcz9lOZ-6G0",
+      },
+      {
+        title: "Jaiye Jaiye",
+        youtube:
+          "https://music.youtube.com/watch?v=bejM44z1NIA&si=dGB6RB4otj6e17hZ",
+      },
+      {
+        title: "Dutty Whine",
+        youtube:
+          "https://music.youtube.com/watch?v=UetdgIVHNBs&si=YtwmlF8cKtpuh-p4",
+      },
+      {
+        title: "Bombay",
+        youtube:
+          "https://music.youtube.com/watch?v=7U4l5ccwb-A&si=sU5f5c2J-WRIbOf_",
+      },
+      {
+        title: "One Life",
+        youtube:
+          "https://music.youtube.com/watch?v=a7Lk-wym0sA&si=tL7y-lhJqdVKoEMC",
+      },
+      {
+        title: "In Love",
+        youtube:
+          "https://music.youtube.com/watch?v=3RIZGePKT2s&si=PISG3EADNhlLEHCG",
+      },
+      {
+        title: "Murder",
+        youtube:
+          "https://music.youtube.com/watch?v=wjdo1-3OBYM&si=oRIjOAePifXbI-29",
+      },
+      {
+        title: "For Me",
+        youtube:
+          "https://music.youtube.com/watch?v=-iWNl8xdO0I&si=CTRC3-buz5y4mJDw",
+      },
+      {
+        title: "One Question",
+        youtube:
+          "https://music.youtube.com/watch?v=xDAtmOu_oyk&si=g6UTIEiyKhSLQwQd",
+      },
+      {
+        title: "Roll It (Remix)",
+        youtube:
+          "https://music.youtube.com/watch?v=ESs0-2Xlgok&si=7CIqs0Lrel_FfZZT",
+      },
+      {
+        title: "Celebrate",
+        youtube:
+          "https://music.youtube.com/watch?v=XL_9X5BZcs4&si=yvgzLpdE9nayMdlT",
+      },
+      {
+        title: "Sweet Love",
+        youtube:
+          "https://music.youtube.com/watch?v=yFTaNokK4cU&si=ZeK5If8opjIlVLcw",
+      },
+      {
+        title: "Naughty Ride (feat. Major Lazer)",
+        youtube:
+          "https://music.youtube.com/watch?v=e3AyM9SFBJY&si=WtdtYGDdFw-npK_k",
+      },
+      {
+        title: "African Bad Gyal (feat. Chris Brown)",
+        youtube:
+          "https://music.youtube.com/watch?v=HxDBJ1fOQ4I&si=aOHzUhE9xbXGGDt9",
+      },
+      {
+        title: "One For Me (feat. Ty Dolla $ign)",
+        youtube:
+          "https://music.youtube.com/watch?v=WiG8qNbv3No&si=PwG89DsM1oK59nn0",
+      },
+      {
+        title: "Picture Perfect",
+        youtube:
+          "https://music.youtube.com/watch?v=2AG9OXP8NNU&si=yAVdTydSwcgRECdC",
+      },
+      {
+        title: "Nobody",
+        youtube:
+          "https://music.youtube.com/watch?v=azZ0Tcq1IYU&si=r6Kw5LVLYrfzL-cE",
+      },
+      {
+        title: "Sexy",
+        youtube:
+          "https://music.youtube.com/watch?v=Nth7ckNr3HY&si=EUaJcsJFfz4TKHVd",
+      },
+      {
+        title: "All For Love (feat. Bucie)",
+        youtube:
+          "https://music.youtube.com/watch?v=OQTIqSfOp5Q&si=n0YMMML1ow_rjThF",
+      },
+      {
+        title: "Dirty Wine (feat. Ty Dolla $ign)",
+        youtube:
+          "https://music.youtube.com/watch?v=8ZsD_EW0HYc&si=dh56-kDPNT9bKQ66",
+      },
+      {
+        title: "Gbese (feat. Trey Songz)",
+        youtube:
+          "https://music.youtube.com/watch?v=3aCPGqC_bmA&si=S_u5j09E4ce7rtt0",
+      },
+      {
+        title: "Jaiye Jaiye (feat. Femi Kuti)",
+        youtube:
+          "https://music.youtube.com/watch?v=eF_CWfI481A&si=dLAE7_u1f92bodpC",
+      },
+      {
+        title: "Show You the Money",
+        youtube:
+          "https://music.youtube.com/watch?v=WL0KfsOFR6Y&si=GGLB055oR2Fux7gP",
+      },
+      {
+        title: "In My Bed",
+        youtube:
+          "https://music.youtube.com/watch?v=2YsSCQpJm7M&si=gmhNuCn42fH_jBFK",
+      },
+      {
+        title: "Mummy Mi",
+        youtube:
+          "https://music.youtube.com/watch?v=LNxUPHQziQw&si=Cap-J_12EXoqMjn3",
+      },
+      {
+        title: "Kind Love",
+        youtube:
+          "https://music.youtube.com/watch?v=IKB8mxgEWls&si=u4Z8s5YK-usx5lrL",
+      },
+      {
+        title: "On Top Your Matter",
+        youtube:
+          "https://music.youtube.com/watch?v=8wjbt1Vilb4&si=lGteX6jSk6pDpV9M",
+      },
+      {
+        title: "In Love (feat. Seyi Shay)",
+        youtube:
+          "https://music.youtube.com/watch?v=vVZZaX2OOIQ&si=LMTAdCjcnTmMgW6Q",
+      },
+      {
+        title: "For You (feat. Akon)",
+        youtube:
+          "https://music.youtube.com/watch?v=JSfWlUwr22I&si=E9SAL5GT3rcVJm4N",
+      },
+      {
+        title: "Dutty Whyne (feat. Banky W.)",
+        youtube:
+          "https://music.youtube.com/watch?v=C4loqy8Safo&si=xBz3vJMe0ACjlY_m",
+      },
+      {
+        title: "Ki Lo Fe",
+        youtube:
+          "https://music.youtube.com/watch?v=NrwowGhTVtM&si=5xx1bomyNJaLMa1p",
+      },
+      {
+        title: "Omalicha",
+        youtube:
+          "https://music.youtube.com/watch?v=XTRGxg8qr6A&si=5U7SfTN-HZG5LIEr",
+      },
+      {
+        title: "Bombay (feat. Phyno)",
+        youtube:
+          "https://music.youtube.com/watch?v=aowFjLwAGL0&si=VwONvxYNX8ZgKV3t",
+      },
+      {
+        title: "One Question (feat. Yemi Sax)",
+        youtube:
+          "https://music.youtube.com/watch?v=afOHeg33OC4&si=DqaIe2KeqtQNjHnJ",
+      },
+      {
+        title: "Celebrate",
+        youtube:
+          "https://music.youtube.com/watch?v=iJ_7Esj1T6s&si=Pu9xL7uxuTa1mHEG",
+      },
+      {
+        title: "Show You the Money (Remix) (feat. Tyga)",
+        youtube:
+          "https://music.youtube.com/watch?v=ocFQLGZBMLE&si=Kfz0E-6nLmccmD2R",
+      },
+      {
+        title: "Murder (feat. Wale)",
+        youtube:
+          "https://music.youtube.com/watch?v=P5LTYgA1qw0&si=jZaUL3FTIzXSfYCG",
+      },
+      {
+        title: "Joy",
+        youtube:
+          "https://music.youtube.com/watch?v=yack1jPECjw&si=qS0uWgjseK4sM_Ex",
+      },
+      {
+        title: "Caro (feat. L.A.X)",
+        youtube:
+          "https://music.youtube.com/watch?v=L0fsgy-VyC0&si=_prBbb1-m76MVQZz",
+      },
+      {
+        title: "Say My Name",
+        youtube:
+          "https://music.youtube.com/watch?v=cagJhfLXLUw&si=ZmqrJ8vBMtIbZ0Au",
+      },
+      {
+        title: "No Lele",
+        youtube:
+          "https://music.youtube.com/watch?v=vCmc_37Z1WQ&si=PNP5jSEVO6T9DPEH",
+      },
+      {
+        title: "Scatter the Floor",
+        youtube:
+          "https://music.youtube.com/watch?v=lSqri0N0sWw&si=4mMDQpZ3wRb0LCvl",
+      },
+      {
+        title: "Pakurumo",
+        youtube:
+          "https://music.youtube.com/watch?v=7rUbWzifbVA&si=1c3o8ZxZFwr-Cgm1",
+      },
+      {
+        title: "Slow Whine (feat. Banky W.)",
+        youtube:
+          "https://music.youtube.com/watch?v=nycaF-KRiv8&si=Jx8ujlToQ2IUVb8f",
+      },
+      {
+        title: "Love My Baby",
+        youtube:
+          "https://music.youtube.com/watch?v=yTo2s7huxME&si=-s3rOxB6qaQEH28l",
+      },
+      {
+        title: "Gidi Girl",
+        youtube:
+          "https://music.youtube.com/watch?v=XdrjfMBBgdw&si=FfHjdWhrVKBlN9Vb",
+      },
+      {
+        title: "Oluwa Lo Ni",
+        youtube:
+          "https://music.youtube.com/watch?v=lXqrGP9npIw&si=mI7BsqliM81eZQ49",
+      },
+      {
+        title: "Don't Dull",
+        youtube:
+          "https://music.youtube.com/watch?v=5NjUWx0e6gA&si=93FzJ-dZkIntMZGR",
+      },
+      {
+        title: "Tease Me / Bad Guys",
+        youtube:
+          "https://music.youtube.com/watch?v=KA3Gc-p6OGQ&si=Kn4o57UODApCjijJ",
+      },
+      {
+        title: "Eme Boyz (feat. Skales & Banky W.)",
+        youtube:
+          "https://music.youtube.com/watch?v=2VHlyNmhl38&si=z34edkjZrwm2lRbX",
+      },
+      {
+        title: "What You Wanna Do?",
+        youtube:
+          "https://music.youtube.com/watch?v=nGlVqp4NbZ4&si=FiaMB1PmswuQqXD0",
+      },
+      {
+        title: "For Me (feat. Wande Coal)",
+        youtube:
+          "https://music.youtube.com/watch?v=Kr_-HBGTCTw&si=Sz6s5_cqDo26mSGg",
+      },
+      {
+        title: "Holla at Your Boy",
+        youtube:
+          "https://music.youtube.com/watch?v=ULvAsgP26TE&si=jxKBA9fu-FoFQJFi",
+      },
+      {
+        title: "Wad Up (feat. D'Prince)",
+        youtube:
+          "https://music.youtube.com/watch?v=ICN1o4sV0Eg&si=k2P9uYy084msKli_",
+      },
+      {
+        title: "Shout Out",
+        youtube:
+          "https://music.youtube.com/watch?v=FCgzLZ_7plk&si=rBwKJAIIxh7hYmED",
       },
     ],
   },
