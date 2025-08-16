@@ -310,6 +310,16 @@ export const ARTISTS: Artist[] = [
     image: "/artists/asake.jpeg",
     genre: "Afrobeats",
     country: "Nigeria",
+    instagram: "https://www.instagram.com/asakefp/",
+    twitter: "https://x.com/asakemusik",
+    spotify:
+      "https://open.spotify.com/artist/3a1tBryiczPAZpgoZN9Rzg?si=y6FOZ-7JS-SkvEYe8WppAg",
+    youtube: "https://www.youtube.com/channel/UCU9R50wyBPKpdbcIScAyZig",
+    tiktok:
+      "https://www.tiktok.com/@asakelife?is_from_webapp=1&sender_device=pc",
+    facebook: null,
+    soundcloud: null,
+    linkedin: null,
     top_songs: [
       {
         title: "Sungba",
@@ -320,12 +330,230 @@ export const ARTISTS: Artist[] = [
         youtube: "https://www.youtube.com/watch?v=iiOHqmmjdGk",
       },
       {
+        title: "Organise",
+        youtube:
+          "https://music.youtube.com/watch?v=JDTZWazs-Fs&si=pGWqv7YM_yUIE6Uq",
+      },
+      {
         title: "Peace Be Unto You (PBUY)",
         youtube: "https://www.youtube.com/watch?v=MefXQvGTYtE",
       },
       {
         title: "Amapiano",
         youtube: "https://www.youtube.com/watch?v=l_-v1fNdSHs",
+      },
+      {
+        title: "Lonely At The Top",
+        youtube:
+          "https://music.youtube.com/watch?v=T4G5uTd72EM&si=FhOsclPSsXdw1Gen",
+      },
+      {
+        title: "Remember",
+        youtube:
+          "https://music.youtube.com/watch?v=MhvVRw5XTVY&si=pIpDLuxC0dfeOD_J",
+      },
+      {
+        title: "Sungba (Remix) (feat. Burna Boy)",
+        youtube:
+          "https://music.youtube.com/watch?v=KpfgApk7ERA&si=DlFNwQqOw-q5I-FS",
+      },
+      {
+        title: "Omo Ope (feat. Olamide)",
+        youtube:
+          "https://music.youtube.com/watch?v=IGUXFzIzWMo&si=urKKtmvyKACUPLei",
+      },
+      {
+        title: "Joha",
+        youtube:
+          "https://music.youtube.com/watch?v=Dc6Sk-YfEWQ&si=fB3oIVQw322I5NrS",
+      },
+      {
+        title: "Nzaza",
+        youtube:
+          "https://music.youtube.com/watch?v=KF0Xl-uJyNc&si=y_Sx0gFp_zmBx7mU",
+      },
+
+      {
+        title: "Terminator",
+        youtube:
+          "https://music.youtube.com/watch?v=yi2D7H4b9BY&si=Uvt_4PMc7v3UUFnS",
+      },
+      {
+        title: "Ototo",
+        youtube:
+          "https://music.youtube.com/watch?v=g8nu0IoC3Mw&si=MYjjDIXTofN5t104",
+      },
+      {
+        title: "Yoga",
+        youtube:
+          "https://music.youtube.com/watch?v=UeIT8OHwtd0&si=fSszd2XZBNmGB8za",
+      },
+      {
+        title: "Basquiat",
+        youtube:
+          "https://music.youtube.com/watch?v=UzSDU9WC5kY&si=0CB_bLc8-aJ-kI6H",
+      },
+      {
+        title: "2:30",
+        youtube:
+          "https://music.youtube.com/watch?v=xsgDo3mOGFM&si=i5194qc62rm3XczM",
+      },
+      {
+        title: "Great Guy",
+        youtube:
+          "https://music.youtube.com/watch?v=NKqXl7ddKTQ&si=Y6CYW8whgFi-8t__",
+      },
+      {
+        title: "Mogbe",
+        youtube:
+          "https://music.youtube.com/watch?v=8rdIBplBlqA&si=vuwH9cF-Em-rWhEV",
+      },
+      {
+        title: "Mood",
+        youtube:
+          "https://music.youtube.com/watch?v=nuXHzN1QDcA&si=XsT5Hh1Wkr4CVGZK",
+      },
+      {
+        title: "Dupe",
+        youtube:
+          "https://music.youtube.com/watch?v=thXd_T_xpFU&si=v_1ol2JPo-VRC6mR",
+      },
+      {
+        title: "Only Me",
+        youtube:
+          "https://music.youtube.com/watch?v=leY0Bu5wCHs&si=dUI2eNAjN0FDCfpF",
+      },
+      {
+        title: "I Believe",
+        youtube:
+          "https://music.youtube.com/watch?v=xOMPzlzGcfM&si=kIgI-xQCVgBwrpDx",
+      },
+
+      {
+        title: "What's Up My G",
+        youtube:
+          "https://music.youtube.com/watch?v=xCMXE0sGZNM&si=9LkA68GgAi7-QeI2",
+      },
+      {
+        title: "Dull",
+        youtube:
+          "https://music.youtube.com/watch?v=lxK1V0siJqI&si=69ANyXGpELHJiD8T",
+      },
+      {
+        title: "My Heart",
+        youtube:
+          "https://music.youtube.com/watch?v=gs9Ard7ql6s&si=uDdExN5E_F3gs7--",
+      },
+      {
+        title: "Worldwide",
+        youtube:
+          "https://music.youtube.com/watch?v=kDgumW4ARRg&si=O_2kzQyDzXKymnSP",
+      },
+      {
+        title: "Active",
+        youtube:
+          "https://music.youtube.com/watch?v=sZhysJHLn_s&si=RnYDncho7qNumSb0",
+      },
+
+      {
+        title: "Suru",
+        youtube:
+          "https://music.youtube.com/watch?v=9ESi6RpUg2E&si=yUYR2z0nBMYvqN7F",
+      },
+      {
+        title: "Skating",
+        youtube:
+          "https://music.youtube.com/watch?v=nTcLF0rpLAI&si=EUborwGLyLIbOdeC",
+      },
+      {
+        title: "Wave",
+        youtube:
+          "https://music.youtube.com/watch?v=cNHfCr_hjYc&si=EvOv7uaaIQaZzKbh",
+      },
+      {
+        title: "Mentally",
+        youtube:
+          "https://music.youtube.com/watch?v=_vQY4wmO0M0&si=eOG-RkLMf7jDvp39",
+      },
+      {
+        title: "Uhh Yeahh",
+        youtube:
+          "https://music.youtube.com/watch?v=amojDNZ_ZkY&si=7_VeHnUpV6Oe5XSd",
+      },
+      {
+        title: "I Swear",
+        youtube:
+          "https://music.youtube.com/watch?v=1f13PrjFgBs&si=AV1xIvWC9e5T6Ron",
+      },
+      {
+        title: "Ligali",
+        youtube:
+          "https://music.youtube.com/watch?v=GhMK-fp6Hps&si=TD8XokcwMwf6U7KV",
+      },
+      {
+        title: "Whine",
+        youtube:
+          "https://music.youtube.com/watch?v=XbeYV3fZYfE&si=Sr8Znp8n0dK4w5IK",
+      },
+      {
+        title: "Fuji Vibe",
+        youtube:
+          "https://music.youtube.com/watch?v=9KzD3lTZ2es&si=NyAwfaj_OUg-9icQ",
+      },
+      {
+        title: "WHY LOVE",
+        youtube:
+          "https://music.youtube.com/watch?v=VmakV_meVY0&si=RiFix4z-MuPuhJIx",
+      },
+      {
+        title: "Sunshine",
+        youtube:
+          "https://music.youtube.com/watch?v=PUkabY_aNmI&si=i-TZcXGI9FIpoMoe",
+      },
+      {
+        title: "Olorun",
+        youtube:
+          "https://music.youtube.com/watch?v=Yt-841OSeLA&si=zgTqoTaqG3UnOOzX",
+      },
+      {
+        title: "Awodi",
+        youtube:
+          "https://music.youtube.com/watch?v=-lkZ25iPCBI&si=YqjoIz-McfxDSoHc",
+      },
+      {
+        title: "Introduction",
+        youtube:
+          "https://music.youtube.com/watch?v=pBsfFaMGtp0&si=fWDRTSnj_g-jCRS9",
+      },
+      {
+        title: "Muse",
+        youtube:
+          "https://music.youtube.com/watch?v=Zrd-ZJMWySs&si=P03MVtZfdrSHAk9a",
+      },
+      {
+        title: "Reason (feat. Russ)",
+        youtube:
+          "https://music.youtube.com/watch?v=bBCIZe6Cjd0&si=UuQKnyCl_0uMiSq_",
+      },
+      {
+        title: "Sunmomi",
+        youtube:
+          "https://music.youtube.com/watch?v=BNxcwtBg1W4&si=Xop92umbPG8GPbSz",
+      },
+      {
+        title: "Trabaye",
+        youtube:
+          "https://music.youtube.com/watch?v=veKu9fWWeJ0&si=Ttjj8o8SmqhRdqkv",
+      },
+      {
+        title: "Baba God",
+        youtube:
+          "https://music.youtube.com/watch?v=G5qInEh1I0I&si=i8YRA0WeWjfqcYJD",
+      },
+      {
+        title: "Military",
+        youtube:
+          "https://music.youtube.com/watch?v=GVE9G5CiLbs&si=GYNJHyChUNBD7Vxb",
       },
     ],
   },
@@ -691,6 +919,16 @@ export const ARTISTS: Artist[] = [
     image: "/artists/focalistic.jpg",
     genre: "Amapiano",
     country: "South Africa",
+    instagram: "https://www.instagram.com/focalistic/",
+    twitter: " https://x.com/FOCALISTIC",
+    spotify:
+      "https://open.spotify.com/artist/2GJMSZ7M3D0KyyKRhYgWju?si=iMAjWS0zT-yOQ-ycc6j9hA",
+    youtube: "https://www.youtube.com/channel/UC9nSslE0YFzYrisAPx13RTg",
+    tiktok:
+      "https://www.tiktok.com/@focalisticofficial?is_from_webapp=1&sender_device=pc",
+    facebook: "https://web.facebook.com/FOCALISTIC",
+    soundcloud: null,
+    linkedin: null,
     top_songs: [
       {
         title: "Ke Star",
@@ -699,6 +937,198 @@ export const ARTISTS: Artist[] = [
       {
         title: "Champion Sound (with Davido)",
         youtube: "https://www.youtube.com/watch?v=i-J0Fdze42M",
+      },
+      {
+        title: "Mehlomadala (feat. Lusanda, Zwayetoven & SOUL NATIVES)",
+        youtube:
+          "https://music.youtube.com/watch?v=tuc1Ixhalac&si=xVnGLhS_BWCPpPia",
+      },
+      {
+        title: "13 POS (Ke Bo Mang)",
+        youtube:
+          "https://music.youtube.com/watch?v=FV59CFdZG2Q&si=0dPZMJJzHX8gOjAc",
+      },
+      {
+        title: "Schwarzenegger (feat. Sims Noreng & Herc Cut the Lights)",
+        youtube:
+          "https://music.youtube.com/watch?v=tnlD6MKXNG4&si=4jRy1hbkJ47nBNez",
+      },
+      {
+        title: "Tsoma Rona",
+        youtube:
+          "https://music.youtube.com/watch?v=j370eBD0c-g&si=mgDMAGYJSj6AK-Z9",
+      },
+      {
+        title: "Lephodisa (feat. Mellow & Sleazy & Vyno Keys)",
+        youtube:
+          "https://music.youtube.com/watch?v=g4WdghIwFic&si=PfPqPl1UGMPh3tL-",
+      },
+      {
+        title: "Summer Ya Mapara (feat. Mellow & Sleazy & Thama Tee)",
+        youtube:
+          "https://music.youtube.com/watch?v=fTVyR8iN93c&si=WE8TdQdgfg20llja",
+      },
+      {
+        title: "PSL WAVE (feat. Ch'cco, M.J, Mellow & Sleazy & Thama Tee)",
+        youtube:
+          "https://music.youtube.com/watch?v=Qa4QHn_dCCc&si=ZZumhJIy2yVWCMrL",
+      },
+      {
+        title: "Letheka (feat. Thama Tee)",
+        youtube:
+          "https://music.youtube.com/watch?v=vt68SD0D0d4&si=9UhZlehmzmWnWM14",
+      },
+      {
+        title: "Shwele",
+        youtube:
+          "https://music.youtube.com/watch?v=fYefy2U3tw4&si=zeZpsMwM89N0U0Ea",
+      },
+      {
+        title: "Dipuo (feat. Herc & Sjava)",
+        youtube:
+          "https://music.youtube.com/watch?v=K4BKevYCsDE&si=gzHnEpAkWXW4RHSf",
+      },
+      {
+        title: "Timana (feat. DBN Gogo & Sfarzo Rtee)",
+        youtube:
+          "https://music.youtube.com/watch?v=Yw0jJiUW_g0&si=0fZG3hCaI_qx8qOt",
+      },
+      {
+        title: "Boshego (feat. Elaine, Mellow ",
+        youtube:
+          "https://music.youtube.com/watch?v=TZVjQCROHp4&si=TCEMEXpUUjt4D8h_",
+      },
+      {
+        title: "Tsela Tse Nyane (feat. M.J, MJ, MNS & Pabi Cooper)",
+        youtube:
+          "https://music.youtube.com/watch?v=kSJRWUfRngY&si=yhq7CZ6v6gByCanu",
+      },
+      {
+        title:
+          "Tabela Hape (feat. Kabza De Small, M.J, MJ & Mellow and Sleazy)",
+        youtube:
+          "https://music.youtube.com/watch?v=1MB7nlEImT4&si=AabKDPNCuTHzC3DU",
+      },
+      {
+        title: "Botlhoko (feat. Herc)",
+        youtube:
+          "https://music.youtube.com/watch?v=xR6DACr94Xk&si=ho4avJHGPhIhr5Go",
+      },
+      {
+        title:
+          "HARDA (feat. Herc Cut the Lights, Jay Sax, Shishiliza & Tshego)",
+        youtube:
+          "https://music.youtube.com/watch?v=69cn12aNh78&si=0Vj6ldKn0jDMSITw",
+      },
+      {
+        title: "Limousine (feat. DJ 787 & Justin99)",
+        youtube:
+          "https://music.youtube.com/watch?v=EVeSMQzMru4&si=eszMdBMZCxi4TE3V",
+      },
+      {
+        title: "Ntjaka Mei Dawg (feat. Ch'cco, Lastborn, MNS & SjavasDeDeejay)",
+        youtube:
+          "https://music.youtube.com/watch?v=qnz2I1DO7Ok&si=HPomkq4NC95lK_2W",
+      },
+      {
+        title: "SJEPA (feat. M.J)",
+        youtube:
+          "https://music.youtube.com/watch?v=PXuUT8Ny8rY&si=tEct1UVA9kZeBdV6",
+      },
+      {
+        title: "Fire (feat. Felo Le Tee, MHD, Mellow & Sleazy & Mellow)",
+        youtube:
+          "https://music.youtube.com/watch?v=GLI1x3bPqPM&si=zLJHke3t3yH73G-R",
+      },
+      {
+        title: "Dzudza (feat. Mellow & Sleazy, Mellow & Sleazy)",
+        youtube:
+          "https://music.youtube.com/watch?v=Z5vYaSTHQFQ&si=BafI0X8aT66mDfcW",
+      },
+      {
+        title: "I'm Not The Father (feat. Justin99)",
+        youtube:
+          "https://music.youtube.com/watch?v=bk50HqgWVMk&si=ItJMkEwkwXdlO4P4",
+      },
+      {
+        title: "Nka Mo Dira (feat. Herc Cut the Lights)",
+        youtube:
+          "https://music.youtube.com/watch?v=tXOsVqTYQZ4&si=AaAhcsJkPxGObUTR",
+      },
+      {
+        title: "Might Not Forgive You (feat. Dynasty & Sjava)",
+        youtube:
+          "https://music.youtube.com/watch?v=41cOv5QOiFM&si=AyZ3-klAenit8CI4",
+      },
+      {
+        title: "Sghubu Ses Excellent (feat. Bongza, MDU aka TRP & Madumane)",
+        youtube:
+          "https://music.youtube.com/watch?v=jKY9LH5c42k&si=5MY05AnuqTOZbqW-",
+      },
+      {
+        title: "Ke Star (feat. Vigro Deep)",
+        youtube:
+          "https://music.youtube.com/watch?v=a9_da2P5JjQ&si=W2YOIV6gv3TukxM-",
+      },
+      {
+        title: "Tashkuma (feat. Mellow & Sleazy, Tyler ICU, Sleazy & Mellow)",
+        youtube:
+          "https://music.youtube.com/watch?v=QjXM02IAoVo&si=me_RIXdm2M4jqaoT",
+      },
+      {
+        title: "Onoroko (feat. Reece Madlisa, Riky Rick & Semi Tee)",
+        youtube:
+          "https://music.youtube.com/watch?v=Ar_4Ow2gqf8&si=oYZ5QrK1MRyN2HSA",
+      },
+      {
+        title: "Benz and Beamer (feat. Mas Musiq)",
+        youtube:
+          "https://music.youtube.com/watch?v=9TMDKBoF4cQ&si=7i4Yp09kqD2ejjg5",
+      },
+      {
+        title: "Vrr Phaa (feat. Vigro Deep)",
+        youtube:
+          "https://music.youtube.com/watch?v=ck1J6LbnP9w&si=7idVFxg6hPHuw1nP",
+      },
+      {
+        title: "In Your Mind (feat. DJ Maphorisa, DJ Venom & Tyler ICU)",
+        youtube:
+          "https://music.youtube.com/watch?v=4a0efQh1UnY&si=Ah3LlwMoJ0D20f2x",
+      },
+      {
+        title: "Stlamatlama (feat. 25K, Abidoza & Junior Taurus)",
+        youtube:
+          "https://music.youtube.com/watch?v=zFtGXiGgdfo&si=-DyBZJZhXXjphd_8",
+      },
+      {
+        title: "Billion",
+        youtube:
+          "https://music.youtube.com/watch?v=nnVl4fDfCWk&si=1X1xaBnivGgQbZiH",
+      },
+      {
+        title: "Palama (feat. DBN Gogo, Mellow & Sleazy & Sleazy)",
+        youtube:
+          "https://music.youtube.com/watch?v=PhGaIX4Z5Is&si=OPwBhTUdm-EbJFjl",
+      },
+      {
+        title: "Phalafala (feat. Mr JazziQ)",
+        youtube:
+          "https://music.youtube.com/watch?v=l63UFWaaf-s&si=diaufM-X0VuQH7Gp",
+      },
+      {
+        title: "Blecke (feat. JazziDisciples)",
+        youtube:
+          "https://music.youtube.com/watch?v=fHDjfd4tNGI&si=auElIGRqvr0wQdHs",
+      },
+      {
+        title: "Sefela (feat. Mas Musiq)",
+        youtube:
+          "https://music.youtube.com/watch?v=1E-bXYc9_GE&si=WgAzEA6tgN47aHyg",
+      },
+      {
+        title: "City on Fire (feat. Abidoza & Squad Sa Maradona)",
+        youtube:
+          "https://music.youtube.com/watch?v=mIKdM6vByUY&si=OXbDEx2q43_rf4sN",
       },
     ],
   },
@@ -709,6 +1139,14 @@ export const ARTISTS: Artist[] = [
     image: "/artists/wizkid.jpg",
     genre: "Afrobeats",
     country: "Nigeria",
+    instagram: null,
+    twitter: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    tiktok: null,
+    facebook: null,
+    linkedin: null,
     top_songs: [
       {
         title: "Essence (feat. Tems)",
@@ -733,6 +1171,18 @@ export const ARTISTS: Artist[] = [
       {
         title: "KANTE",
         youtube: "https://www.youtube.com/watch?v=3bFPDfWReN0",
+      },
+      {
+        title: "",
+        youtube: "",
+      },
+      {
+        title: "",
+        youtube: "",
+      },
+      {
+        title: "",
+        youtube: "",
       },
     ],
   },
