@@ -304,260 +304,6 @@ export const ARTISTS: Artist[] = [
     ],
   },
   {
-    id: "asake",
-    name: "Asake",
-    website: null,
-    image: "/artists/asake.jpeg",
-    genre: "Afrobeats",
-    country: "Nigeria",
-    instagram: "https://www.instagram.com/asakefp/",
-    twitter: "https://x.com/asakemusik",
-    spotify:
-      "https://open.spotify.com/artist/3a1tBryiczPAZpgoZN9Rzg?si=y6FOZ-7JS-SkvEYe8WppAg",
-    youtube: "https://www.youtube.com/channel/UCU9R50wyBPKpdbcIScAyZig",
-    tiktok:
-      "https://www.tiktok.com/@asakelife?is_from_webapp=1&sender_device=pc",
-    facebook: null,
-    soundcloud: null,
-    linkedin: null,
-    top_songs: [
-      {
-        title: "Sungba",
-        youtube: "https://www.youtube.com/watch?v=5A-CjKOQWvg",
-      },
-      {
-        title: "MMS",
-        youtube: "https://www.youtube.com/watch?v=iiOHqmmjdGk",
-      },
-      {
-        title: "Organise",
-        youtube:
-          "https://music.youtube.com/watch?v=JDTZWazs-Fs&si=pGWqv7YM_yUIE6Uq",
-      },
-      {
-        title: "Peace Be Unto You (PBUY)",
-        youtube: "https://www.youtube.com/watch?v=MefXQvGTYtE",
-      },
-      {
-        title: "Amapiano",
-        youtube: "https://www.youtube.com/watch?v=l_-v1fNdSHs",
-      },
-      {
-        title: "Lonely At The Top",
-        youtube:
-          "https://music.youtube.com/watch?v=T4G5uTd72EM&si=FhOsclPSsXdw1Gen",
-      },
-      {
-        title: "Remember",
-        youtube:
-          "https://music.youtube.com/watch?v=MhvVRw5XTVY&si=pIpDLuxC0dfeOD_J",
-      },
-      {
-        title: "Sungba (Remix) (feat. Burna Boy)",
-        youtube:
-          "https://music.youtube.com/watch?v=KpfgApk7ERA&si=DlFNwQqOw-q5I-FS",
-      },
-      {
-        title: "Omo Ope (feat. Olamide)",
-        youtube:
-          "https://music.youtube.com/watch?v=IGUXFzIzWMo&si=urKKtmvyKACUPLei",
-      },
-      {
-        title: "Joha",
-        youtube:
-          "https://music.youtube.com/watch?v=Dc6Sk-YfEWQ&si=fB3oIVQw322I5NrS",
-      },
-      {
-        title: "Nzaza",
-        youtube:
-          "https://music.youtube.com/watch?v=KF0Xl-uJyNc&si=y_Sx0gFp_zmBx7mU",
-      },
-
-      {
-        title: "Terminator",
-        youtube:
-          "https://music.youtube.com/watch?v=yi2D7H4b9BY&si=Uvt_4PMc7v3UUFnS",
-      },
-      {
-        title: "Ototo",
-        youtube:
-          "https://music.youtube.com/watch?v=g8nu0IoC3Mw&si=MYjjDIXTofN5t104",
-      },
-      {
-        title: "Yoga",
-        youtube:
-          "https://music.youtube.com/watch?v=UeIT8OHwtd0&si=fSszd2XZBNmGB8za",
-      },
-      {
-        title: "Basquiat",
-        youtube:
-          "https://music.youtube.com/watch?v=UzSDU9WC5kY&si=0CB_bLc8-aJ-kI6H",
-      },
-      {
-        title: "2:30",
-        youtube:
-          "https://music.youtube.com/watch?v=xsgDo3mOGFM&si=i5194qc62rm3XczM",
-      },
-      {
-        title: "Great Guy",
-        youtube:
-          "https://music.youtube.com/watch?v=NKqXl7ddKTQ&si=Y6CYW8whgFi-8t__",
-      },
-      {
-        title: "Mogbe",
-        youtube:
-          "https://music.youtube.com/watch?v=8rdIBplBlqA&si=vuwH9cF-Em-rWhEV",
-      },
-      {
-        title: "Mood",
-        youtube:
-          "https://music.youtube.com/watch?v=nuXHzN1QDcA&si=XsT5Hh1Wkr4CVGZK",
-      },
-      {
-        title: "Dupe",
-        youtube:
-          "https://music.youtube.com/watch?v=thXd_T_xpFU&si=v_1ol2JPo-VRC6mR",
-      },
-      {
-        title: "Only Me",
-        youtube:
-          "https://music.youtube.com/watch?v=leY0Bu5wCHs&si=dUI2eNAjN0FDCfpF",
-      },
-      {
-        title: "I Believe",
-        youtube:
-          "https://music.youtube.com/watch?v=xOMPzlzGcfM&si=kIgI-xQCVgBwrpDx",
-      },
-
-      {
-        title: "What's Up My G",
-        youtube:
-          "https://music.youtube.com/watch?v=xCMXE0sGZNM&si=9LkA68GgAi7-QeI2",
-      },
-      {
-        title: "Dull",
-        youtube:
-          "https://music.youtube.com/watch?v=lxK1V0siJqI&si=69ANyXGpELHJiD8T",
-      },
-      {
-        title: "My Heart",
-        youtube:
-          "https://music.youtube.com/watch?v=gs9Ard7ql6s&si=uDdExN5E_F3gs7--",
-      },
-      {
-        title: "Worldwide",
-        youtube:
-          "https://music.youtube.com/watch?v=kDgumW4ARRg&si=O_2kzQyDzXKymnSP",
-      },
-      {
-        title: "Active",
-        youtube:
-          "https://music.youtube.com/watch?v=sZhysJHLn_s&si=RnYDncho7qNumSb0",
-      },
-
-      {
-        title: "Suru",
-        youtube:
-          "https://music.youtube.com/watch?v=9ESi6RpUg2E&si=yUYR2z0nBMYvqN7F",
-      },
-      {
-        title: "Skating",
-        youtube:
-          "https://music.youtube.com/watch?v=nTcLF0rpLAI&si=EUborwGLyLIbOdeC",
-      },
-      {
-        title: "Wave",
-        youtube:
-          "https://music.youtube.com/watch?v=cNHfCr_hjYc&si=EvOv7uaaIQaZzKbh",
-      },
-      {
-        title: "Mentally",
-        youtube:
-          "https://music.youtube.com/watch?v=_vQY4wmO0M0&si=eOG-RkLMf7jDvp39",
-      },
-      {
-        title: "Uhh Yeahh",
-        youtube:
-          "https://music.youtube.com/watch?v=amojDNZ_ZkY&si=7_VeHnUpV6Oe5XSd",
-      },
-      {
-        title: "I Swear",
-        youtube:
-          "https://music.youtube.com/watch?v=1f13PrjFgBs&si=AV1xIvWC9e5T6Ron",
-      },
-      {
-        title: "Ligali",
-        youtube:
-          "https://music.youtube.com/watch?v=GhMK-fp6Hps&si=TD8XokcwMwf6U7KV",
-      },
-      {
-        title: "Whine",
-        youtube:
-          "https://music.youtube.com/watch?v=XbeYV3fZYfE&si=Sr8Znp8n0dK4w5IK",
-      },
-      {
-        title: "Fuji Vibe",
-        youtube:
-          "https://music.youtube.com/watch?v=9KzD3lTZ2es&si=NyAwfaj_OUg-9icQ",
-      },
-      {
-        title: "WHY LOVE",
-        youtube:
-          "https://music.youtube.com/watch?v=VmakV_meVY0&si=RiFix4z-MuPuhJIx",
-      },
-      {
-        title: "Sunshine",
-        youtube:
-          "https://music.youtube.com/watch?v=PUkabY_aNmI&si=i-TZcXGI9FIpoMoe",
-      },
-      {
-        title: "Olorun",
-        youtube:
-          "https://music.youtube.com/watch?v=Yt-841OSeLA&si=zgTqoTaqG3UnOOzX",
-      },
-      {
-        title: "Awodi",
-        youtube:
-          "https://music.youtube.com/watch?v=-lkZ25iPCBI&si=YqjoIz-McfxDSoHc",
-      },
-      {
-        title: "Introduction",
-        youtube:
-          "https://music.youtube.com/watch?v=pBsfFaMGtp0&si=fWDRTSnj_g-jCRS9",
-      },
-      {
-        title: "Muse",
-        youtube:
-          "https://music.youtube.com/watch?v=Zrd-ZJMWySs&si=P03MVtZfdrSHAk9a",
-      },
-      {
-        title: "Reason (feat. Russ)",
-        youtube:
-          "https://music.youtube.com/watch?v=bBCIZe6Cjd0&si=UuQKnyCl_0uMiSq_",
-      },
-      {
-        title: "Sunmomi",
-        youtube:
-          "https://music.youtube.com/watch?v=BNxcwtBg1W4&si=Xop92umbPG8GPbSz",
-      },
-      {
-        title: "Trabaye",
-        youtube:
-          "https://music.youtube.com/watch?v=veKu9fWWeJ0&si=Ttjj8o8SmqhRdqkv",
-      },
-      {
-        title: "Baba God",
-        youtube:
-          "https://music.youtube.com/watch?v=G5qInEh1I0I&si=i8YRA0WeWjfqcYJD",
-      },
-      {
-        title: "Military",
-        youtube:
-          "https://music.youtube.com/watch?v=GVE9G5CiLbs&si=GYNJHyChUNBD7Vxb",
-      },
-    ],
-  },
-  {
     id: "davido",
     name: "Davido",
     image: "/artists/davido.jpg",
@@ -909,6 +655,260 @@ export const ARTISTS: Artist[] = [
         title: "Stand Strong (feat. Sunday Service Choir)",
         youtube:
           "https://music.youtube.com/watch?v=vtWjk_CiSQI&si=84Hzi6G3J1Vmjp64",
+      },
+    ],
+  },
+  {
+    id: "asake",
+    name: "Asake",
+    website: null,
+    image: "/artists/asake.jpeg",
+    genre: "Afrobeats",
+    country: "Nigeria",
+    instagram: "https://www.instagram.com/asakefp/",
+    twitter: "https://x.com/asakemusik",
+    spotify:
+      "https://open.spotify.com/artist/3a1tBryiczPAZpgoZN9Rzg?si=y6FOZ-7JS-SkvEYe8WppAg",
+    youtube: "https://www.youtube.com/channel/UCU9R50wyBPKpdbcIScAyZig",
+    tiktok:
+      "https://www.tiktok.com/@asakelife?is_from_webapp=1&sender_device=pc",
+    facebook: null,
+    soundcloud: null,
+    linkedin: null,
+    top_songs: [
+      {
+        title: "Sungba",
+        youtube: "https://www.youtube.com/watch?v=5A-CjKOQWvg",
+      },
+      {
+        title: "MMS",
+        youtube: "https://www.youtube.com/watch?v=iiOHqmmjdGk",
+      },
+      {
+        title: "Organise",
+        youtube:
+          "https://music.youtube.com/watch?v=JDTZWazs-Fs&si=pGWqv7YM_yUIE6Uq",
+      },
+      {
+        title: "Peace Be Unto You (PBUY)",
+        youtube: "https://www.youtube.com/watch?v=MefXQvGTYtE",
+      },
+      {
+        title: "Amapiano",
+        youtube: "https://www.youtube.com/watch?v=l_-v1fNdSHs",
+      },
+      {
+        title: "Lonely At The Top",
+        youtube:
+          "https://music.youtube.com/watch?v=T4G5uTd72EM&si=FhOsclPSsXdw1Gen",
+      },
+      {
+        title: "Remember",
+        youtube:
+          "https://music.youtube.com/watch?v=MhvVRw5XTVY&si=pIpDLuxC0dfeOD_J",
+      },
+      {
+        title: "Sungba (Remix) (feat. Burna Boy)",
+        youtube:
+          "https://music.youtube.com/watch?v=KpfgApk7ERA&si=DlFNwQqOw-q5I-FS",
+      },
+      {
+        title: "Omo Ope (feat. Olamide)",
+        youtube:
+          "https://music.youtube.com/watch?v=IGUXFzIzWMo&si=urKKtmvyKACUPLei",
+      },
+      {
+        title: "Joha",
+        youtube:
+          "https://music.youtube.com/watch?v=Dc6Sk-YfEWQ&si=fB3oIVQw322I5NrS",
+      },
+      {
+        title: "Nzaza",
+        youtube:
+          "https://music.youtube.com/watch?v=KF0Xl-uJyNc&si=y_Sx0gFp_zmBx7mU",
+      },
+
+      {
+        title: "Terminator",
+        youtube:
+          "https://music.youtube.com/watch?v=yi2D7H4b9BY&si=Uvt_4PMc7v3UUFnS",
+      },
+      {
+        title: "Ototo",
+        youtube:
+          "https://music.youtube.com/watch?v=g8nu0IoC3Mw&si=MYjjDIXTofN5t104",
+      },
+      {
+        title: "Yoga",
+        youtube:
+          "https://music.youtube.com/watch?v=UeIT8OHwtd0&si=fSszd2XZBNmGB8za",
+      },
+      {
+        title: "Basquiat",
+        youtube:
+          "https://music.youtube.com/watch?v=UzSDU9WC5kY&si=0CB_bLc8-aJ-kI6H",
+      },
+      {
+        title: "2:30",
+        youtube:
+          "https://music.youtube.com/watch?v=xsgDo3mOGFM&si=i5194qc62rm3XczM",
+      },
+      {
+        title: "Great Guy",
+        youtube:
+          "https://music.youtube.com/watch?v=NKqXl7ddKTQ&si=Y6CYW8whgFi-8t__",
+      },
+      {
+        title: "Mogbe",
+        youtube:
+          "https://music.youtube.com/watch?v=8rdIBplBlqA&si=vuwH9cF-Em-rWhEV",
+      },
+      {
+        title: "Mood",
+        youtube:
+          "https://music.youtube.com/watch?v=nuXHzN1QDcA&si=XsT5Hh1Wkr4CVGZK",
+      },
+      {
+        title: "Dupe",
+        youtube:
+          "https://music.youtube.com/watch?v=thXd_T_xpFU&si=v_1ol2JPo-VRC6mR",
+      },
+      {
+        title: "Only Me",
+        youtube:
+          "https://music.youtube.com/watch?v=leY0Bu5wCHs&si=dUI2eNAjN0FDCfpF",
+      },
+      {
+        title: "I Believe",
+        youtube:
+          "https://music.youtube.com/watch?v=xOMPzlzGcfM&si=kIgI-xQCVgBwrpDx",
+      },
+
+      {
+        title: "What's Up My G",
+        youtube:
+          "https://music.youtube.com/watch?v=xCMXE0sGZNM&si=9LkA68GgAi7-QeI2",
+      },
+      {
+        title: "Dull",
+        youtube:
+          "https://music.youtube.com/watch?v=lxK1V0siJqI&si=69ANyXGpELHJiD8T",
+      },
+      {
+        title: "My Heart",
+        youtube:
+          "https://music.youtube.com/watch?v=gs9Ard7ql6s&si=uDdExN5E_F3gs7--",
+      },
+      {
+        title: "Worldwide",
+        youtube:
+          "https://music.youtube.com/watch?v=kDgumW4ARRg&si=O_2kzQyDzXKymnSP",
+      },
+      {
+        title: "Active",
+        youtube:
+          "https://music.youtube.com/watch?v=sZhysJHLn_s&si=RnYDncho7qNumSb0",
+      },
+
+      {
+        title: "Suru",
+        youtube:
+          "https://music.youtube.com/watch?v=9ESi6RpUg2E&si=yUYR2z0nBMYvqN7F",
+      },
+      {
+        title: "Skating",
+        youtube:
+          "https://music.youtube.com/watch?v=nTcLF0rpLAI&si=EUborwGLyLIbOdeC",
+      },
+      {
+        title: "Wave",
+        youtube:
+          "https://music.youtube.com/watch?v=cNHfCr_hjYc&si=EvOv7uaaIQaZzKbh",
+      },
+      {
+        title: "Mentally",
+        youtube:
+          "https://music.youtube.com/watch?v=_vQY4wmO0M0&si=eOG-RkLMf7jDvp39",
+      },
+      {
+        title: "Uhh Yeahh",
+        youtube:
+          "https://music.youtube.com/watch?v=amojDNZ_ZkY&si=7_VeHnUpV6Oe5XSd",
+      },
+      {
+        title: "I Swear",
+        youtube:
+          "https://music.youtube.com/watch?v=1f13PrjFgBs&si=AV1xIvWC9e5T6Ron",
+      },
+      {
+        title: "Ligali",
+        youtube:
+          "https://music.youtube.com/watch?v=GhMK-fp6Hps&si=TD8XokcwMwf6U7KV",
+      },
+      {
+        title: "Whine",
+        youtube:
+          "https://music.youtube.com/watch?v=XbeYV3fZYfE&si=Sr8Znp8n0dK4w5IK",
+      },
+      {
+        title: "Fuji Vibe",
+        youtube:
+          "https://music.youtube.com/watch?v=9KzD3lTZ2es&si=NyAwfaj_OUg-9icQ",
+      },
+      {
+        title: "WHY LOVE",
+        youtube:
+          "https://music.youtube.com/watch?v=VmakV_meVY0&si=RiFix4z-MuPuhJIx",
+      },
+      {
+        title: "Sunshine",
+        youtube:
+          "https://music.youtube.com/watch?v=PUkabY_aNmI&si=i-TZcXGI9FIpoMoe",
+      },
+      {
+        title: "Olorun",
+        youtube:
+          "https://music.youtube.com/watch?v=Yt-841OSeLA&si=zgTqoTaqG3UnOOzX",
+      },
+      {
+        title: "Awodi",
+        youtube:
+          "https://music.youtube.com/watch?v=-lkZ25iPCBI&si=YqjoIz-McfxDSoHc",
+      },
+      {
+        title: "Introduction",
+        youtube:
+          "https://music.youtube.com/watch?v=pBsfFaMGtp0&si=fWDRTSnj_g-jCRS9",
+      },
+      {
+        title: "Muse",
+        youtube:
+          "https://music.youtube.com/watch?v=Zrd-ZJMWySs&si=P03MVtZfdrSHAk9a",
+      },
+      {
+        title: "Reason (feat. Russ)",
+        youtube:
+          "https://music.youtube.com/watch?v=bBCIZe6Cjd0&si=UuQKnyCl_0uMiSq_",
+      },
+      {
+        title: "Sunmomi",
+        youtube:
+          "https://music.youtube.com/watch?v=BNxcwtBg1W4&si=Xop92umbPG8GPbSz",
+      },
+      {
+        title: "Trabaye",
+        youtube:
+          "https://music.youtube.com/watch?v=veKu9fWWeJ0&si=Ttjj8o8SmqhRdqkv",
+      },
+      {
+        title: "Baba God",
+        youtube:
+          "https://music.youtube.com/watch?v=G5qInEh1I0I&si=i8YRA0WeWjfqcYJD",
+      },
+      {
+        title: "Military",
+        youtube:
+          "https://music.youtube.com/watch?v=GVE9G5CiLbs&si=GYNJHyChUNBD7Vxb",
       },
     ],
   },
