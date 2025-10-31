@@ -68,21 +68,36 @@ export function MusicSection() {
               {isOpen && <div>
                   <AlbumCountdown />
                   <div className="flex flex-wrap gap-4 justify-center mt-6">
-                    <Button className="bg-gray-200 text-black flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
-                      <Headphones className="h-5 w-5" />
-                      <span>Spotify</span>
+                    <Button 
+                      asChild
+                      className="bg-[#1DB954] hover:bg-[#1ed760] text-white flex items-center gap-2 py-4 text-lg shadow-lg w-full max-w-[110px]"
+                    >
+                      <a href="https://open.spotify.com/album/0EymL639qojtOaT2vaB2IZ" target="_blank" rel="noopener noreferrer">
+                        <Headphones className="h-5 w-5" />
+                        <span>Spotify</span>
+                      </a>
                     </Button>
-                    <Button className="bg-gray-200 text-black flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
-                      <Apple className="h-5 w-5" />
-                      <span>Apple</span>
+                    <Button 
+                      asChild
+                      className="bg-[#FA243C] hover:bg-[#ff4058] text-white flex items-center gap-2 py-4 text-lg shadow-lg w-full max-w-[110px]"
+                    >
+                      <a href="https://music.apple.com/ca/album/afrobeats-is-a-public-good/1837705280" target="_blank" rel="noopener noreferrer">
+                        <Apple className="h-5 w-5" />
+                        <span>Apple</span>
+                      </a>
                     </Button>
-                    <Button className="bg-gray-200 text-black flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
-                      <Youtube className="h-5 w-5" />
-                      <span>YouTube</span>
+                    <Button 
+                      asChild
+                      className="bg-[#FF0000] hover:bg-[#ff3333] text-white flex items-center gap-2 py-4 text-lg shadow-lg w-full max-w-[110px]"
+                    >
+                      <a href="https://youtube.com/playlist?list=OLAK5uy_lXoKCymdHRrb86jji8oNAT5RpcSaUvwQk&si=d1-GJKMUAuLziMLL" target="_blank" rel="noopener noreferrer">
+                        <Youtube className="h-5 w-5" />
+                        <span>YouTube</span>
+                      </a>
                     </Button>
                   </div>
                   <p className="text-center text-black mt-6">
-                    Links to streaming will be available on release day!
+                    Stream the album now on all platforms! 🎵
                   </p>
                 </div>}
             </div>
