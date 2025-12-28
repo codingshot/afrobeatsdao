@@ -12,6 +12,7 @@ import {
   Twitter,
   Youtube,
   Music2,
+  Facebook,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
@@ -212,7 +213,7 @@ const ArtistProfile = () => {
       case "tiktok":
         return Music;
       case "facebook":
-        return ExternalLink;
+        return Facebook;
       case "linkedin":
         return ExternalLink;
       default:
@@ -347,48 +348,62 @@ const ArtistProfile = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+      {
+        <Helmet>
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaDescription} />
 
-        <meta property="og:type" content="profile" />
-        <meta property="og:title" content={metaTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content={ogImageAlt} />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="800" />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:site_name" content="Afrobeats.party" />
-        <meta property="og:locale" content="en_US" />
+          <meta property="og:type" content="profile" />
+          <meta property="og:title" content={metaTitle} />
+          <meta property="og:description" content={metaDescription} />
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:alt" content={ogImageAlt} />
+          <meta property="og:image:width" content="800" />
+          <meta property="og:image:height" content="800" />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:site_name" content="Afrobeats.party" />
+          <meta property="og:locale" content="en_US" />
 
-        <meta property="music:musician" content={canonicalUrl} />
-        <meta
-          property="music:song_count"
-          content={String(artist.top_songs?.length || 0)}
-        />
+          <meta property="music:musician" content={canonicalUrl} />
+          <meta
+            property="music:song_count"
+            content={String(artist.top_songs?.length || 0)}
+          />
 
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@afrobeatsdao" />
-        <meta name="twitter:creator" content="@afrobeatsdao" />
-        <meta name="twitter:title" content={metaTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:image:alt" content={ogImageAlt} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@afrobeatsdao" />
+          <meta name="twitter:creator" content="@afrobeatsdao" />
+          <meta name="twitter:title" content={metaTitle} />
+          <meta name="twitter:description" content={metaDescription} />
+          <meta name="twitter:image" content={ogImage} />
+          <meta name="twitter:image:alt" content={ogImageAlt} />
 
-        <link rel="canonical" href={canonicalUrl} />
-        <meta name="keywords" content={seoKeywords} />
-        <meta name="author" content="Afrobeats.party" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="theme-color" content="#008751" />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta name="keywords" content={seoKeywords} />
+          <meta name="author" content="Afrobeats.party" />
+          <meta
+            name="robots"
+            content="index, follow, max-image-preview:large"
+          />
+          <meta name="theme-color" content="#008751" />
+          <meta name="location" content={artist.country.trim()} />
 
-        {safeCountry && (
-          <>
-            <meta name="geo.region" content={safeCountry} />
-            <meta name="geo.placename" content={safeCountry} />
-          </>
-        )}
-      </Helmet>
+          {/* {safeCountry && (
+            <>
+              <meta name="geo.region" content={safeCountry} />
+              <meta name="geo.placename" content={safeCountry} />
+            </>
+          )} */}
+          <meta
+            name="geo.region"
+            content={safeString(safeCountry) || undefined}
+          />
+          <meta
+            name="geo.placename"
+            content={safeString(safeCountry) || undefined}
+          />
+        </Helmet>
+      }
 
       <div className="min-h-screen bg-background ">
         <main className="container mx-auto px-4 py-8">
@@ -426,7 +441,7 @@ const ArtistProfile = () => {
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-4 rounded-xl shadow-md">
                 <h1 className="text-3xl font-bold text-black mb-2">
                   {artist.name}
                 </h1>
@@ -435,7 +450,7 @@ const ArtistProfile = () => {
                   <Badge className="bg-[#008751] px-3 py-1">
                     Afrobeats Artist
                   </Badge>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     {artist.website && (
                       <a
                         href={artist.website}
