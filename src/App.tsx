@@ -27,6 +27,7 @@ import Chapters from "./pages/Chapters";
 import Join from "./pages/Join";
 import ArtistJoin from "./pages/ArtistJoin";
 import { GlobalAudioPlayerProvider } from "@/components/GlobalAudioPlayer";
+import { DanceProgressProvider } from "@/hooks/use-dance-progress";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -34,8 +35,9 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <TooltipProvider>
-          <GlobalAudioPlayerProvider>
+        <DanceProgressProvider>
+          <TooltipProvider>
+            <GlobalAudioPlayerProvider>
             <div className="min-h-screen">
               <Header />
               <Toaster />
@@ -65,8 +67,9 @@ const App = () => {
                 </Routes>
               </main>
             </div>
-          </GlobalAudioPlayerProvider>
-        </TooltipProvider>
+            </GlobalAudioPlayerProvider>
+          </TooltipProvider>
+        </DanceProgressProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

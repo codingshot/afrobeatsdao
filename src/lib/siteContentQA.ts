@@ -13,6 +13,8 @@ const SPOTIFY_TRACK_RE = /^https:\/\/open\.spotify\.com\/track\/([0-9A-Za-z]{22}
 const YOUTUBE_WATCH_RE = /^https:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]{6,}(&.*)?$/;
 const YOUTUBE_SHORT_RE = /^https:\/\/youtu\.be\/[\w-]{6,}(\?.*)?$/;
 const YOUTUBE_SHORTS_RE = /^https:\/\/(www\.)?youtube\.com\/shorts\/[\w-]{6,}(\?.*)?$/;
+const YOUTUBE_EMBED_RE = /^https:\/\/(www\.)?youtube\.com\/embed\/[\w-]{6,}(\?.*)?$/;
+const YOUTUBE_LIVE_RE = /^https:\/\/(www\.)?youtube\.com\/live\/[\w-]{6,}(\?.*)?$/;
 
 export function assertValidSpotifyTrackUrl(url: string, context: string): void {
   const m = url.trim().match(SPOTIFY_TRACK_RE);
@@ -30,7 +32,13 @@ const APPLE_MUSIC_ITEM_RE =
 
 export function assertValidYoutubeUrl(url: string, context: string): void {
   const u = url.trim();
-  if (!YOUTUBE_WATCH_RE.test(u) && !YOUTUBE_SHORT_RE.test(u) && !YOUTUBE_SHORTS_RE.test(u)) {
+  if (
+    !YOUTUBE_WATCH_RE.test(u) &&
+    !YOUTUBE_SHORT_RE.test(u) &&
+    !YOUTUBE_SHORTS_RE.test(u) &&
+    !YOUTUBE_EMBED_RE.test(u) &&
+    !YOUTUBE_LIVE_RE.test(u)
+  ) {
     throw new Error(`${context}: unexpected YouTube URL shape: ${url}`);
   }
 }

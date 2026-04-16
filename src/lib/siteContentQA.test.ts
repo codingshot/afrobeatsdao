@@ -20,7 +20,7 @@ describe("dance curriculum QA", () => {
     const n =
       danceCurriculum.afrobeats.length +
       danceCurriculum.amapiano.length;
-    expect(n).toBe(10);
+    expect(n).toBe(11);
   });
 
   it("has unique dance ids across genres", () => {

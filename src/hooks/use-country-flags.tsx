@@ -38,7 +38,10 @@ const countryCodeMap: Record<string, string> = {
   "Thailand": "TH",
   "Ireland": "IE",
   "Netherlands": "NL",
-  // Add more as needed
+  "United States": "US",
+  "Canada": "CA",
+  "France": "FR",
+  "Germany": "DE",
 };
 
 export function useCountryFlags() {

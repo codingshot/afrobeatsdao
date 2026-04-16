@@ -14,12 +14,11 @@ import {
   CarouselPrevious
 } from "@/components/ui/carousel";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { getFirstCurriculumYoutubeVideoId } from "@/lib/danceYoutube";
 
 type CurriculumGenre = keyof typeof danceCurriculum;
 type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
 type DanceWithGenre = CurriculumDance & { genre: CurriculumGenre };
-
-type DanceTutorial = { link?: string };
 
 // Helper function to get all dances from the curriculum
 const getAllDances = (): DanceWithGenre[] => {
@@ -93,19 +92,6 @@ export function DanceCarousel() {
     }
   };
 
-  // Get tutorial YouTube ID from the first tutorial link
-  const getVideoId = (tutorials: DanceTutorial[]) => {
-    if (!tutorials || tutorials.length === 0) return null;
-
-    const youtubeLink = tutorials[0]?.link;
-    if (!youtubeLink) return null;
-
-    const regex =
-      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\s]{11})/;
-    const match = youtubeLink.match(regex);
-    return match ? match[1] : null;
-  };
-
   return (
     <section id="dances" className="py-14 bg-white font-afro">
       <div className="container mx-auto px-4">
@@ -138,7 +124,7 @@ export function DanceCarousel() {
         >
           <CarouselContent className="-ml-4">
             {dances.slice(0, 8).map((dance) => {
-              const videoId = getVideoId(dance.tutorials);
+              const videoId = getFirstCurriculumYoutubeVideoId(dance) || null;
               const flagUrl = getFlag(dance.origin);
               return (
                 <CarouselItem key={dance.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">

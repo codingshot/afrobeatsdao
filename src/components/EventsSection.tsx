@@ -3,6 +3,7 @@ import { formatDate } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { VibesRightNowCta } from "@/components/VibesRightNowCta";
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slugUtils";
 import EVENTS_DATA from "@/data/events.json";
@@ -189,6 +190,7 @@ export function EventsSection() {
                 Show upcoming events
               </Button>
             )}
+            <VibesRightNowCta tone="light" className="mt-2 max-w-xl mx-auto text-left" />
           </div>
         )}
       </div>

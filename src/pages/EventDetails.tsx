@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { deslugify, slugify } from '@/lib/slugUtils';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { VibesRightNowCta } from "@/components/VibesRightNowCta";
 import { CalendarDays, MapPin, Users, ExternalLink, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -121,6 +122,7 @@ const EventDetails = () => {
                 Back to Events
               </Link>
             </Button>
+            <VibesRightNowCta tone="light" className="mt-10 w-full max-w-lg" />
           </div>
         </main>
         <Footer />
@@ -428,6 +430,10 @@ const EventDetails = () => {
                 </div>
               </div>
             )}
+
+            <div className="mt-12 mb-4">
+              <VibesRightNowCta tone="dark" />
+            </div>
           </div>
         </main>
         

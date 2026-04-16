@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,13 +14,14 @@ import { Dance } from "./DanceDetails";
 import { danceCurriculum } from "@/data/dance-curriculum";
 import { Helmet } from "react-helmet";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getYoutubeVideoId } from "@/lib/youtubeVideoId";
+import { getPrimaryYoutubeTutorial } from "@/lib/danceYoutube";
 
 interface DanceContentProps {
   dance: Dance;
 }
 
 type DanceSong = NonNullable<Dance["songs"]>[number];
-type DanceTutorial = NonNullable<Dance["tutorials"]>[number];
 
 export const DanceContent = ({ dance }: DanceContentProps) => {
   const [selectedTab, setSelectedTab] = useState("overview");
@@ -223,20 +224,38 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     return (danceProgress.moduleProgress.length * 100) / dance.modules.length;
   };
 
-  const isTutorialAvailable = (tutorial: DanceTutorial) => {
-    return tutorial && tutorial.link && (tutorial.link.includes('youtube.com') || tutorial.link.includes('youtu.be'));
-  };
+  const primaryYoutubeTutorial = useMemo(
+    () => getPrimaryYoutubeTutorial(dance.tutorials),
+    [dance.tutorials]
+  );
 
-  // Extract YouTube video ID from link
-  const getYoutubeVideoId = (link: string) => {
-    if (!link) return null;
-    if (link.includes('youtu.be/')) {
-      return link.split('/').pop();
+  const learnVideo = useMemo(() => {
+    if (primaryYoutubeTutorial) {
+      const id = getYoutubeVideoId(primaryYoutubeTutorial.link);
+      return {
+        id,
+        title: primaryYoutubeTutorial.title,
+        subtitle: `By ${primaryYoutubeTutorial.creator || primaryYoutubeTutorial.platform}`,
+        openUrl: primaryYoutubeTutorial.link,
+        heading: "Video tutorial",
+      };
     }
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = link.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
-  };
+    const song = dance.songs?.[0];
+    if (song?.youtube) {
+      const id = getYoutubeVideoId(song.youtube);
+      return {
+        id,
+        title: song.title,
+        subtitle: `By ${song.artist}`,
+        openUrl: song.youtube,
+        heading: "Practice video",
+      };
+    }
+    return null;
+  }, [primaryYoutubeTutorial, dance.songs]);
+
+  const isYoutubeEmbedReady = (id: string) =>
+    id.replace(/[^a-zA-Z0-9_-]/g, "").length >= 6;
 
   return (
     <>
@@ -347,16 +366,16 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                               <Button 
                                 variant="outline" 
                                 className={`flex-1 ${
-                                  dance.tutorials && dance.tutorials[0] 
+                                  primaryYoutubeTutorial
                                   ? "border-[#008751] text-[#008751] hover:bg-[#008751]/10" 
                                   : "border-gray-600 text-gray-500 cursor-not-allowed"
                                 }`}
-                                onClick={() => dance.tutorials && dance.tutorials[0] && handleModuleAction('tutorial', idx)}
-                                disabled={!dance.tutorials || !dance.tutorials[0]}
+                                onClick={() => primaryYoutubeTutorial && handleModuleAction('tutorial', idx)}
+                                disabled={!primaryYoutubeTutorial}
                               >
                                 <Play className="mr-2 h-4 w-4" /> 
                                 Tutorial
-                                {(!dance.tutorials || !dance.tutorials[0]) && " (Unavailable)"}
+                                {!primaryYoutubeTutorial && " (Unavailable)"}
                               </Button>
                               <Button 
                                 variant="outline" 
@@ -383,51 +402,30 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
           </TabsContent>
           
           <TabsContent value="learn" className="space-y-6">
-            {dance.tutorials && dance.tutorials[0] && (
+            {learnVideo && (
               <div className="space-y-4">
-                <h3 className="text-lg md:text-xl font-semibold text-[#FFD600]">Video Tutorial</h3>
-                {isTutorialAvailable(dance.tutorials[0]) ? (
+                <h3 className="text-lg md:text-xl font-semibold text-[#FFD600]">{learnVideo.heading}</h3>
+                {isYoutubeEmbedReady(learnVideo.id) ? (
                   <>
                     <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                      {getYoutubeVideoId(dance.tutorials[0].link) ? (
-                        <iframe
-                          className="w-full h-full"
-                          src={`https://www.youtube.com/embed/${getYoutubeVideoId(dance.tutorials[0].link)}`}
-                          title={dance.tutorials[0].title}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      ) : (
-                        // Fallback to dance image when YouTube video is unavailable
-                        <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
-                          <div className="h-full w-full flex flex-col items-center justify-center">
-                            {dance.image ? (
-                              <img
-                                src={dance.image}
-                                alt={`${dance.name} preview`}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="text-gray-400 flex flex-col items-center justify-center h-full w-full bg-gray-900/70">
-                                <p>Preview not available</p>
-                              </div>
-                            )}
-                          </div>
-                        </AspectRatio>
-                      )}
+                      <iframe
+                        className="w-full h-full"
+                        src={`https://www.youtube.com/embed/${learnVideo.id}`}
+                        title={learnVideo.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-medium text-white">{dance.tutorials[0].title}</h4>
-                        <p className="text-sm text-gray-400">
-                          By {dance.tutorials[0].creator || dance.tutorials[0].platform}
-                        </p>
+                        <h4 className="font-medium text-white">{learnVideo.title}</h4>
+                        <p className="text-sm text-gray-400">{learnVideo.subtitle}</p>
                       </div>
                       <Button 
                         variant="outline" 
                         size="sm" 
                         className="text-white border-gray-700 hover:bg-white/10"
-                        onClick={() => window.open(dance.tutorials[0].link, '_blank')}
+                        onClick={() => window.open(learnVideo.openUrl, '_blank')}
                       >
                         <Youtube className="mr-2 h-4 w-4" />
                         Open on YouTube
@@ -435,7 +433,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                     </div>
                   </>
                 ) : (
-                  // Show dance image when tutorial is not available
                   <div className="aspect-video bg-gray-900/50 rounded-lg overflow-hidden">
                     {dance.image ? (
                       <AspectRatio ratio={16/9} className="rounded-lg overflow-hidden">
@@ -447,7 +444,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                       </AspectRatio>
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <p className="text-gray-400">Tutorial not available</p>
+                        <p className="text-gray-400">Video preview not available</p>
                       </div>
                     )}
                   </div>
@@ -482,7 +479,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                   {dance.songs.map((song, idx) => (
                     <Card key={idx} className="overflow-hidden bg-gray-900 border-gray-800">
                       <div className="aspect-video">
-                        {getYoutubeVideoId(song.youtube) ? (
+                        {isYoutubeEmbedReady(getYoutubeVideoId(song.youtube)) ? (
                           <iframe
                             className="w-full h-full"
                             src={`https://www.youtube.com/embed/${getYoutubeVideoId(song.youtube)}`}

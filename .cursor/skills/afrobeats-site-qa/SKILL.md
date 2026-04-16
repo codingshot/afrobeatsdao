@@ -59,6 +59,10 @@ and internal route patterns (`src/lib/siteContentQA.ts`, `siteRoutes.ts`,
 1. Run `validateClubRecords` expectations via `npm run test`.
 2. Manually verify `coordinates` as **[longitude, latitude]** and that
    `google_maps` matches `address`.
+3. For **adding or auditing venues**, follow the project skill
+   **afrobeats-clubs-curation** (`.cursor/skills/afrobeats-clubs-curation/SKILL.md`):
+   official URL checks, extending **`getClubCountry`** / flags when adding a
+   new `city`, and honest venue typing.
 
 ## Dances and routing
 

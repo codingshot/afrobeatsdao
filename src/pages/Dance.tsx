@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Music, Headphones, ArrowRight, Play, Plus, Filter } from "lucide-react";
+import { Music, Headphones, ArrowRight, Play, Plus, Shuffle, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCountryFlags } from "@/hooks/use-country-flags";
 import { danceCurriculum } from "@/data/dance-curriculum";
@@ -14,6 +14,7 @@ import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { ResumableDances } from "@/components/dance/ResumableDances";
 import { DanceProgressIndicator } from "@/components/dance/DanceProgressIndicator";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
+import { getFirstCurriculumYoutubeVideoId } from "@/lib/danceYoutube";
 
 type CurriculumGenre = keyof typeof danceCurriculum;
 type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
@@ -117,6 +118,38 @@ const DancePage = () => {
   };
 
   const filteredDances = filterDances();
+
+  /** Dances for the selected genre tab only (ignores country / difficulty) — used when filters hide every card. */
+  const getDancesGenreScope = (): DanceWithGenre[] => {
+    if (selectedGenre === "all") {
+      return [
+        ...danceCurriculum.afrobeats.map((dance) => ({ ...dance, genre: "afrobeats" as const })),
+        ...danceCurriculum.amapiano.map((dance) => ({ ...dance, genre: "amapiano" as const })),
+      ];
+    }
+    return danceCurriculum[selectedGenre as CurriculumGenre].map((dance) => ({
+      ...dance,
+      genre: selectedGenre as CurriculumGenre,
+    }));
+  };
+
+  const resolveActionPool = (): DanceWithGenre[] => {
+    if (filteredDances.length > 0) return filteredDances;
+    return getDancesGenreScope();
+  };
+
+  const handleQuickStart = () => {
+    const pool = resolveActionPool();
+    if (pool.length === 0) return;
+    handleDanceSelect(pool[0]);
+  };
+
+  const handleRandomDance = () => {
+    const pool = resolveActionPool();
+    if (pool.length === 0) return;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    handleDanceSelect(pick);
+  };
   
   const clearFilters = () => {
     setSelectedCountry("all");  // Changed from "" to "all"
@@ -193,6 +226,26 @@ const DancePage = () => {
                 </ToggleGroup>
               </div>
 
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-1">
+                <Button
+                  type="button"
+                  className="bg-black text-[#FFD600] border border-black hover:bg-black/90 font-semibold shadow-sm"
+                  onClick={handleQuickStart}
+                >
+                  <Zap className="mr-2 h-4 w-4 shrink-0" />
+                  Quick start
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-black/25 bg-white/90 text-black hover:bg-white font-semibold"
+                  onClick={handleRandomDance}
+                >
+                  <Shuffle className="mr-2 h-4 w-4 shrink-0" />
+                  Random dance
+                </Button>
+              </div>
+
               {/* Filters */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="w-full sm:w-auto">
@@ -255,18 +308,20 @@ const DancePage = () => {
               </Button>
             </div>
           ) : (
-            filteredDances.map((dance, index) => (
+            filteredDances.map((dance, index) => {
+              const previewVideoId = getFirstCurriculumYoutubeVideoId(dance);
+              return (
               <Card 
                 key={`${dance.genre}-${dance.id}`}
                 className="bg-black/70 border-white/20 hover:border-[#FFD600] transition-colors cursor-pointer text-white overflow-hidden animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
                 onClick={() => handleDanceSelect(dance)}
               >
-                {dance.tutorials && dance.tutorials[0] && (
+                {previewVideoId ? (
                   <div className="aspect-video w-full bg-gray-900 relative group">
                     <iframe
                       className="w-full h-full"
-                      src={`https://www.youtube.com/embed/${dance.tutorials[0].link.split('=')[1] || dance.tutorials[0].link.split('/').pop()}?controls=0`}
+                      src={`https://www.youtube.com/embed/${previewVideoId}?controls=0`}
                       title={dance.name}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     />
@@ -276,7 +331,11 @@ const DancePage = () => {
                       </Button>
                     </div>
                   </div>
-                )}
+                ) : dance.image ? (
+                  <div className="aspect-video w-full bg-gray-900 relative overflow-hidden">
+                    <img src={dance.image} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ) : null}
                 
                 <CardHeader className="bg-[#FFD600] text-black p-3">
                   <div className="flex items-center justify-between">
@@ -365,7 +424,8 @@ const DancePage = () => {
                   </Button>
                 </CardContent>
               </Card>
-            ))
+              );
+            })
           )}
         </div>
       </div>

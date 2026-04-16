@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { MapPin, ExternalLink, Music, Clock, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
+import { getClubCountry } from '@/data/clubs';
 // The import below is handled by MapWrapper.tsx
 // import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -78,14 +79,6 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
     }
   }, [activeCardIndex, carouselApi]);
 
-  const getCountryFromCity = (city: string) => {
-    if (city === "London") return "United Kingdom";
-    if (city === "Bangkok") return "Thailand";
-    if (city === "Dublin") return "Ireland";
-    if (city === "Amsterdam") return "Netherlands";
-    return "";
-  };
-
   const handleCardSelect = (club: Club, index: number) => {
     setActiveCardIndex(index);
     if (mapRef && club.coordinates) {
@@ -139,7 +132,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                     <CardContent className="p-2">
                       <div className="flex items-center gap-2 mb-2">
                         <img 
-                          src={getFlag(getCountryFromCity(club.city))} 
+                          src={getFlag(getClubCountry(club.city))} 
                           alt={`${club.city} flag`}
                           className="w-6 h-4 object-cover rounded-sm"
                         />
@@ -231,7 +224,7 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
                   <CardContent className="space-y-2">
                     <div className="flex items-center gap-2">
                       <img 
-                        src={getFlag(getCountryFromCity(club.city))} 
+                        src={getFlag(getClubCountry(club.city))} 
                         alt={`${club.city} flag`}
                         className="w-6 h-4 object-cover rounded-sm"
                       />

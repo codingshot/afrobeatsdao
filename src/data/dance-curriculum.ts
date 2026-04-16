@@ -52,6 +52,24 @@ export const danceCurriculum = {
           artist: "Naira Marley",
           youtube: "https://www.youtube.com/watch?v=u-MpjTKZiZc",
           spotify: "https://open.spotify.com/track/3hWpsq7VFSW03BXfH6mUjC"
+        },
+        {
+          title: "Tesumole",
+          artist: "Naira Marley",
+          youtube: "https://www.youtube.com/watch?v=8-f24T4gfr8",
+          spotify: "https://open.spotify.com/track/5S68HS59VTLtYgR3DeAGz6"
+        },
+        {
+          title: "Cash App",
+          artist: "Bella Shmurda, Zlatan & Lincoln",
+          youtube: "https://www.youtube.com/watch?v=n1S66UhdIwA",
+          spotify: "https://open.spotify.com/track/66OmUVUiuja0zp423wGqhr"
+        },
+        {
+          title: "Bolanle",
+          artist: "IVD ft. Zlatan",
+          youtube: "https://www.youtube.com/watch?v=RDJw79JzFNs",
+          spotify: "https://open.spotify.com/track/7gSlSNvxiHC9HrKKbgKzYd"
         }
       ],
       tutorials: [
@@ -120,6 +138,18 @@ export const danceCurriculum = {
           artist: "Sarkodie",
           youtube: "https://www.youtube.com/watch?v=kLDUQEtZHmM",
           spotify: "https://open.spotify.com/track/2iTzNWT7x2NXpMngGZQzPd"
+        },
+        {
+          title: "Antenna",
+          artist: "Fuse ODG ft. Wyclef Jean",
+          youtube: "https://www.youtube.com/watch?v=6LCoksSQMzs",
+          spotify: "https://open.spotify.com/track/4HhYJgNbyHdJBYlYWx0fRm"
+        },
+        {
+          title: "Adonai",
+          artist: "Sarkodie ft. Castro",
+          youtube: "https://www.youtube.com/watch?v=ipZvlG-wwWk",
+          spotify: "https://open.spotify.com/track/4EMOdqB2ALVMtd7vUWMjGZ"
         }
       ],
       tutorials: [
@@ -190,6 +220,24 @@ export const danceCurriculum = {
           artist: "Lil Kesh",
           youtube: "https://www.youtube.com/watch?v=5NazEJLDYgk",
           spotify: "https://open.spotify.com/track/5jZRPNzSWiUQrQpZ9AiBcA"
+        },
+        {
+          title: "Bobo",
+          artist: "Olamide",
+          youtube: "https://www.youtube.com/watch?v=SFmZKO35SfQ",
+          spotify: "https://open.spotify.com/track/4sQKJSlLADp2yUsiSDrjSq"
+        },
+        {
+          title: "Issa Goal",
+          artist: "Naira Marley x Olamide x Lil Kesh",
+          youtube: "https://www.youtube.com/watch?v=D-zdHo4LJJI",
+          spotify: "https://open.spotify.com/track/2Ik44IAMWERhfXtt6uTgej"
+        },
+        {
+          title: "Is It Because I Love You",
+          artist: "Lil Kesh ft. Patoranking",
+          youtube: "https://www.youtube.com/watch?v=mx8O1ZRlTiI",
+          spotify: "https://open.spotify.com/track/2QjOHJqmoUkNVpMf0MdxU4"
         }
       ],
       tutorials: [
@@ -264,6 +312,18 @@ export const danceCurriculum = {
           artist: "African China",
           youtube: "https://www.youtube.com/watch?v=F_gMiZJQ0wk",
           spotify: "https://open.spotify.com/track/0Z8GtfsxMoXZHvtRdMubBd"
+        },
+        {
+          title: "Fire",
+          artist: "Daddy Showkey",
+          youtube: "https://www.youtube.com/watch?v=9yE0HTPkfzs",
+          spotify: "https://open.spotify.com/track/2RhJK5pVYKvwKTkTubUhzR"
+        },
+        {
+          title: "Mr. President",
+          artist: "African China",
+          youtube: "https://www.youtube.com/watch?v=nK7UUKxTMLM",
+          spotify: "https://open.spotify.com/track/7uuLMUjWaekZNamsn8TVsN"
         }
       ],
       tutorials: [
@@ -338,6 +398,18 @@ export const danceCurriculum = {
           artist: "Zlatan",
           youtube: "https://www.youtube.com/watch?v=LAlNHBlDCPE",
           spotify: "https://open.spotify.com/track/3LbFmQlvPt8ZbNdrOjoLvk"
+        },
+        {
+          title: "Belle",
+          artist: "DJ Xclusive",
+          youtube: "https://www.youtube.com/watch?v=DL6fKBhzHUc",
+          spotify: "https://open.spotify.com/track/5GyLkztXZ0exlpPQ4GLnoZ"
+        },
+        {
+          title: "Dami Si",
+          artist: "DJ Xclusive ft. Lil Kesh & CDQ",
+          youtube: "https://www.youtube.com/watch?v=cps_ly1Av5k",
+          spotify: "https://open.spotify.com/track/2PDOQt0gHfK0BhmzB9yDFj"
         }
       ],
       tutorials: [
@@ -412,6 +484,24 @@ export const danceCurriculum = {
           artist: "Focalistic",
           youtube: "https://www.youtube.com/watch?v=XjJ_L-THNl0",
           spotify: "https://open.spotify.com/track/0hKVw9d0hh633BMCqPyUF8"
+        },
+        {
+          title: "Gwaragwara",
+          artist: "DJ Bongz",
+          youtube: "https://www.youtube.com/watch?v=QYm1UBALJYg",
+          spotify: "https://open.spotify.com/track/3hGlMT4yW4WgIBEi7YpmJx"
+        },
+        {
+          title: "Ke Star (Remix)",
+          artist: "Focalistic & Davido ft. Vigro Deep",
+          youtube: "https://www.youtube.com/watch?v=oQKKCXXRcKE",
+          spotify: "https://open.spotify.com/track/7b3991NnMDhwZRq7C2Cpgc"
+        },
+        {
+          title: "Koko",
+          artist: "DJ Maphorisa x Kabza De Small ft. Mhaw Keys",
+          youtube: "https://www.youtube.com/watch?v=c0fuyILii2g",
+          spotify: "https://open.spotify.com/track/0flCORlQex42XHc0SiIlaS"
         }
       ],
       tutorials: [
@@ -489,6 +579,29 @@ export const danceCurriculum = {
           youtube: "https://www.youtube.com/watch?v=yDc58GmFJK0",
           spotify: "https://open.spotify.com/track/2NbUnaGrjwRuRjZ5EPyOR5",
           appleMusic: "https://music.apple.com/us/song/love-you-tonight-feat-dj-maphorisa-sha-sha-kabza-de-small/1483225542"
+        },
+        {
+          title: "Tshwala Bam (Remix)",
+          artist: "TitoM & Yuppe ft. Burna Boy & S.N.E",
+          youtube: "https://www.youtube.com/watch?v=Hg3aMnVU1xU",
+          spotify: "https://open.spotify.com/track/6cyXHTix4NQ069gKJEYv41"
+        },
+        {
+          title: "Inhlupheko",
+          artist: "TitoM & Yuppe ft. Ceehle & Major Keys",
+          youtube: "https://www.youtube.com/watch?v=7-qFzx5GbTo",
+          spotify: "https://open.spotify.com/track/3bmw8E1wtREmGdIvaILou7"
+        },
+        {
+          title: "Asibe Happy",
+          artist: "Kabza De Small & DJ Maphorisa ft. Ami Faku",
+          youtube: "https://www.youtube.com/watch?v=rmeyxtWagrY",
+          spotify: "https://open.spotify.com/track/6F70m9aMK4PSJKBfp1H8DZ"
+        },
+        {
+          title: "Let Me Be (Ngiyeke)",
+          artist: "DJ Maphorisa x Kabza De Small",
+          youtube: "https://www.youtube.com/watch?v=HzLpg2IfSPY"
         }
       ],
       tutorials: [
@@ -496,7 +609,7 @@ export const danceCurriculum = {
           title: "Tshwala Bam Tutorial",
           platform: "YouTube",
           creator: "Limpopo Boy",
-          link: "https://www.youtube.com/watch?v=c5w-ExP2GRU"
+          link: "https://www.youtube.com/watch?v=6vTO9fzH1iY"
         },
         {
           title: "Tshwala Bam Basics",
@@ -538,6 +651,96 @@ export const danceCurriculum = {
         traditional: "Raw, Amapiano-driven, minimalistic",
         modern: "Polished, Afrobeats/hip-hop influences"
       }
+    },
+    {
+      id: "zep-zep",
+      name: "Zep / Zep Zep",
+      origin: "South Africa",
+      description:
+        "A viral Amapiano-forward social dance and challenge (often called Zep, Zep Zep, or ZEP) that spread through TikTok, Reels, and club floors in the mid-2020s. It pairs sharp, syncopated footwork with punchy arm hits and call-and-response energy—usually drilled to mid-tempo log-drum grooves rather than a single official 'Zep' release.",
+      difficulty: "Medium",
+      image: "/dances/zep-zep.gif",
+      modules: [
+        "Stance and bounce on the log drum",
+        "Zep footwork patterns",
+        "Arm hits and upper-body accents",
+        "Challenge phrasing and freestyle"
+      ],
+      keyMoves: [
+        {
+          name: "Bounce pocket",
+          steps: [
+            "Feet under hips, soft knees, chest over hips",
+            "Bounce on snare or clap—not every kick drum",
+            "Keep ankles springy for quick direction changes"
+          ]
+        },
+        {
+          name: "Zep step",
+          steps: [
+            "Small lateral or diagonal steps on the offbeat",
+            "Think 'tap-tap-hold' with the bassline, not big house steps",
+            "Reset the weight quickly so you can double-time on drops"
+          ]
+        },
+        {
+          name: "Arm hits",
+          steps: [
+            "Short outward or downward punches on accents",
+            "Alternate arms with the Zep step so the body looks 'typed'",
+            "Relax the hands between hits to avoid looking stiff"
+          ]
+        }
+      ],
+      notableDancers: ["Community creators on TikTok & YouTube", "Amapiano DJs & MCs", "Club freestyle collectives"],
+      songs: [
+        {
+          title: "ZEP ZEP ZEP (Amapiano dance challenge highlights)",
+          artist: "Bujwa Nation 2.0",
+          youtube: "https://www.youtube.com/watch?v=B0T9bpSIvoY"
+        },
+        {
+          title: "Ke Star",
+          artist: "Focalistic ft. Vigro Deep",
+          youtube: "https://www.youtube.com/watch?v=XjJ_L-THNl0",
+          spotify: "https://open.spotify.com/track/0hKVw9d0hh633BMCqPyUF8"
+        },
+        {
+          title: "Ke Star (Remix)",
+          artist: "Focalistic & Davido ft. Vigro Deep",
+          youtube: "https://www.youtube.com/watch?v=oQKKCXXRcKE",
+          spotify: "https://open.spotify.com/track/7b3991NnMDhwZRq7C2Cpgc"
+        },
+        {
+          title: "Koko",
+          artist: "DJ Maphorisa x Kabza De Small ft. Mhaw Keys",
+          youtube: "https://www.youtube.com/watch?v=c0fuyILii2g",
+          spotify: "https://open.spotify.com/track/0flCORlQex42XHc0SiIlaS"
+        }
+      ],
+      tutorials: [
+        {
+          title: "ZEP Amapiano tutorial (beginners)",
+          platform: "YouTube",
+          creator: "Various instructors",
+          link: "https://www.youtube.com/watch?v=xFEWJw4c7ss"
+        },
+        {
+          title: "Highly requested Zep tutorial",
+          platform: "TikTok",
+          creator: "@itsracks_",
+          link: "https://www.tiktok.com/@itsracks_/video/7607621336860495122"
+        }
+      ],
+      culturalContext:
+        "Zep sits in the same pipeline as other Amapiano internet challenges: short clips teachable in under a minute, duets and stitches for remix culture, and club nights that turn online phrases into floor rituals. Names and exact choreography shift by city and sound—credit the creators you learn from and treat slang lyrics and gestures with cultural respect.",
+      historicalBackground:
+        "The ZEP / Zep Zep wave accelerated alongside global Amapiano touring and TikTok challenge mechanics in 2025–2026. Because it is community-sourced rather than a single choreographer's syllabus, keep descriptions inclusive ('challenge' / 'trend') and refresh links as creators publish new breakdowns.",
+      modernVariations: [
+        "Zep on faster 125–130 BPM edits",
+        "Zep fused with Nigerian legwork for diaspora sets",
+        "Couples / line-formation Zep for events"
+      ]
     },
     {
       id: "vosho",
@@ -592,6 +795,18 @@ export const danceCurriculum = {
           artist: "DJ Maphorisa",
           youtube: "https://www.youtube.com/watch?v=LcOIXlQQ2t0",
           spotify: "https://open.spotify.com/track/4nVBt6MZDDM2zHY9pKSlx1"
+        },
+        {
+          title: "Asibe Happy",
+          artist: "Kabza De Small & DJ Maphorisa ft. Ami Faku",
+          youtube: "https://www.youtube.com/watch?v=rmeyxtWagrY",
+          spotify: "https://open.spotify.com/track/6F70m9aMK4PSJKBfp1H8DZ"
+        },
+        {
+          title: "Wololo",
+          artist: "Babes Wodumo ft. Mampintsha",
+          youtube: "https://www.youtube.com/watch?v=hlkybvVEQ4g",
+          spotify: "https://open.spotify.com/track/7ytYzBHkEhgF8RPWjCITEB"
         }
       ],
       tutorials: [
@@ -666,6 +881,18 @@ export const danceCurriculum = {
           artist: "MFR Souls",
           youtube: "https://www.youtube.com/watch?v=zjHAYOtGRC0",
           spotify: "https://open.spotify.com/track/2pQCg0prJgM5MHvKBgEMQI"
+        },
+        {
+          title: "Ke Star (Remix)",
+          artist: "Focalistic & Davido ft. Vigro Deep",
+          youtube: "https://www.youtube.com/watch?v=oQKKCXXRcKE",
+          spotify: "https://open.spotify.com/track/7b3991NnMDhwZRq7C2Cpgc"
+        },
+        {
+          title: "Konka",
+          artist: "MFR Souls ft. Big Zulu",
+          youtube: "https://www.youtube.com/watch?v=FM49HpLo8ME",
+          spotify: "https://open.spotify.com/track/2IDyAHTCBfqMrx3yfmkHeo"
         }
       ],
       tutorials: [
@@ -740,6 +967,23 @@ export const danceCurriculum = {
           artist: "Kabza De Small",
           youtube: "https://www.youtube.com/watch?v=J07MT4KpMjk",
           spotify: "https://open.spotify.com/track/4wZlndCeGaE5KoNqXLJxTq"
+        },
+        {
+          title: "Zekete",
+          artist: "Ommy Dimpoz, DJ Maphorisa & Kabza De Small",
+          youtube: "https://www.youtube.com/watch?v=CqHg507r2zw",
+          spotify: "https://open.spotify.com/track/2MU4RNIdrqbPuYaDecnJOo"
+        },
+        {
+          title: "Konka",
+          artist: "MFR Souls ft. Big Zulu",
+          youtube: "https://www.youtube.com/watch?v=FM49HpLo8ME",
+          spotify: "https://open.spotify.com/track/2IDyAHTCBfqMrx3yfmkHeo"
+        },
+        {
+          title: "Let Me Be (Ngiyeke)",
+          artist: "DJ Maphorisa x Kabza De Small",
+          youtube: "https://www.youtube.com/watch?v=HzLpg2IfSPY"
         }
       ],
       tutorials: [

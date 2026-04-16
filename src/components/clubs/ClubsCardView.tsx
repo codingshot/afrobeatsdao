@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { MapPin, ExternalLink, Info, Clock, Music, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
+import { getClubCountry } from '@/data/clubs';
 import { Badge } from '@/components/ui/badge';
 import { MapPinOff } from 'lucide-react';
 
@@ -14,14 +15,6 @@ interface ClubsCardViewProps {
 
 const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
   const { getFlag } = useCountryFlags();
-
-  const getCountryFromCity = (city: string) => {
-    if (city === "London") return "United Kingdom";
-    if (city === "Bangkok") return "Thailand";
-    if (city === "Dublin") return "Ireland";
-    if (city === "Amsterdam") return "Netherlands";
-    return "";
-  };
 
   if (clubs.length === 0) {
     return (
@@ -44,7 +37,7 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
             <div className="flex justify-between items-start">
               <div className="flex items-start gap-2">
                 <img 
-                  src={getFlag(getCountryFromCity(club.city))} 
+                  src={getFlag(getClubCountry(club.city))} 
                   alt={`${club.city} flag`}
                   className="w-6 h-4 object-cover rounded-sm mt-1"
                 />

@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
 import QueueDrawer from "./QueueDrawer";
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, List, ListCollapse } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Repeat, Repeat1, Share2, Music2, Maximize, Minimize, Video, VideoOff, List, ListCollapse, Sparkles } from "lucide-react";
 import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar } from "@/components/ui/avatar";
 import { getYoutubeVideoId } from "@/lib/youtubeVideoId";
+import { collectRandomPlayableSongs, shuffleArray } from "@/lib/randomSongPool";
 
 /** Minimal typing for the iframe API surface we use */
 export interface YoutubePlayerApi {
@@ -56,6 +57,8 @@ interface GlobalAudioPlayerContextType {
   isPlaying: boolean;
   playNow: (song: Song) => void;
   addToQueue: (song: Song) => void;
+  /** Random track now + shuffled lineup prepended to the queue (I'm feeling lucky). */
+  feelingLucky: () => void;
   removeFromQueue: (songId: string) => void;
   togglePlay: () => void;
   nextSong: () => void;
@@ -67,6 +70,9 @@ interface GlobalAudioPlayerContextType {
   currentTime: number;
   isDragging: boolean;
 }
+
+/** How many shuffled tracks to queue after the first random play. */
+const FEELING_LUCKY_LINEUP = 14;
 
 // Local storage keys
 const STORAGE_KEYS = {
@@ -294,6 +300,26 @@ export const GlobalAudioPlayerProvider = ({
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
   }, []);
+
+  const feelingLucky = useCallback(() => {
+    const pool = collectRandomPlayableSongs();
+    if (pool.length === 0) {
+      toast({
+        title: "Nothing to play",
+        description: "No tracks are available for random mode yet.",
+      });
+      return;
+    }
+    const shuffled = shuffleArray(pool);
+    const first = shuffled[0] as Song;
+    const lineup = shuffled.slice(1, 1 + FEELING_LUCKY_LINEUP) as Song[];
+    playNow(first);
+    setQueue((prev) => [...lineup, ...prev]);
+    toast({
+      title: "I'm feeling lucky",
+      description: `Now playing ${first.title ?? "a random pick"}${first.artist ? ` · ${first.artist}` : ""}. ${lineup.length} more lined up next.`,
+    });
+  }, [playNow, toast]);
 
   const removeFromQueue = useCallback((songId: string) => {
     setQueue(prev => prev.filter(song => song.id !== songId));
@@ -572,6 +598,7 @@ export const GlobalAudioPlayerProvider = ({
     isPlaying,
     playNow,
     addToQueue,
+    feelingLucky,
     removeFromQueue,
     togglePlay,
     nextSong,
@@ -672,6 +699,17 @@ export const GlobalAudioPlayerProvider = ({
                   <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
                     <SkipForward className="h-4 w-4" />
                   </Button>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={feelingLucky}
+                    className="text-[#FFD600] hover:bg-[#FFD600]/15"
+                    title="I'm feeling lucky — random song + random queue"
+                    aria-label="I'm feeling lucky — play a random song and queue more random tracks"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                  </Button>
                   
                   <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
                     {repeat ? <Repeat1 className="h-4 w-4" /> : <Repeat className="h-4 w-4" />}
@@ -751,6 +789,17 @@ export const GlobalAudioPlayerProvider = ({
                     <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
                       <SkipForward className="h-5 w-5" />
                     </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={feelingLucky}
+                      className="text-[#FFD600] hover:bg-[#FFD600]/15"
+                      title="I'm feeling lucky — random song + random queue"
+                      aria-label="I'm feeling lucky — play a random song and queue more random tracks"
+                    >
+                      <Sparkles className="h-5 w-5" />
+                    </Button>
                     
                     <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
                       {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
@@ -795,12 +844,22 @@ export const GlobalAudioPlayerProvider = ({
             )}
           </div>
         ) : (
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="flex items-center gap-4">
               <Music2 className="h-8 w-8 text-[#FFD600]" />
               <span className="text-sm">Afrobeats Player</span>
             </div>
-            <Button onClick={() => {
+            <div className="flex flex-wrap items-center gap-2 justify-end">
+              <Button
+                variant="outline"
+                onClick={feelingLucky}
+                className="border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
+                title="I'm feeling lucky — random song + random queue"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                I&apos;m feeling lucky
+              </Button>
+              <Button onClick={() => {
               const defaultVideo = getRandomVibeVideo();
               playNow({
                 id: `default-vibe-${defaultVideo}`,
@@ -811,6 +870,7 @@ export const GlobalAudioPlayerProvider = ({
               <Play className="mr-2 h-4 w-4" />
               Play Something
             </Button>
+            </div>
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { MapItem } from '@/types/map';
 import { ARTISTS } from '@/data/artists';
-import { CLUBS } from '@/data/clubs';
+import { CLUBS, getClubCountry } from '@/data/clubs';
 import eventsData from '@/data/events.json';
 import communityData from '@/data/community.json';
 
@@ -56,14 +56,11 @@ export const useMapData = () => {
       CLUBS.forEach(club => {
         if (club.coordinates && club.coordinates.length === 2) {
           mapItems.push({
-            id: `club-${club.name.replace(/\s+/g, '-').toLowerCase()}`,
+            id: `club-${club.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`,
             name: club.name,
             type: 'club',
             coordinates: [club.coordinates[0], club.coordinates[1]] as [number, number],
-            country: club.city === 'London' ? 'United Kingdom' : 
-                     club.city === 'Bangkok' ? 'Thailand' :
-                     club.city === 'Dublin' ? 'Ireland' :
-                     club.city === 'Amsterdam' ? 'Netherlands' : 'Unknown',
+            country: getClubCountry(club.city) || "Unknown",
             city: club.city,
             description: club.type,
             openingHours: club.hours,

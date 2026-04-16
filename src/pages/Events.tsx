@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { VibesRightNowCta } from "@/components/VibesRightNowCta";
 import { Calendar, Filter, Search, MapPin, ExternalLink, CalendarX, RotateCcw, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -404,6 +405,7 @@ const Events = () => {
                     </Button>
                   )}
                 </div>
+                <VibesRightNowCta tone="light" className="mt-8 max-w-2xl mx-auto" />
               </div>
             )}
           </div>

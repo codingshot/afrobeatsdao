@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { CLUBS } from '@/data/clubs';
+import { CLUBS, getClubCountry } from '@/data/clubs';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -12,14 +12,6 @@ export const ClubsSection = () => {
   const {
     getFlag
   } = useCountryFlags();
-
-  const getCountryFromCity = (city: string) => {
-    if (city === "London") return "United Kingdom";
-    if (city === "Bangkok") return "Thailand";
-    if (city === "Dublin") return "Ireland";
-    if (city === "Amsterdam") return "Netherlands";
-    return "";
-  };
 
   const handleClubClick = (club: typeof CLUBS[0]) => {
     if (club.website) {
@@ -53,7 +45,7 @@ export const ClubsSection = () => {
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-2 mb-3">
-                      <img src={getFlag(getCountryFromCity(club.city))} alt={`${club.city} flag`} className="w-6 h-4 object-cover rounded-sm mt-1" />
+                      <img src={getFlag(getClubCountry(club.city))} alt={`${club.city} flag`} className="w-6 h-4 object-cover rounded-sm mt-1" />
                       <div>
                         <h3 className="font-semibold text-lg">{club.name}</h3>
                         <p className="text-sm text-muted-foreground">{club.city}</p>
