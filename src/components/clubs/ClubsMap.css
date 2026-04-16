@@ -8,13 +8,42 @@
   background-image: url(https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png);
 }
 
-/* Fix for popup width on mobile */
+/* Custom divIcon markers — wrapper must not use Leaflet default sprite positioning */
+.clubs-map-marker-wrap {
+  background: transparent !important;
+  border: none !important;
+}
+
+.clubs-map-marker-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ffd600 0%, #008751 100%);
+  border: 2px solid #fff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* Popup shell */
+.leaflet-popup.clubs-leaflet-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 135, 81, 0.15);
+}
+
+.leaflet-popup.clubs-leaflet-popup .leaflet-popup-tip {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
 .leaflet-popup-content {
+  margin: 10px 12px;
   min-width: 200px;
 }
 
 @media (min-width: 640px) {
   .leaflet-popup-content {
-    min-width: 250px;
+    min-width: 240px;
   }
 }

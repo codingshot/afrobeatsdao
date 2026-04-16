@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer';
 import ClubsMapView from '@/components/clubs/ClubsMapView';
 import ClubsCardView from '@/components/clubs/ClubsCardView';
 import ClubsFilterBar from '@/components/clubs/ClubsFilterBar';
-import { Club, ClubFilters, ClubViewMode, SortOption } from '@/types/club';
+import { ClubFilters, ClubViewMode, SortOption } from '@/types/club';
 import { CLUBS, getCities, getMusicTypes, getClubTypes } from '@/data/clubs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Helmet } from "react-helmet";
@@ -21,9 +21,6 @@ const Clubs = () => {
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('name');
 
-  // State for the currently selected club
-  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
-  
   // Update view mode when screen size changes
   useEffect(() => {
     if (isMobile !== undefined) {
@@ -87,13 +84,8 @@ const Clubs = () => {
   const musicTypes = useMemo(() => getMusicTypes(), []);
   const clubTypes = useMemo(() => getClubTypes(), []);
 
-  // Handler for selecting a club on the map
-  const handleSelectClub = (club: Club) => {
-    setSelectedClub(club);
-  };
-
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-[#008751]/[0.04] to-background">
       <Helmet>
         <title>Afrobeats Clubs Directory | Find African Music Venues Worldwide</title>
         <meta name="description" content={`Discover ${CLUBS.length}+ Afrobeats and African music clubs and venues worldwide. Filter by city, music type, and more to find your next night out.`} />
@@ -122,7 +114,17 @@ const Clubs = () => {
         </script>
       </Helmet>
 
-      <main className="flex-1 container mx-auto px-4 py-4">
+      <main className="flex-1 container mx-auto px-4 py-6 md:py-8 max-w-7xl">
+        <header className="mb-6 text-center md:text-left">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#008751] mb-1">Directory</p>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
+            Afrobeats &amp; Amapiano venues
+          </h1>
+          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto md:mx-0 text-sm md:text-base">
+            Curated clubs and party rooms worldwide. Switch map or list, filter by city or vibe, then open Maps or the venue site.
+          </p>
+        </header>
+
         <ClubsFilterBar 
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -133,23 +135,33 @@ const Clubs = () => {
           cities={cities}
           musicTypes={musicTypes}
           clubTypes={clubTypes}
+          resultCount={filteredClubs.length}
+          totalCount={CLUBS.length}
         />
         
-        <div className="h-[calc(100vh-16rem)]">
-          {viewMode === 'map' ? (
-            <ClubsMapView 
-              clubs={filteredClubs} 
-              filters={filters}
-              onSelectClub={handleSelectClub}
-            />
+        <div className="flex flex-col min-h-[min(70vh,560px)]">
+          {filteredClubs.length === 0 ? (
+            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-[#008751]/30 bg-card/50 py-16 px-6 text-center">
+              <h2 className="text-xl font-semibold font-heading">No venues match</h2>
+              <p className="text-muted-foreground mt-2 max-w-sm text-sm">
+                Try clearing filters or searching by another city or music tag.
+              </p>
+              <button
+                type="button"
+                className="mt-6 text-sm font-medium text-[#008751] underline-offset-4 hover:underline"
+                onClick={() => {
+                  setFilters({});
+                  setSortBy("name");
+                }}
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : viewMode === 'map' ? (
+            <ClubsMapView clubs={filteredClubs} filters={filters} />
           ) : (
-            <ClubsCardView clubs={filteredClubs} />
-          )}
-          
-          {filteredClubs.length === 0 && (
-            <div className="text-center py-16">
-              <h3 className="text-xl font-semibold">No clubs found</h3>
-              <p className="text-muted-foreground mt-2">Try adjusting your filters</p>
+            <div className="flex-1 min-h-0 overflow-y-auto pb-4">
+              <ClubsCardView clubs={filteredClubs} />
             </div>
           )}
         </div>

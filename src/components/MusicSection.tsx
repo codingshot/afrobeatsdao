@@ -7,6 +7,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 const ALBUM_RELEASE_DATE = new Date("2025-08-01T00:00:00Z");
 
+/** Official YouTube playlist: “Afrobeats is a public good” */
+const PUBLIC_GOOD_YT_PLAYLIST_ID = "OLAK5uy_lXoKCymdHRrb86jji8oNAT5RpcSaUvwQk";
+const PUBLIC_GOOD_YT_PLAYLIST_URL = `https://www.youtube.com/playlist?list=${PUBLIC_GOOD_YT_PLAYLIST_ID}`;
+const PUBLIC_GOOD_YT_PLAYLIST_EMBED = `https://www.youtube.com/embed/videoseries?list=${PUBLIC_GOOD_YT_PLAYLIST_ID}`;
+
 function AlbumCountdown() {
   const [timeLeft, setTimeLeft] = useState(ALBUM_RELEASE_DATE.getTime() - Date.now());
   useEffect(() => {
@@ -50,10 +55,33 @@ export function MusicSection() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            🆓 — available everywhere soon.
+            🆓 — full album playlist on YouTube; more stores as they go live.
           </p>
           <p className="text-lg mt-2 text-black font-semibold">
-            Album drops August 1st, 2025!
+            Released August 1st, 2025 — listen below on YouTube.
+          </p>
+        </div>
+        <div className="max-w-4xl mx-auto mb-12">
+          <div className="rounded-xl overflow-hidden shadow-2xl border-4 border-black/10 bg-black aspect-video">
+            <iframe
+              src={PUBLIC_GOOD_YT_PLAYLIST_EMBED}
+              title="Afrobeats is a public good — YouTube album playlist"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+          <p className="text-center text-sm text-black/80 mt-3">
+            <a
+              href={PUBLIC_GOOD_YT_PLAYLIST_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline underline-offset-4 hover:text-[#E63946]"
+            >
+              Open this playlist on YouTube
+            </a>{" "}
+            — same order as the official release playlist.
           </p>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 max-w-5xl mx-auto">
@@ -77,13 +105,22 @@ export function MusicSection() {
                       <Apple className="h-5 w-5" />
                       <span>Apple</span>
                     </Button>
-                    <Button className="bg-gray-200 text-black flex items-center gap-2 py-4 text-lg shadow-lg cursor-not-allowed w-full max-w-[110px]" disabled>
-                      <Youtube className="h-5 w-5" />
-                      <span>YouTube</span>
+                    <Button
+                      asChild
+                      className="bg-[#FF0000] hover:bg-[#cc0000] text-white flex items-center gap-2 py-4 text-lg shadow-lg w-full max-w-[140px]"
+                    >
+                      <a href={PUBLIC_GOOD_YT_PLAYLIST_URL} target="_blank" rel="noopener noreferrer">
+                        <Youtube className="h-5 w-5" />
+                        <span>YouTube</span>
+                      </a>
                     </Button>
                   </div>
-                  <p className="text-center text-black mt-6">
-                    Links to streaming will be available on release day!
+                  <p className="text-center text-black mt-6 text-sm">
+                    Spotify and Apple Music links will be added here when available. The full album playlist is already on{" "}
+                    <a href={PUBLIC_GOOD_YT_PLAYLIST_URL} className="font-semibold underline" target="_blank" rel="noopener noreferrer">
+                      YouTube
+                    </a>
+                    .
                   </p>
                 </div>}
             </div>

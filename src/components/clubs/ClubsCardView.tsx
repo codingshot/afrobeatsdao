@@ -30,10 +30,14 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
       {clubs.map((club, index) => (
-        <Card key={`${club.name}-${index}`} className="overflow-hidden transition-all hover:shadow-md border-[#008751]/20">
-          <CardHeader className="p-4 pb-2">
+        <Card
+          key={`${club.city}-${club.name}`}
+          className="group overflow-hidden transition-all duration-200 border-[#008751]/20 hover:border-[#008751]/40 hover:shadow-lg hover:-translate-y-0.5 bg-card"
+        >
+          <div className="h-1 bg-gradient-to-r from-[#008751] via-[#FFD600] to-[#008751] opacity-90" />
+          <CardHeader className="p-4 pb-2 pt-3">
             <div className="flex justify-between items-start">
               <div className="flex items-start gap-2">
                 <img 
@@ -41,9 +45,9 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
                   alt={`${club.city} flag`}
                   className="w-6 h-4 object-cover rounded-sm mt-1"
                 />
-                <div>
-                  <CardTitle className="text-xl">{club.name}</CardTitle>
-                  <CardDescription>{club.city}</CardDescription>
+                <div className="min-w-0">
+                  <CardTitle className="text-lg md:text-xl font-heading leading-snug">{club.name}</CardTitle>
+                  <CardDescription className="font-medium">{club.city}</CardDescription>
                 </div>
               </div>
               <HoverCard>
@@ -110,7 +114,7 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
                 <Music className="h-3.5 w-3.5 mr-1 text-muted-foreground mt-0.5" />
                 <div className="flex flex-wrap gap-1">
                   {club.music.split(',').map((genre, i) => (
-                    <Badge key={i} variant="outline" className="text-xs bg-[#F97316]/10">
+                    <Badge key={i} variant="secondary" className="text-[10px] font-normal px-2 py-0">
                       {genre.trim()}
                     </Badge>
                   ))}
@@ -133,24 +137,25 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
             )}
             
             {club.general_rating && (
-              <p className="text-sm italic text-muted-foreground">{club.general_rating}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 border-t border-border/60 pt-3 mt-1">
+                {club.general_rating}
+              </p>
             )}
           </CardContent>
-          <CardFooter className="p-4 pt-0 flex flex-wrap gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="flex-1"
+          <CardFooter className="p-4 pt-0 flex flex-wrap gap-2 border-t border-border/40 bg-muted/20">
+            <Button
+              size="sm"
+              className="flex-1 bg-[#008751] text-white hover:bg-[#008751]/90"
               onClick={() => window.open(club.google_maps, '_blank')}
             >
               <MapPin className="mr-1 h-4 w-4" />
               Maps
             </Button>
             {club.website && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex-1"
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 border-[#008751]/35 hover:bg-[#008751]/10"
                 onClick={() => window.open(club.website, '_blank')}
               >
                 <ExternalLink className="mr-1 h-4 w-4" />

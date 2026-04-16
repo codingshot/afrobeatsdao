@@ -19,6 +19,8 @@ interface ClubsFilterBarProps {
   cities: string[];
   musicTypes: string[];
   clubTypes: string[];
+  resultCount: number;
+  totalCount: number;
 }
 
 const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
@@ -30,7 +32,9 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   onSortChange,
   cities,
   musicTypes,
-  clubTypes
+  clubTypes,
+  resultCount,
+  totalCount,
 }) => {
   const isMobile = useIsMobile();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
@@ -60,15 +64,22 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   };
 
   return (
-    <Card className="mb-4">
-      <CardContent className="p-4">
+    <Card className="mb-6 border-[#008751]/20 shadow-sm bg-card/80 backdrop-blur-sm">
+      <CardContent className="p-4 md:p-5">
         <div className="flex flex-col gap-4">
-          {/* Header and Subtitle */}
-          <div className="text-center mb-2">
-            <h2 className="text-2xl font-heading text-black">Afrobeats Clubs</h2>
-            <p className="text-muted-foreground mt-1">
-              Find Afrobeats and Amapiano exclusive clubs around the world
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">
+            <div>
+              <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground">Explore venues</h2>
+              <p className="text-muted-foreground text-sm mt-0.5">
+                Filter by city, style, or keyword — then map or list view.
+              </p>
+            </div>
+            <div className="inline-flex items-center justify-center gap-2 rounded-full border border-[#008751]/25 bg-[#008751]/5 px-3 py-1.5 text-sm self-center sm:self-auto">
+              <span className="font-semibold tabular-nums text-[#008751]">{resultCount}</span>
+              <span className="text-muted-foreground">/</span>
+              <span className="tabular-nums text-muted-foreground">{totalCount}</span>
+              <span className="text-muted-foreground hidden sm:inline">venues</span>
+            </div>
           </div>
 
           {/* Search Row with Filter Toggle and View Toggle */}
@@ -97,31 +108,42 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
             )}
 
             {/* View Toggle */}
-            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}>
-              <ToggleGroupItem value="map" aria-label="Map View">
-                <Map className="h-4 w-4" />
+            <ToggleGroup
+              type="single"
+              value={viewMode}
+              onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}
+              className="shrink-0 rounded-lg border border-border p-0.5 bg-muted/40"
+            >
+              <ToggleGroupItem
+                value="map"
+                aria-label="Map view"
+                className="rounded-md px-3 data-[state=on]:bg-[#008751] data-[state=on]:text-white data-[state=on]:shadow-sm"
+              >
+                <Map className="h-4 w-4 sm:mr-1.5" />
+                <span className="hidden sm:inline text-xs font-medium">Map</span>
               </ToggleGroupItem>
-              <ToggleGroupItem value="card" aria-label="Card View">
-                <List className="h-4 w-4" />
+              <ToggleGroupItem
+                value="card"
+                aria-label="List view"
+                className="rounded-md px-3 data-[state=on]:bg-[#008751] data-[state=on]:text-white data-[state=on]:shadow-sm"
+              >
+                <List className="h-4 w-4 sm:mr-1.5" />
+                <span className="hidden sm:inline text-xs font-medium">List</span>
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
 
           {/* Filters - Hidden on mobile unless toggled */}
           {(!isMobile || showFiltersOnMobile) && (
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <Select value={filters.city || "all"} onValueChange={handleCityChange}>
-                <SelectTrigger className="bg-white text-black">
+                <SelectTrigger className="bg-background border-[#008751]/20">
                   <SelectValue placeholder="City" />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-black z-50">
-                  <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Cities</SelectItem>
-                  {cities.map(city => (
-                    <SelectItem 
-                      key={city} 
-                      value={city}
-                      className="text-black hover:bg-gray-100 focus:bg-gray-100"
-                    >
+                <SelectContent className="z-[100]">
+                  <SelectItem value="all">All cities</SelectItem>
+                  {cities.map((city) => (
+                    <SelectItem key={city} value={city}>
                       {city}
                     </SelectItem>
                   ))}
@@ -129,17 +151,13 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               </Select>
 
               <Select value={filters.type || "all"} onValueChange={handleTypeChange}>
-                <SelectTrigger className="bg-white text-black">
-                  <SelectValue placeholder="Club Type" />
+                <SelectTrigger className="bg-background border-[#008751]/20">
+                  <SelectValue placeholder="Venue type" />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-black z-50">
-                  <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Types</SelectItem>
-                  {clubTypes.map(type => (
-                    <SelectItem 
-                      key={type} 
-                      value={type}
-                      className="text-black hover:bg-gray-100 focus:bg-gray-100"
-                    >
+                <SelectContent className="z-[100]">
+                  <SelectItem value="all">All types</SelectItem>
+                  {clubTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
                       {type}
                     </SelectItem>
                   ))}
@@ -147,17 +165,13 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               </Select>
 
               <Select value={filters.music || "all"} onValueChange={handleMusicChange}>
-                <SelectTrigger className="bg-white text-black">
-                  <SelectValue placeholder="Music Style" />
+                <SelectTrigger className="bg-background border-[#008751]/20">
+                  <SelectValue placeholder="Music" />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-black z-50">
-                  <SelectItem value="all" className="text-black hover:bg-gray-100 focus:bg-gray-100">All Music</SelectItem>
-                  {musicTypes.map(music => (
-                    <SelectItem 
-                      key={music} 
-                      value={music}
-                      className="text-black hover:bg-gray-100 focus:bg-gray-100"
-                    >
+                <SelectContent className="z-[100]">
+                  <SelectItem value="all">All music tags</SelectItem>
+                  {musicTypes.map((music) => (
+                    <SelectItem key={music} value={music}>
                       {music}
                     </SelectItem>
                   ))}
@@ -165,14 +179,14 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
               </Select>
 
               <Select value={sortBy} onValueChange={(value) => onSortChange(value as SortOption)}>
-                <SelectTrigger className="bg-white text-black">
-                  <SelectValue placeholder="Sort By" />
+                <SelectTrigger className="bg-background border-[#008751]/20">
+                  <SelectValue placeholder="Sort" />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-black z-50">
-                  <SelectItem value="name" className="text-black hover:bg-gray-100 focus:bg-gray-100">Name</SelectItem>
-                  <SelectItem value="city" className="text-black hover:bg-gray-100 focus:bg-gray-100">City</SelectItem>
-                  <SelectItem value="year_founded" className="text-black hover:bg-gray-100 focus:bg-gray-100">Year Founded</SelectItem>
-                  <SelectItem value="capacity" className="text-black hover:bg-gray-100 focus:bg-gray-100">Capacity</SelectItem>
+                <SelectContent className="z-[100]">
+                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="city">City</SelectItem>
+                  <SelectItem value="year_founded">Era</SelectItem>
+                  <SelectItem value="capacity">Capacity</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -77,16 +77,21 @@ export const useMapData = () => {
         const locationCoords: Record<string, [number, number]> = {
           'Portimão, Portugal': [-8.5376, 37.1364],
           'Detroit, MI, USA': [-83.0458, 42.3314],
+          'Hart Plaza, Detroit, MI, USA': [-83.0440, 42.3288],
           'Accra, Ghana': [-0.1969, 5.6037],
           'Lagos, Nigeria': [3.3792, 6.5244],
           'Rabat, Morocco': [-6.8326, 34.0209],
+          'Dubai, United Arab Emirates': [55.2708, 25.2048],
           'Ain Dubai, Bluewaters Island, Dubai, United Arab Emirates': [55.1200, 25.2100],
           'Bygrave Woods, Ashwell Road, Baldock Newnham, Hertfordshire, UK': [-0.1928, 51.9500],
           'Playa del Inglés, Gran Canaria, Spain': [-15.5500, 27.7600],
           'The Palladium Club, Bideford, England, UK': [-4.2026, 51.0200],
           'Brisbane, Australia (venue TBA)': [153.0251, -27.4705],
           'SOB\'s, 204 Varick Street, New York City, USA': [-74.0060, 40.7128],
+          'Brooklyn Roots Collective, Brooklyn, NY, USA': [-73.9590, 40.6520],
+          'Throw Social DC, Washington, DC, USA': [-77.0210, 38.8800],
           'Studio 338, 388 Boord Street, London, UK': [-0.0307, 51.5074],
+          'Sefton Park, Liverpool, UK': [-2.9380, 53.3830],
           'Hart Plaza | Detroit, MI, USA': [-83.0458, 42.3314]
         };
 

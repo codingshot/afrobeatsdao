@@ -22,15 +22,15 @@
     "ticket_info": "This edition has concluded. For future Afro Nation announcements, use the main afronation.com mailing list and social channels."
   },
   "AfroFuture Fest": {
-    "image_url": "https://www.palacetravel.com/wp-content/uploads/2023/09/AfroFuture-Fest-2024.jpg",
+    "image_url": "/AfrobeatsDAOMeta.png",
     "website": "https://www.afrofuture.com",
     "ticket_url": "https://www.afrofuture.com",
     "location": "Accra, Ghana",
-    "event_description": "AfroFuture (formerly Afrochella) is Ghana’s flagship Detty December culture week—live Afrobeats, food, art, and fashion around Accra. Tour operators often publish late-December through New Year packages; exact festival nights and tickets are confirmed on afrofuture.com and official partners (for example tix.africa when the season goes on sale).",
+    "event_description": "AfroFuture (formerly Afrochella) is Ghana’s flagship Detty December culture week—live Afrobeats, food, art, and fashion around Accra. The official site rotates ticketing by edition (e.g. Ghana 2025 on tix.africa); exact 2026–27 festival nights are only confirmed when AfroFuture publishes them on afrofuture.com—do not rely on third-party travel packages for dates. The dates below are a provisional year-end placeholder for the Events page until the organiser posts the authoritative window.",
     "organizer": "AfroFuture",
-    "start_date": "2026-12-27",
+    "start_date": "2026-12-28",
     "end_date": "2027-01-02",
-    "ticket_info": "Pricing varies by tier and partner packages. Always buy from AfroFuture’s official site or listed ticketing partners—avoid unofficial resale for entry guarantees."
+    "ticket_info": "Buy only from AfroFuture’s official site and linked partners (e.g. tix.africa when that edition is on sale). Tiers and packages change each year."
   },
   "Afrofuture Juneteenth Block Party": {
     "image_url": "/events/afrofuturedetroitblockparty.jpg",
@@ -138,5 +138,49 @@
     "start_date": "2026-04-19",
     "end_date": "2026-04-19",
     "ticket_info": "Tiered Eventbrite tickets; outdoor areas are weather-dependent—read the promoter’s latest email blasts for set times."
+  },
+  "Africa Oyé": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://africaoye.com",
+    "ticket_url": "https://ticketquarter.co.uk/Online/article/tq-africa-oye-2026",
+    "location": "Sefton Park, Liverpool, UK",
+    "event_description": "Africa Oyé bills itself as the UK’s biggest celebration of African and Caribbean music and culture in Sefton Park, Liverpool—live stages span Afrobeats, reggae, soukous, and more, plus the Oyé village market. The 2026 weekend is confirmed for 20–21 June on africaoye.com; tickets are sold via TicketQuarter (under-12s free per organiser copy on the ticket page).",
+    "organizer": "Africa Oyé CIC",
+    "start_date": "2026-06-20",
+    "end_date": "2026-06-21",
+    "ticket_info": "Primary sales via TicketQuarter (linked from africaoye.com); concessions for students, NHS staff, and groups of four or more are advertised on the organiser site."
+  },
+  "African World Festival (Detroit)": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://www.thewright.org/african-world-festival",
+    "ticket_url": "https://www.thewright.org/african-world-festival",
+    "location": "Hart Plaza, Detroit, MI, USA",
+    "event_description": "The Charles H. Wright Museum of African American History’s African World Festival® is a three-day celebration of African diaspora culture at Hart Plaza—live music across contemporary African pop, R&B, jazz, and more, plus marketplace and family programming. Official dates for 2026 are 10–12 July (announced on thewright.org).",
+    "organizer": "Charles H. Wright Museum of African American History",
+    "start_date": "2026-07-10",
+    "end_date": "2026-07-12",
+    "ticket_info": "Admission structure varies by year; follow thewright.org for ticketing, vendor deadlines, and member offers."
+  },
+  "AfroFuture Presents: The Homage — New York": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://www.afrofuture.com/upcoming-events/homage-dj-battle-new-york",
+    "ticket_url": "https://www.afrofuture.com/upcoming-events/homage-dj-battle-new-york",
+    "location": "Brooklyn Roots Collective, Brooklyn, NY, USA",
+    "event_description": "AfroFuture’s Homage series honours foundational club sounds; the 15 May 2026 New York edition (Brooklyn Roots Collective, 5:30–10:00 p.m. EDT per the official event page) focuses on Johannesburg-rooted amapiano with Tyler ICU. This is a ticketed club concert, not the full Ghana festival.",
+    "organizer": "AfroFuture",
+    "start_date": "2026-05-15",
+    "end_date": "2026-05-15",
+    "ticket_info": "Purchase through AfroFuture’s official event page; check door times and age policy on the listing."
+  },
+  "AfroFuture Presents: The Homage — Washington, DC": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://www.afrofuture.com/upcoming-events/homage-dj-battle---washington-dc",
+    "ticket_url": "https://www.afrofuture.com/upcoming-events/homage-dj-battle---washington-dc",
+    "location": "Throw Social DC, Washington, DC, USA",
+    "event_description": "Sister Homage night to the Brooklyn date: 16 May 2026 at Throw Social DC (10:00 p.m.–3:00 a.m. EDT per afrofuture.com), spotlighting amapiano with Tyler ICU. Confirm venue and late-night transport on the official AfroFuture listing.",
+    "organizer": "AfroFuture",
+    "start_date": "2026-05-16",
+    "end_date": "2026-05-16",
+    "ticket_info": "Tickets via the official AfroFuture event page; late-night entry—read the organiser’s FAQs."
   }
 }

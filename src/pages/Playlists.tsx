@@ -28,14 +28,33 @@ interface Playlist {
   description: string;
 }
 
-const PLAYLISTS: Playlist[] = [{
-  id: "spotify1",
-  title: "Afrobeats Essentials",
-  platform: "spotify",
-  image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
-  url: "https://open.spotify.com/playlist/37i9dQZF1DX5lDwDtPVwBk",
-  description: "The essential Afrobeats tracks you need to know."
-}, {
+/** YouTube /playlist?list=… pages are not loadable as a single video in the in-app player. */
+function isYoutubePlaylistOnlyUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./, "") === "youtube.com" && u.pathname === "/playlist";
+  } catch {
+    return false;
+  }
+}
+
+const PLAYLISTS: Playlist[] = [
+  {
+    id: "afrobeats-public-good-album",
+    title: "Afrobeats is a public good (album)",
+    platform: "youtube",
+    image: "/lovable-uploads/6b6dcd87-97f1-4c68-964d-3ef675aff525.png",
+    url: "https://www.youtube.com/playlist?list=OLAK5uy_lXoKCymdHRrb86jji8oNAT5RpcSaUvwQk",
+    description: "CC0 release — official YouTube album playlist (same as on the home page).",
+  },
+  {
+    id: "spotify1",
+    title: "Afrobeats Essentials",
+    platform: "spotify",
+    image: "https://mosaic.scdn.co/640/ab67616d0000b2733b812c8a29a8015e6ea11e35ab67616d0000b2735c5d15730deab2e48e2ae493ab67616d0000b273bb7610dfa8b8b17b2af9e81a",
+    url: "https://open.spotify.com/playlist/37i9dQZF1DX5lDwDtPVwBk",
+    description: "The essential Afrobeats tracks you need to know."
+  }, {
   id: "apple1",
   title: "Afrobeats Workout",
   platform: "apple",
@@ -178,6 +197,13 @@ const Playlists = () => {
 
   const handleAddToQueue = (playlist: Playlist) => {
     if (playlist.platform === 'youtube') {
+      if (isYoutubePlaylistOnlyUrl(playlist.url)) {
+        toast({
+          title: "Open on YouTube",
+          description: "This entry is a YouTube playlist page. Use the link to play it on YouTube.",
+        });
+        return;
+      }
       const videoId = playlist.url.split('v=')[1] || playlist.url.split('youtu.be/')[1];
       addToQueue({
         id: playlist.id,
@@ -422,7 +448,7 @@ const Playlists = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          {playlist.platform === 'youtube' ? (
+                          {playlist.platform === 'youtube' && !isYoutubePlaylistOnlyUrl(playlist.url) ? (
                             <>
                               <Button 
                                 variant="ghost" 
