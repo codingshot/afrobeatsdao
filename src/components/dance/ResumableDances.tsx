@@ -9,27 +9,28 @@ import { useCountryFlags } from "@/hooks/use-country-flags";
 import { danceCurriculum } from "@/data/dance-curriculum";
 import { DanceProgressIndicator } from "./DanceProgressIndicator";
 
+type CurriculumGenre = keyof typeof danceCurriculum;
+type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
+type InProgressDance = CurriculumDance & { genre: CurriculumGenre };
+
 export const ResumableDances = () => {
-  const { getTotalProgress } = useDanceProgress();
+  const { getTotalProgress, getDanceProgress } = useDanceProgress();
   const navigate = useNavigate();
   const { getFlag } = useCountryFlags();
   const allProgress = getTotalProgress();
-  
-  // If no dances have been started, don't show this section
+
   if (allProgress.started === 0) return null;
-  
-  // Find all the dances that have been started but not completed
-  const inProgressDances: any[] = [];
-  
-  Object.keys(danceCurriculum).forEach(genre => {
-    danceCurriculum[genre as keyof typeof danceCurriculum].forEach(dance => {
-      const { getDanceProgress } = useDanceProgress();
+
+  const inProgressDances: InProgressDance[] = [];
+
+  (Object.keys(danceCurriculum) as CurriculumGenre[]).forEach((genre) => {
+    danceCurriculum[genre].forEach((dance) => {
       const progress = getDanceProgress(dance.id);
-      
+
       if (progress.started && !progress.completed) {
         inProgressDances.push({
           ...dance,
-          genre
+          genre,
         });
       }
     });

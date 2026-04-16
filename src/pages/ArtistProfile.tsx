@@ -26,7 +26,7 @@ const ArtistProfile = () => {
   }, [id]);
 
   // Enhanced safe string conversion that handles all edge cases
-  const safeString = (value: any): string => {
+  const safeString = (value: unknown): string => {
     try {
       // Handle null/undefined first
       if (value === null || value === undefined) {

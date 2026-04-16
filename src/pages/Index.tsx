@@ -16,44 +16,22 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 const Index = () => {
   const navigate = useNavigate();
-
-  // Safely access the audio player context
-  let audioPlayerContext;
-  try {
-    audioPlayerContext = useGlobalAudioPlayer();
-  } catch (error) {
-    console.warn("GlobalAudioPlayer context not available:", error);
-    audioPlayerContext = null;
-  }
-  const {
-    playNow,
-    currentSong
-  } = audioPlayerContext || {};
+  const { playNow, currentSong } = useGlobalAudioPlayer();
 
   // Auto-play a random vibe when the page loads and no song is currently playing
   useEffect(() => {
-    if (!audioPlayerContext || !playNow) return;
+    const savedSong = localStorage.getItem("afrobeats_current_song");
 
-    // Check localStorage first for any saved song
-    const savedSong = localStorage.getItem('afrobeats_current_song');
-
-    // Only initialize if no song is currently playing and no song in local storage
     if (!currentSong && !savedSong) {
-      // Get a random Vibe of the Day video to use as the default song
       const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
       const vibeVideoId = VIBE_VIDEOS[randomIndex];
-      console.log("Auto-initializing player with video ID:", vibeVideoId);
 
-      // Create a song object from the Vibe of the Day
-      const defaultSong = {
+      playNow({
         id: `vibe-${vibeVideoId}`,
-        youtube: vibeVideoId // Only pass the video ID, titles will be fetched from YouTube
-      };
-
-      // Play the Vibe of the Day video
-      playNow(defaultSong);
+        youtube: vibeVideoId,
+      });
     }
-  }, [playNow, currentSong, audioPlayerContext]);
+  }, [playNow, currentSong]);
   return <div className="min-h-screen font-sans pb-[100px]">
       <main>
         <HeroSection />

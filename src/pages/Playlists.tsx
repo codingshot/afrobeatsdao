@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, type DropResult } from 'react-beautiful-dnd';
 import { ListMusic, MoveVertical } from 'lucide-react';
 import ArtistsList from "@/components/music/ArtistsList";
 import SongsList from "@/components/music/SongsList";
@@ -135,39 +135,12 @@ const PLAYLISTS: Playlist[] = [{
 }];
 
 const Playlists = () => {
-  console.log("Playlists component rendering");
-  
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const currentTab = searchParams.get('tab') || 'artists';
 
-  let audioPlayerContext;
-  try {
-    audioPlayerContext = useGlobalAudioPlayer();
-    console.log("GlobalAudioPlayer context successfully obtained");
-  } catch (error) {
-    console.error("Error using GlobalAudioPlayer:", error);
-    audioPlayerContext = {
-      playNow: () => console.log("Mock playNow called"),
-      addToQueue: () => console.log("Mock addToQueue called"),
-      queue: []
-    };
-  }
-  const {
-    playNow,
-    addToQueue,
-    queue,
-    currentSong,
-    reorderQueue
-  } = audioPlayerContext;
-  const {
-    toast
-  } = useToast();
-
-  useEffect(() => {
-    console.log("Playlists component mounted");
-    return () => console.log("Playlists component unmounted");
-  }, []);
+  const { playNow, addToQueue, queue, currentSong, reorderQueue } = useGlobalAudioPlayer();
+  const { toast } = useToast();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState("all");
@@ -257,7 +230,7 @@ const Playlists = () => {
     return url;
   };
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     reorderQueue(result.source.index, result.destination.index);
   };

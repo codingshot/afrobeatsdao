@@ -13,6 +13,7 @@ import { useCountryFlags } from '@/hooks/use-country-flags';
 import L from 'leaflet';
 import { Badge } from '@/components/ui/badge';
 import {
+  type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
@@ -59,10 +60,11 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
   const [hoveredClub, setHoveredClub] = useState<Club | null>(null);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
   const [mapRef, setMapRef] = useState<L.Map | null>(null);
-  const [carouselApi, setCarouselApi] = useState<any>(null);
-  
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+
   useEffect(() => {
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    type IconProto = typeof L.Icon.Default.prototype & { _getIconUrl?: string };
+    delete (L.Icon.Default.prototype as IconProto)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
       iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -112,7 +114,6 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, filters, onSelectClu
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            {...{} as any}
           />
           
           <MapController clubs={clubs} filters={filters} />

@@ -1,7 +1,7 @@
-import { CalendarDays, MapPin } from "lucide-react";
+import { CalendarDays, History, MapPin } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slugUtils";
@@ -10,6 +10,7 @@ import EVENTS_DATA from "@/data/events.json";
 type Event = {
   image_url: string;
   website: string;
+  ticket_url?: string;
   location: string;
   event_description: string;
   organizer: string;
@@ -22,7 +23,11 @@ export const EVENTS: Record<string, Event> = EVENTS_DATA;
 
 export function EventsSection() {
   const [showPastEvents, setShowPastEvents] = useState(false);
-  const today = new Date();
+  const todayStart = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
   const DEFAULT_IMAGE = '/AfrobeatsDAOMeta.png';
   
   // Improved function to handle image URLs from JSON data
@@ -39,16 +44,35 @@ export function EventsSection() {
     return `/${imageUrl}`;
   };
   
-  const filteredEvents = Object.entries(EVENTS).filter(([, event]) => {
-    const endDate = new Date(event.end_date);
-    if (showPastEvents) {
-      return endDate < today;
-    }
-    return endDate >= today;
-  }).sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+  const { filteredEvents, anyPastInDataset, anyUpcomingInDataset } = useMemo(() => {
+    const entries = Object.entries(EVENTS);
+    let anyPast = false;
+    let anyUpcoming = false;
+    entries.forEach(([, event]) => {
+      const endDate = new Date(event.end_date);
+      endDate.setHours(23, 59, 59, 999);
+      if (endDate < todayStart) anyPast = true;
+      else anyUpcoming = true;
+    });
+    const filtered = entries
+      .filter(([, event]) => {
+        const endDate = new Date(event.end_date);
+        endDate.setHours(23, 59, 59, 999);
+        if (showPastEvents) {
+          return endDate < todayStart;
+        }
+        return endDate >= todayStart;
+      })
+      .sort(([, a], [, b]) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+    return {
+      filteredEvents: filtered,
+      anyPastInDataset: anyPast,
+      anyUpcomingInDataset: anyUpcoming,
+    };
+  }, [showPastEvents, todayStart]);
 
   const isEventActive = (startDate: string, endDate: string) => {
-    const now = today.getTime();
+    const now = Date.now();
     const start = new Date(startDate).getTime();
     const end = new Date(endDate).getTime();
     return now >= start && now <= end;
@@ -144,8 +168,27 @@ export function EventsSection() {
             </CarouselContent>
           </Carousel>
         ) : (
-          <div className="text-center text-gray-500">
-            {showPastEvents ? "No past events to display." : "No upcoming events to display."}
+          <div className="text-center text-gray-600 space-y-4 py-4">
+            <p>
+              {showPastEvents ? "No past events to display." : "No upcoming events to display."}
+            </p>
+            {!showPastEvents && anyPastInDataset && (
+              <Button
+                type="button"
+                size="sm"
+                className="bg-[#008751] text-white hover:bg-[#008751]/90"
+                onClick={() => setShowPastEvents(true)}
+              >
+                <History className="mr-2 h-4 w-4" />
+                Show past events
+              </Button>
+            )}
+            {showPastEvents && anyUpcomingInDataset && (
+              <Button type="button" size="sm" variant="outline" onClick={() => setShowPastEvents(false)}>
+                <CalendarDays className="mr-2 h-4 w-4" />
+                Show upcoming events
+              </Button>
+            )}
           </div>
         )}
       </div>

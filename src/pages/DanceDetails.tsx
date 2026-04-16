@@ -1,7 +1,7 @@
 
 import { useParams, useNavigate } from "react-router-dom";
 import { danceCurriculum } from "@/data/dance-curriculum";
-import { DanceDetails as DanceDetailsComponent } from "@/components/dance/DanceDetails";
+import { DanceDetails as DanceDetailsComponent, type Dance } from "@/components/dance/DanceDetails";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -11,66 +11,42 @@ import { Helmet } from "react-helmet";
 const DanceDetails = () => {
   const { genre, id } = useParams();
   const navigate = useNavigate();
-  const [dance, setDance] = useState<any>(null);
+  const [dance, setDance] = useState<Dance | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
-  
+
   useEffect(() => {
-    console.log("Dance Details - URL params:", { genre, id });
-    console.log("Dance Details - Current path:", window.location.pathname);
-    
-    const findDance = () => {
-      let foundDance = null;
-      
-      // Get the dance ID from either the URL params or the last segment of the path
-      const pathSegments = window.location.pathname.split('/').filter(Boolean);
-      const lastSegment = pathSegments[pathSegments.length - 1];
-      const potentialId = id || lastSegment;
-      
-      console.log("Searching for dance with ID:", potentialId);
-      
-      // If we have both genre and id, try to find the dance in that specific genre
-      if (genre && id) {
-        console.log("Searching in genre:", genre);
-        if (danceCurriculum[genre as keyof typeof danceCurriculum]) {
-          foundDance = danceCurriculum[genre as keyof typeof danceCurriculum].find(d => d.id === id);
-          console.log("Found in specific genre:", foundDance);
+    let foundDance: Dance | null = null;
+
+    const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    const potentialId = id || lastSegment;
+
+    if (genre && id && danceCurriculum[genre as keyof typeof danceCurriculum]) {
+      const match = danceCurriculum[genre as keyof typeof danceCurriculum].find((d) => d.id === id);
+      if (match) foundDance = match as Dance;
+    }
+
+    if (!foundDance && potentialId) {
+      for (const genreKey in danceCurriculum) {
+        const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
+          (d) => d.id === potentialId,
+        );
+        if (found) {
+          foundDance = found as Dance;
+          break;
         }
       }
-      
-      // If not found or if we only have an id, search across all genres
-      if (!foundDance) {
-        console.log("Searching across all genres for ID:", potentialId);
-        for (const genreKey in danceCurriculum) {
-          const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
-            d => d.id === potentialId
-          );
-          if (found) {
-            foundDance = found;
-            console.log("Found dance in genre", genreKey, ":", foundDance);
-            break;
-          }
-        }
-      }
-      
-      if (foundDance) {
-        console.log("Setting dance:", foundDance);
-        setDance(foundDance);
-        setNotFound(false);
-      } else {
-        console.log("Dance not found");
-        setNotFound(true);
-      }
-      
-      setIsLoading(false);
-    };
-    
-    // Add a small delay to ensure routing is complete
-    const timeoutId = setTimeout(() => {
-      findDance();
-    }, 100);
-    
-    return () => clearTimeout(timeoutId);
+    }
+
+    if (foundDance) {
+      setDance(foundDance);
+      setNotFound(false);
+    } else {
+      setNotFound(true);
+    }
+
+    setIsLoading(false);
   }, [genre, id]);
   
   if (isLoading) {
@@ -109,7 +85,7 @@ const DanceDetails = () => {
   // SEO meta information
   const danceTitle = dance?.name || 'Dance Details';
   const danceDescription = dance?.description || 'Learn about this dance style on Afrobeats.party';
-  const danceThumbnail = dance?.thumbnail || '/AfrobeatsDAOMeta.png';
+  const danceThumbnail = dance?.image || "/AfrobeatsDAOMeta.png";
 
   return (
     <>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { useGlobalAudioPlayer } from "@/components/GlobalAudioPlayer";
 import { useToast } from "@/hooks/use-toast";
-import { ARTISTS } from "@/data/artists";
+import { ARTISTS, type Artist } from "@/data/artists";
 import { Link } from "react-router-dom";
 import {
   Carousel,
@@ -30,7 +30,7 @@ const ArtistsCarousel: React.FC = () => {
     return url;
   };
 
-  const playArtistSongs = (artist: any) => {
+  const playArtistSongs = (artist: Artist) => {
     if (artist.top_songs.length === 0) return;
     
     // Shuffle the songs array

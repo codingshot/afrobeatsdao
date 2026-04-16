@@ -5,12 +5,13 @@ import { Apple, Youtube, Headphones, ChevronDown, CreativeCommons } from "lucide
 import { FlippableAlbum } from "./FlippableAlbum";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+const ALBUM_RELEASE_DATE = new Date("2025-08-01T00:00:00Z");
+
 function AlbumCountdown() {
-  const releaseDate = new Date("2025-08-01T00:00:00Z");
-  const [timeLeft, setTimeLeft] = useState(releaseDate.getTime() - Date.now());
+  const [timeLeft, setTimeLeft] = useState(ALBUM_RELEASE_DATE.getTime() - Date.now());
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTimeLeft(releaseDate.getTime() - Date.now());
+      setTimeLeft(ALBUM_RELEASE_DATE.getTime() - Date.now());
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);

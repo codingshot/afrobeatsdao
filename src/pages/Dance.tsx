@@ -15,6 +15,11 @@ import { ResumableDances } from "@/components/dance/ResumableDances";
 import { DanceProgressIndicator } from "@/components/dance/DanceProgressIndicator";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
 
+type CurriculumGenre = keyof typeof danceCurriculum;
+type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
+type DanceWithGenre = CurriculumDance & { genre: CurriculumGenre };
+type DanceSong = NonNullable<CurriculumDance["songs"]>[number];
+
 const genreDescriptions = {
   afrobeats: "An energetic style from Nigeria and Ghana that blends traditional African movements with modern influences. Features powerful rhythmic footwork, hip movements, and expressive gestures, typically following faster-paced beats. Deeply connected to cultural identity and social expression, popularized through music videos and social media.",
   amapiano: "A South African style combining house, jazz, and kwaito elements. Features smoother, more melodic movements at a slower tempo (110-120 BPM), with an emphasis on fluid footwork. While Afrobeats is more energetic and percussive, Amapiano focuses on flowing, laid-back movements that follow melodic piano patterns. Has gained worldwide popularity through TikTok challenges."
@@ -51,13 +56,13 @@ const DancePage = () => {
     setIsLoading(false);
   }, []);
 
-  const handleDanceSelect = (dance: any) => {
+  const handleDanceSelect = (dance: DanceWithGenre) => {
     // Mark the dance as started when selected
     startDance(dance.id);
     navigate(`/dance/${selectedGenre === "all" ? dance.genre : selectedGenre}/${dance.id}`);
   };
 
-  const handlePlaySong = (e: React.MouseEvent, song: any) => {
+  const handlePlaySong = (e: React.MouseEvent, song: DanceSong) => {
     e.stopPropagation();
     if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.playNow) {
       audioPlayer.playNow({
@@ -69,7 +74,7 @@ const DancePage = () => {
     }
   };
 
-  const handleAddToQueue = (e: React.MouseEvent, song: any) => {
+  const handleAddToQueue = (e: React.MouseEvent, song: DanceSong) => {
     e.stopPropagation();
     if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.addToQueue) {
       audioPlayer.addToQueue({
@@ -81,8 +86,8 @@ const DancePage = () => {
     }
   };
 
-  const filterDances = () => {
-    let filteredDances: any[] = [];
+  const filterDances = (): DanceWithGenre[] => {
+    let filteredDances: DanceWithGenre[] = [];
 
     if (selectedGenre === "all") {
       // Combine both genres, adding a genre property to each dance

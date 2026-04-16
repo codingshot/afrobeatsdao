@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Calendar, Filter, Search, MapPin, ExternalLink, CalendarX } from "lucide-react";
+import { Calendar, Filter, Search, MapPin, ExternalLink, CalendarX, RotateCcw, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,11 +14,24 @@ import EVENTS_DATA from "@/data/events.json";
 
 // Define event types to match the events in EventsSection 
 // Renamed from Event to MusicEvent to avoid conflict with DOM Event
+interface EventJson {
+  image_url: string;
+  website: string;
+  ticket_url?: string;
+  location: string;
+  event_description: string;
+  organizer: string;
+  start_date: string;
+  end_date: string;
+  ticket_info: string;
+}
+
 interface MusicEvent {
   id: string;
   title: string;
   location: string;
   date: string;
+  endDate: string;
   image: string;
   description: string;
   type: string;
@@ -41,16 +54,17 @@ const getImageUrl = (imageUrl: string) => {
 };
 
 // Convert the event data to match our MusicEvent interface
-const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], index) => {
+const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA as Record<string, EventJson>).map(([name, event], index) => {
   return {
     id: (index + 1).toString(),
     title: name,
     location: event.location,
     date: event.start_date,
+    endDate: event.end_date,
     image: getImageUrl(event.image_url),
     description: event.event_description,
     type: event.location.includes("UK") ? "Festival" : event.event_description.toLowerCase().includes("workshop") ? "Workshop" : event.event_description.toLowerCase().includes("party") ? "Party" : "Festival",
-    ticketLink: event.ticket_info ? event.website : undefined,
+    ticketLink: event.ticket_url,
     website: event.website
   };
 });
@@ -59,6 +73,16 @@ const EVENTS: MusicEvent[] = Object.entries(EVENTS_DATA).map(([name, event], ind
 const EVENT_TYPES = ["All Types", ...Array.from(new Set(EVENTS.map(event => event.type)))];
 const LOCATIONS = ["All Locations", ...Array.from(new Set(EVENTS.map(event => event.location)))];
 
+function endOfEventDay(endDateIso: string): Date {
+  const d = new Date(endDateIso);
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+function isPastMusicEvent(event: MusicEvent, todayStart: Date): boolean {
+  return endOfEventDay(event.endDate) < todayStart;
+}
+
 const Events = () => {
   // State for filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,8 +90,32 @@ const Events = () => {
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [showPastEvents, setShowPastEvents] = useState(false);
 
-  // Current date for filtering past/upcoming events
-  const today = new Date();
+  const todayStart = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+
+  const hasNonDefaultFilters =
+    searchQuery.trim() !== "" ||
+    typeFilter !== "All Types" ||
+    locationFilter !== "All Locations";
+
+  const anyUpcomingInDataset = useMemo(
+    () => EVENTS.some((e) => !isPastMusicEvent(e, todayStart)),
+    [todayStart]
+  );
+
+  const anyPastInDataset = useMemo(
+    () => EVENTS.some((e) => isPastMusicEvent(e, todayStart)),
+    [todayStart]
+  );
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setTypeFilter("All Types");
+    setLocationFilter("All Locations");
+  };
 
   // Filter events based on search query and filters
   const filteredEvents = useMemo(() => {
@@ -84,13 +132,12 @@ const Events = () => {
       const matchesLocation = locationFilter === "All Locations" || event.location === locationFilter;
       
       // Apply past/upcoming filter
-      const eventDate = new Date(event.date);
-      const isPastEvent = eventDate < today;
-      const matchesPastFilter = showPastEvents ? isPastEvent : !isPastEvent;
+      const past = isPastMusicEvent(event, todayStart);
+      const matchesPastFilter = showPastEvents ? past : !past;
 
       return matchesSearch && matchesType && matchesLocation && matchesPastFilter;
     });
-  }, [searchQuery, typeFilter, locationFilter, showPastEvents]);
+  }, [searchQuery, typeFilter, locationFilter, showPastEvents, todayStart]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -109,12 +156,12 @@ const Events = () => {
   };
 
   // SEO data
-  const metaTitle = "Afrobeats Events 2025 - Global Festivals, Parties & Workshops | Afrobeats.party";
-  const metaDescription = "🎉 Discover the hottest Afrobeats festivals, parties, and workshops happening worldwide in 2025! From Afro Nation to local events, find your next African music experience.";
+  const metaTitle = "Afrobeats Events 2026 - Global Festivals, Parties & Workshops | Afrobeats.party";
+  const metaDescription = "Discover Afrobeats and amapiano festivals, parties, and workshops worldwide in 2026 and beyond—from Afro Nation Portugal to Detty December in Lagos and Accra.";
   const canonicalUrl = "https://afrobeats.party/events";
   const ogImage = filteredEvents.length > 0 ? (filteredEvents[0].image.startsWith('http') ? filteredEvents[0].image : `https://afrobeats.party${filteredEvents[0].image}`) : "https://afrobeats.party/AfrobeatsDAOMeta.png";
   const seoKeywords = [
-    'afrobeats events 2025',
+    'afrobeats events 2026',
     'african music festivals',
     'amapiano festivals',
     'afro nation',
@@ -136,7 +183,7 @@ const Events = () => {
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:alt" content="Afrobeats Events 2025 - Global Festivals and Parties" />
+        <meta property="og:image:alt" content="Afrobeats Events - Global Festivals and Parties" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content={canonicalUrl} />
@@ -150,7 +197,7 @@ const Events = () => {
         <meta name="twitter:title" content={metaTitle} />
         <meta name="twitter:description" content={metaDescription} />
         <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:image:alt" content="Afrobeats Events 2025 - Global Festivals and Parties" />
+        <meta name="twitter:image:alt" content="Afrobeats Events - Global Festivals and Parties" />
         
         {/* Additional SEO */}
         <link rel="canonical" href={canonicalUrl} />
@@ -164,7 +211,7 @@ const Events = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "EventListing",
-            "name": "Afrobeats Events 2025",
+            "name": "Afrobeats Events",
             "description": metaDescription,
             "url": canonicalUrl,
             "image": ogImage,
@@ -312,9 +359,51 @@ const Events = () => {
                 </Card>
               </Link>
             )) : (
-              <div className="col-span-full text-center py-12">
+              <div className="col-span-full text-center py-12 px-4">
                 <h3 className="text-xl font-medium mb-2 text-slate-900">No events found</h3>
-                <p className="text-slate-700">Try adjusting your search filters</p>
+                <p className="text-slate-700 max-w-lg mx-auto mb-6">
+                  {!showPastEvents && (
+                    <>
+                      {hasNonDefaultFilters && anyUpcomingInDataset
+                        ? "No upcoming events match your current filters."
+                        : !anyUpcomingInDataset
+                          ? "There are no upcoming events in the calendar right now."
+                          : "No upcoming events match your current filters."}
+                    </>
+                  )}
+                  {showPastEvents && (
+                    <>
+                      {hasNonDefaultFilters
+                        ? "No past events match your current filters."
+                        : "No past events are listed yet."}
+                    </>
+                  )}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center items-center flex-wrap">
+                  {!showPastEvents && anyPastInDataset && (
+                    <Button
+                      type="button"
+                      variant="default"
+                      className="bg-[#008751] text-white hover:bg-[#008751]/90"
+                      onClick={() => setShowPastEvents(true)}
+                    >
+                      <History className="mr-2 h-4 w-4" />
+                      Show past events
+                    </Button>
+                  )}
+                  {showPastEvents && anyUpcomingInDataset && (
+                    <Button type="button" variant="outline" onClick={() => setShowPastEvents(false)}>
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Show upcoming events
+                    </Button>
+                  )}
+                  {hasNonDefaultFilters && (
+                    <Button type="button" variant="outline" onClick={clearFilters}>
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      Clear filters
+                    </Button>
+                  )}
+                </div>
               </div>
             )}
           </div>

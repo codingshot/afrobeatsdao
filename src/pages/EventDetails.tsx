@@ -19,6 +19,7 @@ import { EVENTS } from "@/components/EventsSection";
 interface Event {
   image_url: string;
   website: string;
+  ticket_url?: string;
   location: string;
   event_description: string;
   organizer: string;
@@ -248,7 +249,7 @@ const EventDetails = () => {
             "offers": {
               "@type": "Offer",
               "description": event.details.ticket_info,
-              "url": event.details.website,
+              "url": event.details.ticket_url || event.details.website,
               "availability": "https://schema.org/InStock"
             },
             "isPartOf": {
@@ -344,11 +345,11 @@ const EventDetails = () => {
                   <h2 className="text-2xl font-heading font-bold mb-4 text-white">Ticket Information</h2>
                   <p className="text-white mb-4 whitespace-pre-line">{event.details.ticket_info}</p>
                   
-                  {event.details.website && (
+                  {(event.details.ticket_url || event.details.website) && (
                     <Button variant="accent" className="bg-[#008751] text-white hover:bg-[#008751]/90" asChild>
-                      <a href={event.details.website} target="_blank" rel="noopener noreferrer">
+                      <a href={event.details.ticket_url || event.details.website} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="mr-2 h-4 w-4" />
-                        Get Tickets
+                        {event.details.ticket_url ? "Get Tickets" : "Tickets / Info"}
                       </a>
                     </Button>
                   )}

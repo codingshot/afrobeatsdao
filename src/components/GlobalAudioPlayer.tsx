@@ -8,11 +8,38 @@ import { VIBE_VIDEOS } from "@/components/VibeOfTheDay";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar } from "@/components/ui/avatar";
+import { getYoutubeVideoId } from "@/lib/youtubeVideoId";
+
+/** Minimal typing for the iframe API surface we use */
+export interface YoutubePlayerApi {
+  destroy(): void;
+  loadVideoById(id: string): void;
+  playVideo(): void;
+  pauseVideo(): void;
+  seekTo(seconds: number, allowSeekAhead?: boolean): void;
+  setVolume(v: number): void;
+  getDuration(): number;
+  getCurrentTime(): number;
+  getVideoData(): { title?: string; author?: string };
+}
+
+interface YoutubePlayerStateEvent {
+  data: number;
+  target: YoutubePlayerApi;
+}
 
 declare global {
   interface Window {
-    onYouTubeIframeAPIReady: () => void;
-    YT: any;
+    onYouTubeIframeAPIReady?: () => void;
+    YT?: {
+      Player: new (elementId: string, options: Record<string, unknown>) => YoutubePlayerApi;
+      PlayerState: {
+        ENDED: number;
+        PLAYING: number;
+        PAUSED: number;
+        BUFFERING: number;
+      };
+    };
   }
 }
 
@@ -61,7 +88,7 @@ export const GlobalAudioPlayerProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [player, setPlayer] = useState<any>(null);
+  const [player, setPlayer] = useState<YoutubePlayerApi | null>(null);
   const [currentSong, setCurrentSong] = useState<Song | null>(null);
   const [queue, setQueue] = useState<Song[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -88,12 +115,31 @@ export const GlobalAudioPlayerProvider = ({
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const { toast } = useToast();
 
+  const currentSongRef = useRef<Song | null>(null);
+  const volumeRef = useRef(volume);
+  const previousVideoDataRef = useRef<Song | null>(null);
+
+  useEffect(() => {
+    currentSongRef.current = currentSong;
+  }, [currentSong]);
+
+  useEffect(() => {
+    volumeRef.current = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    previousVideoDataRef.current = previousVideoData;
+  }, [previousVideoData]);
+
   useEffect(() => {
     try {
       // Load volume
       const savedVolume = localStorage.getItem(STORAGE_KEYS.VOLUME);
       if (savedVolume) {
-        setVolume(parseInt(savedVolume, 10));
+        const parsed = parseInt(savedVolume, 10);
+        if (Number.isFinite(parsed)) {
+          setVolume(Math.min(100, Math.max(0, parsed)));
+        }
       }
       
       // Load repeat setting
@@ -129,7 +175,7 @@ export const GlobalAudioPlayerProvider = ({
         
         // Set thumbnail URL for the saved song
         if (parsedSong.youtube) {
-          const videoId = getVideoId(parsedSong.youtube);
+          const videoId = getYoutubeVideoId(parsedSong.youtube);
           if (videoId) {
             setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
           }
@@ -163,30 +209,9 @@ export const GlobalAudioPlayerProvider = ({
     }
   }, [currentSong, queue, volume, repeat, videoVisible, playedSongs, isInitialLoad]);
 
-  // Helper function to extract video ID from YouTube URL or ID string
-  const getVideoId = useCallback((youtube: string): string => {
-    if (youtube.includes('v=')) {
-      return youtube.split('v=')[1].split('&')[0];
-    } else if (youtube.includes('youtu.be/')) {
-      return youtube.split('youtu.be/')[1].split('?')[0];
-    }
-    return youtube;
-  }, []);
-
   const toggleQueueVisibility = useCallback(() => {
-    console.log("Toggling queue visibility, current state:", queueVisible);
-    setQueueVisible(prev => !prev);
-  }, [queueVisible]);
-
-  useEffect(() => {
-    if (youtubeApiLoaded && player && !currentSong) {
-      const defaultVideo = getRandomVibeVideo();
-      playNow({
-        id: `default-vibe-${defaultVideo}`,
-        youtube: defaultVideo
-      });
-    }
-  }, [youtubeApiLoaded, player, currentSong]);
+    setQueueVisible((prev) => !prev);
+  }, []);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
     const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
@@ -194,33 +219,12 @@ export const GlobalAudioPlayerProvider = ({
     return availableVideos[randomIndex];
   }, []);
 
-  // Setup Media Session API for background playback control
+  const repeatRef = useRef(repeat);
   useEffect(() => {
-    if ('mediaSession' in navigator && currentSong) {
-      try {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: videoTitle || 'Unknown Title',
-          artist: channelTitle || 'Unknown Artist',
-          album: 'Afrobeats Player',
-          artwork: [
-            { 
-              src: thumbnailUrl || '/AfrobeatsDAOMeta.png', 
-              sizes: '128x128', 
-              type: 'image/png' 
-            }
-          ]
-        });
-        
-        // Set action handlers
-        navigator.mediaSession.setActionHandler('play', togglePlay);
-        navigator.mediaSession.setActionHandler('pause', togglePlay);
-        navigator.mediaSession.setActionHandler('previoustrack', previousSong);
-        navigator.mediaSession.setActionHandler('nexttrack', nextSong);
-      } catch (error) {
-        console.error("Error setting up Media Session:", error);
-      }
-    }
-  }, [currentSong, videoTitle, channelTitle, thumbnailUrl]);
+    repeatRef.current = repeat;
+  }, [repeat]);
+
+  const nextSongRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (!window.YT && !document.getElementById('youtube-iframe-api')) {
@@ -236,114 +240,6 @@ export const GlobalAudioPlayerProvider = ({
       setYoutubeApiLoaded(true);
     }
   }, []);
-
-  useEffect(() => {
-    if (youtubeApiLoaded && playerContainerRef.current) {
-      if (player) {
-        try {
-          player.destroy();
-        } catch (e) {
-          console.error("Error destroying player:", e);
-        }
-      }
-      try {
-        const newPlayer = new window.YT.Player('youtube-player', {
-          height: '240',
-          width: '426',
-          playerVars: {
-            playsinline: 1,
-            controls: 1
-          },
-          events: {
-            onStateChange: (event: any) => {
-              if (event.data === window.YT.PlayerState.ENDED) {
-                setIsLoading(false);
-                if (repeat) {
-                  event.target.playVideo();
-                } else {
-                  nextSong();
-                }
-              } else if (event.data === window.YT.PlayerState.PLAYING) {
-                setIsLoading(false);
-                setIsPlaying(true);
-                const videoData = event.target.getVideoData();
-                if (videoData) {
-                  setVideoTitle(videoData.title || "Unknown Title");
-                  setChannelTitle(videoData.author || "Unknown Channel");
-                }
-                setDuration(event.target.getDuration());
-                
-                // Set thumbnail URL
-                const videoId = getVideoId(currentSong?.youtube || "");
-                if (videoId) {
-                  setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
-                }
-                
-                // After first successful play, mark initial load as complete
-                if (isInitialLoad) {
-                  setIsInitialLoad(false);
-                }
-              } else if (event.data === window.YT.PlayerState.PAUSED) {
-                setIsLoading(false);
-                setIsPlaying(false);
-              } else if (event.data === window.YT.PlayerState.BUFFERING) {
-                setIsLoading(true);
-              }
-            },
-            onError: (event: any) => {
-              console.error("YouTube player error:", event);
-              setIsLoading(false);
-              
-              if (currentSong) {
-                const errorSong = {...currentSong};
-                toast({
-                  title: "Error playing song",
-                  description: "This song couldn't be played. Adding to end of queue and moving to next."
-                });
-                
-                setQueue(prevQueue => [...prevQueue, errorSong]);
-                
-                nextSong();
-              } else if (previousVideoData) {
-                console.log("Error playing video, reverting to previous video");
-                setCurrentSong(previousVideoData);
-                event.target.loadVideoById(previousVideoData.youtube);
-              } else {
-                setVideoTitle("Error loading video");
-                setChannelTitle("Unknown");
-              }
-            },
-            onReady: (event: any) => {
-              event.target.setVolume(volume);
-              console.log("YouTube player ready");
-              
-              // If we have a saved current song, load it
-              if (currentSong && !isPlaying) {
-                try {
-                  event.target.loadVideoById(currentSong.youtube);
-                  event.target.playVideo();
-                } catch (e) {
-                  console.error("Error loading saved video:", e);
-                }
-              }
-            }
-          }
-        });
-        setPlayer(newPlayer);
-      } catch (e) {
-        console.error("Error initializing YouTube player:", e);
-      }
-    }
-    return () => {
-      if (player) {
-        try {
-          player.destroy();
-        } catch (e) {
-          console.error("Error destroying player on unmount:", e);
-        }
-      }
-    };
-  }, [youtubeApiLoaded]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -368,8 +264,7 @@ export const GlobalAudioPlayerProvider = ({
     setIsPlaying(true);
     if (player && player.loadVideoById) {
       try {
-        let videoId = getVideoId(song.youtube);
-        console.log("Loading video ID:", videoId);
+        const videoId = getYoutubeVideoId(song.youtube);
         player.loadVideoById(videoId);
         
         // Update thumbnail
@@ -381,10 +276,20 @@ export const GlobalAudioPlayerProvider = ({
           title: "Error loading video",
           description: "Couldn't load the requested video. Trying next song."
         });
-        nextSong();
+        nextSongRef.current();
       }
     }
-  }, [player, currentSong, previousVideoData, getVideoId]);
+  }, [player, currentSong, toast]);
+
+  useEffect(() => {
+    if (youtubeApiLoaded && player && !currentSong) {
+      const defaultVideo = getRandomVibeVideo();
+      playNow({
+        id: `default-vibe-${defaultVideo}`,
+        youtube: defaultVideo,
+      });
+    }
+  }, [youtubeApiLoaded, player, currentSong, playNow, getRandomVibeVideo]);
 
   const addToQueue = useCallback((song: Song) => {
     setQueue(prev => [...prev, song]);
@@ -418,10 +323,9 @@ export const GlobalAudioPlayerProvider = ({
     }
     
     // If no unplayed queue songs, get a random vibe video that hasn't been played
-    const currentVideoId = currentId || 
-                          currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
-                          currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
-                          currentSong?.youtube;
+    const rawYt = currentSong?.youtube;
+    const currentVideoId =
+      currentId || (rawYt ? getYoutubeVideoId(rawYt) : undefined);
     
     // Find videos that haven't been played recently
     const recentlyPlayedIds = Array.from(playedSongs).slice(-RECENTLY_PLAYED_LIMIT);
@@ -447,13 +351,13 @@ export const GlobalAudioPlayerProvider = ({
       playNow(nextSong);
     } else {
       const nextSong = findUnplayedSong(
-        currentSong?.youtube.split('v=')[1]?.split('&')[0] || 
-        currentSong?.youtube.split('youtu.be/')[1]?.split('?')[0] || 
-        currentSong?.youtube
+        currentSong?.youtube ? getYoutubeVideoId(currentSong.youtube) : undefined
       );
       playNow(nextSong);
     }
   }, [queue, playNow, findUnplayedSong, currentSong]);
+
+  nextSongRef.current = nextSong;
 
   const previousSong = useCallback(() => {
     if (player) {
@@ -488,6 +392,136 @@ export const GlobalAudioPlayerProvider = ({
       return newQueue;
     });
   }, []);
+
+  useEffect(() => {
+    if (!youtubeApiLoaded || !playerContainerRef.current) return;
+    const YT = window.YT;
+    if (!YT) return;
+
+    let instance: YoutubePlayerApi | null = null;
+    try {
+      instance = new YT.Player("youtube-player", {
+        height: "240",
+        width: "426",
+        playerVars: {
+          playsinline: 1,
+          controls: 1,
+        },
+        events: {
+          onStateChange: (event: YoutubePlayerStateEvent) => {
+            if (event.data === YT.PlayerState.ENDED) {
+              setIsLoading(false);
+              if (repeatRef.current) {
+                event.target.playVideo();
+              } else {
+                nextSongRef.current();
+              }
+            } else if (event.data === YT.PlayerState.PLAYING) {
+              setIsLoading(false);
+              setIsPlaying(true);
+              const videoData = event.target.getVideoData();
+              if (videoData) {
+                setVideoTitle(videoData.title || "Unknown Title");
+                setChannelTitle(videoData.author || "Unknown Channel");
+              }
+              setDuration(event.target.getDuration());
+
+              const yt = currentSongRef.current?.youtube || "";
+              const videoId = getYoutubeVideoId(yt);
+              if (videoId) {
+                setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+              }
+
+              setIsInitialLoad((v) => (v ? false : v));
+            } else if (event.data === YT.PlayerState.PAUSED) {
+              setIsLoading(false);
+              setIsPlaying(false);
+            } else if (event.data === YT.PlayerState.BUFFERING) {
+              setIsLoading(true);
+            }
+          },
+          onError: (event: YoutubePlayerStateEvent) => {
+            console.error("YouTube player error:", event);
+            setIsLoading(false);
+
+            const songNow = currentSongRef.current;
+            if (songNow) {
+              const errorSong = { ...songNow };
+              toast({
+                title: "Error playing song",
+                description: "This song couldn't be played. Adding to end of queue and moving to next.",
+              });
+
+              setQueue((prevQueue) => [...prevQueue, errorSong]);
+
+              nextSongRef.current();
+            } else {
+              const prev = previousVideoDataRef.current;
+              if (prev?.youtube) {
+                setCurrentSong(prev);
+                event.target.loadVideoById(getYoutubeVideoId(prev.youtube));
+              } else {
+                setVideoTitle("Error loading video");
+                setChannelTitle("Unknown");
+              }
+            }
+          },
+          onReady: (event: YoutubePlayerStateEvent) => {
+            event.target.setVolume(volumeRef.current);
+
+            const song = currentSongRef.current;
+            if (song?.youtube) {
+              try {
+                event.target.loadVideoById(getYoutubeVideoId(song.youtube));
+                event.target.playVideo();
+              } catch (e) {
+                console.error("Error loading saved video:", e);
+              }
+            }
+          },
+        },
+      });
+      setPlayer(instance);
+    } catch (e) {
+      console.error("Error initializing YouTube player:", e);
+    }
+
+    return () => {
+      if (instance) {
+        try {
+          instance.destroy();
+        } catch (e) {
+          console.error("Error destroying player on unmount:", e);
+        }
+      }
+    };
+  }, [youtubeApiLoaded, toast]);
+
+  useEffect(() => {
+    if ("mediaSession" in navigator && currentSong) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: videoTitle || "Unknown Title",
+          artist: channelTitle || "Unknown Artist",
+          album: "Afrobeats Player",
+          artwork: [
+            {
+              src: thumbnailUrl || "/AfrobeatsDAOMeta.png",
+              sizes: "128x128",
+              type: "image/png",
+            },
+          ],
+        });
+
+        navigator.mediaSession.setActionHandler("play", togglePlay);
+        navigator.mediaSession.setActionHandler("pause", togglePlay);
+        navigator.mediaSession.setActionHandler("previoustrack", previousSong);
+        navigator.mediaSession.setActionHandler("nexttrack", nextSong);
+      } catch (error) {
+        console.error("Error setting up Media Session:", error);
+      }
+    }
+  }, [currentSong, videoTitle, channelTitle, thumbnailUrl, togglePlay, nextSong, previousSong]);
 
   const toggleVideo = useCallback(() => {
     setVideoVisible(prev => !prev);
@@ -608,7 +642,7 @@ export const GlobalAudioPlayerProvider = ({
                   <Slider 
                     value={[currentTime]} 
                     min={0} 
-                    max={duration} 
+                    max={duration > 0 ? duration : 1} 
                     step={1} 
                     onValueChange={([value]) => {
                       setCurrentTime(value);
@@ -746,7 +780,7 @@ export const GlobalAudioPlayerProvider = ({
                   <span className="text-xs text-gray-400 min-w-[40px]">
                     {formatTime(currentTime)}
                   </span>
-                  <Slider value={[currentTime]} min={0} max={duration} step={1} onValueChange={([value]) => {
+                  <Slider value={[currentTime]} min={0} max={duration > 0 ? duration : 1} step={1} onValueChange={([value]) => {
                 setCurrentTime(value);
                 setIsDragging(true);
               }} onValueCommit={([value]) => {

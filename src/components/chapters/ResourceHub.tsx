@@ -133,10 +133,12 @@ const eventTemplates = [
   }
 ];
 
+type DocumentTemplate = (typeof documentTemplates)[number];
+
 export const ResourceHub = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<{id: string, title: string, content: string} | null>(null);
 
-  const handleEditTemplate = (template: any) => {
+  const handleEditTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate({
       id: template.id,
       title: template.title,

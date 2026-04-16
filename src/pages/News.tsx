@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -29,61 +29,63 @@ const News = () => {
     fetchNews();
   }, []);
 
-  useEffect(() => {
-    filterNews();
-  }, [newsItems, searchTerm, dateFilter]);
-
   const fetchNews = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://afrobeats-rss.up.railway.app/rss.xml');
+      const response = await fetch("https://afrobeats-rss.up.railway.app/rss.xml");
       const xmlText = await response.text();
-      
+
       const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-      const items = xmlDoc.querySelectorAll('item');
-      
-      const parsedItems: NewsItem[] = Array.from(items).map(item => ({
-        title: item.querySelector('title')?.textContent?.replace(/^\[CDATA\[|\]\]$/g, '') || '',
-        link: item.querySelector('link')?.textContent || '',
-        guid: item.querySelector('guid')?.textContent || '',
-        pubDate: item.querySelector('pubDate')?.textContent || '',
-        description: item.querySelector('description')?.textContent?.replace(/^\[CDATA\[|\]\]$/g, '') || '',
-        categories: Array.from(item.querySelectorAll('category')).map(cat => cat.textContent || '')
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+      const items = xmlDoc.querySelectorAll("item");
+
+      const parsedItems: NewsItem[] = Array.from(items).map((item) => ({
+        title: item.querySelector("title")?.textContent?.replace(/^\[CDATA\[|\]\]$/g, "") || "",
+        link: item.querySelector("link")?.textContent || "",
+        guid: item.querySelector("guid")?.textContent || "",
+        pubDate: item.querySelector("pubDate")?.textContent || "",
+        description:
+          item.querySelector("description")?.textContent?.replace(/^\[CDATA\[|\]\]$/g, "") || "",
+        categories: Array.from(item.querySelectorAll("category")).map((cat) => cat.textContent || ""),
       }));
-      
+
       setNewsItems(parsedItems);
     } catch (error) {
-      console.error('Error fetching news:', error);
+      console.error("Error fetching news:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const filterNews = () => {
+  const filterNews = useCallback(() => {
     let filtered = newsItems;
 
     if (searchTerm) {
-      filtered = filtered.filter(item =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.categories.some(cat => cat.toLowerCase().includes(searchTerm.toLowerCase()))
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.categories.some((cat) => cat.toLowerCase().includes(searchTerm.toLowerCase())),
       );
     }
 
     if (dateFilter) {
-      const filterDate = format(dateFilter, 'yyyy-MM-dd');
-      filtered = filtered.filter(item => {
-        const itemDate = format(new Date(item.pubDate), 'yyyy-MM-dd');
+      const filterDate = format(dateFilter, "yyyy-MM-dd");
+      filtered = filtered.filter((item) => {
+        const itemDate = format(new Date(item.pubDate), "yyyy-MM-dd");
         return itemDate === filterDate;
       });
     }
 
     setFilteredItems(filtered);
-  };
+  }, [newsItems, searchTerm, dateFilter]);
+
+  useEffect(() => {
+    filterNews();
+  }, [filterNews]);
 
   const clearFilters = () => {
-    setSearchTerm('');
+    setSearchTerm("");
     setDateFilter(undefined);
   };
 

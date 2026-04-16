@@ -15,14 +15,20 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
+type CurriculumGenre = keyof typeof danceCurriculum;
+type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
+type DanceWithGenre = CurriculumDance & { genre: CurriculumGenre };
+
+type DanceTutorial = { link?: string };
+
 // Helper function to get all dances from the curriculum
-const getAllDances = () => {
-  const allDances: any[] = [];
-  Object.keys(danceCurriculum).forEach(genre => {
-    danceCurriculum[genre as keyof typeof danceCurriculum].forEach(dance => {
+const getAllDances = (): DanceWithGenre[] => {
+  const allDances: DanceWithGenre[] = [];
+  (Object.keys(danceCurriculum) as CurriculumGenre[]).forEach((genre) => {
+    danceCurriculum[genre].forEach((dance) => {
       allDances.push({
         ...dance,
-        genre
+        genre,
       });
     });
   });
@@ -88,14 +94,14 @@ export function DanceCarousel() {
   };
 
   // Get tutorial YouTube ID from the first tutorial link
-  const getVideoId = (tutorials: any[]) => {
+  const getVideoId = (tutorials: DanceTutorial[]) => {
     if (!tutorials || tutorials.length === 0) return null;
-    
+
     const youtubeLink = tutorials[0]?.link;
     if (!youtubeLink) return null;
-    
-    // Extract YouTube video ID
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+
+    const regex =
+      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\s]{11})/;
     const match = youtubeLink.match(regex);
     return match ? match[1] : null;
   };

@@ -19,6 +19,9 @@ interface DanceContentProps {
   dance: Dance;
 }
 
+type DanceSong = NonNullable<Dance["songs"]>[number];
+type DanceTutorial = NonNullable<Dance["tutorials"]>[number];
+
 export const DanceContent = ({ dance }: DanceContentProps) => {
   const [selectedTab, setSelectedTab] = useState("overview");
   const [moduleVisible, setModuleVisible] = useState<number | null>(null);
@@ -32,7 +35,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const danceProgress = getDanceProgress(dance.id);
 
   // Ultra-safe string conversion that handles ALL edge cases including Symbols
-  const safeString = (value: any): string => {
+  const safeString = (value: unknown): string => {
     try {
       // Handle null/undefined first
       if (value === null || value === undefined) {
@@ -77,10 +80,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(`Viewing dance: ${dance.name} (${dance.id})`);
-  }, [dance.id, dance.name]);
-
   // Safely extract and validate all dance properties for meta tags with additional validation
   const safeDanceName = safeString(dance?.name) || 'Dance';
   const safeDanceOrigin = safeString(dance?.origin) || '';
@@ -92,19 +91,8 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     return moveName.length > 0 ? moveName : null;
   }).filter(name => name !== null).join(', ') || '';
 
-  console.log('DanceContent - Safe values check:', {
-    safeDanceName,
-    safeDanceOrigin,
-    safeDanceDescription,
-    safeDanceKeywords,
-    nameType: typeof safeDanceName,
-    originType: typeof safeDanceOrigin,
-    descriptionType: typeof safeDanceDescription,
-    keywordsType: typeof safeDanceKeywords
-  });
-
   // Validate meta values before using in Helmet
-  const validateForHelmet = (value: any, fallback: string = ''): string => {
+  const validateForHelmet = (value: unknown, fallback: string = ""): string => {
     const safe = safeString(value);
     if (typeof safe !== 'string') {
       console.error('validateForHelmet: Non-string value detected:', safe, typeof safe);
@@ -117,27 +105,18 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
   const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
 
-  console.log('DanceContent - Final Helmet values:', {
-    helmetTitle,
-    helmetDescription,
-    helmetKeywords,
-    titleType: typeof helmetTitle,
-    descriptionType: typeof helmetDescription,
-    keywordsType: typeof helmetKeywords
-  });
-
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
   };
 
-  const createSongFromDanceData = (song: any) => ({
+  const createSongFromDanceData = (song: DanceSong) => ({
     id: `${song.title}-${song.artist}`,
     title: song.title,
     artist: song.artist,
     youtube: song.youtube,
   });
 
-  const handlePlayNow = (song: any, e?: React.MouseEvent) => {
+  const handlePlayNow = (song: DanceSong, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (audioPlayer && song) {
       try {
@@ -152,7 +131,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     }
   };
 
-  const handleAddToQueue = (song: any, e?: React.MouseEvent) => {
+  const handleAddToQueue = (song: DanceSong, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (audioPlayer && song) {
       try {
@@ -244,7 +223,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     return (danceProgress.moduleProgress.length * 100) / dance.modules.length;
   };
 
-  const isTutorialAvailable = (tutorial: any) => {
+  const isTutorialAvailable = (tutorial: DanceTutorial) => {
     return tutorial && tutorial.link && (tutorial.link.includes('youtube.com') || tutorial.link.includes('youtu.be'));
   };
 

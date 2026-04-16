@@ -80,7 +80,7 @@ const Clubs = () => {
     });
 
     return result;
-  }, [CLUBS, filters, sortBy]);
+  }, [filters, sortBy]);
   
   // Get unique values for filter dropdowns
   const cities = useMemo(() => getCities(), []);

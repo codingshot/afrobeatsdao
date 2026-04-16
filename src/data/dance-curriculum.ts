@@ -62,9 +62,9 @@ export const danceCurriculum = {
           link: "https://www.youtube.com/watch?v=guT32EbS9A0"
         },
         {
-          title: "https://www.tiktok.com/@thomaspereira.g",
+          title: "Zanku breakdown — Thomas Pereira",
           platform: "TikTok",
-          creator: "https://www.tiktok.com/@thomaspereira.g",
+          creator: "@thomaspereira.g",
           link: "https://www.tiktok.com/@thomaspereira.g/video/7290287461329063201?q=zanku%20breakdown%20dance&t=1747739865356"
         }
       ],
@@ -113,13 +113,13 @@ export const danceCurriculum = {
           title: "Azonto",
           artist: "Fuse ODG",
           youtube: "https://www.youtube.com/watch?v=lUvxGrWWdsw",
-          spotify: "https://open.spotify.com/track/3Yk3k3KCuCZ8vQXcV2W6pM"
+          spotify: "https://open.spotify.com/track/1TeIFb2AIbExCZjInMxGha"
         },
         {
           title: "U Go Kill Me",
           artist: "Sarkodie",
           youtube: "https://www.youtube.com/watch?v=kLDUQEtZHmM",
-          spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z"
+          spotify: "https://open.spotify.com/track/2iTzNWT7x2NXpMngGZQzPd"
         }
       ],
       tutorials: [
@@ -405,13 +405,13 @@ export const danceCurriculum = {
           title: "Ofana Nawe",
           artist: "DJ Bongz",
           youtube: "https://www.youtube.com/watch?v=wQ-XCM0vl6o",
-          spotify: "https://open.spotify.com/track/4b3z8z7Y8z9xQz3x4Y5z6Z"
+          spotify: "https://open.spotify.com/track/50iSQ7DDC1GOtTtCpIuPnA"
         },
         {
           title: "Ke Star",
           artist: "Focalistic",
           youtube: "https://www.youtube.com/watch?v=XjJ_L-THNl0",
-          spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z"
+          spotify: "https://open.spotify.com/track/0hKVw9d0hh633BMCqPyUF8"
         }
       ],
       tutorials: [
@@ -436,7 +436,7 @@ export const danceCurriculum = {
       origin: "South Africa",
       description: "A trending Amapiano dance that went viral on social media in 2024. Features distinctive side steps and arm movements.",
       difficulty: "Easy-Medium",
-      image: "https://placehold.co/600x400/ffd600/000000?text=Tshwala+Bam",
+      image: "/dances/tshwala-bam.gif",
       modules: [
         "Side Step Fundamentals",
         "Arm Wave Technique",
@@ -473,22 +473,22 @@ export const danceCurriculum = {
           title: "Tshwala Bam",
           artist: "TitoM & Yuppe",
           youtube: "https://www.youtube.com/watch?v=OQYHdMPOt4s",
-          spotify: "https://open.spotify.com/track/2iZ8z7Y8z9xQz3x4Y5z6Z0",
-          appleMusic: "https://music.apple.com/us/song/tshwala-bam/1678765432"
+          spotify: "https://open.spotify.com/track/54seQV7MCcppBrznALCdlT",
+          appleMusic: "https://music.apple.com/us/song/tshwala-bam-feat-s-n-e-eeque/1817717855"
         },
         {
           title: "Soweto Baby",
           artist: "DJ Maphorisa",
           youtube: "https://www.youtube.com/watch?v=LcOIXlQQ2t0",
-          spotify: "https://open.spotify.com/track/5b3z8z7Y8z9xQz3x4Y5z6Z",
-          appleMusic: "https://music.apple.com/us/song/soweto-baby/1234567890"
+          spotify: "https://open.spotify.com/track/4nVBt6MZDDM2zHY9pKSlx1",
+          appleMusic: "https://music.apple.com/us/album/soweto-baby-feat-dj-buckz-wizkid-single/1075775835"
         },
         {
           title: "Love You Tonight",
           artist: "MFR Souls",
           youtube: "https://www.youtube.com/watch?v=yDc58GmFJK0",
-          spotify: "https://open.spotify.com/track/4b3z8z7Y8z9xQz3x4Y5z6Z",
-          appleMusic: "https://music.apple.com/us/song/love-you-tonight/1548765432"
+          spotify: "https://open.spotify.com/track/2NbUnaGrjwRuRjZ5EPyOR5",
+          appleMusic: "https://music.apple.com/us/song/love-you-tonight-feat-dj-maphorisa-sha-sha-kabza-de-small/1483225542"
         }
       ],
       tutorials: [
