@@ -1,0 +1,20 @@
+# Afrobeats.party
+
+> Global platform for African music, Afrobeats culture, artists, playlists, events, clubs, dance curriculum, and community.
+
+## Primary URLs
+- https://afrobeats.party/
+- https://afrobeats.party/music
+- https://afrobeats.party/dance
+- https://afrobeats.party/news
+- https://afrobeats.party/events
+- https://afrobeats.party/clubs
+- https://afrobeats.party/partner
+- https://afrobeats.party/chapters
+- https://afrobeats.party/join
+- https://afrobeats.party/careers
+
+## Notes for assistants
+- Artist profiles live under `/music/artist/:id`; individual tracks under `/music/artist/:id/:songSlug`.
+- Dance lessons use `/dance/:genre/:id` or `/dance/:id` depending on routing.
+- News is aggregated from an external RSS feed; headlines link out to original publishers.

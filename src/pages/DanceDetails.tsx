@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 
 const DanceDetails = () => {
   const { genre, id } = useParams();
@@ -16,22 +15,20 @@ const DanceDetails = () => {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    setIsLoading(true);
+    setDance(null);
     let foundDance: Dance | null = null;
+    const danceId = id?.trim();
 
-    const pathSegments = window.location.pathname.split("/").filter(Boolean);
-    const lastSegment = pathSegments[pathSegments.length - 1];
-    const potentialId = id || lastSegment;
-
-    if (genre && id && danceCurriculum[genre as keyof typeof danceCurriculum]) {
-      const match = danceCurriculum[genre as keyof typeof danceCurriculum].find((d) => d.id === id);
+    if (genre && danceId && genre in danceCurriculum) {
+      const match = danceCurriculum[genre as keyof typeof danceCurriculum].find((d) => d.id === danceId);
       if (match) foundDance = match as Dance;
     }
 
-    if (!foundDance && potentialId) {
-      for (const genreKey in danceCurriculum) {
-        const found = danceCurriculum[genreKey as keyof typeof danceCurriculum].find(
-          (d) => d.id === potentialId,
-        );
+    if (!foundDance && danceId) {
+      for (const genreKey of ["afrobeats", "amapiano"] as const) {
+        const found = danceCurriculum[genreKey].find((d) => d.id === danceId);
         if (found) {
           foundDance = found as Dance;
           break;
@@ -43,6 +40,7 @@ const DanceDetails = () => {
       setDance(foundDance);
       setNotFound(false);
     } else {
+      setDance(null);
       setNotFound(true);
     }
 
@@ -51,7 +49,7 @@ const DanceDetails = () => {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-black px-4 pt-20 pb-8 sm:px-6 md:pt-24 lg:px-8">
         <div className="text-center">
           <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading dance details...</h1>
           <div className="w-16 h-16 border-4 border-[#FFD600] border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -62,7 +60,7 @@ const DanceDetails = () => {
 
   if (notFound) {
     return (
-      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 pt-20 pb-8 sm:px-6 md:pt-24 lg:px-8">
         <Alert variant="destructive" className="max-w-md mb-6 bg-red-500/10 border-red-500/20 text-white">
           <AlertTitle className="text-xl font-heading mb-2">Dance Not Found</AlertTitle>
           <AlertDescription className="text-gray-200">
@@ -70,7 +68,8 @@ const DanceDetails = () => {
           </AlertDescription>
         </Alert>
         
-        <Button 
+        <Button
+          type="button"
           onClick={() => navigate("/dance")}
           variant="default"
           className="bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium flex items-center gap-2"
@@ -82,28 +81,9 @@ const DanceDetails = () => {
     );
   }
 
-  // SEO meta information
-  const danceTitle = dance?.name || 'Dance Details';
-  const danceDescription = dance?.description || 'Learn about this dance style on Afrobeats.party';
-  const danceThumbnail = dance?.image || "/AfrobeatsDAOMeta.png";
+  if (!dance) return null;
 
-  return (
-    <>
-      <Helmet>
-        <title>{`${danceTitle} | Afrobeats.party`}</title>
-        <meta name="description" content={danceDescription} />
-        <meta property="og:title" content={`${danceTitle} | Afrobeats.party`} />
-        <meta property="og:description" content={danceDescription} />
-        <meta property="og:image" content={danceThumbnail} />
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${danceTitle} | Afrobeats.party`} />
-        <meta name="twitter:description" content={danceDescription} />
-        <meta name="twitter:image" content={danceThumbnail} />
-      </Helmet>
-      <DanceDetailsComponent dance={dance} />
-    </>
-  );
+  return <DanceDetailsComponent dance={dance} />;
 };
 
 export default DanceDetails;

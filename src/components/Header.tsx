@@ -7,7 +7,7 @@ import { Users, Calendar, Music, Disc3, Menu, UserRound } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { danceCurriculum } from "@/data/dance-curriculum";
 
@@ -138,6 +138,10 @@ export function Header() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const isRouteActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/';
@@ -157,36 +161,36 @@ export function Header() {
             <NavigationMenu>
               <NavigationMenuList className="flex-wrap justify-center gap-0">
                 <NavigationMenuItem>
-                  <Link to="/dance">
+                  <Link to="/dance" aria-current={isRouteActive("/dance") ? "page" : undefined}>
                     <NavigationMenuLink className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md px-3 lg:px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black", isRouteActive("/dance") && "bg-black/10")}>
-                      <Disc3 className="mr-2 h-4 w-4 shrink-0" />
+                      <Disc3 className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                       Dance
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/clubs">
+                  <Link to="/clubs" aria-current={isRouteActive("/clubs") ? "page" : undefined}>
                     <NavigationMenuLink className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md px-3 lg:px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black", isRouteActive("/clubs") && "bg-black/10")}>
-                      <Users className="mr-2 h-4 w-4 shrink-0" />
+                      <Users className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                       Clubs
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/events">
+                  <Link to="/events" aria-current={isRouteActive("/events") ? "page" : undefined}>
                     <NavigationMenuLink className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md px-3 lg:px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black", isRouteActive("/events") && "bg-black/10")}>
-                      <Calendar className="mr-2 h-4 w-4 shrink-0" />
+                      <Calendar className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                       Events
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/music">
+                  <Link to="/music" aria-current={isRouteActive("/music") ? "page" : undefined}>
                     <NavigationMenuLink className={cn("group inline-flex h-10 w-max items-center justify-center rounded-md px-3 lg:px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black", isRouteActive("/music") && "bg-black/10")}>
-                      <Music className="mr-2 h-4 w-4 shrink-0" />
+                      <Music className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                       Music
                     </NavigationMenuLink>
                   </Link>
@@ -210,42 +214,58 @@ export function Header() {
             <div className="md:hidden">
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-black hover:bg-black/10 h-10 w-10">
-                    <Menu className="h-6 w-6" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="text-black hover:bg-black/10 h-11 w-11 min-h-[44px] min-w-[44px]"
+                    aria-label="Open menu"
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="site-mobile-nav"
+                  >
+                    <Menu className="h-6 w-6" aria-hidden />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[min(100vw,320px)] border-l border-black/10 bg-[#FFD600] p-0 z-[10000]">
-                  <nav className="flex flex-col">
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Site navigation</SheetTitle>
+                    <SheetDescription>Main pages on Afrobeats DAO</SheetDescription>
+                  </SheetHeader>
+                  <nav id="site-mobile-nav" className="flex flex-col pt-12" aria-label="Mobile">
                     <Link
                       to="/dance"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn("flex items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/dance") && "bg-black/10")}
+                      aria-current={isRouteActive("/dance") ? "page" : undefined}
+                      className={cn("flex min-h-[48px] items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/dance") && "bg-black/10")}
                     >
-                      <Disc3 className="mr-3 h-5 w-5 shrink-0" />
+                      <Disc3 className="mr-3 h-5 w-5 shrink-0" aria-hidden />
                       Dance
                     </Link>
                     <Link
                       to="/clubs"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn("flex items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/clubs") && "bg-black/10")}
+                      aria-current={isRouteActive("/clubs") ? "page" : undefined}
+                      className={cn("flex min-h-[48px] items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/clubs") && "bg-black/10")}
                     >
-                      <Users className="mr-3 h-5 w-5 shrink-0" />
+                      <Users className="mr-3 h-5 w-5 shrink-0" aria-hidden />
                       Clubs
                     </Link>
                     <Link
                       to="/events"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn("flex items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/events") && "bg-black/10")}
+                      aria-current={isRouteActive("/events") ? "page" : undefined}
+                      className={cn("flex min-h-[48px] items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10 border-b border-black/10", isRouteActive("/events") && "bg-black/10")}
                     >
-                      <Calendar className="mr-3 h-5 w-5 shrink-0" />
+                      <Calendar className="mr-3 h-5 w-5 shrink-0" aria-hidden />
                       Events
                     </Link>
                     <Link
                       to="/music"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn("flex items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10", isRouteActive("/music") && "bg-black/10")}
+                      aria-current={isRouteActive("/music") ? "page" : undefined}
+                      className={cn("flex min-h-[48px] items-center px-4 py-3.5 text-base font-medium text-black hover:bg-black/10", isRouteActive("/music") && "bg-black/10")}
                     >
-                      <Music className="mr-3 h-5 w-5 shrink-0" />
+                      <Music className="mr-3 h-5 w-5 shrink-0" aria-hidden />
                       Music
                     </Link>
                   </nav>

@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router-dom';
 import { slugify } from '@/lib/slugUtils';
+import { SITE_ORIGIN, absoluteUrl, sanitizeSnippet, jsonLdGraph, breadcrumbListSchema } from '@/lib/siteSeo';
 
 const ArtistProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -260,10 +261,47 @@ const ArtistProfile = () => {
 
   // Build meta strings with safe concatenation - avoid template literals
   const metaTitle = safeName + (safeCountry ? ' - ' + safeCountry : '') + ' ' + safeGenre + ' Artist | Afrobeats.party';
-  const metaDescription = '🎵 Discover ' + safeName + '\'s music on Afrobeats.party! ' + (safeCountry ? 'This ' + safeCountry + ' artist ' : 'Listen to ') + (artist.top_songs?.length || 0) + ' top songs including their biggest hits. ' + (safeGenre ? 'Experience the best of ' + safeGenre + ' ' : 'Stream Afrobeats ') + 'music and join the global African music community.';
-  const canonicalUrl = 'https://afrobeats.party/music/artist/' + safeId;
-  const ogImage = safeImage ? 'https://afrobeats.party' + safeImage : 'https://afrobeats.party/AfrobeatsDAOMeta.png';
+  const metaDescriptionRaw =
+    'Discover ' +
+    safeName +
+    "'s music on Afrobeats.party. " +
+    (safeCountry ? 'This ' + safeCountry + ' artist ' : 'Listen to ') +
+    (artist.top_songs?.length || 0) +
+    ' top songs including their biggest hits. ' +
+    (safeGenre ? 'Experience the best of ' + safeGenre + ' ' : 'Stream Afrobeats ') +
+    'music and join the global African music community.';
+  const metaDescription = sanitizeSnippet(metaDescriptionRaw);
+  const canonicalUrl = SITE_ORIGIN + '/music/artist/' + safeId;
+  const ogImage = safeImage ? absoluteUrl(safeImage) : absoluteUrl('/AfrobeatsDAOMeta.png');
   const ogImageAlt = safeName + ' - ' + (safeCountry ? safeCountry + ' ' : '') + safeGenre + ' Artist Profile';
+
+  const artistSameAs = [
+    safeString(artist.spotify),
+    safeString(artist.instagram),
+    safeString(artist.twitter),
+    safeString(artist.youtube),
+    safeString(artist.soundcloud),
+    safeString(artist.tiktok),
+    safeString(artist.facebook),
+    safeString(artist.linkedin),
+  ].filter((u) => u && /^https?:\/\//i.test(u));
+
+  const artistJsonLd = jsonLdGraph([
+    {
+      '@type': 'Person',
+      name: safeName,
+      url: canonicalUrl,
+      image: ogImage,
+      ...(safeCountry ? { nationality: { '@type': 'Country', name: safeCountry } } : {}),
+      ...(safeGenre ? { genre: safeGenre } : {}),
+      ...(artistSameAs.length ? { sameAs: artistSameAs } : {}),
+    },
+    breadcrumbListSchema([
+      { name: 'Home', url: SITE_ORIGIN },
+      { name: 'Music', url: SITE_ORIGIN + '/music' },
+      { name: safeName, url: canonicalUrl },
+    ]),
+  ]);
   
   // Build keywords safely
   const keywordsList = [
@@ -323,10 +361,11 @@ const ArtistProfile = () => {
             <meta name="geo.placename" content={safeCountry} />
           </>
         )}
+        <script type="application/ld+json">{JSON.stringify(artistJsonLd)}</script>
       </Helmet>
       
       <div className="min-h-screen bg-background">
-        <main className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8">
           <Button 
             variant="outline" 
             onClick={() => navigate('/music')} 
@@ -510,7 +549,7 @@ const ArtistProfile = () => {
               </div>
             </div>
           </div>
-        </main>
+        </div>
         
         <Footer />
       </div>

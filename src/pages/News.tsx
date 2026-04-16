@@ -1,5 +1,6 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Helmet } from 'react-helmet';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, Search, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { SITE_ORIGIN, sanitizeSnippet, jsonLdGraph, breadcrumbListSchema } from '@/lib/siteSeo';
 
 interface NewsItem {
   title: string;
@@ -84,6 +86,43 @@ const News = () => {
     filterNews();
   }, [filterNews]);
 
+  const newsCanonical = `${SITE_ORIGIN}/news`;
+  const newsDescription = useMemo(
+    () =>
+      sanitizeSnippet(
+        newsItems[0]
+          ? `Latest Afrobeats headlines including ${newsItems[0].title}. African music releases and culture.`
+          : 'Afrobeats news, releases, and culture from trusted sources.',
+      ),
+    [newsItems],
+  );
+
+  const newsJsonLd = useMemo(() => {
+    if (newsItems.length === 0) return null;
+    const top = newsItems.slice(0, 15);
+    return jsonLdGraph([
+      {
+        '@type': 'CollectionPage',
+        name: 'Afrobeats News',
+        url: newsCanonical,
+        description: newsDescription,
+      },
+      breadcrumbListSchema([
+        { name: 'Home', url: SITE_ORIGIN },
+        { name: 'News', url: newsCanonical },
+      ]),
+      {
+        '@type': 'ItemList',
+        itemListElement: top.map((it, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: it.title,
+          item: it.link,
+        })),
+      },
+    ]);
+  }, [newsItems, newsCanonical, newsDescription]);
+
   const clearFilters = () => {
     setSearchTerm("");
     setDateFilter(undefined);
@@ -92,32 +131,58 @@ const News = () => {
   // Create ticker segments with clickable headlines
   const createTickerSegments = () => {
     return newsItems.map((item, index) => (
-      <span key={index}>
-        <button 
-          onClick={() => window.open(item.link, '_blank')}
-          className="hover:underline cursor-pointer bg-transparent border-none text-black font-semibold"
+      <span key={item.guid || `ticker-${index}`}>
+        <button
+          type="button"
+          onClick={() => window.open(item.link, "_blank", "noopener,noreferrer")}
+          className="cursor-pointer rounded-sm border-none bg-transparent py-1 text-left font-semibold text-black hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25"
         >
           {item.title}
         </button>
-        {index < newsItems.length - 1 && ' 🪘 '}
+        {index < newsItems.length - 1 && <span aria-hidden> 🪘 </span>}
       </span>
     ));
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FEF7CD] pt-20">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E63946]"></div>
+      <>
+        <Helmet>
+          <title>Afrobeats News | Afrobeats.party</title>
+          <meta name="description" content="Loading the latest Afrobeats news and African music headlines." />
+          <link rel="canonical" href={newsCanonical} />
+        </Helmet>
+        <div className="min-h-screen bg-[#FEF7CD] pt-20">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E63946]"></div>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FEF7CD] pt-20">
+    <>
+      <Helmet>
+        <title>Afrobeats News | Afrobeats.party</title>
+        <meta name="description" content={newsDescription} />
+        <link rel="canonical" href={newsCanonical} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Afrobeats News | Afrobeats.party" />
+        <meta property="og:description" content={newsDescription} />
+        <meta property="og:url" content={newsCanonical} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/AfrobeatsDAOMeta.png`} />
+        <meta property="og:site_name" content="Afrobeats.party" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Afrobeats News | Afrobeats.party" />
+        <meta name="twitter:description" content={newsDescription} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/AfrobeatsDAOMeta.png`} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        {newsJsonLd && <script type="application/ld+json">{JSON.stringify(newsJsonLd)}</script>}
+      </Helmet>
+      <div className="min-h-screen bg-[#FEF7CD] pt-20">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -144,7 +209,7 @@ const News = () => {
               {/* Ticker container */}
               <div className="bg-[#FFD600] py-3 overflow-hidden relative">
                 <div 
-                  className="whitespace-nowrap text-black font-semibold flex"
+                  className="news-ticker-track whitespace-nowrap text-black font-semibold flex"
                   style={{
                     animation: 'scroll 60s linear infinite'
                   }}
@@ -178,12 +243,18 @@ const News = () => {
         <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <label htmlFor="news-search" className="sr-only">
+                Search news
+              </label>
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" aria-hidden />
               <Input
+                id="news-search"
+                type="search"
+                enterKeyHint="search"
                 placeholder="Search news..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="min-h-11 pl-10"
               />
             </div>
             
@@ -282,6 +353,7 @@ const News = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 

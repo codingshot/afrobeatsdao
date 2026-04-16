@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Droppable, Draggable, type DropResult } from 'react-beautiful-dnd';
 import { Play, ListMusic, MoveVertical, Download } from 'lucide-react';
 import { Song } from './GlobalAudioPlayer';
+import { getYoutubeVideoId } from "@/lib/youtubeVideoId";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import MarkdownPreviewDialog from "./MarkdownPreviewDialog";
@@ -43,18 +44,17 @@ const QueueDrawer = ({
     return `https://img.youtube.com/vi/${videoId}/default.jpg`;
   };
 
-  const getVideoIdFromUrl = (url: string): string => {
-    if (url.includes('v=')) {
-      return url.split('v=')[1]?.split('&')[0] || '';
-    } else if (url.includes('youtu.be/')) {
-      return url.split('youtu.be/')[1]?.split('?')[0] || '';
-    }
-    return url;
-  };
+  const getVideoIdFromUrl = (url: string): string => getYoutubeVideoId(url);
 
   const filteredQueue = queue.filter(song => 
     !showPlayedSongs || !playedSongs.has(song.id)
   );
+
+  const playedSongsList: Song[] = Array.from(playedSongs).map(id => {
+    const song = queue.find(s => s.id === id);
+    if (song) return song;
+    return { id, youtube: id.replace("vibe-", ""), title: "Title of video", artist: "" };
+  }).filter(Boolean) as Song[];
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -119,26 +119,26 @@ const QueueDrawer = ({
 
   if (!isVisible) return null;
 
-  const playedSongsList: Song[] = Array.from(playedSongs).map(id => {
-    const song = queue.find(s => s.id === id);
-    if (song) return song;
-    return { id, youtube: id.replace('vibe-', ''), title: 'Title of video', artist: '' };
-  }).filter(Boolean) as Song[];
-
   return (
-    <div className={`fixed right-4 ${isMinimized ? 'h-[50px]' : 'bottom-[80px]'} w-[350px] z-40`}>
+    <div
+      role="region"
+      aria-label="Playback queue and history"
+      className={`fixed right-4 ${isMinimized ? 'h-[50px]' : 'bottom-[80px]'} w-[min(100vw-2rem,350px)] max-w-[calc(100vw-2rem)] z-40`}
+    >
       <Card className="border bg-white shadow-lg">
         <CardContent className={`p-4 ${isMinimized ? 'p-2' : ''}`}>
           {isMinimized ? (
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Queue ({filteredQueue.length})</span>
               <Button
+                type="button"
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMinimized(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="min-h-9 min-w-9 text-gray-500 hover:text-gray-700"
+                aria-label="Expand queue panel"
               >
-                <Minimize className="h-4 w-4" />
+                <Minimize className="h-4 w-4" aria-hidden />
               </Button>
             </div>
           ) : (
@@ -151,12 +151,14 @@ const QueueDrawer = ({
                   </TabsList>
                 </Tabs>
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsMinimized(true)}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="min-h-9 min-w-9 text-gray-500 hover:text-gray-700"
+                  aria-label="Minimize queue panel"
                 >
-                  <Minimize className="h-4 w-4" />
+                  <Minimize className="h-4 w-4" aria-hidden />
                 </Button>
               </div>
               
@@ -188,9 +190,10 @@ const QueueDrawer = ({
                                       >
                                         <div 
                                           {...provided.dragHandleProps}
-                                          className="text-gray-400 hover:text-gray-600 cursor-grab"
+                                          className="text-gray-400 hover:text-gray-600 cursor-grab touch-manipulation rounded p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008751]"
+                                          aria-label={`Reorder: ${song.title || "track"}`}
                                         >
-                                          <MoveVertical className="h-4 w-4" />
+                                          <MoveVertical className="h-4 w-4" aria-hidden />
                                         </div>
                                         
                                         <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden">

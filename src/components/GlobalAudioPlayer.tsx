@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useLayoutEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Progress } from "@/components/ui/progress";
@@ -10,6 +10,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar } from "@/components/ui/avatar";
 import { getYoutubeVideoId } from "@/lib/youtubeVideoId";
 import { collectRandomPlayableSongs, shuffleArray } from "@/lib/randomSongPool";
+import {
+  appendToQueueCapped,
+  getPlayableVideoId,
+  parseStoredQueue,
+  parseStoredSong,
+  reorderQueueSafe,
+  MAX_QUEUE_LENGTH,
+} from "@/lib/globalAudioPlayerSupport";
+import { buildYoutubeArtwork, positionStateForMediaSession } from "@/lib/mediaSessionSupport";
 
 /** Minimal typing for the iframe API surface we use */
 export interface YoutubePlayerApi {
@@ -124,10 +133,51 @@ export const GlobalAudioPlayerProvider = ({
   const currentSongRef = useRef<Song | null>(null);
   const volumeRef = useRef(volume);
   const previousVideoDataRef = useRef<Song | null>(null);
+  /** Avoid redundant loadVideoById when player instance + track unchanged. */
+  const lastSyncedPlayerLoadRef = useRef<{ player: YoutubePlayerApi | null; key: string }>({
+    player: null,
+    key: "",
+  });
+  const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const persistSnapshotRef = useRef({
+    currentSong: null as Song | null,
+    queue: [] as Song[],
+    volume: 100,
+    repeat: false,
+    videoVisible: false,
+    playedSongs: new Set<string>(),
+    isInitialLoad: true,
+  });
+  const playerApiRef = useRef<YoutubePlayerApi | null>(null);
+  const isPlayingRef = useRef(false);
+  const pausedWhileHiddenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  type MediaBridge = {
+    togglePlay: () => void;
+    nextSong: () => void;
+    previousSong: () => void;
+    seekBy: (deltaSec: number) => void;
+    feelingLucky: () => void;
+  };
+  const noop = () => {};
+  const mediaBridgeRef = useRef<MediaBridge>({
+    togglePlay: noop,
+    nextSong: noop,
+    previousSong: noop,
+    seekBy: () => {},
+    feelingLucky: noop,
+  });
 
   useEffect(() => {
     currentSongRef.current = currentSong;
   }, [currentSong]);
+
+  useEffect(() => {
+    playerApiRef.current = player;
+  }, [player]);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
   useEffect(() => {
     volumeRef.current = volume;
@@ -137,7 +187,8 @@ export const GlobalAudioPlayerProvider = ({
     previousVideoDataRef.current = previousVideoData;
   }, [previousVideoData]);
 
-  useEffect(() => {
+  // Hydrate from localStorage before passive effects (bootstrap / YouTube) read queue & currentSong.
+  useLayoutEffect(() => {
     try {
       // Load volume
       const savedVolume = localStorage.getItem(STORAGE_KEYS.VOLUME);
@@ -160,30 +211,35 @@ export const GlobalAudioPlayerProvider = ({
         setVideoVisible(savedVideoVisible === 'true');
       }
 
-      // Load queue
       const savedQueue = localStorage.getItem(STORAGE_KEYS.QUEUE);
-      if (savedQueue) {
-        setQueue(JSON.parse(savedQueue));
-      }
+      setQueue(parseStoredQueue(savedQueue));
       
       // Load played songs
       const savedPlayedSongs = localStorage.getItem(STORAGE_KEYS.PLAYED_SONGS);
       if (savedPlayedSongs) {
-        setPlayedSongs(new Set(JSON.parse(savedPlayedSongs)));
+        try {
+          const arr = JSON.parse(savedPlayedSongs) as unknown;
+          if (Array.isArray(arr) && arr.every((x) => typeof x === "string")) {
+            setPlayedSongs(new Set(arr));
+          }
+        } catch {
+          /* ignore corrupt played history */
+        }
       }
       
-      // Load current song
       const savedCurrentSong = localStorage.getItem(STORAGE_KEYS.CURRENT_SONG);
-      if (savedCurrentSong) {
-        const parsedSong = JSON.parse(savedCurrentSong);
-        setCurrentSong(parsedSong);
-        setLoadingTitle(parsedSong.title || "Loading...");
-        
-        // Set thumbnail URL for the saved song
-        if (parsedSong.youtube) {
-          const videoId = getYoutubeVideoId(parsedSong.youtube);
-          if (videoId) {
-            setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+      const parsedSong = parseStoredSong(savedCurrentSong);
+      if (parsedSong) {
+        const vid = getPlayableVideoId(parsedSong.youtube);
+        if (vid) {
+          setCurrentSong(parsedSong);
+          setLoadingTitle(parsedSong.title || "Loading...");
+          setThumbnailUrl(`https://img.youtube.com/vi/${vid}/default.jpg`);
+        } else {
+          try {
+            localStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
+          } catch {
+            /* ignore */
           }
         }
       }
@@ -193,31 +249,79 @@ export const GlobalAudioPlayerProvider = ({
   }, []);
 
   useEffect(() => {
-    if (isInitialLoad) return; // Skip on initial load
-    
-    try {
-      if (currentSong) {
-        localStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(currentSong));
+    if (isInitialLoad) return;
+
+    if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
+    persistTimerRef.current = setTimeout(() => {
+      persistTimerRef.current = null;
+      const p = persistSnapshotRef.current;
+      if (p.isInitialLoad) return;
+      try {
+        if (p.currentSong) {
+          localStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(p.currentSong));
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
+        }
+
+        localStorage.setItem(STORAGE_KEYS.QUEUE, JSON.stringify(p.queue));
+        localStorage.setItem(STORAGE_KEYS.VOLUME, p.volume.toString());
+        localStorage.setItem(STORAGE_KEYS.REPEAT, p.repeat.toString());
+        localStorage.setItem(STORAGE_KEYS.VIDEO_VISIBLE, p.videoVisible.toString());
+        localStorage.setItem(STORAGE_KEYS.PLAYED_SONGS, JSON.stringify(Array.from(p.playedSongs)));
+      } catch (e) {
+        console.error("Error saving player state:", e);
       }
-      
-      localStorage.setItem(STORAGE_KEYS.QUEUE, JSON.stringify(queue));
-      localStorage.setItem(STORAGE_KEYS.VOLUME, volume.toString());
-      localStorage.setItem(STORAGE_KEYS.REPEAT, repeat.toString());
-      localStorage.setItem(STORAGE_KEYS.VIDEO_VISIBLE, videoVisible.toString());
-      
-      // Convert Set to Array before saving
-      localStorage.setItem(
-        STORAGE_KEYS.PLAYED_SONGS, 
-        JSON.stringify(Array.from(playedSongs))
-      );
-    } catch (e) {
-      console.error("Error saving player state:", e);
-    }
+    }, 320);
+
+    return () => {
+      if (persistTimerRef.current) {
+        clearTimeout(persistTimerRef.current);
+        persistTimerRef.current = null;
+      }
+    };
   }, [currentSong, queue, volume, repeat, videoVisible, playedSongs, isInitialLoad]);
+
+  useEffect(() => {
+    const flush = () => {
+      const p = persistSnapshotRef.current;
+      if (p.isInitialLoad) return;
+      try {
+        if (p.currentSong) {
+          localStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(p.currentSong));
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
+        }
+        localStorage.setItem(STORAGE_KEYS.QUEUE, JSON.stringify(p.queue));
+        localStorage.setItem(STORAGE_KEYS.VOLUME, p.volume.toString());
+        localStorage.setItem(STORAGE_KEYS.REPEAT, p.repeat.toString());
+        localStorage.setItem(STORAGE_KEYS.VIDEO_VISIBLE, p.videoVisible.toString());
+        localStorage.setItem(STORAGE_KEYS.PLAYED_SONGS, JSON.stringify(Array.from(p.playedSongs)));
+      } catch (e) {
+        console.error("Error flushing player state:", e);
+      }
+    };
+    window.addEventListener("pagehide", flush);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      flush();
+    };
+  }, []);
 
   const toggleQueueVisibility = useCallback(() => {
     setQueueVisible((prev) => !prev);
   }, []);
+
+  useEffect(() => {
+    if (!queueVisible) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setQueueVisible(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [queueVisible]);
 
   const getRandomVibeVideo = useCallback((excludeId?: string) => {
     const availableVideos = VIBE_VIDEOS.filter(id => id !== excludeId);
@@ -260,45 +364,96 @@ export const GlobalAudioPlayerProvider = ({
     }
   };
 
-  const playNow = useCallback((song: Song) => {
-    setIsLoading(true);
-    setLoadingTitle(song.title || "Loading...");
-    if (currentSong) {
-      setPreviousVideoData(currentSong);
-    }
-    setCurrentSong(song);
-    setIsPlaying(true);
-    if (player && player.loadVideoById) {
-      try {
-        const videoId = getYoutubeVideoId(song.youtube);
-        player.loadVideoById(videoId);
-        
-        // Update thumbnail
-        setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
-      } catch (e) {
-        console.error("Error loading video:", e, song);
+  const playNow = useCallback(
+    (song: Song) => {
+      const videoId = getPlayableVideoId(song.youtube);
+      if (!videoId) {
         setIsLoading(false);
         toast({
-          title: "Error loading video",
-          description: "Couldn't load the requested video. Trying next song."
+          title: "Cannot play",
+          description: "This track does not have a valid YouTube video link.",
         });
-        nextSongRef.current();
+        return;
       }
+
+      setIsLoading(true);
+      setLoadingTitle(song.title || "Loading...");
+      const prev = currentSongRef.current;
+      if (prev) setPreviousVideoData(prev);
+      setCurrentSong(song);
+      setIsPlaying(true);
+
+      if (player?.loadVideoById) {
+        try {
+          player.loadVideoById(videoId);
+          lastSyncedPlayerLoadRef.current = {
+            player,
+            key: `${videoId}\0${song.id}`,
+          };
+          setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+        } catch (e) {
+          console.error("Error loading video:", e, song);
+          setIsLoading(false);
+          toast({
+            title: "Error loading video",
+            description: "Couldn't load the requested video. Trying next song.",
+          });
+          nextSongRef.current();
+        }
+      }
+    },
+    [player, toast]
+  );
+
+  // When the iframe becomes ready after playNow(...), or restore from storage set currentSong before player existed.
+  useEffect(() => {
+    if (!player?.loadVideoById || !currentSong?.youtube) return;
+    const videoId = getPlayableVideoId(currentSong.youtube);
+    if (!videoId) return;
+    const key = `${videoId}\0${currentSong.id}`;
+    if (
+      lastSyncedPlayerLoadRef.current.player === player &&
+      lastSyncedPlayerLoadRef.current.key === key
+    ) {
+      return;
     }
-  }, [player, currentSong, toast]);
+    lastSyncedPlayerLoadRef.current = { player, key };
+    try {
+      player.loadVideoById(videoId);
+      setThumbnailUrl(`https://img.youtube.com/vi/${videoId}/default.jpg`);
+      if (isPlaying) {
+        player.playVideo();
+      }
+    } catch (e) {
+      console.error("Error syncing video into YouTube player:", e, currentSong);
+      setIsLoading(false);
+      toast({
+        title: "Error loading video",
+        description: "Couldn't load the requested video. Trying next song.",
+      });
+      nextSongRef.current();
+    }
+  }, [player, currentSong, isPlaying, toast]);
 
   useEffect(() => {
-    if (youtubeApiLoaded && player && !currentSong) {
-      const defaultVideo = getRandomVibeVideo();
-      playNow({
-        id: `default-vibe-${defaultVideo}`,
-        youtube: defaultVideo,
-      });
+    if (!youtubeApiLoaded || !player || currentSong) return;
+
+    if (queue.length > 0) {
+      const first = queue[0];
+      setQueue((prev) => prev.slice(1));
+      playNow(first);
+      return;
     }
-  }, [youtubeApiLoaded, player, currentSong, playNow, getRandomVibeVideo]);
+
+    const defaultVideo = getRandomVibeVideo();
+    playNow({
+      id: `default-vibe-${defaultVideo}`,
+      youtube: defaultVideo,
+    });
+  }, [youtubeApiLoaded, player, currentSong, queue, playNow, getRandomVibeVideo]);
 
   const addToQueue = useCallback((song: Song) => {
-    setQueue(prev => [...prev, song]);
+    setQueue((prev) => appendToQueueCapped(prev, song, MAX_QUEUE_LENGTH));
   }, []);
 
   const feelingLucky = useCallback(() => {
@@ -314,7 +469,10 @@ export const GlobalAudioPlayerProvider = ({
     const first = shuffled[0] as Song;
     const lineup = shuffled.slice(1, 1 + FEELING_LUCKY_LINEUP) as Song[];
     playNow(first);
-    setQueue((prev) => [...lineup, ...prev]);
+    setQueue((prev) => {
+      const merged = [...lineup, ...prev];
+      return merged.length > MAX_QUEUE_LENGTH ? merged.slice(0, MAX_QUEUE_LENGTH) : merged;
+    });
     toast({
       title: "I'm feeling lucky",
       description: `Now playing ${first.title ?? "a random pick"}${first.artist ? ` · ${first.artist}` : ""}. ${lineup.length} more lined up next.`,
@@ -386,14 +544,27 @@ export const GlobalAudioPlayerProvider = ({
   nextSongRef.current = nextSong;
 
   const previousSong = useCallback(() => {
-    if (player) {
-      try {
-        player.seekTo(0);
-      } catch (e) {
-        console.error("Error seeking to start:", e);
+    const p = player;
+    if (!p?.seekTo || !p.getCurrentTime) return;
+    try {
+      const t = p.getCurrentTime();
+      if (t > 3) {
+        p.seekTo(0, true);
+        setCurrentTime(0);
+        return;
       }
+      const prev = previousVideoDataRef.current;
+      const vid = prev?.youtube ? getPlayableVideoId(prev.youtube) : null;
+      if (prev && vid) {
+        playNow(prev);
+        return;
+      }
+      p.seekTo(0, true);
+      setCurrentTime(0);
+    } catch (e) {
+      console.error("Error on previous track:", e);
     }
-  }, [player]);
+  }, [player, playNow]);
 
   const updateVolume = useCallback((value: number) => {
     if (player) {
@@ -406,16 +577,29 @@ export const GlobalAudioPlayerProvider = ({
     }
   }, [player]);
 
+  const seekBy = useCallback((deltaSeconds: number) => {
+    const p = player;
+    if (!p?.getCurrentTime || !p.seekTo || !p.getDuration) return;
+    try {
+      const dur = p.getDuration();
+      if (!Number.isFinite(dur) || dur <= 0) return;
+      const t = p.getCurrentTime();
+      const next = Math.min(Math.max(0, t + deltaSeconds), dur);
+      p.seekTo(next, true);
+      setCurrentTime(next);
+    } catch (e) {
+      console.error("Error seeking:", e);
+    }
+  }, [player]);
+
   const toggleRepeat = useCallback(() => {
     setRepeat(prev => !prev);
   }, []);
 
   const reorderQueue = useCallback((from: number, to: number) => {
-    setQueue(prev => {
-      const newQueue = [...prev];
-      const [removed] = newQueue.splice(from, 1);
-      newQueue.splice(to, 0, removed);
-      return newQueue;
+    setQueue((prev) => {
+      const next = reorderQueueSafe(prev, from, to);
+      return next ?? prev;
     });
   }, []);
 
@@ -426,12 +610,14 @@ export const GlobalAudioPlayerProvider = ({
 
     let instance: YoutubePlayerApi | null = null;
     try {
+      const origin = typeof window !== "undefined" ? window.location.origin : undefined;
       instance = new YT.Player("youtube-player", {
         height: "240",
         width: "426",
         playerVars: {
           playsinline: 1,
           controls: 1,
+          ...(origin ? { origin } : {}),
         },
         events: {
           onStateChange: (event: YoutubePlayerStateEvent) => {
@@ -443,6 +629,10 @@ export const GlobalAudioPlayerProvider = ({
                 nextSongRef.current();
               }
             } else if (event.data === YT.PlayerState.PLAYING) {
+              if (pausedWhileHiddenTimerRef.current) {
+                clearTimeout(pausedWhileHiddenTimerRef.current);
+                pausedWhileHiddenTimerRef.current = null;
+              }
               setIsLoading(false);
               setIsPlaying(true);
               const videoData = event.target.getVideoData();
@@ -461,7 +651,18 @@ export const GlobalAudioPlayerProvider = ({
               setIsInitialLoad((v) => (v ? false : v));
             } else if (event.data === YT.PlayerState.PAUSED) {
               setIsLoading(false);
-              setIsPlaying(false);
+              if (pausedWhileHiddenTimerRef.current) {
+                clearTimeout(pausedWhileHiddenTimerRef.current);
+                pausedWhileHiddenTimerRef.current = null;
+              }
+              if (typeof document !== "undefined" && document.hidden) {
+                pausedWhileHiddenTimerRef.current = setTimeout(() => {
+                  pausedWhileHiddenTimerRef.current = null;
+                  setIsPlaying(false);
+                }, 900);
+              } else {
+                setIsPlaying(false);
+              }
             } else if (event.data === YT.PlayerState.BUFFERING) {
               setIsLoading(true);
             }
@@ -472,20 +673,17 @@ export const GlobalAudioPlayerProvider = ({
 
             const songNow = currentSongRef.current;
             if (songNow) {
-              const errorSong = { ...songNow };
               toast({
                 title: "Error playing song",
-                description: "This song couldn't be played. Adding to end of queue and moving to next.",
+                description: "This track could not be played. Skipping to the next item.",
               });
-
-              setQueue((prevQueue) => [...prevQueue, errorSong]);
-
               nextSongRef.current();
             } else {
               const prev = previousVideoDataRef.current;
-              if (prev?.youtube) {
+              const pv = prev?.youtube ? getPlayableVideoId(prev.youtube) : null;
+              if (prev && pv) {
                 setCurrentSong(prev);
-                event.target.loadVideoById(getYoutubeVideoId(prev.youtube));
+                event.target.loadVideoById(pv);
               } else {
                 setVideoTitle("Error loading video");
                 setChannelTitle("Unknown");
@@ -494,16 +692,7 @@ export const GlobalAudioPlayerProvider = ({
           },
           onReady: (event: YoutubePlayerStateEvent) => {
             event.target.setVolume(volumeRef.current);
-
-            const song = currentSongRef.current;
-            if (song?.youtube) {
-              try {
-                event.target.loadVideoById(getYoutubeVideoId(song.youtube));
-                event.target.playVideo();
-              } catch (e) {
-                console.error("Error loading saved video:", e);
-              }
-            }
+            // Initial cue/load is handled by the player↔currentSong sync effect so it runs after React state and refs are committed.
           },
         },
       });
@@ -513,6 +702,10 @@ export const GlobalAudioPlayerProvider = ({
     }
 
     return () => {
+      if (pausedWhileHiddenTimerRef.current) {
+        clearTimeout(pausedWhileHiddenTimerRef.current);
+        pausedWhileHiddenTimerRef.current = null;
+      }
       if (instance) {
         try {
           instance.destroy();
@@ -524,30 +717,108 @@ export const GlobalAudioPlayerProvider = ({
   }, [youtubeApiLoaded, toast]);
 
   useEffect(() => {
-    if ("mediaSession" in navigator && currentSong) {
+    if (!("mediaSession" in navigator)) return;
+    const clear = (action: MediaSessionAction) => {
       try {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: videoTitle || "Unknown Title",
-          artist: channelTitle || "Unknown Artist",
-          album: "Afrobeats Player",
-          artwork: [
-            {
-              src: thumbnailUrl || "/AfrobeatsDAOMeta.png",
-              sizes: "128x128",
-              type: "image/png",
-            },
-          ],
-        });
-
-        navigator.mediaSession.setActionHandler("play", togglePlay);
-        navigator.mediaSession.setActionHandler("pause", togglePlay);
-        navigator.mediaSession.setActionHandler("previoustrack", previousSong);
-        navigator.mediaSession.setActionHandler("nexttrack", nextSong);
-      } catch (error) {
-        console.error("Error setting up Media Session:", error);
+        navigator.mediaSession.setActionHandler(action, null);
+      } catch {
+        /* action unsupported */
       }
+    };
+    const b = () => mediaBridgeRef.current;
+    try {
+      navigator.mediaSession.setActionHandler("play", () => b().togglePlay());
+      navigator.mediaSession.setActionHandler("pause", () => b().togglePlay());
+      navigator.mediaSession.setActionHandler("previoustrack", () => b().previousSong());
+      navigator.mediaSession.setActionHandler("nexttrack", () => b().nextSong());
+      navigator.mediaSession.setActionHandler("seekbackward", (details?: MediaSessionActionDetails) => {
+        const off = typeof details?.seekOffset === "number" ? details.seekOffset : 10;
+        b().seekBy(-off);
+      });
+      navigator.mediaSession.setActionHandler("seekforward", (details?: MediaSessionActionDetails) => {
+        const off = typeof details?.seekOffset === "number" ? details.seekOffset : 10;
+        b().seekBy(off);
+      });
+    } catch (error) {
+      console.error("Error registering Media Session handlers:", error);
     }
-  }, [currentSong, videoTitle, channelTitle, thumbnailUrl, togglePlay, nextSong, previousSong]);
+    try {
+      navigator.mediaSession.setActionHandler("stop", () => {
+        const p = playerApiRef.current;
+        if (p?.pauseVideo) p.pauseVideo();
+        setIsPlaying(false);
+      });
+    } catch {
+      /* stop unsupported */
+    }
+    return () => {
+      (
+        [
+          "play",
+          "pause",
+          "previoustrack",
+          "nexttrack",
+          "seekbackward",
+          "seekforward",
+          "stop",
+        ] as MediaSessionAction[]
+      ).forEach(clear);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!("mediaSession" in navigator)) return;
+    if (!currentSong) {
+      try {
+        navigator.mediaSession.metadata = null;
+        navigator.mediaSession.playbackState = "none";
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
+    const vid = getPlayableVideoId(currentSong.youtube);
+    const fallback =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/AfrobeatsDAOMeta.png`
+        : "https://afrobeats.party/AfrobeatsDAOMeta.png";
+    const artSrc =
+      thumbnailUrl && (thumbnailUrl.startsWith("http://") || thumbnailUrl.startsWith("https://"))
+        ? thumbnailUrl
+        : fallback;
+    const art = buildYoutubeArtwork(vid, artSrc);
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: videoTitle || currentSong.title || "Unknown Title",
+        artist: channelTitle || currentSong.artist || "Unknown Artist",
+        album: "Afrobeats.party",
+        artwork: art,
+      });
+    } catch (error) {
+      console.error("Error setting Media Session metadata:", error);
+    }
+  }, [currentSong, videoTitle, channelTitle, thumbnailUrl]);
+
+  useEffect(() => {
+    if (!("mediaSession" in navigator) || !currentSong) return;
+    try {
+      navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+    } catch {
+      /* ignore */
+    }
+  }, [isPlaying, currentSong]);
+
+  useEffect(() => {
+    if (!("mediaSession" in navigator) || !navigator.mediaSession.setPositionState) return;
+    if (!currentSong || !isPlaying || isDragging) return;
+    const ps = positionStateForMediaSession(duration, currentTime, 1);
+    if (!ps) return;
+    try {
+      navigator.mediaSession.setPositionState(ps);
+    } catch {
+      /* duration may still be 0 on some tracks */
+    }
+  }, [currentSong, isPlaying, isDragging, duration, currentTime]);
 
   const toggleVideo = useCallback(() => {
     setVideoVisible(prev => !prev);
@@ -559,20 +830,50 @@ export const GlobalAudioPlayerProvider = ({
 
   useEffect(() => {
     if (!player || !isPlaying || isDragging) return;
-    
-    const interval = setInterval(() => {
+
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const tick = () => {
       if (player.getCurrentTime) {
         try {
-          const currentTime = player.getCurrentTime();
-          setCurrentTime(currentTime);
+          setCurrentTime(player.getCurrentTime());
         } catch (e) {
           console.error("Error getting current time:", e);
         }
       }
-    }, 1000);
-    
-    return () => clearInterval(interval);
+    };
+
+    const arm = () => {
+      if (intervalId) clearInterval(intervalId);
+      const ms = typeof document !== "undefined" && document.hidden ? 5000 : 1000;
+      intervalId = setInterval(tick, ms);
+    };
+
+    arm();
+    const onVis = () => arm();
+    document.addEventListener("visibilitychange", onVis);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVis);
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [player, isPlaying, isDragging]);
+
+  /** When returning to the tab, nudge playback — mobile browsers often pause hidden embeds while audio may still be intended. */
+  useEffect(() => {
+    const onVis = () => {
+      if (document.hidden) return;
+      const p = playerApiRef.current;
+      if (!p?.playVideo || !isPlayingRef.current) return;
+      try {
+        p.playVideo();
+      } catch {
+        /* ignore */
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
 
   useEffect(() => {
     if (currentSong?.id) {
@@ -591,6 +892,24 @@ export const GlobalAudioPlayerProvider = ({
       });
     }
   }, [currentSong]);
+
+  mediaBridgeRef.current = {
+    togglePlay,
+    nextSong,
+    previousSong,
+    seekBy,
+    feelingLucky,
+  };
+
+  persistSnapshotRef.current = {
+    currentSong,
+    queue,
+    volume,
+    repeat,
+    videoVisible,
+    playedSongs,
+    isInitialLoad,
+  };
 
   return <GlobalAudioPlayerContext.Provider value={{
     currentSong,
@@ -656,8 +975,17 @@ export const GlobalAudioPlayerProvider = ({
                       </p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10 flex-shrink-0`} title={queueVisible ? "Hide queue" : "Show queue"}>
-                    {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleQueueVisibility}
+                    className={`min-h-11 min-w-11 shrink-0 ${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}
+                    title={queueVisible ? "Hide queue" : "Show queue"}
+                    aria-label={queueVisible ? "Hide playback queue" : "Show playback queue"}
+                    aria-expanded={queueVisible}
+                  >
+                    {queueVisible ? <ListCollapse className="h-5 w-5" aria-hidden /> : <List className="h-5 w-5" aria-hidden />}
                   </Button>
                 </div>
 
@@ -680,6 +1008,7 @@ export const GlobalAudioPlayerProvider = ({
                       setIsDragging(false);
                     }} 
                     className="cursor-pointer flex-1" 
+                    aria-label="Seek in current track"
                   />
                   <span className="text-xs text-gray-400 min-w-[40px]">
                     {formatTime(duration)}
@@ -687,45 +1016,48 @@ export const GlobalAudioPlayerProvider = ({
                 </div>
 
                 {/* Main Controls Row - Play/Pause, Previous, Next, Repeat, Volume, Video */}
-                <div className="flex items-center justify-center gap-4">
-                  <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
-                    <SkipBack className="h-4 w-4" />
+                <div className="flex items-center justify-center gap-2 sm:gap-4">
+                  <Button type="button" variant="ghost" size="icon" onClick={previousSong} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label="Skip to start of track">
+                    <SkipBack className="h-4 w-4" aria-hidden />
                   </Button>
                   
-                  <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
-                    {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                  <Button type="button" variant="ghost" size="icon" onClick={togglePlay} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label={isPlaying ? "Pause" : "Play"}>
+                    {isPlaying ? <Pause className="h-5 w-5" aria-hidden /> : <Play className="h-5 w-5" aria-hidden />}
                   </Button>
                   
-                  <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
-                    <SkipForward className="h-4 w-4" />
+                  <Button type="button" variant="ghost" size="icon" onClick={nextSong} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label="Next track">
+                    <SkipForward className="h-4 w-4" aria-hidden />
                   </Button>
 
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     onClick={feelingLucky}
-                    className="text-[#FFD600] hover:bg-[#FFD600]/15"
+                    className="min-h-11 min-w-11 text-[#FFD600] hover:bg-[#FFD600]/15"
                     title="I'm feeling lucky — random song + random queue"
                     aria-label="I'm feeling lucky — play a random song and queue more random tracks"
                   >
-                    <Sparkles className="h-4 w-4" />
+                    <Sparkles className="h-4 w-4" aria-hidden />
                   </Button>
                   
-                  <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
-                    {repeat ? <Repeat1 className="h-4 w-4" /> : <Repeat className="h-4 w-4" />}
+                  <Button type="button" variant="ghost" size="icon" onClick={toggleRepeat} className={`min-h-11 min-w-11 ${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} aria-label={repeat ? "Repeat one: on" : "Repeat: off"}>
+                    {repeat ? <Repeat1 className="h-4 w-4" aria-hidden /> : <Repeat className="h-4 w-4" aria-hidden />}
                   </Button>
 
                   {/* Volume Control with Vertical Popup */}
                   <div className="relative">
                     <Button 
+                      type="button"
                       variant="ghost" 
                       size="icon" 
-                      className="text-white hover:bg-white/10"
+                      className="min-h-11 min-w-11 text-white hover:bg-white/10"
                       onMouseEnter={() => setShowVolumeSlider(true)}
                       onMouseLeave={() => setShowVolumeSlider(false)}
                       onClick={() => setVolume(volume === 0 ? 100 : 0)}
+                      aria-label={volume === 0 ? "Unmute" : "Mute"}
                     >
-                      {volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                      {volume === 0 ? <VolumeX className="h-4 w-4" aria-hidden /> : <Volume2 className="h-4 w-4" aria-hidden />}
                     </Button>
                     {showVolumeSlider && (
                       <div 
@@ -742,14 +1074,15 @@ export const GlobalAudioPlayerProvider = ({
                             orientation="vertical"
                             onValueChange={([value]) => updateVolume(value)} 
                             className="cursor-pointer h-16" 
+                            aria-label="Volume"
                           />
                         </div>
                       </div>
                     )}
                   </div>
                   
-                  <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
-                    {videoVisible ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
+                  <Button type="button" variant="ghost" size="icon" onClick={toggleVideo} className="min-h-11 min-w-11 text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"} aria-label={videoVisible ? "Hide video player" : "Show video player"}>
+                    {videoVisible ? <Video className="h-4 w-4" aria-hidden /> : <VideoOff className="h-4 w-4" aria-hidden />}
                   </Button>
                 </div>
               </div>
@@ -778,49 +1111,50 @@ export const GlobalAudioPlayerProvider = ({
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
-                    <Button variant="ghost" size="icon" onClick={previousSong} className="text-white hover:bg-white/10">
-                      <SkipBack className="h-5 w-5" />
+                    <Button type="button" variant="ghost" size="icon" onClick={previousSong} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label="Skip to start of track">
+                      <SkipBack className="h-5 w-5" aria-hidden />
                     </Button>
                     
-                    <Button variant="ghost" size="icon" onClick={togglePlay} className="text-white hover:bg-white/10">
-                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                    <Button type="button" variant="ghost" size="icon" onClick={togglePlay} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label={isPlaying ? "Pause" : "Play"}>
+                      {isPlaying ? <Pause className="h-5 w-5" aria-hidden /> : <Play className="h-5 w-5" aria-hidden />}
                     </Button>
                     
-                    <Button variant="ghost" size="icon" onClick={nextSong} className="text-white hover:bg-white/10">
-                      <SkipForward className="h-5 w-5" />
+                    <Button type="button" variant="ghost" size="icon" onClick={nextSong} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label="Next track">
+                      <SkipForward className="h-5 w-5" aria-hidden />
                     </Button>
 
                     <Button
+                      type="button"
                       variant="ghost"
                       size="icon"
                       onClick={feelingLucky}
-                      className="text-[#FFD600] hover:bg-[#FFD600]/15"
+                      className="min-h-11 min-w-11 text-[#FFD600] hover:bg-[#FFD600]/15"
                       title="I'm feeling lucky — random song + random queue"
                       aria-label="I'm feeling lucky — play a random song and queue more random tracks"
                     >
-                      <Sparkles className="h-5 w-5" />
+                      <Sparkles className="h-5 w-5" aria-hidden />
                     </Button>
                     
-                    <Button variant="ghost" size="icon" onClick={toggleRepeat} className={`${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`}>
-                      {repeat ? <Repeat1 className="h-5 w-5" /> : <Repeat className="h-5 w-5" />}
+                    <Button type="button" variant="ghost" size="icon" onClick={toggleRepeat} className={`min-h-11 min-w-11 ${repeat ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} aria-label={repeat ? "Repeat one: on" : "Repeat: off"}>
+                      {repeat ? <Repeat1 className="h-5 w-5" aria-hidden /> : <Repeat className="h-5 w-5" aria-hidden />}
                     </Button>
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                    <Button variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} title={queueVisible ? "Hide queue" : "Show queue"}>
-                      {queueVisible ? <ListCollapse className="h-5 w-5" /> : <List className="h-5 w-5" />}
+                    <Button type="button" variant="ghost" size="icon" onClick={toggleQueueVisibility} className={`min-h-11 min-w-11 ${queueVisible ? "text-[#FFD600]" : "text-white"} hover:bg-white/10`} title={queueVisible ? "Hide queue" : "Show queue"} aria-label={queueVisible ? "Hide playback queue" : "Show playback queue"} aria-expanded={queueVisible}>
+                      {queueVisible ? <ListCollapse className="h-5 w-5" aria-hidden /> : <List className="h-5 w-5" aria-hidden />}
                     </Button>
                     
-                    <Button variant="ghost" size="icon" onClick={toggleVideo} className="text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"}>
-                      {videoVisible ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                    <Button type="button" variant="ghost" size="icon" onClick={toggleVideo} className="min-h-11 min-w-11 text-white hover:bg-white/10" title={videoVisible ? "Hide video" : "Show video"} aria-label={videoVisible ? "Hide video player" : "Show video player"}>
+                      {videoVisible ? <Video className="h-5 w-5" aria-hidden /> : <VideoOff className="h-5 w-5" aria-hidden />}
                     </Button>
                     
-                    <Button variant="ghost" size="icon" onClick={() => setVolume(volume === 0 ? 100 : 0)} className="text-white hover:bg-white/10">
-                      {volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    <Button type="button" variant="ghost" size="icon" onClick={() => setVolume(volume === 0 ? 100 : 0)} className="min-h-11 min-w-11 text-white hover:bg-white/10" aria-label={volume === 0 ? "Unmute" : "Mute"}>
+                      {volume === 0 ? <VolumeX className="h-5 w-5" aria-hidden /> : <Volume2 className="h-5 w-5" aria-hidden />}
                     </Button>
                     
                     <div className="w-24">
-                      <Slider value={[volume]} min={0} max={100} step={1} onValueChange={([value]) => updateVolume(value)} className="cursor-pointer flex-1" />
+                      <Slider value={[volume]} min={0} max={100} step={1} onValueChange={([value]) => updateVolume(value)} className="cursor-pointer flex-1" aria-label="Volume" />
                     </div>
                   </div>
                 </div>
@@ -835,7 +1169,7 @@ export const GlobalAudioPlayerProvider = ({
               }} onValueCommit={([value]) => {
                 handleTimeChange(value);
                 setIsDragging(false);
-              }} className="cursor-pointer flex-1" />
+              }} className="cursor-pointer flex-1" aria-label="Seek in current track" />
                   <span className="text-xs text-gray-400 min-w-[40px]">
                     {formatTime(duration)}
                   </span>
@@ -846,28 +1180,35 @@ export const GlobalAudioPlayerProvider = ({
         ) : (
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="flex items-center gap-4">
-              <Music2 className="h-8 w-8 text-[#FFD600]" />
+              <Music2 className="h-8 w-8 text-[#FFD600]" aria-hidden />
               <span className="text-sm">Afrobeats Player</span>
             </div>
             <div className="flex flex-wrap items-center gap-2 justify-end">
               <Button
+                type="button"
                 variant="outline"
                 onClick={feelingLucky}
-                className="border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
+                className="min-h-11 border-[#FFD600] text-[#FFD600] hover:bg-[#FFD600]/10"
                 title="I'm feeling lucky — random song + random queue"
+                aria-label="I'm feeling lucky — play a random song and queue more random tracks"
               >
-                <Sparkles className="mr-2 h-4 w-4" />
+                <Sparkles className="mr-2 h-4 w-4" aria-hidden />
                 I&apos;m feeling lucky
               </Button>
-              <Button onClick={() => {
+              <Button
+                type="button"
+                onClick={() => {
               const defaultVideo = getRandomVibeVideo();
               playNow({
                 id: `default-vibe-${defaultVideo}`,
                 youtube: defaultVideo,
                 title: "Random Vibe"
               });
-            }} className="bg-[#FFD600] text-black hover:bg-[#FFD600]/90">
-              <Play className="mr-2 h-4 w-4" />
+            }}
+                className="min-h-11 bg-[#FFD600] text-black hover:bg-[#FFD600]/90"
+                aria-label="Play a random vibe video"
+              >
+              <Play className="mr-2 h-4 w-4" aria-hidden />
               Play Something
             </Button>
             </div>

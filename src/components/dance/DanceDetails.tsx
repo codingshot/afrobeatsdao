@@ -57,9 +57,10 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
 
   if (!dance) {
     return (
-      <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-black px-3 pt-20 pb-6 sm:px-6 sm:pb-8 md:pt-24 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <Button 
+          <Button
+            type="button"
             onClick={() => navigate("/dance")}
             variant="default"
             className="mb-4 sm:mb-6 bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium"
@@ -74,9 +75,10 @@ export const DanceDetails = ({ dance }: DanceDetailsProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black px-3 pt-20 pb-6 sm:px-6 sm:pb-8 md:pt-24 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <Button 
+        <Button
+          type="button"
           onClick={() => navigate("/dance")}
           variant="default"
           className="mb-4 sm:mb-6 bg-[#FFD600] hover:bg-[#FFD600]/80 text-black font-medium"

@@ -22,7 +22,6 @@ export function VibeOfTheDay() {
   const playInGlobalPlayer = () => {
     try {
       const videoId = VIBE_VIDEOS[currentVideoIndex];
-      console.log("VibeOfTheDay: Playing video in global player:", videoId);
       playNow({
         id: `vibe-${videoId}`,
         youtube: videoId
@@ -33,7 +32,7 @@ export function VibeOfTheDay() {
   };
 
   return (
-    <section id="vibe" className="py-16 bg-white font-afro">
+    <section id="vibe" tabIndex={-1} className="scroll-mt-24 py-16 bg-white font-afro outline-none">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-heading font-bold mb-4 flex items-center justify-center gap-2">

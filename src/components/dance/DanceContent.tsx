@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -119,6 +119,13 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
 
   const handlePlayNow = (song: DanceSong, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (!song?.youtube?.trim()) {
+      toast({
+        title: "Playback unavailable",
+        description: "This track does not have a linked YouTube audio source yet.",
+      });
+      return;
+    }
     if (audioPlayer && song) {
       try {
         audioPlayer.playNow(createSongFromDanceData(song));
@@ -134,6 +141,13 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
 
   const handleAddToQueue = (song: DanceSong, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    if (!song?.youtube?.trim()) {
+      toast({
+        title: "Cannot add to queue",
+        description: "This track does not have a linked YouTube audio source yet.",
+      });
+      return;
+    }
     if (audioPlayer && song) {
       try {
         audioPlayer.addToQueue(createSongFromDanceData(song));
@@ -147,28 +161,32 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
     }
   };
   
-  const handleModuleAction = (action: 'tutorial' | 'practice', moduleIndex: number, e?: React.MouseEvent) => {
+  const handleModuleAction = (action: "tutorial" | "practice", moduleIndex: number, e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
     }
-    
+
     startDance(dance.id);
-    markModuleComplete(dance.id, moduleIndex);
-    
-    if (action === 'practice' && dance.songs && dance.songs.length > 0) {
-      const songIndex = moduleIndex % dance.songs.length;
-      handlePlayNow(dance.songs[songIndex]);
+    if (action === "practice") {
+      markModuleComplete(dance.id, moduleIndex);
+      if (dance.songs?.length) {
+        const songIndex = moduleIndex % dance.songs.length;
+        const song = dance.songs[songIndex];
+        if (song?.youtube?.trim()) {
+          handlePlayNow(song);
+        }
+      }
     }
-    
+
     toast({
-      title: action === 'tutorial' ? "Tutorial Started" : "Practice Mode Started",
-      description: `You've started ${action === 'tutorial' ? 'learning' : 'practicing'} ${dance.modules?.[moduleIndex] || "this module"}`,
+      title: action === "tutorial" ? "Tutorial Started" : "Practice Mode Started",
+      description: `You've started ${action === "tutorial" ? "learning" : "practicing"} ${dance.modules?.[moduleIndex] || "this module"}`,
     });
   };
 
   const findNextDance = () => {
-    const categories = Object.keys(danceCurriculum);
+    const categories = ["afrobeats", "amapiano"] as (keyof typeof danceCurriculum)[];
     let currentCategoryIndex = -1;
     let currentDanceIndex = -1;
 
@@ -257,6 +275,13 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const isYoutubeEmbedReady = (id: string) =>
     id.replace(/[^a-zA-Z0-9_-]/g, "").length >= 6;
 
+  const ogImageAbsolute =
+    dance.image && (dance.image.startsWith("http://") || dance.image.startsWith("https://"))
+      ? dance.image
+      : dance.image
+        ? `https://afrobeats.party${dance.image.startsWith("/") ? dance.image : `/${dance.image}`}`
+        : "https://afrobeats.party/AfrobeatsDAOMeta.png";
+
   return (
     <>
       <Helmet>
@@ -265,6 +290,9 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
         <meta property="og:title" content={`Learn ${safeDanceName} - African Dance Tutorial`} />
         <meta property="og:description" content={helmetDescription} />
         <meta property="og:type" content="article" />
+        <meta property="og:image" content={ogImageAbsolute} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogImageAbsolute} />
         <meta name="keywords" content={helmetKeywords} />
       </Helmet>
 
@@ -283,6 +311,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
               />
             </div>
             <Button
+              type="button"
               onClick={handleNextDance}
               variant="outline"
               className="border-[#008751] bg-[#008751] text-white hover:bg-[#008751]/80 font-medium"
@@ -363,24 +392,28 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                         {moduleVisible === idx && (
                           <div className="mt-4 border-t border-gray-800 pt-4">
                             <div className="flex flex-col sm:flex-row gap-3 mb-3">
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                type="button"
+                                variant="outline"
                                 className={`flex-1 ${
                                   primaryYoutubeTutorial
                                   ? "border-[#008751] text-[#008751] hover:bg-[#008751]/10" 
                                   : "border-gray-600 text-gray-500 cursor-not-allowed"
                                 }`}
-                                onClick={() => primaryYoutubeTutorial && handleModuleAction('tutorial', idx)}
+                                onClick={(e) =>
+                                  primaryYoutubeTutorial && handleModuleAction("tutorial", idx, e)
+                                }
                                 disabled={!primaryYoutubeTutorial}
                               >
                                 <Play className="mr-2 h-4 w-4" /> 
                                 Tutorial
                                 {!primaryYoutubeTutorial && " (Unavailable)"}
                               </Button>
-                              <Button 
-                                variant="outline" 
+                              <Button
+                                type="button"
+                                variant="outline"
                                 className="flex-1 border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10"
-                                onClick={() => handleModuleAction('practice', idx)}
+                                onClick={(e) => handleModuleAction("practice", idx, e)}
                               >
                                 <Music className="mr-2 h-4 w-4" /> 
                                 Practice
@@ -409,9 +442,10 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                   <>
                     <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
                       <iframe
-                        className="w-full h-full"
+                        className="h-full w-full"
                         src={`https://www.youtube.com/embed/${learnVideo.id}`}
                         title={learnVideo.title}
+                        loading="lazy"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />
@@ -421,11 +455,14 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                         <h4 className="font-medium text-white">{learnVideo.title}</h4>
                         <p className="text-sm text-gray-400">{learnVideo.subtitle}</p>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         className="text-white border-gray-700 hover:bg-white/10"
-                        onClick={() => window.open(learnVideo.openUrl, '_blank')}
+                        onClick={() =>
+                          window.open(learnVideo.openUrl, "_blank", "noopener,noreferrer")
+                        }
                       >
                         <Youtube className="mr-2 h-4 w-4" />
                         Open on YouTube
@@ -481,9 +518,10 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                       <div className="aspect-video">
                         {isYoutubeEmbedReady(getYoutubeVideoId(song.youtube)) ? (
                           <iframe
-                            className="w-full h-full"
+                            className="h-full w-full"
                             src={`https://www.youtube.com/embed/${getYoutubeVideoId(song.youtube)}`}
                             title={song.title}
+                            loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                           />
@@ -510,18 +548,20 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                         <h4 className="font-medium text-sm md:text-base text-white">{song.title}</h4>
                         <p className="text-sm text-gray-400">{song.artist}</p>
                         <div className="flex items-center space-x-2 mt-3">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
                             className="flex-1 border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10"
                             onClick={() => handlePlayNow(song)}
                           >
                             <Play className="mr-2 h-4 w-4" />
                             Play Now
                           </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
                             className="flex-1 border-gray-700 text-white hover:bg-white/10"
                             onClick={() => handleAddToQueue(song)}
                           >
@@ -626,9 +666,9 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Card className="bg-gray-900/50 border-gray-800">
                   <CardContent className="p-4">
-                    <h4 className="font-medium mb-2 text-white">African Dance Dictionary</h4>
+                    <h4 className="font-medium mb-2 text-white">More tutorials online</h4>
                     <p className="text-sm text-gray-400 mb-3">
-                      Comprehensive collection of African dance tutorials and history
+                      Open YouTube results for this dance name to explore more breakdowns and classes.
                     </p>
                     <Button 
                       variant="outline" 
@@ -645,12 +685,8 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
                     <p className="text-sm text-gray-400 mb-3">
                       Connect with dancers around the world
                     </p>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full bg-[#008751] text-white border-[#008751] hover:bg-[#008751]/80"
-                    >
-                      Join Community
+                    <Button variant="outline" size="sm" className="w-full bg-[#008751] text-white border-[#008751] hover:bg-[#008751]/80" asChild>
+                      <Link to="/discord">Join community on Discord</Link>
                     </Button>
                   </CardContent>
                 </Card>

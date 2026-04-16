@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Music, Headphones, ArrowRight, Play, Plus, Shuffle, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -15,16 +15,12 @@ import { ResumableDances } from "@/components/dance/ResumableDances";
 import { DanceProgressIndicator } from "@/components/dance/DanceProgressIndicator";
 import { useDanceProgress } from "@/hooks/use-dance-progress";
 import { getFirstCurriculumYoutubeVideoId } from "@/lib/danceYoutube";
+import { SITE_ORIGIN, SITE_NAME, absoluteUrl, sanitizeSnippet, jsonLdGraph, breadcrumbListSchema } from "@/lib/siteSeo";
 
 type CurriculumGenre = keyof typeof danceCurriculum;
 type CurriculumDance = (typeof danceCurriculum)["afrobeats"][number];
 type DanceWithGenre = CurriculumDance & { genre: CurriculumGenre };
 type DanceSong = NonNullable<CurriculumDance["songs"]>[number];
-
-const genreDescriptions = {
-  afrobeats: "An energetic style from Nigeria and Ghana that blends traditional African movements with modern influences. Features powerful rhythmic footwork, hip movements, and expressive gestures, typically following faster-paced beats. Deeply connected to cultural identity and social expression, popularized through music videos and social media.",
-  amapiano: "A South African style combining house, jazz, and kwaito elements. Features smoother, more melodic movements at a slower tempo (110-120 BPM), with an emphasis on fluid footwork. While Afrobeats is more energetic and percussive, Amapiano focuses on flowing, laid-back movements that follow melodic piano patterns. Has gained worldwide popularity through TikTok challenges."
-};
 
 const countries = Array.from(
   new Set(
@@ -65,7 +61,8 @@ const DancePage = () => {
 
   const handlePlaySong = (e: React.MouseEvent, song: DanceSong) => {
     e.stopPropagation();
-    if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.playNow) {
+    e.preventDefault();
+    if (song?.youtube?.trim() && song.title && song.artist && audioPlayer?.playNow) {
       audioPlayer.playNow({
         id: `${song.artist}-${song.title}`,
         title: song.title,
@@ -77,7 +74,8 @@ const DancePage = () => {
 
   const handleAddToQueue = (e: React.MouseEvent, song: DanceSong) => {
     e.stopPropagation();
-    if (song && song.youtube && song.title && song.artist && audioPlayer && audioPlayer.addToQueue) {
+    e.preventDefault();
+    if (song?.youtube?.trim() && song.title && song.artist && audioPlayer?.addToQueue) {
       audioPlayer.addToQueue({
         id: `${song.artist}-${song.title}`,
         title: song.title,
@@ -156,18 +154,50 @@ const DancePage = () => {
     setSelectedDifficulty("all");  // Changed from "" to "all"
   };
 
+  const danceUrl = `${SITE_ORIGIN}/dance`;
+  const danceDesc = sanitizeSnippet(
+    "Afrobeats and Amapiano dance curriculum: filter by country and difficulty, resume progress, and learn authentic moves step by step.",
+  );
+  const danceOg = absoluteUrl("/AfrobeatsDAOMeta.png");
+  const danceJsonLd = jsonLdGraph([
+    {
+      "@type": "WebPage",
+      name: "African dance curriculum",
+      url: danceUrl,
+      description: danceDesc,
+      isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_ORIGIN },
+    },
+    breadcrumbListSchema([
+      { name: "Home", url: SITE_ORIGIN },
+      { name: "Dance", url: danceUrl },
+    ]),
+  ]);
+
   return (
-    <div 
-      className={`min-h-screen bg-gradient-to-b from-black to-gray-900 py-8 px-4 sm:px-6 lg:px-8 transition-opacity duration-500 ${
-        isLoading ? 'opacity-0' : 'opacity-100'
+    <>
+      <Helmet>
+        <title>{`Dance curriculum | ${SITE_NAME}`}</title>
+        <meta name="description" content={danceDesc} />
+        <link rel="canonical" href={danceUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`African dance curriculum | ${SITE_NAME}`} />
+        <meta property="og:description" content={danceDesc} />
+        <meta property="og:url" content={danceUrl} />
+        <meta property="og:image" content={danceOg} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`African dance curriculum | ${SITE_NAME}`} />
+        <meta name="twitter:description" content={danceDesc} />
+        <meta name="twitter:image" content={danceOg} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <script type="application/ld+json">{JSON.stringify(danceJsonLd)}</script>
+      </Helmet>
+      <div
+      className={`min-h-screen bg-gradient-to-b from-black to-gray-900 pt-20 pb-8 px-4 sm:px-6 md:pt-24 lg:px-8 transition-opacity duration-500 ${
+        isLoading ? "opacity-0" : "opacity-100"
       }`}
     >
       <div className="max-w-7xl mx-auto">
-        <h1 
-          className="text-3xl sm:text-5xl font-bold text-center mb-2 text-white font-heading"
-          role="heading"
-          aria-level={1}
-        >
+        <h1 className="text-3xl sm:text-5xl font-bold text-center mb-2 text-white font-heading">
           African Dance Curriculum
         </h1>
         <p className="text-center text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto text-sm sm:text-base">
@@ -229,28 +259,33 @@ const DancePage = () => {
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-1">
                 <Button
                   type="button"
-                  className="bg-black text-[#FFD600] border border-black hover:bg-black/90 font-semibold shadow-sm"
+                  className="min-h-11 bg-black text-[#FFD600] border border-black hover:bg-black/90 font-semibold shadow-sm"
                   onClick={handleQuickStart}
+                  aria-label="Quick start — jump into the next recommended dance lesson"
                 >
-                  <Zap className="mr-2 h-4 w-4 shrink-0" />
+                  <Zap className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                   Quick start
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  className="border-black/25 bg-white/90 text-black hover:bg-white font-semibold"
+                  className="min-h-11 border-black/25 bg-white/90 text-black hover:bg-white font-semibold"
                   onClick={handleRandomDance}
+                  aria-label="Pick a random dance from the curriculum"
                 >
-                  <Shuffle className="mr-2 h-4 w-4 shrink-0" />
+                  <Shuffle className="mr-2 h-4 w-4 shrink-0" aria-hidden />
                   Random dance
                 </Button>
               </div>
 
               {/* Filters */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <div className="w-full sm:w-auto">
+                <div className="w-full sm:w-auto space-y-1.5">
+                  <Label htmlFor="dance-filter-country" className="text-xs font-semibold uppercase tracking-wide text-black/70">
+                    Country
+                  </Label>
                   <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                    <SelectTrigger className="bg-white/80 border-black/10 text-black w-full sm:w-[180px]">
+                    <SelectTrigger id="dance-filter-country" className="min-h-11 bg-white/80 border-black/10 text-black w-full sm:w-[180px]">
                       <SelectValue placeholder="Filter by Country" />
                     </SelectTrigger>
                     <SelectContent className="bg-white text-black border-black/10 z-50">
@@ -266,9 +301,12 @@ const DancePage = () => {
                   </Select>
                 </div>
                 
-                <div className="w-full sm:w-auto">
+                <div className="w-full sm:w-auto space-y-1.5">
+                  <Label htmlFor="dance-filter-difficulty" className="text-xs font-semibold uppercase tracking-wide text-black/70">
+                    Difficulty
+                  </Label>
                   <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger className="bg-white/80 border-black/10 text-black w-full sm:w-[180px]">
+                    <SelectTrigger id="dance-filter-difficulty" className="min-h-11 bg-white/80 border-black/10 text-black w-full sm:w-[180px]">
                       <SelectValue placeholder="Filter by Difficulty" />
                     </SelectTrigger>
                     <SelectContent className="bg-white text-black border-black/10 z-50">
@@ -281,8 +319,9 @@ const DancePage = () => {
                 </div>
                 
                 {(selectedCountry !== "all" || selectedDifficulty !== "all") && (
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     onClick={clearFilters}
                     className="bg-white/80 border-black/10 text-black hover:bg-white"
                   >
@@ -299,8 +338,9 @@ const DancePage = () => {
           {filteredDances.length === 0 ? (
             <div className="col-span-full text-center py-10">
               <p className="text-white text-lg">No dances match your current filters.</p>
-              <Button 
-                variant="default" 
+              <Button
+                type="button"
+                variant="default"
                 className="mt-4 bg-[#FFD600] text-black hover:bg-[#FFD600]/80"
                 onClick={clearFilters}
               >
@@ -320,13 +360,28 @@ const DancePage = () => {
                 {previewVideoId ? (
                   <div className="aspect-video w-full bg-gray-900 relative group">
                     <iframe
-                      className="w-full h-full"
+                      className="pointer-events-none h-full w-full"
                       src={`https://www.youtube.com/embed/${previewVideoId}?controls=0`}
-                      title={dance.name}
+                      title={`${dance.name} preview`}
+                      loading="lazy"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     />
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button variant="default" className="bg-[#FFD600] text-black hover:bg-[#FFD600]/80">
+                    <div
+                      className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDanceSelect(dance);
+                      }}
+                    >
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="bg-[#FFD600] text-black hover:bg-[#FFD600]/80"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDanceSelect(dance);
+                        }}
+                      >
                         Learn {dance.name}
                       </Button>
                     </div>
@@ -390,7 +445,8 @@ const DancePage = () => {
                           <li key={idx} className="flex items-center justify-between">
                             <span className="truncate">{song.title}</span>
                             <div className="flex space-x-1">
-                              <Button 
+                              <Button
+                                type="button"
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 text-white hover:text-[#FFD600] hover:bg-[#FFD600]/10"
@@ -399,7 +455,8 @@ const DancePage = () => {
                               >
                                 <Play className="h-3 w-3" />
                               </Button>
-                              <Button 
+                              <Button
+                                type="button"
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 text-white hover:text-[#FFD600] hover:bg-[#FFD600]/10"
@@ -415,10 +472,15 @@ const DancePage = () => {
                     </div>
                   )}
                   
-                  <Button 
-                    variant="white" 
+                  <Button
+                    type="button"
+                    variant="white"
                     size="sm"
                     className="w-full mt-3 justify-between"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDanceSelect(dance);
+                    }}
                   >
                     Learn More <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -430,6 +492,7 @@ const DancePage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

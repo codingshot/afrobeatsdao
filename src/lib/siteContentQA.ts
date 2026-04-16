@@ -140,8 +140,7 @@ export function findDanceCurriculumLinkIssues(): DanceSongLinkIssue[] {
           return;
         }
         try {
-          // eslint-disable-next-line no-new
-          new URL(tutorial.link);
+          void new URL(tutorial.link);
         } catch {
           issues.push({ ...c, message: `${genre}/${dance.id} tutorial "${tutorial.title}": invalid URL` });
           return;
@@ -193,8 +192,7 @@ export function findDanceCurriculumDataIssues(): string[] {
         }
       } else if (dance.image?.startsWith("http://") || dance.image?.startsWith("https://")) {
         try {
-          // eslint-disable-next-line no-new
-          new URL(dance.image);
+          void new URL(dance.image);
         } catch {
           issues.push(`${p}: image URL is invalid`);
         }

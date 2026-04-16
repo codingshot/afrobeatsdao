@@ -7,7 +7,12 @@ import { MapPin, ExternalLink, Info, Clock, Music, Users } from 'lucide-react';
 import { useCountryFlags } from '@/hooks/use-country-flags';
 import { getClubCountry } from '@/data/clubs';
 import { Badge } from '@/components/ui/badge';
-import { MapPinOff } from 'lucide-react';
+
+function openExternal(url: string | undefined) {
+  const u = url?.trim();
+  if (!u) return;
+  window.open(u, "_blank", "noopener,noreferrer");
+}
 
 interface ClubsCardViewProps {
   clubs: Club[];
@@ -16,18 +21,7 @@ interface ClubsCardViewProps {
 const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
   const { getFlag } = useCountryFlags();
 
-  if (clubs.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <MapPinOff className="h-12 w-12 mb-4 text-muted-foreground" />
-        <h3 className="text-xl font-semibold mb-2">No clubs found</h3>
-        <p className="text-muted-foreground mb-4">Try adjusting your filters to find more clubs</p>
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Reset All Filters
-        </Button>
-      </div>
-    );
-  }
+  if (clubs.length === 0) return null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
@@ -143,20 +137,24 @@ const ClubsCardView: React.FC<ClubsCardViewProps> = ({ clubs }) => {
             )}
           </CardContent>
           <CardFooter className="p-4 pt-0 flex flex-wrap gap-2 border-t border-border/40 bg-muted/20">
-            <Button
-              size="sm"
-              className="flex-1 bg-[#008751] text-white hover:bg-[#008751]/90"
-              onClick={() => window.open(club.google_maps, '_blank')}
-            >
-              <MapPin className="mr-1 h-4 w-4" />
-              Maps
-            </Button>
-            {club.website && (
+            {club.google_maps?.trim() && (
               <Button
+                type="button"
+                size="sm"
+                className="flex-1 bg-[#008751] text-white hover:bg-[#008751]/90"
+                onClick={() => openExternal(club.google_maps)}
+              >
+                <MapPin className="mr-1 h-4 w-4" />
+                Maps
+              </Button>
+            )}
+            {club.website?.trim() && (
+              <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 className="flex-1 border-[#008751]/35 hover:bg-[#008751]/10"
-                onClick={() => window.open(club.website, '_blank')}
+                onClick={() => openExternal(club.website)}
               >
                 <ExternalLink className="mr-1 h-4 w-4" />
                 Website

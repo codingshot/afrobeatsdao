@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 
 const MainNavbar = ({ className }: { className?: string }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const onIndexPage = location.pathname === "/";
@@ -41,17 +42,19 @@ const MainNavbar = ({ className }: { className?: string }) => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (location.pathname.includes('/clubs')) {
-      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
-    } else if (location.pathname.includes('/dance')) {
-      window.location.href = `/dance?search=${encodeURIComponent(searchValue)}`;
-    } else if (location.pathname.includes('/events')) {
-      window.location.href = `/events?search=${encodeURIComponent(searchValue)}`;
-    } else if (location.pathname.includes('/news')) {
-      window.location.href = `/news?search=${encodeURIComponent(searchValue)}`;
+    const q = searchValue.trim();
+    const enc = encodeURIComponent(q);
+
+    if (location.pathname.includes("/clubs")) {
+      navigate(`/clubs?search=${enc}`);
+    } else if (location.pathname.includes("/dance")) {
+      navigate(`/dance?search=${enc}`);
+    } else if (location.pathname.includes("/events")) {
+      navigate(`/events?search=${enc}`);
+    } else if (location.pathname.includes("/news")) {
+      navigate(`/news?search=${enc}`);
     } else {
-      window.location.href = `/clubs?search=${encodeURIComponent(searchValue)}`;
+      navigate(`/clubs?search=${enc}`);
     }
   };
 
@@ -72,21 +75,26 @@ const MainNavbar = ({ className }: { className?: string }) => {
         </Link>
 
         <div className="hidden md:flex items-center space-x-4">
-          <form onSubmit={handleSearch} className="relative flex items-center">
+          <form onSubmit={handleSearch} className="relative flex items-center" role="search">
+            <label htmlFor="main-nav-search" className="sr-only">
+              Search this section
+            </label>
             <Input
-              type="text"
-              placeholder="Search..."
+              id="main-nav-search"
+              type="search"
+              enterKeyHint="search"
+              placeholder="Search clubs, dance, events…"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="w-48 pl-8 h-9 bg-white border-0 focus-visible:ring-1 focus-visible:ring-[#008751] text-black"
+              className="w-48 min-h-10 pl-8 h-10 bg-white border-0 focus-visible:ring-2 focus-visible:ring-[#008751] text-black"
             />
-            <Search className="absolute left-2 h-4 w-4 text-black" />
+            <Search className="pointer-events-none absolute left-2 h-4 w-4 text-black" aria-hidden />
           </form>
 
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link to="/dance">
+                <Link to="/dance" aria-current={location.pathname.startsWith("/dance") ? "page" : undefined}>
                   <NavigationMenuLink
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
@@ -94,14 +102,14 @@ const MainNavbar = ({ className }: { className?: string }) => {
                         "bg-black/10 text-black"
                     )}
                   >
-                    <Play className="mr-2 h-4 w-4" />
+                    <Play className="mr-2 h-4 w-4" aria-hidden />
                     Dance
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link to="/events">
+                <Link to="/events" aria-current={location.pathname.startsWith("/events") ? "page" : undefined}>
                   <NavigationMenuLink
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
@@ -109,14 +117,14 @@ const MainNavbar = ({ className }: { className?: string }) => {
                         "bg-black/10 text-black"
                     )}
                   >
-                    <Calendar className="mr-2 h-4 w-4" />
+                    <Calendar className="mr-2 h-4 w-4" aria-hidden />
                     Events
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link to="/clubs">
+                <Link to="/clubs" aria-current={location.pathname.startsWith("/clubs") ? "page" : undefined}>
                   <NavigationMenuLink
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
@@ -124,7 +132,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                         "bg-black/10 text-black"
                     )}
                   >
-                    <Users className="mr-2 h-4 w-4" />
+                    <Users className="mr-2 h-4 w-4" aria-hidden />
                     Clubs
                   </NavigationMenuLink>
                 </Link>
@@ -169,7 +177,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <Link to="/news">
+                <Link to="/news" aria-current={location.pathname.startsWith("/news") ? "page" : undefined}>
                   <NavigationMenuLink
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
@@ -177,14 +185,14 @@ const MainNavbar = ({ className }: { className?: string }) => {
                         "bg-black/10 text-black"
                     )}
                   >
-                    <Newspaper className="mr-2 h-4 w-4" />
+                    <Newspaper className="mr-2 h-4 w-4" aria-hidden />
                     News
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <Link to="/careers">
+                <Link to="/careers" aria-current={location.pathname.startsWith("/careers") ? "page" : undefined}>
                   <NavigationMenuLink
                     className={cn(
                       "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-black/10 text-black hover:text-black",
@@ -192,7 +200,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
                         "bg-black/10 text-black"
                     )}
                   >
-                    <Briefcase className="mr-2 h-4 w-4" />
+                    <Briefcase className="mr-2 h-4 w-4" aria-hidden />
                     Careers
                   </NavigationMenuLink>
                 </Link>
@@ -202,18 +210,26 @@ const MainNavbar = ({ className }: { className?: string }) => {
         </div>
 
         <div className="md:hidden flex items-center">
-          <form onSubmit={handleSearch} className="relative mr-2">
+          <form onSubmit={handleSearch} className="relative mr-2" role="search">
+            <label htmlFor="main-nav-search-mobile" className="sr-only">
+              Search
+            </label>
             <Input
-              type="text"
-              placeholder="Search..."
+              id="main-nav-search-mobile"
+              type="search"
+              enterKeyHint="search"
+              placeholder="Search…"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="w-28 pl-7 h-8 text-xs bg-white/90 border-0"
+              className="w-28 min-h-10 pl-7 h-10 text-xs bg-white/90 border-0 focus-visible:ring-2 focus-visible:ring-[#008751]"
             />
-            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-black" />
+            <Search className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-black" aria-hidden />
           </form>
           
-          <Link to="/dance" className="px-2 py-1 text-sm font-medium text-black">
+          <Link
+            to="/dance"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-black hover:bg-black/10"
+          >
             Dance
           </Link>
         </div>

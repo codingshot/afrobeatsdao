@@ -39,10 +39,16 @@ const App = () => {
           <TooltipProvider>
             <GlobalAudioPlayerProvider>
             <div className="min-h-screen">
+              <a
+                href="#page-content"
+                className="fixed left-4 top-4 z-[10002] -translate-y-[200%] rounded-md bg-[#008751] px-4 py-2.5 text-sm font-semibold text-white shadow-lg outline-none ring-2 ring-white ring-offset-2 ring-offset-[#008751] transition-transform focus:translate-y-0 focus:duration-200"
+              >
+                Skip to main content
+              </a>
               <Header />
               <Toaster />
               <Sonner />
-              <main>
+              <main id="page-content" tabIndex={-1} className="outline-none">
                 <Routes>
                   <Route path="/" element={<div className="page-home"><Index /></div>} />
                   <Route path="/dance" element={<div className="page-dance"><Dance /></div>} />

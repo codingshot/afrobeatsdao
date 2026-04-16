@@ -24,7 +24,7 @@ const ArtistJoin = () => {
       <div className="min-h-screen bg-[#FEF7CD]">
         <Header />
         
-        <main className="pt-20 pb-16">
+        <div className="pt-20 pb-16">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8">
@@ -48,7 +48,7 @@ const ArtistJoin = () => {
               </div>
             </div>
           </div>
-        </main>
+        </div>
         
         <Footer />
       </div>

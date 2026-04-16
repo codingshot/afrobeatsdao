@@ -21,6 +21,12 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+function openExternal(url: string | undefined) {
+  const u = url?.trim();
+  if (!u) return;
+  window.open(u, "_blank", "noopener,noreferrer");
+}
+
 interface ClubsMapViewProps {
   clubs: Club[];
   filters?: ClubFilters;
@@ -193,20 +199,24 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
                       </div>
 
                       <div className="flex flex-col gap-2 mt-3 pt-2 border-t border-border/60">
-                        <Button
-                          size="sm"
-                          className="w-full bg-[#008751] text-white hover:bg-[#008751]/90"
-                          onClick={() => window.open(club.google_maps, "_blank")}
-                        >
-                          <MapPin className="mr-1.5 h-3.5 w-3.5" />
-                          Directions
-                        </Button>
-                        {club.website && (
+                        {club.google_maps?.trim() && (
                           <Button
+                            type="button"
+                            size="sm"
+                            className="w-full bg-[#008751] text-white hover:bg-[#008751]/90"
+                            onClick={() => openExternal(club.google_maps)}
+                          >
+                            <MapPin className="mr-1.5 h-3.5 w-3.5" />
+                            Directions
+                          </Button>
+                        )}
+                        {club.website?.trim() && (
+                          <Button
+                            type="button"
                             size="sm"
                             variant="outline"
                             className="w-full border-[#FFD600]/60 text-foreground hover:bg-[#FFD600]/15"
-                            onClick={() => window.open(club.website, "_blank")}
+                            onClick={() => openExternal(club.website)}
                           >
                             <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
                             Official site
@@ -236,12 +246,20 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
             {clubs.map((club, index) => (
               <CarouselItem key={`${club.city}-${club.name}`} className="pl-2 md:pl-3 basis-[85%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                 <Card
+                  role="button"
+                  tabIndex={0}
                   className={`h-full border-[#008751]/15 transition-all duration-200 cursor-pointer hover:shadow-lg hover:border-[#008751]/35 ${
                     hoveredClub?.name === club.name || index === activeCardIndex
                       ? "ring-2 ring-[#008751] shadow-md scale-[1.02]"
                       : ""
                   }`}
                   onClick={() => handleCardSelect(club, index)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleCardSelect(club, index);
+                    }
+                  }}
                   onMouseEnter={() => setHoveredClub(club)}
                   onMouseLeave={() => setHoveredClub(null)}
                 >
@@ -262,27 +280,29 @@ const ClubsMapView: React.FC<ClubsMapViewProps> = ({ clubs, onSelectClub }) => {
                     <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{club.hours}</p>
 
                     <div className="flex gap-2 pt-1">
-                      {club.google_maps && (
+                      {club.google_maps?.trim() && (
                         <Button
+                          type="button"
                           size="sm"
                           className="flex-1 h-8 text-xs bg-[#008751] text-white hover:bg-[#008751]/90"
                           onClick={(e) => {
                             e.stopPropagation();
-                            window.open(club.google_maps, "_blank");
+                            openExternal(club.google_maps);
                           }}
                         >
                           <MapPin className="mr-1 h-3.5 w-3.5" />
                           Map
                         </Button>
                       )}
-                      {club.website && (
+                      {club.website?.trim() && (
                         <Button
+                          type="button"
                           size="sm"
                           variant="outline"
                           className="flex-1 h-8 text-xs border-[#008751]/30 hover:bg-[#008751]/10"
                           onClick={(e) => {
                             e.stopPropagation();
-                            window.open(club.website, "_blank");
+                            openExternal(club.website);
                           }}
                         >
                           <ExternalLink className="mr-1 h-3.5 w-3.5" />

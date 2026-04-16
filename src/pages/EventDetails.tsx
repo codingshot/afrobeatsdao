@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { deslugify, slugify } from '@/lib/slugUtils';
+import { slugify } from '@/lib/slugUtils';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { VibesRightNowCta } from "@/components/VibesRightNowCta";
@@ -39,15 +39,17 @@ const EventDetails = () => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
     
-    if (slug) {
-      const eventName = deslugify(slug);
-      
-      // Find the event by its name
-      const foundEventEntry = Object.entries(EVENTS).find(
-        ([name]) => slugify(name.toLowerCase()) === slug.toLowerCase()
-      );
-      
-      if (foundEventEntry) {
+    if (!slug) {
+      setEvent(null);
+      setRelatedEvents([]);
+      setMapUrl("");
+      return;
+    }
+
+    const normalizedSlug = (slug || "").trim().toLowerCase();
+    const foundEventEntry = Object.entries(EVENTS).find(([name]) => slugify(name) === normalizedSlug);
+
+    if (foundEventEntry) {
         const [name, details] = foundEventEntry;
         setEvent({ name, details });
         
@@ -104,7 +106,10 @@ const EventDetails = () => {
           .map(({ name, details }) => ({ name, details }));
         
         setRelatedEvents(otherEvents);
-      }
+    } else {
+      setEvent(null);
+      setRelatedEvents([]);
+      setMapUrl("");
     }
   }, [slug]);
 
@@ -112,10 +117,10 @@ const EventDetails = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-24">
+        <div className="flex-1 container mx-auto px-4 py-24">
           <div className="flex flex-col items-center justify-center h-full">
             <h1 className="text-3xl font-bold mb-4">Event not found</h1>
-            <p className="text-lg mb-6">Sorry, we couldn't find the event you're looking for.</p>
+            <p className="text-lg mb-6">Sorry, we couldn&apos;t find the event you&apos;re looking for.</p>
             <Button variant="default" asChild>
               <Link to="/events">
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -124,7 +129,7 @@ const EventDetails = () => {
             </Button>
             <VibesRightNowCta tone="light" className="mt-10 w-full max-w-lg" />
           </div>
-        </main>
+        </div>
         <Footer />
       </div>
     );
@@ -155,7 +160,9 @@ const EventDetails = () => {
 
   // Enhanced SEO data with dynamic event information
   const eventDate = formatDate(event.details.start_date);
-  const eventLocation = event.details.location.split(',')[0]; // Get city name
+  const locationParts = event.details.location.split(",").map((s) => s.trim());
+  const eventLocation = locationParts[0] || event.details.location;
+  const addressRegion = locationParts[1] || "";
   const metaTitle = `${event.name} - ${eventDate} in ${eventLocation} | Afrobeats.party`;
   const metaDescription = `🎉 Join ${event.name} on ${eventDate} in ${event.details.location}! ${event.details.event_description.substring(0, 150)}... Experience the best Afrobeats culture with ${event.details.organizer}. Get tickets now!`;
   const canonicalUrl = `https://afrobeats.party/event/${slug}`;
@@ -241,19 +248,23 @@ const EventDetails = () => {
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": eventLocation,
-                "addressRegion": event.details.location
+                ...(addressRegion ? { addressRegion } : {})
               }
             },
             "organizer": {
               "@type": "Organization",
               "name": event.details.organizer
             },
-            "offers": {
-              "@type": "Offer",
-              "description": event.details.ticket_info,
-              "url": event.details.ticket_url || event.details.website,
-              "availability": "https://schema.org/InStock"
-            },
+            ...(event.details.ticket_url?.trim() || event.details.website?.trim()
+              ? {
+                  offers: {
+                    "@type": "Offer",
+                    "description": event.details.ticket_info,
+                    "url": event.details.ticket_url?.trim() || event.details.website?.trim(),
+                    "availability": "https://schema.org/InStock"
+                  }
+                }
+              : {}),
             "isPartOf": {
               "@type": "WebSite",
               "name": "Afrobeats.party",
@@ -271,7 +282,7 @@ const EventDetails = () => {
       <div className="min-h-screen flex flex-col bg-black text-white">
         <Header />
         
-        <main className="flex-1">
+        <div className="flex-1">
           {/* Banner image with overlay back button */}
           <div className="w-full relative">
             <AspectRatio ratio={21/9} className="bg-muted">
@@ -435,7 +446,7 @@ const EventDetails = () => {
               <VibesRightNowCta tone="dark" />
             </div>
           </div>
-        </main>
+        </div>
         
         <Footer />
       </div>

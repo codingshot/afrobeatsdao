@@ -1,6 +1,8 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
 import ClubsMapView from '@/components/clubs/ClubsMapView';
 import ClubsCardView from '@/components/clubs/ClubsCardView';
 import ClubsFilterBar from '@/components/clubs/ClubsFilterBar';
@@ -11,6 +13,7 @@ import { Helmet } from "react-helmet";
 
 const Clubs = () => {
   const isMobile = useIsMobile();
+  const [searchParams, setSearchParams] = useSearchParams();
   
   // State for view mode (map or card)
   const [viewMode, setViewMode] = useState<ClubViewMode>(isMobile ? 'card' : 'map');
@@ -21,11 +24,42 @@ const Clubs = () => {
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('name');
 
+  // Keep keyword search in sync with ?search= (navbar, share links, reset).
+  useEffect(() => {
+    const raw = searchParams.get("search");
+    const nextSearch = raw == null || raw.trim() === "" ? undefined : raw.trim();
+    setFilters((prev) => {
+      if (prev.search === nextSearch) return prev;
+      return { ...prev, search: nextSearch };
+    });
+  }, [searchParams]);
+
+  const setFiltersWithSearchUrl = useCallback(
+    (next: ClubFilters) => {
+      setFilters(next);
+      setSearchParams(
+        (prev) => {
+          const p = new URLSearchParams(prev);
+          const s = next.search?.trim();
+          if (s) p.set("search", s);
+          else p.delete("search");
+          return p;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
+  const resetFiltersAndSort = useCallback(() => {
+    setFilters({});
+    setSortBy("name");
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
+
   // Update view mode when screen size changes
   useEffect(() => {
-    if (isMobile !== undefined) {
-      setViewMode(isMobile ? 'card' : 'map');
-    }
+    setViewMode(isMobile ? 'card' : 'map');
   }, [isMobile]);
 
   // Filter and sort clubs
@@ -38,11 +72,19 @@ const Clubs = () => {
     }
     
     if (filters.type) {
-      result = result.filter(club => club.type.includes(filters.type));
+      result = result.filter(
+        (club) => club.type === filters.type || club.type.toLowerCase().includes(filters.type.toLowerCase())
+      );
     }
     
     if (filters.music) {
-      result = result.filter(club => club.music.includes(filters.music));
+      const tag = filters.music.trim().toLowerCase();
+      result = result.filter((club) =>
+        club.music
+          .split(",")
+          .map((t) => t.trim().toLowerCase())
+          .some((t) => t === tag)
+      );
     }
     
     if (filters.search) {
@@ -92,7 +134,7 @@ const Clubs = () => {
         <meta property="og:title" content="Afrobeats Clubs Directory" />
         <meta property="og:description" content="Find African music venues around the world" />
         <meta property="og:type" content="website" />
-        <meta name="keywords" content={`afrobeats clubs, african music venues, ${cities.join(', ')}, nightlife, dance clubs`} />
+        <meta name="keywords" content={`afrobeats clubs, african music venues, ${cities.slice(0, 12).join(', ')}, nightlife, dance clubs`} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -114,7 +156,9 @@ const Clubs = () => {
         </script>
       </Helmet>
 
-      <main className="flex-1 container mx-auto px-4 py-6 md:py-8 max-w-7xl">
+      <Header />
+
+      <div className="flex-1 container mx-auto px-4 pt-20 pb-6 md:pt-24 md:pb-8 max-w-7xl">
         <header className="mb-6 text-center md:text-left">
           <p className="text-xs font-semibold uppercase tracking-widest text-[#008751] mb-1">Directory</p>
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
@@ -129,9 +173,10 @@ const Clubs = () => {
           viewMode={viewMode}
           onViewModeChange={setViewMode}
           filters={filters}
-          onFiltersChange={setFilters}
+          onFiltersChange={setFiltersWithSearchUrl}
           sortBy={sortBy}
           onSortChange={setSortBy}
+          onResetAll={resetFiltersAndSort}
           cities={cities}
           musicTypes={musicTypes}
           clubTypes={clubTypes}
@@ -149,10 +194,7 @@ const Clubs = () => {
               <button
                 type="button"
                 className="mt-6 text-sm font-medium text-[#008751] underline-offset-4 hover:underline"
-                onClick={() => {
-                  setFilters({});
-                  setSortBy("name");
-                }}
+                onClick={resetFiltersAndSort}
               >
                 Reset filters
               </button>
@@ -165,7 +207,7 @@ const Clubs = () => {
             </div>
           )}
         </div>
-      </main>
+      </div>
       
       <Footer />
     </div>

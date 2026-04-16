@@ -51,8 +51,14 @@ export function VibesRightNowCta({ tone = "light", className }: VibesRightNowCta
         )}
         asChild
       >
-        <a href={VIBES_RIGHT_NOW_URL} target="_blank" rel="noopener noreferrer">
-          <ExternalLink className="mr-2 h-4 w-4" />
+        <a
+          href={VIBES_RIGHT_NOW_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md"
+          aria-label="Open VibesRight.now in a new tab — live DJ sets and parties"
+        >
+          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
           Go to VibesRight.now
         </a>
       </Button>

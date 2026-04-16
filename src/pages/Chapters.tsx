@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,12 +11,34 @@ import { ResourceHub } from "@/components/chapters/ResourceHub";
 import { StartChapterGuide } from "@/components/chapters/StartChapterGuide";
 import { ChapterBenefits } from "@/components/chapters/ChapterBenefits";
 import { Globe, Users, Calendar, BookOpen, MessageCircle, Twitter } from 'lucide-react';
+import { SITE_ORIGIN, SITE_NAME, absoluteUrl, sanitizeSnippet } from '@/lib/siteSeo';
 
 const Chapters = () => {
   const [activeView, setActiveView] = useState<'map' | 'list'>('map');
+  const chaptersUrl = `${SITE_ORIGIN}/chapters`;
+  const chaptersDesc = sanitizeSnippet(
+    'Start or join an Afrobeats DAO college chapter: map of chapters, resources, and guides to grow African music culture on campus.',
+  );
+  const chaptersOg = absoluteUrl('/AfrobeatsDAOMeta.png');
 
   return (
-    <div className="min-h-screen bg-afro-yellow font-afro pt-20">
+    <>
+      <Helmet>
+        <title>{`College Chapters | ${SITE_NAME}`}</title>
+        <meta name="description" content={chaptersDesc} />
+        <link rel="canonical" href={chaptersUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`Afrobeats DAO College Chapters | ${SITE_NAME}`} />
+        <meta property="og:description" content={chaptersDesc} />
+        <meta property="og:url" content={chaptersUrl} />
+        <meta property="og:image" content={chaptersOg} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Afrobeats DAO College Chapters | ${SITE_NAME}`} />
+        <meta name="twitter:description" content={chaptersDesc} />
+        <meta name="twitter:image" content={chaptersOg} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+      </Helmet>
+      <div className="min-h-screen bg-afro-yellow font-afro pt-20">
       {/* Hero Section */}
       <section className="py-16 bg-afro-teal text-white">
         <div className="container mx-auto px-4 text-center">
@@ -212,6 +235,7 @@ const Chapters = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

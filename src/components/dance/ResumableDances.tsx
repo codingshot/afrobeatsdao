@@ -65,10 +65,15 @@ export const ResumableDances = () => {
                 </div>
                 <div className="p-3">
                   <DanceProgressIndicator danceId={dance.id} totalModules={dance.keyMoves?.length || 5} />
-                  <Button 
-                    variant="default" 
+                  <Button
+                    type="button"
+                    variant="default"
                     size="sm"
                     className="w-full mt-3 bg-[#008751] hover:bg-[#008751]/80 justify-between"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/dance/${dance.genre}/${dance.id}`);
+                    }}
                   >
                     Resume Learning <Play className="ml-2 h-3 w-3" />
                   </Button>
@@ -77,8 +82,9 @@ export const ResumableDances = () => {
             ))}
             
             {inProgressDances.length > 3 && (
-              <Button 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 className="text-[#FFD600] border-[#FFD600]/50 hover:bg-[#FFD600]/10"
                 onClick={() => {
                   // You could implement a dedicated 'My Progress' page here

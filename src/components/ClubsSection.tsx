@@ -13,13 +13,19 @@ export const ClubsSection = () => {
     getFlag
   } = useCountryFlags();
 
-  const handleClubClick = (club: typeof CLUBS[0]) => {
-    if (club.website) {
-      window.open(club.website, '_blank');
-    } else if (club.google_maps) {
-      window.open(club.google_maps, '_blank');
+  const openExternal = (url: string) => {
+    const u = url.trim();
+    if (!u) return;
+    window.open(u, "_blank", "noopener,noreferrer");
+  };
+
+  const handleClubClick = (club: (typeof CLUBS)[0]) => {
+    if (club.website?.trim()) {
+      openExternal(club.website);
+    } else if (club.google_maps?.trim()) {
+      openExternal(club.google_maps);
     } else {
-      navigate('/clubs');
+      navigate("/clubs");
     }
   };
 
@@ -33,6 +39,7 @@ export const ClubsSection = () => {
             <p className="text-slate-600 text-sm mt-1 max-w-xl">Tap a card to open the venue — or browse the full map on the clubs page.</p>
           </div>
           <Button
+            type="button"
             onClick={() => navigate("/clubs")}
             className="shrink-0 bg-[#008751] text-white hover:bg-[#008751]/90 shadow-sm"
           >
@@ -45,8 +52,16 @@ export const ClubsSection = () => {
             {CLUBS.map((club, index) => (
               <CarouselItem key={`${club.city}-${club.name}-${index}`} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
                 <Card
+                  role="button"
+                  tabIndex={0}
                   className="overflow-hidden cursor-pointer border-slate-900/10 shadow-md transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:border-[#008751]/30 group"
                   onClick={() => handleClubClick(club)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleClubClick(club);
+                    }
+                  }}
                 >
                   <div className="h-1 bg-gradient-to-r from-[#008751] via-[#FFD600] to-[#008751]" />
                   <CardContent className="p-5">

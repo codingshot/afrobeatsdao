@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Briefcase, Users } from "lucide-react";
@@ -9,6 +10,7 @@ import { JobListing } from "@/types/job";
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { SITE_ORIGIN, SITE_NAME, absoluteUrl, sanitizeSnippet, jsonLdGraph, breadcrumbListSchema } from "@/lib/siteSeo";
 
 // Add a custom style to ensure the job title text color is properly set
 const jobTitleStyle = {
@@ -34,18 +36,30 @@ const JobDetails = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading job details...</h1>
-          <div className="w-16 h-16 border-4 border-[#FFD600] border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <>
+        <Helmet>
+          <title>{`Careers | ${SITE_NAME}`}</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
+        <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-xl sm:text-2xl font-bold text-white mb-4">Loading job details...</h1>
+            <div className="w-16 h-16 border-4 border-[#FFD600] border-t-transparent rounded-full animate-spin mx-auto"></div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+      <>
+        <Helmet>
+          <title>{`Job not found | Careers | ${SITE_NAME}`}</title>
+          <meta name="description" content="This job listing is not available. Browse open roles at Afrobeats.party careers." />
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <div className="min-h-screen bg-black py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
         <Alert variant="destructive" className="max-w-md mb-6 bg-red-500/10 border-red-500/20 text-white">
           <AlertTitle className="text-xl font-heading mb-2">Job Not Found</AlertTitle>
           <AlertDescription className="text-gray-200">
@@ -62,11 +76,59 @@ const JobDetails = () => {
           Back to Careers
         </Button>
       </div>
+      </>
     );
   }
 
+  const jobPageUrl = `${SITE_ORIGIN}/careers/${job.slug}`;
+  const jobMetaDescription = sanitizeSnippet(job.summary);
+  const jobPostingBody = sanitizeSnippet(`${job.summary}\n\n${job.description}`, 8000);
+  const jobOg = absoluteUrl("/AfrobeatsDAOMeta.png");
+  const jobJsonLd = jsonLdGraph([
+    breadcrumbListSchema([
+      { name: "Home", url: SITE_ORIGIN },
+      { name: "Careers", url: `${SITE_ORIGIN}/careers` },
+      { name: job.title, url: jobPageUrl },
+    ]),
+    {
+      "@type": "JobPosting",
+      title: job.title,
+      description: jobPostingBody,
+      datePosted: job.postedDate,
+      employmentType: job.type,
+      hiringOrganization: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_ORIGIN,
+        logo: jobOg,
+      },
+      jobLocation: {
+        "@type": "Place",
+        name: job.location,
+      },
+      directApply: true,
+      url: jobPageUrl,
+    },
+  ]);
+
   return (
     <div className="min-h-screen bg-black text-white pb-20">
+      <Helmet>
+        <title>{`${job.title} | Careers | ${SITE_NAME}`}</title>
+        <meta name="description" content={jobMetaDescription} />
+        <link rel="canonical" href={jobPageUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${job.title} | ${SITE_NAME}`} />
+        <meta property="og:description" content={jobMetaDescription} />
+        <meta property="og:url" content={jobPageUrl} />
+        <meta property="og:image" content={jobOg} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${job.title} | ${SITE_NAME}`} />
+        <meta name="twitter:description" content={jobMetaDescription} />
+        <meta name="twitter:image" content={jobOg} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <script type="application/ld+json">{JSON.stringify(jobJsonLd)}</script>
+      </Helmet>
       <div className="container mx-auto py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">

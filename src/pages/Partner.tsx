@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -152,7 +153,30 @@ const Partner = () => {
   const handleDiscordJoin = () => {
     window.open('https://discord.gg/TNrWwSA955', '_blank');
   };
-  return <div className="min-h-screen bg-afro-yellow font-sans">
+  const partnerUrl = `${SITE_ORIGIN}/partner`;
+  const partnerDesc = sanitizeSnippet(
+    'Partner with Afrobeats.party on events, content, merchandise, festivals, and community programs that celebrate African music and culture.',
+  );
+  const partnerOg = absoluteUrl('/AfrobeatsDAOMeta.png');
+
+  return (
+    <>
+      <Helmet>
+        <title>{`Partnerships | ${SITE_NAME}`}</title>
+        <meta name="description" content={partnerDesc} />
+        <link rel="canonical" href={partnerUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`Partner with ${SITE_NAME}`} />
+        <meta property="og:description" content={partnerDesc} />
+        <meta property="og:url" content={partnerUrl} />
+        <meta property="og:image" content={partnerOg} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Partner with ${SITE_NAME}`} />
+        <meta name="twitter:description" content={partnerDesc} />
+        <meta name="twitter:image" content={partnerOg} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+      </Helmet>
+      <div className="min-h-screen bg-afro-yellow font-sans">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-afro-yellow to-afro-orange">
         <div className="container mx-auto px-4 text-center">
@@ -387,6 +411,8 @@ const Partner = () => {
           </div>
         </div>
       </section>
-    </div>;
+    </div>
+    </>
+  );
 };
 export default Partner;

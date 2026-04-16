@@ -68,6 +68,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    scroll-padding-top: 4.75rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker-track {
+    animation: none !important;
+  }
 }
 
 /* Font setup */

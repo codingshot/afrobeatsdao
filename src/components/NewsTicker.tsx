@@ -44,13 +44,15 @@ const NewsTicker = () => {
   const createTickerSegments = () => {
     return newsItems.map((item, index) => (
       <span key={index}>
-        <button 
-          onClick={() => window.open(item.link, '_blank')}
-          className="hover:underline cursor-pointer bg-transparent border-none text-black font-semibold"
+        <button
+          type="button"
+          onClick={() => window.open(item.link, "_blank", "noopener,noreferrer")}
+          className="cursor-pointer border-none bg-transparent py-1 text-left font-semibold text-black hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFD600] rounded-sm"
+          aria-label={`${item.title} — open article in a new tab`}
         >
           {item.title}
         </button>
-        {index < newsItems.length - 1 && ' 🪘 '}
+        {index < newsItems.length - 1 && <span aria-hidden> 🪘 </span>}
       </span>
     ));
   };
@@ -60,14 +62,14 @@ const NewsTicker = () => {
   }
 
   return (
-    <div className="relative w-screen">
+    <section className="relative w-screen" aria-label="Latest Afrobeats news headlines" aria-live="polite">
       {/* Top stroke */}
       <div className="w-full h-0.5 bg-black"></div>
       
       {/* Ticker container */}
       <div className="bg-[#FFD600] py-3 overflow-hidden relative">
         <div 
-          className="whitespace-nowrap text-black font-semibold flex"
+          className="news-ticker-track whitespace-nowrap text-black font-semibold flex"
           style={{
             animation: 'scroll 30s linear infinite'
           }}
@@ -105,7 +107,7 @@ const NewsTicker = () => {
           }
         }
       `}</style>
-    </div>
+    </section>
   );
 };
 

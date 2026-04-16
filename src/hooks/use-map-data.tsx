@@ -140,14 +140,6 @@ export const useMapData = () => {
         }
       });
 
-      console.info('Map data loaded:', {
-        clubs: CLUBS.length,
-        artists: ARTISTS.length,
-        events: eventsArray.length,
-        community: communityData.length,
-        total: mapItems.length
-      });
-
       return mapItems;
     }
   });

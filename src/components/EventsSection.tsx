@@ -90,18 +90,22 @@ export function EventsSection() {
             </h2>
             
             <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1 w-full sm:w-auto lg:w-auto">
-              <Button 
-                variant={!showPastEvents ? "default" : "ghost"} 
+              <Button
+                type="button"
+                variant={!showPastEvents ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setShowPastEvents(false)} 
+                onClick={() => setShowPastEvents(false)}
+                aria-pressed={!showPastEvents}
                 className={`rounded-full px-3 sm:px-4 text-sm ${!showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Upcoming
               </Button>
-              <Button 
-                variant={showPastEvents ? "default" : "ghost"} 
+              <Button
+                type="button"
+                variant={showPastEvents ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setShowPastEvents(true)} 
+                onClick={() => setShowPastEvents(true)}
+                aria-pressed={showPastEvents}
                 className={`rounded-full px-3 sm:px-4 text-sm ${showPastEvents ? "bg-[#008751] text-white hover:bg-[#008751]/90" : "hover:bg-gray-200"}`}
               >
                 Past
@@ -109,14 +113,15 @@ export function EventsSection() {
             </div>
           </div>
           
-          <Link to="/events" className="w-full sm:w-auto lg:w-auto">
-            <Button 
-              variant="outline" 
-              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto lg:w-auto"
-            >
+          <Button
+            asChild
+            variant="outline"
+            className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto lg:w-auto"
+          >
+            <Link to="/events" className="w-full sm:w-auto lg:w-auto inline-flex items-center justify-center">
               See All Events
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
         
         {filteredEvents.length > 0 ? (

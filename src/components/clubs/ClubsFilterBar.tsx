@@ -14,6 +14,8 @@ interface ClubsFilterBarProps {
   onViewModeChange: (mode: ClubViewMode) => void;
   filters: ClubFilters;
   onFiltersChange: (filters: ClubFilters) => void;
+  /** When set, "Clear filters" also resets sort and URL search (matches empty-state reset). */
+  onResetAll?: () => void;
   sortBy: SortOption;
   onSortChange: (sort: SortOption) => void;
   cities: string[];
@@ -56,7 +58,8 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   };
 
   const handleClearFilters = () => {
-    onFiltersChange({});
+    if (onResetAll) onResetAll();
+    else onFiltersChange({});
   };
 
   const toggleFilters = () => {
@@ -86,24 +89,33 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
           <div className="flex gap-2 items-center">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <label htmlFor="clubs-directory-search" className="sr-only">
+                Search venues by name, city, or vibe
+              </label>
+              <Search className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden />
               <Input
+                id="clubs-directory-search"
                 placeholder="Search clubs..."
                 className="pl-8"
                 value={filters.search || ''}
                 onChange={handleSearchChange}
+                autoComplete="off"
               />
             </div>
 
             {/* Filter Toggle Button (Mobile Only) */}
             {isMobile && (
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 onClick={toggleFilters}
+                aria-expanded={showFiltersOnMobile}
+                aria-controls="clubs-advanced-filters"
                 className={`${showFiltersOnMobile ? 'bg-[#008751] text-white' : 'text-black border-[#008751]'}`}
               >
-                <Filter className="h-4 w-4" />
+                <Filter className="h-4 w-4" aria-hidden />
+                <span className="sr-only">Toggle filters</span>
               </Button>
             )}
 
@@ -135,7 +147,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
 
           {/* Filters - Hidden on mobile unless toggled */}
           {(!isMobile || showFiltersOnMobile) && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div id="clubs-advanced-filters" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <Select value={filters.city || "all"} onValueChange={handleCityChange}>
                 <SelectTrigger className="bg-background border-[#008751]/20">
                   <SelectValue placeholder="City" />
@@ -195,7 +207,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
           {/* Clear Filters */}
           {(filters.city || filters.type || filters.music || filters.search) && (
             <div className="flex justify-end">
-              <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-muted-foreground hover:text-foreground">
+              <Button type="button" variant="ghost" size="sm" onClick={handleClearFilters} className="text-muted-foreground hover:text-foreground">
                 Clear Filters
               </Button>
             </div>

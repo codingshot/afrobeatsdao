@@ -18,6 +18,7 @@ import { ListMusic, MoveVertical } from 'lucide-react';
 import ArtistsList from "@/components/music/ArtistsList";
 import SongsList from "@/components/music/SongsList";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { SITE_ORIGIN, absoluteUrl, sanitizeSnippet, jsonLdGraph, breadcrumbListSchema } from "@/lib/siteSeo";
 
 interface Playlist {
   id: string;
@@ -309,30 +310,65 @@ const Playlists = () => {
   const filteredQueue = queue.filter(song => !showPlayedSongs || !playedSongs.has(song.id));
 
   const metaDescription = `Discover the best ${platformFilter === "all" ? "Afrobeats" : platformFilter} music playlists. ${filteredPlaylists.length} curated playlists featuring top African artists and trending songs.`;
+  const metaDescriptionSanitized = sanitizeSnippet(metaDescription);
+  const playlistsPageUrl = `${SITE_ORIGIN}/music`;
+  const playlistsOgImage = absoluteUrl("/AfrobeatsDAOMeta.png");
+  const playlistListItems = filteredPlaylists.slice(0, 25).map((p, i) => ({
+    "@type": "ListItem" as const,
+    position: i + 1,
+    name: p.title,
+    item: p.url,
+  }));
+  const playlistsJsonLd = jsonLdGraph([
+    {
+      "@type": "CollectionPage",
+      name: "African music playlists",
+      url: playlistsPageUrl,
+      description: metaDescriptionSanitized,
+      isPartOf: { "@type": "WebSite", name: "Afrobeats.party", url: SITE_ORIGIN },
+    },
+    breadcrumbListSchema([
+      { name: "Home", url: SITE_ORIGIN },
+      { name: "Music", url: playlistsPageUrl },
+    ]),
+    {
+      "@type": "MusicPlaylist",
+      name: "African Music Playlists",
+      numTracks: filteredPlaylists.length,
+      description: metaDescriptionSanitized,
+      genre: ["Afrobeats", "Amapiano", "African Music"],
+      url: playlistsPageUrl,
+    },
+    {
+      "@type": "ItemList",
+      numberOfItems: playlistListItems.length,
+      itemListElement: playlistListItems,
+    },
+  ]);
 
   return (
     <>
       <Helmet>
         <title>African Music Playlists - Afrobeats & Amapiano Collections</title>
-        <meta name="description" content={metaDescription} />
+        <meta name="description" content={metaDescriptionSanitized} />
+        <link rel="canonical" href={playlistsPageUrl} />
         <meta property="og:title" content="African Music Playlists - Discover Afrobeats & Amapiano" />
-        <meta property="og:description" content={metaDescription} />
+        <meta property="og:description" content={metaDescriptionSanitized} />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content={playlistsPageUrl} />
+        <meta property="og:image" content={playlistsOgImage} />
+        <meta property="og:site_name" content="Afrobeats.party" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="African Music Playlists - Discover Afrobeats & Amapiano" />
+        <meta name="twitter:description" content={metaDescriptionSanitized} />
+        <meta name="twitter:image" content={playlistsOgImage} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="keywords" content="afrobeats playlists, amapiano playlists, african music, spotify playlists, youtube playlists" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "MusicPlaylist",
-            "name": "African Music Playlists",
-            "numTracks": filteredPlaylists.length,
-            "description": metaDescription,
-            "genre": ["Afrobeats", "Amapiano", "African Music"],
-          })}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(playlistsJsonLd)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background pt-4">
-        <main className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col items-center text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-heading font-extrabold mb-4 text-black">Afrobeats Music</h1>
             <p className="text-xl max-w-2xl mx-auto text-black/90">
@@ -605,7 +641,7 @@ const Playlists = () => {
               </motion.div>
             )}
           </div>
-        </main>
+        </div>
         
         <Footer />
       </div>
