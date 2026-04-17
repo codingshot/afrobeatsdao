@@ -103,11 +103,12 @@ export function EventsSection() {
             </div>
           </div>
 
-          <Link to="/events" className="w-full sm:w-auto lg:w-auto">
-            <Button
-              variant="outline"
-              className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto lg:w-auto"
-            >
+          <Button
+            asChild
+            variant="outline"
+            className="border-[#008751] text-[#008751] hover:bg-[#008751] hover:text-white w-full sm:w-auto lg:w-auto"
+          >
+            <Link to="/events" className="w-full sm:w-auto lg:w-auto">
               See All Events
             </Link>
           </Button>

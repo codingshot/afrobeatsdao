@@ -149,6 +149,8 @@ export function Header() {
     return location.pathname.startsWith(path);
   };
 
+  const onDancePage = location.pathname.startsWith("/dance");
+
   return <>
     <header className={`fixed top-0 w-full z-[9999] bg-[#FFD600] shadow-md font-heading transition-all duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3">
@@ -269,6 +271,7 @@ export function Header() {
                 </nav>
               </SheetContent>
             </Sheet>
+          </div>
           </div>
         </div>
       </div>

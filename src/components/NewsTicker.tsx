@@ -114,7 +114,7 @@ const NewsTicker = () => {
           }
         }
       `}</style>
-    </section>
+    </div>
   );
 };
 

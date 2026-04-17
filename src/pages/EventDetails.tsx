@@ -116,6 +116,11 @@ const EventDetails = () => {
           .map(({ name, details }) => ({ name, details }));
 
         setRelatedEvents(otherEvents);
+      } else {
+        setEvent(null);
+        setRelatedEvents([]);
+        setMapUrl("");
+      }
     } else {
       setEvent(null);
       setRelatedEvents([]);

@@ -106,51 +106,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
   const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
 
-  // Safely extract and validate all dance properties for meta tags with additional validation
-  const safeDanceName = safeString(dance?.name) || 'Dance';
-  const safeDanceOrigin = safeString(dance?.origin) || '';
-  const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
-
-  // Extra safe keyword extraction
-  const safeDanceKeywords = dance?.keyMoves?.map(m => {
-    const moveName = safeString(m?.name);
-    return moveName.length > 0 ? moveName : null;
-  }).filter(name => name !== null).join(', ') || '';
-
-  console.log('DanceContent - Safe values check:', {
-    safeDanceName,
-    safeDanceOrigin,
-    safeDanceDescription,
-    safeDanceKeywords,
-    nameType: typeof safeDanceName,
-    originType: typeof safeDanceOrigin,
-    descriptionType: typeof safeDanceDescription,
-    keywordsType: typeof safeDanceKeywords
-  });
-
-  // Validate meta values before using in Helmet
-  const validateForHelmet = (value: any, fallback: string = ''): string => {
-    const safe = safeString(value);
-    if (typeof safe !== 'string') {
-      console.error('validateForHelmet: Non-string value detected:', safe, typeof safe);
-      return fallback;
-    }
-    return safe;
-  };
-
-  const helmetTitle = validateForHelmet(`${safeDanceName} - Learn ${safeDanceOrigin} Dance`, 'Learn African Dance - Afrobeats.party');
-  const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
-  const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
-
-  console.log('DanceContent - Final Helmet values:', {
-    helmetTitle,
-    helmetDescription,
-    helmetKeywords,
-    titleType: typeof helmetTitle,
-    descriptionType: typeof helmetDescription,
-    keywordsType: typeof helmetKeywords
-  });
-
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
   };

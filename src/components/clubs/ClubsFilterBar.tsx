@@ -30,6 +30,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   onViewModeChange,
   filters,
   onFiltersChange,
+  onResetAll,
   sortBy,
   onSortChange,
   cities,
@@ -60,10 +61,6 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
   const handleClearFilters = () => {
     if (onResetAll) onResetAll();
     else onFiltersChange({});
-  };
-
-  const toggleFilters = () => {
-    setShowFiltersOnMobile(!showFiltersOnMobile);
   };
 
   const toggleFilters = () => {
