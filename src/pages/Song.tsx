@@ -31,7 +31,7 @@ const Song = () => {
   }
 
   // Enhanced safe string conversion that handles all edge cases
-  const safeString = (value: unknown): string => {
+  const safeString = (value: any): string => {
     try {
       // Handle null/undefined first
       if (value === null || value === undefined) {
@@ -69,6 +69,16 @@ const Song = () => {
     } catch (error) {
       console.error('Error in safeString conversion:', error);
       return '';
+    }
+  };
+
+  if (!artist || !song) {
+    console.log('Debug: Artist found:', !!artist);
+    console.log('Debug: Song found:', !!song);
+    console.log('Debug: Artist ID:', artistId);
+    console.log('Debug: Song slug:', songSlug);
+    if (artist) {
+      console.log('Debug: Available songs:', artist.top_songs.map(s => ({ title: s.title, slug: slugify(s.title) })));
     }
   };
 
@@ -126,25 +136,12 @@ const Song = () => {
 
   // Enhanced SEO meta data with safe concatenation - avoid template literals
   const metaTitle = safeSongTitle + ' by ' + safeArtistName + (safeArtistCountry ? ' - ' + safeArtistCountry : '') + ' | Afrobeats.party';
-  const metaDescriptionRaw =
-    'Listen to "' +
-    safeSongTitle +
-    '" by ' +
-    safeArtistName +
-    ' on Afrobeats.party. ' +
-    (safeArtistCountry ? 'Discover this ' + safeArtistCountry + " artist's " : 'Explore ') +
-    safeArtistGenre +
-    ' music and join the global African music community.';
-  const metaDescription = sanitizeSnippet(metaDescriptionRaw);
-  const canonicalUrl = SITE_ORIGIN + '/music/artist/' + safeArtistId + '/' + safeSongSlug;
-  const artistProfileUrl = SITE_ORIGIN + '/music/artist/' + safeArtistId;
-
+  const metaDescription = '🎵 Listen to "' + safeSongTitle + '" by ' + safeArtistName + ' on Afrobeats.party. ' + (safeArtistCountry ? 'Discover this ' + safeArtistCountry + ' artist\'s ' : 'Explore ') + safeArtistGenre + ' music and join the global African music community. Stream now!';
+  const canonicalUrl = 'https://afrobeats.party/music/artist/' + safeArtistId + '/' + safeSongSlug;
+  
   // Use YouTube thumbnail as primary OG image, ensure it's a full URL
-  const ogImage = videoId
-    ? 'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg'
-    : artist.image
-      ? absoluteUrl(safeString(artist.image))
-      : absoluteUrl('/AfrobeatsDAOMeta.png');
+  const ogImage = videoId ? 'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg' : 
+                 (artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png');
   const ogImageAlt = safeSongTitle + ' by ' + safeArtistName + ' - ' + safeArtistGenre + ' Music Video';
   
   // Enhanced keywords for better SEO
@@ -208,67 +205,57 @@ const Song = () => {
     e.currentTarget.src = "https://afrobeats.party/AfrobeatsDAOMeta.png";
   };
 
-  const artistImageAbsolute = artist.image
-    ? absoluteUrl(safeString(artist.image))
-    : absoluteUrl('/AfrobeatsDAOMeta.png');
-  const sameAs = [
-    safeString(artist.spotify),
-    safeString(artist.instagram),
-    safeString(artist.twitter),
-    safeString(artist.youtube),
-  ].filter((url) => url && /^https?:\/\//i.test(url));
-  const listenTarget = (() => {
-    const y = safeString(song.youtube);
-    return y && /^https?:\/\//i.test(y) ? y : canonicalUrl;
-  })();
-
   // Create structured data with proper sanitization
   const createStructuredData = () => {
     try {
-      const data = jsonLdGraph([
-        breadcrumbListSchema([
-          { name: 'Home', url: SITE_ORIGIN },
-          { name: 'Music', url: SITE_ORIGIN + '/music' },
-          { name: safeArtistName, url: artistProfileUrl },
-          { name: safeSongTitle, url: canonicalUrl },
-        ]),
-        {
-          '@type': 'MusicRecording',
-          '@id': canonicalUrl,
-          name: safeSongTitle,
-          description: metaDescription,
-          url: canonicalUrl,
-          image: [ogImage],
-          genre: safeArtistGenre,
-          inLanguage: 'en',
-          byArtist: {
-            '@type': 'Person',
-            name: safeArtistName,
-            url: artistProfileUrl,
-            image: artistImageAbsolute,
-            genre: safeArtistGenre,
-            ...(sameAs.length ? { sameAs } : {}),
-          },
-          isPartOf: {
-            '@type': 'WebSite',
-            name: 'Afrobeats.party',
-            url: SITE_ORIGIN,
-          },
-          potentialAction: {
-            '@type': 'ListenAction',
-            target: listenTarget,
-          },
+      const data = {
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "name": safeSongTitle,
+        "description": metaDescription,
+        "url": canonicalUrl,
+        "image": ogImage,
+        "genre": safeArtistGenre,
+        "datePublished": new Date().toISOString().split('T')[0],
+        "inLanguage": "en",
+        "byArtist": {
+          "@type": "MusicGroup",
+          "name": safeArtistName,
+          "image": artist.image ? 'https://afrobeats.party' + artist.image : 'https://afrobeats.party/AfrobeatsDAOMeta.png',
+          "genre": safeArtistGenre,
+          ...(safeArtistCountry && { "foundingLocation": safeArtistCountry }),
+          "url": 'https://afrobeats.party/music/artist/' + safeArtistId,
+          "sameAs": [
+            safeString(artist.spotify),
+            safeString(artist.instagram),
+            safeString(artist.twitter),
+            safeString(artist.youtube)
+          ].filter(url => url && url.length > 0)
         },
-      ]);
-
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Afrobeats.party",
+          "url": "https://afrobeats.party",
+          "description": "Global platform for African music and Afrobeats culture"
+        },
+        "potentialAction": {
+          "@type": "ListenAction",
+          "target": safeString(song.youtube) || '',
+          "expectsAcceptanceOf": {
+            "@type": "Offer",
+            "category": "free"
+          }
+        }
+      };
+      
       return JSON.stringify(data);
     } catch (error) {
       console.error('Error creating structured data:', error);
       return JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'MusicRecording',
-        name: safeSongTitle,
-        description: metaDescription,
+        "@context": "https://schema.org",
+        "@type": "MusicRecording",
+        "name": safeSongTitle,
+        "description": metaDescription
       });
     }
   };
@@ -301,8 +288,9 @@ const Song = () => {
         <meta property="og:locale" content="en_US" />
         
         <meta property="music:song" content={canonicalUrl} />
-        <meta property="music:musician" content={artistProfileUrl} />
+        <meta property="music:musician" content={'https://afrobeats.party/music/artist/' + safeArtistId} />
         <meta property="music:album" content={safeArtistName} />
+        <meta property="music:duration" content="180" />
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@afrobeatsdao" />

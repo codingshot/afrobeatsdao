@@ -1,6 +1,4 @@
-
-import React from 'react';
-import { Helmet } from 'react-helmet';
+import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SITE_ORIGIN, SITE_NAME, absoluteUrl, sanitizeSnippet } from '@/lib/siteSeo';
@@ -30,8 +28,8 @@ const Join = () => {
         <meta name="robots" content="index, follow, max-image-preview:large" />
       </Helmet>
       <Header />
-      
-      <div className="pt-20 pb-16">
+
+      <main className="pt-20 pb-[150px] md:pb-[93px]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
@@ -39,27 +37,25 @@ const Join = () => {
                 Join the Community
               </h1>
               <p className="text-lg text-gray-700 mb-8">
-                Ready to be part of the Afrobeats movement? Fill out the form below to get started.
+                Ready to be part of the Afrobeats movement? Fill out the form
+                below to get started.
               </p>
             </div>
-            
+
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <iframe 
-                title="Afrobeats DAO community join form"
-                name="afrobeats-join-form"
-                src="https://potlock.notion.site/ebd/206c1f4ba97e8009a2dbefd5a7718324" 
-                width="100%" 
-                height="600" 
-                frameBorder="0" 
-                allowFullScreen 
-                loading="lazy"
-                className="min-h-[70vh] w-full"
+              <iframe
+                src="https://potlock.notion.site/ebd/206c1f4ba97e8009a2dbefd5a7718324"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                allowFullScreen
+                className="w-full"
               />
             </div>
           </div>
         </div>
-      </div>
-      
+      </main>
+
       <Footer />
     </div>
   );

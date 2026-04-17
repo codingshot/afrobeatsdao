@@ -66,6 +66,10 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
     setShowFiltersOnMobile(!showFiltersOnMobile);
   };
 
+  const toggleFilters = () => {
+    setShowFiltersOnMobile(!showFiltersOnMobile);
+  };
+
   return (
     <Card className="mb-6 border-[#008751]/20 shadow-sm bg-card/80 backdrop-blur-sm">
       <CardContent className="p-4 md:p-5">
@@ -89,10 +93,7 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
           <div className="flex gap-2 items-center">
             {/* Search Input */}
             <div className="relative flex-1">
-              <label htmlFor="clubs-directory-search" className="sr-only">
-                Search venues by name, city, or vibe
-              </label>
-              <Search className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 id="clubs-directory-search"
                 placeholder="Search clubs..."
@@ -106,48 +107,29 @@ const ClubsFilterBar: React.FC<ClubsFilterBarProps> = ({
             {/* Filter Toggle Button (Mobile Only) */}
             {isMobile && (
               <Button
-                type="button"
                 variant="outline"
                 size="sm"
                 onClick={toggleFilters}
-                aria-expanded={showFiltersOnMobile}
-                aria-controls="clubs-advanced-filters"
                 className={`${showFiltersOnMobile ? 'bg-[#008751] text-white' : 'text-black border-[#008751]'}`}
               >
-                <Filter className="h-4 w-4" aria-hidden />
-                <span className="sr-only">Toggle filters</span>
+                <Filter className="h-4 w-4" />
               </Button>
             )}
 
             {/* View Toggle */}
-            <ToggleGroup
-              type="single"
-              value={viewMode}
-              onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}
-              className="shrink-0 rounded-lg border border-border p-0.5 bg-muted/40"
-            >
-              <ToggleGroupItem
-                value="map"
-                aria-label="Map view"
-                className="rounded-md px-3 data-[state=on]:bg-[#008751] data-[state=on]:text-white data-[state=on]:shadow-sm"
-              >
-                <Map className="h-4 w-4 sm:mr-1.5" />
-                <span className="hidden sm:inline text-xs font-medium">Map</span>
+            <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && onViewModeChange(value as ClubViewMode)}>
+              <ToggleGroupItem value="map" aria-label="Map View">
+                <Map className="h-4 w-4" />
               </ToggleGroupItem>
-              <ToggleGroupItem
-                value="card"
-                aria-label="List view"
-                className="rounded-md px-3 data-[state=on]:bg-[#008751] data-[state=on]:text-white data-[state=on]:shadow-sm"
-              >
-                <List className="h-4 w-4 sm:mr-1.5" />
-                <span className="hidden sm:inline text-xs font-medium">List</span>
+              <ToggleGroupItem value="card" aria-label="Card View">
+                <List className="h-4 w-4" />
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
 
           {/* Filters - Hidden on mobile unless toggled */}
           {(!isMobile || showFiltersOnMobile) && (
-            <div id="clubs-advanced-filters" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
               <Select value={filters.city || "all"} onValueChange={handleCityChange}>
                 <SelectTrigger className="bg-background border-[#008751]/20">
                   <SelectValue placeholder="City" />

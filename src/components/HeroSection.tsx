@@ -31,21 +31,10 @@ export function HeroSection() {
         </div>
         <p className="text-black text-2xl md:text-3xl max-w-2xl mx-auto hero-subtitle">the only hub for everything Afrobeats - music, DJs, events, clubs, dance + more</p>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-          <Button
-            size="lg"
-            className="min-h-12 bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto"
-            onClick={() => window.open("https://discord.gg/TNrWwSA955", "_blank", "noopener,noreferrer")}
-            aria-label="Join the community on Discord (opens in a new tab)"
-          >
+          <Button size="lg" className="bg-[#008751] text-white hover:bg-[#008751]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto" onClick={() => window.open('https://discord.gg/TNrWwSA955', '_blank')}>
             Join
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="min-h-12 bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto"
-            onClick={scrollToVibe}
-            aria-label="Scroll to Vibe of the Day section"
-          >
+          <Button size="lg" variant="outline" className="bg-[#ea384c] text-white border-white hover:bg-[#ea384c]/90 font-heading text-lg sm:text-xl rounded-full px-6 sm:px-8 py-4 sm:py-6 h-auto w-full sm:w-auto" onClick={scrollToVibe}>
             Vibe
           </Button>
         </div>

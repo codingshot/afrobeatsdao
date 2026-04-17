@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,7 +36,7 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const danceProgress = getDanceProgress(dance.id);
 
   // Ultra-safe string conversion that handles ALL edge cases including Symbols
-  const safeString = (value: unknown): string => {
+  const safeString = (value: any): string => {
     try {
       // Handle null/undefined first
       if (value === null || value === undefined) {
@@ -105,6 +105,51 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
   const helmetTitle = validateForHelmet(`${safeDanceName} - Learn ${safeDanceOrigin} Dance`, 'Learn African Dance - Afrobeats.party');
   const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
   const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
+
+  // Safely extract and validate all dance properties for meta tags with additional validation
+  const safeDanceName = safeString(dance?.name) || 'Dance';
+  const safeDanceOrigin = safeString(dance?.origin) || '';
+  const safeDanceDescription = safeString(dance?.description) || 'Learn about this dance style on Afrobeats.party';
+
+  // Extra safe keyword extraction
+  const safeDanceKeywords = dance?.keyMoves?.map(m => {
+    const moveName = safeString(m?.name);
+    return moveName.length > 0 ? moveName : null;
+  }).filter(name => name !== null).join(', ') || '';
+
+  console.log('DanceContent - Safe values check:', {
+    safeDanceName,
+    safeDanceOrigin,
+    safeDanceDescription,
+    safeDanceKeywords,
+    nameType: typeof safeDanceName,
+    originType: typeof safeDanceOrigin,
+    descriptionType: typeof safeDanceDescription,
+    keywordsType: typeof safeDanceKeywords
+  });
+
+  // Validate meta values before using in Helmet
+  const validateForHelmet = (value: any, fallback: string = ''): string => {
+    const safe = safeString(value);
+    if (typeof safe !== 'string') {
+      console.error('validateForHelmet: Non-string value detected:', safe, typeof safe);
+      return fallback;
+    }
+    return safe;
+  };
+
+  const helmetTitle = validateForHelmet(`${safeDanceName} - Learn ${safeDanceOrigin} Dance`, 'Learn African Dance - Afrobeats.party');
+  const helmetDescription = validateForHelmet(safeDanceDescription, 'Learn African dance moves on Afrobeats.party');
+  const helmetKeywords = validateForHelmet(`${safeDanceName.toLowerCase()}, ${safeDanceOrigin.toLowerCase()} dance, african dance tutorial, dance moves, ${safeDanceKeywords}`, 'african dance, afrobeats, dance tutorial');
+
+  console.log('DanceContent - Final Helmet values:', {
+    helmetTitle,
+    helmetDescription,
+    helmetKeywords,
+    titleType: typeof helmetTitle,
+    descriptionType: typeof helmetDescription,
+    keywordsType: typeof helmetKeywords
+  });
 
   const toggleModule = (index: number) => {
     setModuleVisible(moduleVisible === index ? null : index);
@@ -290,9 +335,6 @@ export const DanceContent = ({ dance }: DanceContentProps) => {
         <meta property="og:title" content={`Learn ${safeDanceName} - African Dance Tutorial`} />
         <meta property="og:description" content={helmetDescription} />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content={ogImageAbsolute} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content={ogImageAbsolute} />
         <meta name="keywords" content={helmetKeywords} />
       </Helmet>
 

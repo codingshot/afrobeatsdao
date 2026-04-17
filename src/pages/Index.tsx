@@ -12,79 +12,62 @@ import NewsTicker from "@/components/NewsTicker";
 import MusicCarousel from "@/components/MusicCarousel";
 import ArtistsCarousel from "@/components/ArtistsCarousel";
 import { MiniGlobalMap } from "@/components/MiniGlobalMap";
-import { Helmet } from "react-helmet";
-import { SITE_ORIGIN, SITE_NAME, absoluteUrl, sanitizeSnippet, jsonLdGraph } from "@/lib/siteSeo";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 const Index = () => {
-  const { playNow, currentSong } = useGlobalAudioPlayer();
-  const homeVibeBootstrapped = useRef(false);
+  const navigate = useNavigate();
+
+  // Safely access the audio player context
+  let audioPlayerContext;
+  try {
+    audioPlayerContext = useGlobalAudioPlayer();
+  } catch (error) {
+    console.warn("GlobalAudioPlayer context not available:", error);
+    audioPlayerContext = null;
+  }
+  const { playNow, currentSong } = audioPlayerContext || {};
 
   // Auto-play a random vibe once on the home page when nothing is queued from storage.
   useEffect(() => {
-    if (homeVibeBootstrapped.current) return;
+    if (!audioPlayerContext || !playNow) return;
+
+    // Check localStorage first for any saved song
     const savedSong = localStorage.getItem("afrobeats_current_song");
-    if (currentSong || savedSong) return;
-    homeVibeBootstrapped.current = true;
-    const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
-    const vibeVideoId = VIBE_VIDEOS[randomIndex];
-    playNow({
-      id: `vibe-${vibeVideoId}`,
-      youtube: vibeVideoId,
-    });
-  }, [playNow, currentSong]);
 
-  const homeDescription = sanitizeSnippet(
-    "Afrobeats.party is a global home for African music and culture: artists, playlists, events, clubs, news, and dance curriculum.",
-    158,
-  );
-  const homeOgImage = absoluteUrl("/AfrobeatsDAOMeta.png");
-  const homeJsonLd = jsonLdGraph([
-    {
-      "@type": "WebSite",
-      name: SITE_NAME,
-      url: SITE_ORIGIN,
-      description: homeDescription,
-      inLanguage: "en-US",
-      publisher: { "@id": `${SITE_ORIGIN}/#organization` },
-    },
-    {
-      "@id": `${SITE_ORIGIN}/#organization`,
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: SITE_ORIGIN,
-      logo: homeOgImage,
-    },
-  ]);
+    // Only initialize if no song is currently playing and no song in local storage
+    if (!currentSong && !savedSong) {
+      // Get a random Vibe of the Day video to use as the default song
+      const randomIndex = Math.floor(Math.random() * VIBE_VIDEOS.length);
+      const vibeVideoId = VIBE_VIDEOS[randomIndex];
+      console.log("Auto-initializing player with video ID:", vibeVideoId);
 
+      // Create a song object from the Vibe of the Day
+      const defaultSong = {
+        id: `vibe-${vibeVideoId}`,
+        youtube: vibeVideoId, // Only pass the video ID, titles will be fetched from YouTube
+      };
+
+      // Play the Vibe of the Day video
+      playNow(defaultSong);
+    }
+  }, [playNow, currentSong, audioPlayerContext]);
   return (
-    <div className="min-h-screen font-sans pb-[100px]">
-      <Helmet>
-        <title>{`${SITE_NAME} — African music, artists & culture`}</title>
-        <meta name="description" content={homeDescription} />
-        <link rel="canonical" href={SITE_ORIGIN} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={`${SITE_NAME} — African music & Afrobeats`} />
-        <meta property="og:description" content={homeDescription} />
-        <meta property="og:url" content={SITE_ORIGIN} />
-        <meta property="og:image" content={homeOgImage} />
-        <meta property="og:site_name" content={SITE_NAME} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${SITE_NAME} — African music & Afrobeats`} />
-        <meta name="twitter:description" content={homeDescription} />
-        <meta name="twitter:image" content={homeOgImage} />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <script type="application/ld+json">{JSON.stringify(homeJsonLd)}</script>
-      </Helmet>
-      <HeroSection />
-      <NewsTicker />
-      <MusicCarousel />
-      <EventsSection />
-      <ClubsSection />
-      <VibeOfTheDay />
-      <MusicSection />
-      <ArtistsCarousel />
-      <DanceCarousel />
-      <MiniGlobalMap />
-      <TeamSection />
+    <div className="min-h-screen font-sans pb-[150px] md:pb-[93px]">
+      <main>
+        <HeroSection />
+        <NewsTicker />
+        <MusicCarousel />
+        <EventsSection />
+        <ClubsSection />
+        <VibeOfTheDay />
+        <MusicSection />
+        <ArtistsCarousel />
+        <DanceCarousel />
+        <MiniGlobalMap />
+        <TeamSection />
+
+        {/* Partner CTA Section */}
+      </main>
       <Footer />
     </div>
   );
