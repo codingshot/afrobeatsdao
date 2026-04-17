@@ -68,7 +68,7 @@ const MainNavbar = ({ className }: { className?: string }) => {
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
           <img
-            src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png"
+            src="/branding/site-logo.png"
             alt="Afrobeats Logo"
             className="h-10 w-auto"
           />

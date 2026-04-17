@@ -154,7 +154,7 @@ export function Header() {
       <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3">
         <div className="flex items-center gap-3 sm:gap-4">
           <Link to="/" className="flex shrink-0 items-center space-x-2">
-            <img src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png" alt="Afrobeats Logo" className="h-10 w-auto sm:h-12" onError={handleImageError} />
+            <img src="/branding/site-logo.png" alt="Afrobeats.party" className="h-10 w-auto sm:h-12" onError={handleImageError} />
           </Link>
 
           <nav className="hidden min-w-0 flex-1 justify-center md:flex">

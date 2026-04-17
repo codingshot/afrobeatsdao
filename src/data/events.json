@@ -182,5 +182,27 @@
     "start_date": "2026-05-16",
     "end_date": "2026-05-16",
     "ticket_info": "Tickets via the official AfroFuture event page; late-night entry—read the organiser’s FAQs."
+  },
+  "Nuits d'Afrique": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://festivalnuitsdafrique.com/",
+    "ticket_url": "https://festivalnuitsdafrique.com/",
+    "location": "Quartier des spectacles, Montreal, QC, Canada",
+    "event_description": "Festival International Nuits d’Afrique is Montreal’s flagship summer showcase of African, Caribbean, and diaspora music across indoor clubs and outdoor stages. The 2026 edition is scheduled 15–20 July; confirm venues, passes, and headliners on festivalnuitsdafrique.com before booking travel.",
+    "organizer": "Festival International Nuits d’Afrique",
+    "start_date": "2026-07-15",
+    "end_date": "2026-07-20",
+    "ticket_info": "Multi-venue passes and single-show tickets are sold through the official festival site; outdoor mainstage programming often includes Afrobeats and amapiano alongside continental roots styles."
+  },
+  "Sauti za Busara": {
+    "image_url": "/AfrobeatsDAOMeta.png",
+    "website": "https://www.busaramusic.org/",
+    "ticket_url": "https://www.busaramusic.org/",
+    "location": "Stone Town, Zanzibar, Tanzania",
+    "event_description": "Sauti za Busara is East Africa’s major celebration of live African music in historic Stone Town—four days of Afrobeats, bongo flava, taarab, and regional sounds with a strong emphasis on artists from the continent. The 2026 festival is provisionally expected in February (confirm exact dates and visa guidance on busaramusic.org).",
+    "organizer": "Busara Promotions",
+    "start_date": "2026-02-12",
+    "end_date": "2026-02-15",
+    "ticket_info": "Tickets and accommodation packages are released on the official site; early booking is recommended during peak tourist season in Zanzibar."
   }
 }

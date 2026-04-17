@@ -1,20 +1,36 @@
 # Afrobeats.party
 
-> Global platform for African music, Afrobeats culture, artists, playlists, events, clubs, dance curriculum, and community.
+> Afrobeats.party is a curated guide to African and diaspora club culture: Afrobeats, amapiano, events, venues, artist pages, playlists, dance tutorials, and community-oriented pages.
 
-## Primary URLs
-- https://afrobeats.party/
-- https://afrobeats.party/music
-- https://afrobeats.party/dance
-- https://afrobeats.party/news
-- https://afrobeats.party/events
-- https://afrobeats.party/clubs
-- https://afrobeats.party/partner
-- https://afrobeats.party/chapters
-- https://afrobeats.party/join
-- https://afrobeats.party/careers
+## Canonical site
+- Primary origin: https://afrobeats.party/
 
-## Notes for assistants
-- Artist profiles live under `/music/artist/:id`; individual tracks under `/music/artist/:id/:songSlug`.
-- Dance lessons use `/dance/:genre/:id` or `/dance/:id` depending on routing.
-- News is aggregated from an external RSS feed; headlines link out to original publishers.
+## Main sections
+- `/` — Home: carousels, featured events, clubs teaser, global map preview, team.
+- `/music` — Playlists and streaming entry points (YouTube, Spotify, Apple Music).
+- `/music/artist/:id` — Artist profile (from `src/data/artists.ts`).
+- `/music/artist/:artistId/:songSlug` — Track detail when routed from artist pages.
+- `/dance` — Dance curriculum index (Afrobeats, amapiano, and related styles).
+- `/dance/:genre/:id` or `/dance/:id` — Individual dance lesson pages with video and metadata.
+- `/events` — Festival and party calendar backed by `src/data/events.json`.
+- `/event/:slug` — Event detail; slug is ASCII-ish `slugify` of the event title (see `src/lib/slugUtils.ts`).
+- `/clubs` — Searchable Afrobeats / amapiano club directory from `src/data/clubs.ts` with map mode.
+- `/map` — Global map of artists, clubs, and events with coordinates.
+- `/news` — Headlines from an external RSS feed (links leave the site to publishers).
+- `/partner`, `/chapters`, `/join`, `/artist-join` — Community and partnership funnels.
+- `/careers` and `/careers/:slug` — Role listings from `src/data/job-listings.ts`.
+- `/discord` — Discord community link page.
+
+## Machine-readable discovery
+- `https://afrobeats.party/sitemap.xml` — Static URL list (update when adding major routes).
+- `https://afrobeats.party/robots.txt` — Crawl policy and sitemap pointer.
+
+## SEO and structured data
+- Per-route `<title>`, `meta description`, Open Graph, Twitter cards, and JSON-LD are set with `react-helmet` on major pages (see `src/pages/*.tsx` and `src/lib/siteSeo.ts`).
+- Default social preview image: `/AfrobeatsDAOMeta.png`.
+
+## Content sources (for fact-checking)
+- Venues and festivals should be verified against official venue or promoter sites before treating dates as authoritative; `events.json` includes disclaimers where editions are provisional.
+
+## Contact / publisher
+- Branding: Afrobeats.party / Afrobeats DAO community positioning on-site (see footer and organization JSON-LD on the home page).

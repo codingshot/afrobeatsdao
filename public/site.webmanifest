@@ -1,6 +1,8 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Afrobeats.party",
+  "short_name": "Afrobeats",
+  "description": "Afrobeats, amapiano, events, clubs, playlists, and dance culture.",
+  "start_url": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +17,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "theme_color": "#FFD600",
+  "background_color": "#0a0a0a",
+  "display": "standalone",
+  "lang": "en"
 }

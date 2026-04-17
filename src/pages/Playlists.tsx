@@ -44,7 +44,7 @@ const PLAYLISTS: Playlist[] = [
     id: "afrobeats-public-good-album",
     title: "Afrobeats is a public good (album)",
     platform: "youtube",
-    image: "/lovable-uploads/6b6dcd87-97f1-4c68-964d-3ef675aff525.png",
+    image: "/branding/cc0-album-cover.png",
     url: "https://www.youtube.com/playlist?list=OLAK5uy_lXoKCymdHRrb86jji8oNAT5RpcSaUvwQk",
     description: "CC0 release — official YouTube album playlist (same as on the home page).",
   },

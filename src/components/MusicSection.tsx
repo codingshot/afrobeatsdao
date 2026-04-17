@@ -86,7 +86,7 @@ export function MusicSection() {
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 max-w-5xl mx-auto">
           <div className="md:w-1/2">
-            <FlippableAlbum coverImage="/lovable-uploads/6b6dcd87-97f1-4c68-964d-3ef675aff525.png" />
+            <FlippableAlbum coverImage="/branding/cc0-album-cover.png" />
           </div>
           <div className="md:w-1/2 mt-8 md:mt-0 w-full">
             <div className="bg-white rounded-xl p-6 w-full max-w-md mx-auto shadow-2xl text-center">

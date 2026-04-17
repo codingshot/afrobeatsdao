@@ -92,7 +92,9 @@ export const useMapData = () => {
           'Throw Social DC, Washington, DC, USA': [-77.0210, 38.8800],
           'Studio 338, 388 Boord Street, London, UK': [-0.0307, 51.5074],
           'Sefton Park, Liverpool, UK': [-2.9380, 53.3830],
-          'Hart Plaza | Detroit, MI, USA': [-83.0458, 42.3314]
+          'Hart Plaza | Detroit, MI, USA': [-83.0458, 42.3314],
+          'Quartier des spectacles, Montreal, QC, Canada': [-73.5673, 45.5088],
+          'Stone Town, Zanzibar, Tanzania': [39.1923, -6.1639],
         };
 
         const coordinates = locationCoords[event.location];
@@ -110,7 +112,9 @@ export const useMapData = () => {
                      event.location.includes('Dubai') ? 'United Arab Emirates' :
                      event.location.includes('UK') ? 'United Kingdom' :
                      event.location.includes('Spain') ? 'Spain' :
-                     event.location.includes('Australia') ? 'Australia' : 'Unknown',
+                     event.location.includes('Australia') ? 'Australia' :
+                     event.location.includes('Canada') ? 'Canada' :
+                     event.location.includes('Tanzania') ? 'Tanzania' : 'Unknown',
             city: event.location.split(',')[0],
             description: event.event_description,
             image: event.image_url,

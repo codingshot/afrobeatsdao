@@ -9,7 +9,7 @@ export function Footer() {
           <div className="mb-4 md:mb-0">
             <div className="flex items-center justify-center md:justify-start gap-4">
               <img 
-                src="/lovable-uploads/d20e3d94-ab2d-45a0-b2dd-9bb50e32753d.png" 
+                src="/branding/site-logo.png" 
                 alt="Afrobeats Logo" 
                 className="h-12 w-auto"
               />
